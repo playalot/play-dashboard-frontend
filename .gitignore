@@ -1,0 +1,7 @@
+dist/*
+node_modules/*
+target/*
+.tmp/*
+.sass-cache/*
+app/styles/*
+app/vendor/*

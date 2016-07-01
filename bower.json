@@ -1,0 +1,25 @@
+{
+  "name": "play-dashboard",
+  "version": "1.0.0",
+  "authors": [
+    "Guan Guan"
+  ],
+  "appPath": "app",
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "app/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "*",
+    "font-awesome": "*",
+    "admin-lte": "*",
+    "ionicons": "*"
+  }
+}

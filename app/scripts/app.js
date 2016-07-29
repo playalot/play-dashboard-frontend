@@ -24,6 +24,7 @@ import EditArticle from './components/editarticle';
 
 import Test from './components/test';
 
+// import '../sass/style.scss'
 ReactDOM.render((
 	<Router history={hashHistory}>
 		<Route name="layout" path="/" component={Layout}>

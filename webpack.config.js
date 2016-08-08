@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const OpenBrowserPlugin = require('open-browser-webpack-plugin');
+const proxyIp = `http://121.41.51.24:4400`;
 module.exports = {
 	entry: {
 		app: ['webpack/hot/dev-server',
@@ -63,23 +64,23 @@ module.exports = {
 		port: 8081,
 		proxy: {
 			'/query/*': {
-				target: 'http://114.55.30.61:4300',
+				target: proxyIp,
 				secure: false
 			},
 			'/api/*': {
-				target: 'http://114.55.30.61:4300',
+				target: proxyIp,
 				secure: false
 			},
 			'/signIn': {
-				target: 'http://114.55.30.61:4300',
+				target: proxyIp,
 				secure: false
 			},
 			'/webjars/*':{
-				target: 'http://114.55.30.61:4300',
+				target: proxyIp,
 				secure: false
 			},
 			'/authenticate/*':{
-				target: 'http://114.55.30.61:4300',
+				target: proxyIp,
 				secure: false
 			}
 		},

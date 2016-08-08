@@ -1,8 +1,6 @@
 import React,{ Component } from 'react'
 import { Link } from 'react-router'
 export default class App extends Component{
-	componentWillMount() {
-	}
 	render() {
 		return(
 			<div className="wrapper">
@@ -53,8 +51,8 @@ export default class App extends Component{
 		                  <i className="fa fa-angle-left pull-right"></i>
 		                </a>
 		                <ul className="treeview-menu">
-		                  <li><Link to="/manage/home" activeClassName="active"><i className="fa fa-circle-o"></i><span>首页推荐管理</span></Link></li>
-		                  <li><Link to="/manage/explore" activeClassName="active"><i className="fa fa-circle-o"></i><span>发现页管理</span></Link></li>
+		                  <li><Link to="/recommendhome" activeClassName="active"><i className="fa fa-circle-o"></i><span>首页推荐管理</span></Link></li>
+		                  <li><Link to="/explorepage" activeClassName="active"><i className="fa fa-circle-o"></i><span>发现页管理</span></Link></li>
 		                </ul>
 		              </li>
 		              <li><Link to="/post" activeClassName="active"><i className="fa fa-camera"></i><span>图片</span></Link></li>
@@ -69,34 +67,6 @@ export default class App extends Component{
 
 		        <div className="content-wrapper">
 		          {this.props.children}
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <a href="/signIn">signIn</a>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
-		          <h1>asdf</h1>
 		        </div>
 
 		        <footer className="main-footer">
@@ -114,6 +84,7 @@ export default class App extends Component{
 		          <div className="tab-content">
 		            <div className="tab-pane active" id="control-sidebar-home-tab">
 		              <h3 className="control-sidebar-heading">Fake user info</h3>
+		              <a href="/signIn">测试登录入口</a>
 		            </div>
 		            <div className="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
 		            <div className="tab-pane" id="control-sidebar-settings-tab">

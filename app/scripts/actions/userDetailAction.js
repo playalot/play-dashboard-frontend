@@ -200,6 +200,7 @@ export const removeClassification = (pid,c) => {
             })
     }
 }
+export const addSku = (id,sid) => {
     return (dispatch,getState) => {
         return Request
             .post(`/api/post/${id}/sku/${sid}`)

@@ -3,9 +3,9 @@ import React from 'react'
 import App from './components/App/App.jsx'
 import PostList from './components/PostList/index.js'
 
-// import UserDetail from './components/UserDetail/index.js'
+import UserDetail from './components/UserDetail/index.js'
 //old
-import UserDetail from './components/userdetail'
+// import UserDetail from './components/userdetail'
 import Home from './components/home';
 import RecommendHome from './components/recommendhome';
 import ExplorePage from './components/explorepage';

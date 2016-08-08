@@ -1,186 +1,192 @@
 import Request from 'superagent'
 
-export const RECEIVE_POST = 'RECEIVE_POST'
-export const RECEIVE_POST_NEW = 'RECEIVE_POST_NEW'
-export const TOGGLE_RECOMMEND_POST = 'TOGGLE_RECOMMEND_POST'
-export const TOGGLE_BLOCK_POST = 'TOGGLE_BLOCK_POST'
-export const TOGGLE_R18_POST = 'TOGGLE_R18_POST'
-export const ADD_TAG_POST = 'ADD_TAG_POST'
-export const REMOVE_TAG_POST = 'REMOVE_TAG_POST'
-export const SET_POST_CLASSIFICATION = 'SET_POST_CLASSIFICATION'
-export const REMOVE_POST_CLASSIFICATION = 'REMOVE_POST_CLASSIFICATION'
-export const ADD_SKU_POST = 'ADD_SKU_POST'
-export const DELETE_POST = 'DELETE_POST'
+export const PL_RECEIVE_POST = 'PL_RECEIVE_POST'
+export const PL_RECEIVE_POST_NEW = 'PL_RECEIVE_POST_NEW'
+export const PL_TOGGLE_RECOMMEND = 'PL_TOGGLE_RECOMMEND'
+export const PL_TOGGLE_BLOCK = 'PL_TOGGLE_BLOCK'
+export const PL_TOGGLE_R18 = 'PL_TOGGLE_R18'
+export const PL_ADD_TAG = 'PL_ADD_TAG'
+export const PL_REMOVE_TAG = 'PL_REMOVE_TAG'
+export const PL_SET_CLASSIFICATION = 'PL_SET_CLASSIFICATION'
+export const PL_REMOVE_CLASSIFICATION = 'PL_REMOVE_CLASSIFICATION'
+export const PL_ADD_SKU = 'PL_ADD_SKU'
+export const PL_DELETE_POST = 'PL_DELETE_POST'
 
 function receivePost(res) {
     return {
-        type: RECEIVE_POST,
+        type: PL_RECEIVE_POST,
         res
     }
 }
 function receivePostNew(res) {
     return {
-        type: RECEIVE_POST_NEW,
+        type: PL_RECEIVE_POST_NEW,
         res
     }
 }
-function toggleRecommend(id) {
+function _toggleRecommend(id) {
     return {
-        type: TOGGLE_RECOMMEND_POST,
+        type: PL_TOGGLE_RECOMMEND,
         id
     }
 }
-function toggleBlock(id) {
+function _toggleBlock(id) {
     return {
-        type: TOGGLE_BLOCK_POST,
+        type: PL_TOGGLE_BLOCK,
         id
     }
 }
-function toggleR18(id) {
+function _toggleR18(id) {
     return {
-        type: TOGGLE_R18_POST,
+        type: PL_TOGGLE_R18,
         id
     }
 }
-function addTag(id,text) {
+function _addTag(id, text) {
     return {
-        type: ADD_TAG_POST,
+        type: PL_ADD_TAG,
         id,
         text
     }
 }
-function removeTag(id,tid) {
+function _removeTag(id, tid) {
     return {
-        type: REMOVE_TAG_POST,
+        type: PL_REMOVE_TAG,
         id,
         tid
     }
 }
-function setPostClasses(pid,cid) {
+function _setClassification(pid, cid) {
     return {
-        type: SET_POST_CLASSIFICATION,
+        type: PL_SET_CLASSIFICATION,
         pid,
         cid
     }
 }
-function removePostClasses(pid,c) {
+function _removeClassification(pid, c) {
     return {
-        type: REMOVE_POST_CLASSIFICATION,
+        type: PL_REMOVE_CLASSIFICATION,
         pid,
         c
     }
 }
-function addSku(id,sku) {
+function _addSku(id, sku) {
     return {
-        type: ADD_SKU_POST,
+        type: PL_ADD_SKU,
         id,
         sku
     }
 }
-function removePost(id) {
+function _deletePost(id) {
     return {
-        type: DELETE_POST,
+        type: PL_DELETE_POST,
         id
     }
 }
-export const addTagPost = (id,text) => {
-    return (dispatch,getState) => {
+export const addTag = (id, text) => {
+    return (dispatch, getState) => {
         return Request
             .post(`/api/post/${id}/tag/${text}`)
-            .end(function(err,res){
-                dispatch(addTag(id,res.body))
+            .end(function(err, res) {
+                dispatch(_addTag(id, res.body))
             })
     }
 }
-export const removeTagPost = (id,tid) => {
-    return (dispatch,getState) => {
+export const removeTag = (id, tid) => {
+    return (dispatch, getState) => {
         return Request
             .del(`/api/post/${id}/tag/${tid}`)
-            .end(function(err,res){
-                dispatch(removeTag(id,tid))
+            .end(function(err, res) {
+                dispatch(_removeTag(id, tid))
             })
     }
 }
-export const toggleR18Post = (id) => {
-    return (dispatch,getState) => {
-        let value  = null
+export const toggleR18 = (id) => {
+    return (dispatch, getState) => {
+        let value = null
         let index = getState().postReducer.get('posts').findIndex((item) => {
             value = item.get('id') === id ? item.get('isR18') : null
             return item.get('id') === id
         })
         return Request
             .post(`/api/post/${id}/r18`)
-            .send({r18:!value})
-            .end(function(err,res){
-                dispatch(toggleR18(id))
+            .send({
+                r18: !value
             })
-        
+            .end(function(err, res) {
+                dispatch(_toggleR18(id))
+            })
+
     }
 }
-export const toggleBlockPost = (id) => {
-    return (dispatch,getState) => {
-        let value  = null
+export const toggleBlock = (id) => {
+    return (dispatch, getState) => {
+        let value = null
         let index = getState().postReducer.get('posts').findIndex((item) => {
             value = item.get('id') === id ? item.get('isBlk') : null
             return item.get('id') === id
         })
         return Request
             .post(`/api/post/${id}/block`)
-            .send({block:!value})
-            .end(function(err,res){
-                dispatch(toggleBlock(id))
+            .send({
+                block: !value
             })
-        
+            .end(function(err, res) {
+                dispatch(_toggleBlock(id))
+            })
+
     }
 }
-export const toggleRecommendPost = (id) => {
-    return function(dispatch,getState) {
-        let value  = null
+export const toggleRecommend = (id) => {
+    return function(dispatch, getState) {
+        let value = null
         let index = getState().postReducer.get('posts').findIndex((item) => {
             value = item.get('id') === id ? item.get('isRec') : null
             return item.get('id') === id
         })
         return Request
             .post(`/api/post/${id}/recommend`)
-            .send({recommend:!value})
-            .end(function(err,res){
-                dispatch(toggleRecommend(id))
+            .send({
+                recommend: !value
+            })
+            .end(function(err, res) {
+                dispatch(_toggleRecommend(id))
             })
     }
 }
-export const setPostClassification = (pid,cid) => {
-    return (dispatch,getState) => {
+export const setClassification = (pid, cid) => {
+    return (dispatch, getState) => {
         return Request
             .post(`/api/post/${pid}/class/${cid}`)
-            .end(function(err,res){
-                dispatch(setPostClasses(pid,cid))
+            .end(function(err, res) {
+                dispatch(_setClassification(pid, cid))
             })
     }
 }
-export const removePostClassification = (pid,c) => {
-    return (dispatch,getState) => {
+export const removeClassification = (pid, c) => {
+    return (dispatch, getState) => {
         return Request
             .del(`/api/post/${pid}/class/${c}`)
-            .end(function(err,res){
-                dispatch(removePostClasses(pid,c))
+            .end(function(err, res) {
+                dispatch(_removeClassification(pid, c))
             })
     }
 }
-export const addSkuPost = (id,sid) => {
-    return (dispatch,getState) => {
+export const addSku = (id, sid) => {
+    return (dispatch, getState) => {
         return Request
             .post(`/api/post/${id}/sku/${sid}`)
-            .end(function(err,res){
-                dispatch(addSku(id,res.body))
+            .end(function(err, res) {
+                dispatch(_addSku(id, res.body))
             })
     }
 }
 export const deletePost = (id) => {
-    return (dispatch,getState) => {
+    return (dispatch, getState) => {
         return Request
             .del(`/api/post/${id}`)
-            .end(function(err,res){
-                dispatch(removePost(id))
+            .end(function(err, res) {
+                dispatch(_deletePost(id))
             })
     }
 }
@@ -191,13 +197,13 @@ const status = {
     overload: false,
 }
 export const fetchPost = (filter, query) => {
-    
+
     if (query !== status.query || filter !== status.filter) {
         status.filter = filter
         status.query = query
         status.timestamp = ''
         status.overload = true
-    }else{
+    } else {
         status.overload = false
     }
     let params = {}
@@ -214,7 +220,7 @@ export const fetchPost = (filter, query) => {
         return Request
             .get(`/api/posts`)
             .query(params)
-            .end(function(err,res){
+            .end(function(err, res) {
                 status.timestamp = res.body.nextTs
                 status.overload ? dispatch(receivePostNew(res.body)) : dispatch(receivePost(res.body))
             })

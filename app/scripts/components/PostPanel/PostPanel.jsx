@@ -5,16 +5,15 @@ import {
 } from 'react-bootstrap'
 import Moment from 'moment'
 const _ = require('lodash')
-// var PostActions = require('../actions/postactions');
 
 export default class PostPanel extends Component{
 	constructor(props) {
 	  	super(props);
 	
 	  	this.state = {}
-	  	this.toggleRecommendPost = this._toggleRecommendPost.bind(this)
-	  	this.toggleBlockPost = this._toggleBlockPost.bind(this)
-	  	this.toggleR18Post = this._toggleR18Post.bind(this)
+	  	this.toggleRecommend = this._toggleRecommend.bind(this)
+	  	this.toggleBlock = this._toggleBlock.bind(this)
+	  	this.toggleR18 = this._toggleR18.bind(this)
 	  	this.addTag = this._addTag.bind(this)
 	  	this.removeTag = this._removeTag.bind(this)
 	  	this.addSku = this._addSku.bind(this)
@@ -27,32 +26,30 @@ export default class PostPanel extends Component{
 			this.props.deletePost(this.props.post.id)
 		}
 	}
-	_toggleRecommendPost() {
-		this.props.toggleRecommendPost(this.props.post.id)
+	_toggleRecommend() {
+		this.props.toggleRecommend(this.props.post.id)
 	}
-	_toggleBlockPost() {
-		this.props.toggleBlockPost(this.props.post.id)
+	_toggleBlock() {
+		this.props.toggleBlock(this.props.post.id)
 	}
-	_toggleR18Post() {
-		console.log(this.props.post.isR18)
-		
-		this.props.toggleR18Post(this.props.post.id)
+	_toggleR18() {
+		this.props.toggleR18(this.props.post.id)
 	}
 	_addSku() {
 		let id = prompt('输入玩具ID')
 		if (id) {
-			this.props.addSkuPost(this.props.post.id,id)
+			this.props.addSku(this.props.post.id,id)
 		}
 	}
 	_addTag() {
 		let text = prompt('输入标签')
 		if (text) {
-			this.props.addTagPost(this.props.post.id,text)
+			this.props.addTag(this.props.post.id,text)
 		}
 	}
 	_removeTag(id) {
 		if (confirm('删除这个标签?')) {
-			this.props.removeTagPost(this.props.post.id,id)
+			this.props.removeTag(this.props.post.id,id)
 		}
 	}
 	render() {
@@ -132,9 +129,9 @@ export default class PostPanel extends Component{
 	                <span onClick={ this.addSku } className="btn btn-sm"><i className="fa fa-plus"></i></span>
 	                <span onClick={ this.addTag } className="btn btn-sm"><i className="fa fa-tag"></i></span>
 	                <span onClick={ this.props.openClass.bind(null, this.props.post) } className="btn btn-sm"><i className="fa fa-th-large"></i></span>
-	                <span onClick={ this.toggleR18Post } className={r18Class}><i className="fa fa-venus-mars"></i></span>
-	                <span onClick={ this.toggleBlockPost } className={invisibleClass}><i className="fa fa-eye-slash"></i></span>
-	                <span onClick={ this.toggleRecommendPost } className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span>
+	                <span onClick={ this.toggleR18 } className={r18Class}><i className="fa fa-venus-mars"></i></span>
+	                <span onClick={ this.toggleBlock } className={invisibleClass}><i className="fa fa-eye-slash"></i></span>
+	                <span onClick={ this.toggleRecommend } className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span>
 	                <span onClick={ this.deletePost } className="post-caption-btn btn btn-sm"><i className="fa fa-trash"></i></span>
 	              </ButtonToolbar>
 	            </div>

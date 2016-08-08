@@ -1,18 +1,32 @@
 import { connect } from 'react-redux'
 import UserDetail from './UserDetail'
 
-import { fetchUserInfo, fetchUserPost } from '../../actions/userDetailAction'
+import { 
+	fetchUserInfo, 
+	fetchUserPost, 
+	setClassification, 
+	removeClassification,
+	clearUserDetailPost 
+} from '../../actions/userDetailAction'
+import { fetchTagClass } from '../../actions/tagClassAction'
 
 const mapActionCreators = {
 	fetchUserInfo,
-	fetchUserPost
+	fetchUserPost,
+	setClassification,
+	removeClassification,
+	fetchTagClass,
+	clearUserDetailPost,
 }
 
 const mapStateToProps = (state) => {
 	const { user, posts } = state.userDetailReducer.toJS()
+	const { classifications, loaded } = state.tagClassReducer.toJS()
 	return {
 		user,
-		posts
+		posts,
+		classifications,
+		classLoaded:loaded,
 	}
 }
 

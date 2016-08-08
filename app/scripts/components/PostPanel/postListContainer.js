@@ -2,22 +2,22 @@ import { connect } from 'react-redux'
 import PostPanel from './PostPanel'
 
 import { 
-	toggleRecommendPost, 
-	addTagPost, 
-	removeTagPost, 
-	toggleBlockPost, 
-	toggleR18Post,
-	addSkuPost, 
+	toggleRecommend, 
+	addTag, 
+	removeTag, 
+	toggleBlock, 
+	toggleR18,
+	addSku, 
 	deletePost,
 } from '../../actions/postAction'
 
 const mapActionCreators ={
-	toggleRecommendPost,
-	toggleBlockPost,
-	toggleR18Post,
-	addTagPost,
-	removeTagPost,
-	addSkuPost,
+	toggleRecommend,
+	toggleBlock,
+	toggleR18,
+	addTag,
+	removeTag,
+	addSku,
 	deletePost,
 }
 

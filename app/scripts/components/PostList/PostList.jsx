@@ -3,10 +3,9 @@ import { Link } from 'react-router'
 import {
 	Row, Col, Modal, Form, FormGroup, InputGroup, FormControl, Button
 } from 'react-bootstrap'
-
-import PostPanel from '../PostPanel/index.js'
 const _ = require('lodash')
-// import PostPanel from '../postpanel'
+
+import PostPanel from '../PostPanel/postListContainer'
 
 export default class Post extends Component{
 	constructor(props) {
@@ -32,16 +31,18 @@ export default class Post extends Component{
 	}
 	componentWillMount() {
 		this.search()
-		this.props.fetchTagClass()
+		if(!this.props.classLoaded){
+			this.props.fetchTagClass()
+		}
 	}
 	_setPostClassification(pid,cid) {
 		this.state.selectedPost.cls.push(cid)
-		this.props.setPostClassification(pid,cid)
+		this.props.setClassification(pid,cid)
 	}
 	_removePostClassification(pid,c) {
 		let index = this.state.selectedPost.cls.indexOf(c)
 		index !== -1 ? this.state.selectedPost.cls.splice(index,1) : null
-		this.props.removePostClassification(pid,c)
+		this.props.removeClassification(pid,c)
 	}
 	_search() {
 		this.props.fetchPost(this.state.filter,this.state.query.trim())

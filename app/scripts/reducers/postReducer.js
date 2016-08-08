@@ -1,25 +1,25 @@
 import Immutable from 'immutable'
 import { 
-    RECEIVE_POST, 
-    RECEIVE_POST_NEW, 
-    TOGGLE_RECOMMEND_POST, 
-    TOGGLE_BLOCK_POST, 
-    TOGGLE_R18_POST,
-    ADD_TAG_POST, 
-    REMOVE_TAG_POST,
-    SET_POST_CLASSIFICATION,
-    REMOVE_POST_CLASSIFICATION,
-    ADD_SKU_POST,
-    DELETE_POST,
+    PL_RECEIVE_POST, 
+    PL_RECEIVE_POST_NEW, 
+    PL_TOGGLE_RECOMMEND, 
+    PL_TOGGLE_BLOCK, 
+    PL_TOGGLE_R18,
+    PL_ADD_TAG, 
+    PL_REMOVE_TAG,
+    PL_SET_CLASSIFICATION,
+    PL_REMOVE_CLASSIFICATION,
+    PL_ADD_SKU,
+    PL_DELETE_POST,
 } from '../actions/postAction'
 
 export default (state = Immutable.fromJS({ posts:[] }),action)=>{
     switch (action.type) {
-        case RECEIVE_POST:
+        case PL_RECEIVE_POST:
             return state.updateIn(['posts'], (posts) => posts.concat(Immutable.fromJS(action.res.posts)))
-        case RECEIVE_POST_NEW:
+        case PL_RECEIVE_POST_NEW:
             return state.updateIn(['posts'], (posts) => posts.clear().concat(Immutable.fromJS(action.res.posts)))
-        case ADD_SKU_POST:
+        case PL_ADD_SKU:
             return state.updateIn(['posts'], (posts) => {
                 return posts.update(
                     posts.findIndex((item) => {
@@ -29,7 +29,7 @@ export default (state = Immutable.fromJS({ posts:[] }),action)=>{
                     }
                 )
             })
-        case TOGGLE_RECOMMEND_POST:
+        case PL_TOGGLE_RECOMMEND:
             return state.updateIn(['posts'], (posts) => {
                 return posts.update(
                     posts.findIndex((item) => { 
@@ -39,7 +39,7 @@ export default (state = Immutable.fromJS({ posts:[] }),action)=>{
                     }
                 )
             })
-        case ADD_TAG_POST: 
+        case PL_ADD_TAG: 
             return state.updateIn(['posts'], (posts) => {
                 return posts.update(
                     posts.findIndex((item) => {
@@ -51,7 +51,7 @@ export default (state = Immutable.fromJS({ posts:[] }),action)=>{
                     }
                 )
             })
-        case REMOVE_TAG_POST:
+        case PL_REMOVE_TAG:
             return state.updateIn(['posts'], (posts) => {
                 return posts.update(
                     posts.findIndex((item) => {
@@ -65,7 +65,7 @@ export default (state = Immutable.fromJS({ posts:[] }),action)=>{
                     }
                 )
             })
-        case TOGGLE_BLOCK_POST:
+        case PL_TOGGLE_BLOCK:
             return state.updateIn(['posts'], (posts) => {
                 return posts.update(
                     posts.findIndex((item) => { 
@@ -75,7 +75,7 @@ export default (state = Immutable.fromJS({ posts:[] }),action)=>{
                     }
                 )
             })
-        case TOGGLE_R18_POST:
+        case PL_TOGGLE_R18:
             return state.updateIn(['posts'], (posts) => {
                 return posts.update(
                     posts.findIndex((item) => { 
@@ -85,7 +85,7 @@ export default (state = Immutable.fromJS({ posts:[] }),action)=>{
                     }
                 )
             })
-        case SET_POST_CLASSIFICATION:
+        case PL_SET_CLASSIFICATION:
             return state.updateIn(['posts'], (posts) => {
                 return posts.update(
                     posts.findIndex((item) => {
@@ -97,7 +97,7 @@ export default (state = Immutable.fromJS({ posts:[] }),action)=>{
                     }
                 )
             })
-        case REMOVE_POST_CLASSIFICATION:
+        case PL_REMOVE_CLASSIFICATION:
             return state.updateIn(['posts'], (posts) => {
                 return posts.update(
                     posts.findIndex((item) => {
@@ -111,7 +111,7 @@ export default (state = Immutable.fromJS({ posts:[] }),action)=>{
                     }
                 )
             })
-        case DELETE_POST: 
+        case PL_DELETE_POST: 
             return state.updateIn(['posts'], (posts) => {
                 return posts.delete(posts.findKey((post) => {
                     return post.get('id') === action.id

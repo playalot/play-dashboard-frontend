@@ -5,12 +5,14 @@ import thunk from 'redux-thunk'
 import postReducer from './reducers/postReducer'
 import tagClassReducer from './reducers/tagClassReducer'
 import userDetailReducer from './reducers/userDetailReducer'
+import statsReducer from './reducers/statsReducer'
 export const makeRootReducer = (asyncReducers) => {
 	return combineReducers({
 		// Add sync reducers here
 		postReducer,
 		tagClassReducer,
 		userDetailReducer,
+		statsReducer,
 		router,
 		...asyncReducers
 	})

@@ -1,12 +1,13 @@
 import React from 'react'
 //new
 import App from './components/App/App.jsx'
-import PostList from './components/PostList/index.js'
+import PostList from './components/PostList/index'
 
-import UserDetail from './components/UserDetail/index.js'
+import UserDetail from './components/UserDetail/index'
+import Home from './components/Home/index'
 //old
 // import UserDetail from './components/userdetail'
-import Home from './components/home';
+// import Home from './components/home';
 import RecommendHome from './components/recommendhome';
 import ExplorePage from './components/explorepage';
 import UserList from './components/userlist';

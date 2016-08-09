@@ -6,6 +6,8 @@ import postReducer from './reducers/postReducer'
 import tagClassReducer from './reducers/tagClassReducer'
 import userDetailReducer from './reducers/userDetailReducer'
 import statsReducer from './reducers/statsReducer'
+import recommendHomeReducer from './reducers/recommendHomeReducer'
+import tagReducer from './reducers/tagReducer'
 export const makeRootReducer = (asyncReducers) => {
 	return combineReducers({
 		// Add sync reducers here
@@ -13,6 +15,8 @@ export const makeRootReducer = (asyncReducers) => {
 		tagClassReducer,
 		userDetailReducer,
 		statsReducer,
+		recommendHomeReducer,
+		tagReducer,
 		router,
 		...asyncReducers
 	})

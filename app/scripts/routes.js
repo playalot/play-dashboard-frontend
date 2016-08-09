@@ -5,14 +5,16 @@ import PostList from './components/PostList/index'
 
 import UserDetail from './components/UserDetail/index'
 import Home from './components/Home/index'
+import RecommendHome from './components/RecommendHome/index'
+import TagList from './components/TagList/index'
 //old
 // import UserDetail from './components/userdetail'
 // import Home from './components/home';
-import RecommendHome from './components/recommendhome';
+// import RecommendHome from './components/recommendhome';
 import ExplorePage from './components/explorepage';
 import UserList from './components/userlist';
 import SkuList from './components/skulist';
-import TagList from './components/taglist';
+// import TagList from './components/taglist';
 import StickerList from './components/stickerlist';
 import ArticleList from './components/articlelist';
 

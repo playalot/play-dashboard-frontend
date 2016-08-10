@@ -88,7 +88,7 @@ export default class UserDetail extends Component{
               </div>
           )
         }
-        if (this.props.user.id && this.props.posts.length) {
+        if (this.props.user.id ) {
             const user = this.props.user
             const posts = this.props.posts
             return (

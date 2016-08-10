@@ -8,14 +8,15 @@ import Home from './components/Home/index'
 import RecommendHome from './components/RecommendHome/index'
 import TagList from './components/TagList/index'
 import ExplorePage from './components/ExplorePage/index'
+import UserList from './components/UserList/index'
 //old
 // import UserDetail from './components/userdetail'
 // import Home from './components/home';
 // import RecommendHome from './components/recommendhome';
 // import ExplorePage from './components/explorepage';
-import UserList from './components/userlist';
-import SkuList from './components/skulist';
 // import TagList from './components/taglist';
+// import UserList from './components/userlist';
+import SkuList from './components/skulist';
 import StickerList from './components/stickerlist';
 import ArticleList from './components/articlelist';
 

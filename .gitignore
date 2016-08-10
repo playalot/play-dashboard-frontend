@@ -5,3 +5,5 @@ target/*
 .sass-cache/*
 app/styles/*
 app/vendor/*
+build/*
+scripts/bundle/app.js

@@ -1,8 +1,9 @@
 import Request from 'superagent'
 
-export const RECEIVE_BANNER = 'RECEIVE_BANNER'
-export const RECEIVE_THEME = 'RECEIVE_THEME'
-export const RECEIVE_THEME_MORE = 'RECEIVE_THEME_MORE'
+export const EP_RECEIVE_BANNER = 'EP_RECEIVE_BANNER'
+export const EP_RECEIVE_THEME = 'EP_RECEIVE_THEME'
+export const EP_RECEIVE_THEME_MORE = 'EP_RECEIVE_THEME_MORE'
+export const EP_SET_THEME_NO_MORE = 'EP_SET_THEME_NO_MORE'
 
 export const EP_ADD_BANNER = 'EP_ADD_BANNER'
 export const EP_DELETE_BANNER = 'EP_DELETE_BANNER'
@@ -11,20 +12,26 @@ export const EP_DELETE_THEME = 'EP_DELETE_THEME'
 
 function receiveBanner(res) {
     return {
-        type: RECEIVE_BANNER,
+        type: EP_RECEIVE_BANNER,
         res
     }
 }
 function receiveTheme(res) {
     return {
-        type: RECEIVE_THEME,
+        type: EP_RECEIVE_THEME,
         res
     }
 }
 function receiveThemeMore(res) {
     return {
-        type: RECEIVE_THEME_MORE,
+        type: EP_RECEIVE_THEME_MORE,
         res
+    }
+}
+function setThemeNoMore(flag) {
+    return {
+        type: EP_SET_THEME_NO_MORE,
+        flag
     }
 }
 function _addBanner(res) {
@@ -63,17 +70,32 @@ export function fetchBanner() {
 const status = {
     page:0,
 }
-export function fetchTheme(more) {
-    more ? ++status.page : (status.page = 0)
+export function fetchTheme() {
     return (dispatch) => {
         return Request
             .get(`/api/themes`)
-            .query({page:status.page})
-            .end(function(err,res){
-                more ? dispatch(receiveThemeMore(res.body.themes)) : dispatch(receiveTheme(res.body.themes))
+            .query({page:0})
+            .end((err,res) => {
+                dispatch(receiveTheme(res.body.themes))
             })
     }
 }
+export function fetchThemeMore() {
+    return (dispatch,getState) => {
+        let page = getState().exploreReducer.getIn(['status','page'])
+        console.warn(page)
+        return Request
+            .get(`/api/themes`)
+            .query({page})
+            .end((err,res) => {
+                if(!res.body.themes.length){
+                    return dispatch(setThemeNoMore(true))
+                }
+                dispatch(receiveThemeMore(res.body.themes))
+            })
+    }
+}
+
 
 export function addBanner() {
     return (dispatch) => {

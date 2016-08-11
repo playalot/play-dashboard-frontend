@@ -1,11 +1,12 @@
 import Immutable from 'immutable'
-import { RECEIVE_STATS } from '../actions/statsAction'
+import { HOME_RECEIVE_STATS } from '../actions/statsAction'
 
-export default (state = Immutable.Map({ stats: {} }),action)=>{
+export default (state = Immutable.Map({ stats: {}, loaded:false }),action)=>{
     switch (action.type) {
-        case RECEIVE_STATS:
+        case HOME_RECEIVE_STATS:
             return state.mergeDeep({
-                stats: action.res
+                stats: action.res,
+                loaded:true
             })
         default:
             return state

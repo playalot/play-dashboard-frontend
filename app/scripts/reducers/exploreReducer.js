@@ -1,18 +1,26 @@
 import Immutable from 'immutable'
 import { 
-	RECEIVE_THEME, RECEIVE_THEME_MORE, RECEIVE_BANNER, 
+	EP_RECEIVE_THEME, EP_RECEIVE_THEME_MORE, EP_RECEIVE_BANNER, EP_SET_THEME_NO_MORE,
 	EP_ADD_BANNER,
 	EP_DELETE_BANNER, 
 	EP_ADD_THEME,
 	EP_DELETE_THEME
 } from '../actions/exploreAction'
 
-export default (state = Immutable.fromJS({ themeList: [],bannerList:[] }),action)=>{
+export default (state = Immutable.fromJS({ 
+    themeList:[], bannerList:[],
+    status:{
+        noMore:false,
+        page:0,
+        themeLoaded:false,
+        bannerLoaded:false,
+    }
+}),action) => {
     switch (action.type) {
-        case RECEIVE_BANNER:
+        case EP_RECEIVE_BANNER:
             return state.updateIn(['bannerList'],(bannerList) => {
             	return bannerList.clear().concat(Immutable.fromJS(action.res))
-            })
+            }).setIn(['status','bannerLoaded'],true)
         case EP_ADD_BANNER:
         	return state.updateIn(['bannerList'],(bannerList) => {
         		return bannerList.unshift(Immutable.fromJS(action.res))
@@ -23,14 +31,20 @@ export default (state = Immutable.fromJS({ themeList: [],bannerList:[] }),action
         			return banner.get('id') === action.id
         		}))
         	})
-		case RECEIVE_THEME:
+		case EP_RECEIVE_THEME:
             return state.updateIn(['themeList'],(themeList) => {
             	return themeList.clear().concat(Immutable.fromJS(action.res))
+            }).setIn(['status','themeLoaded'],true).updateIn(['status','page'],(page) =>{
+                return ++page
             })
-        case RECEIVE_THEME_MORE:
+        case EP_RECEIVE_THEME_MORE:
         	return state.updateIn(['themeList'],(themeList) => {
             	return themeList.concat(Immutable.fromJS(action.res))
+            }).updateIn(['status','page'],(page) =>{
+                return ++page
             })
+        case EP_SET_THEME_NO_MORE:
+            return state.setIn(['status','noMore'],action.flag)
         case EP_ADD_THEME:
         	return state.updateIn(['themeList'],(themeList) => {
         		return themeList.unshift(Immutable.fromJS(action.res))

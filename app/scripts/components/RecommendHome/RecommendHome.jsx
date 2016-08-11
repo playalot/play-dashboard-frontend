@@ -1,17 +1,17 @@
 import React,{ Component } from 'react'
-import Reflux from 'reflux'
 import { Row, Col } from 'react-bootstrap'
 import CDN from '../../widgets/cdn'
 
 export default class RecommendHome extends Component{
 	constructor(props) {
-	  	super(props);
+	  	super(props)
 	
-	  	this.state = {}
 	  	this.deleteHomeAd = this._deleteHomeAd.bind(this)
 	}
 	componentWillMount() {
-		this.props.fetchHomeads()
+		if(!this.props.loaded){
+			this.props.fetchHomeads()
+		}
 	}
 	_deleteHomeAd(id) {
 		if (confirm('删除这个推荐?')) {
@@ -19,12 +19,10 @@ export default class RecommendHome extends Component{
 	    }
 	}
 	render() {
-
-		if (this.props.homeads) {
-	      return (
-	        <div className="content">
-	          <Row>
-	            {
+		return (
+			<div className="content">
+	          	  <Row>
+	              {
 	            	this.props.homeads.map( (ad) => {
 		              return (
 		                <Col xs={12} sm={3} lg={3} key={'ad_'+ad.id}>
@@ -55,12 +53,9 @@ export default class RecommendHome extends Component{
 		                </Col>
 		              )
 		            })
-	            }
-	            </Row>
+	              }
+	              </Row>
 	        </div>
-	      )
-	    } else {
-	      return (<div></div>)
-	    }
+		)
 	}
 }

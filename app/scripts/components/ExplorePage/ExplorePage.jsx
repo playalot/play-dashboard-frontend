@@ -14,11 +14,22 @@ export default class ExplorePage extends Component{
 	  	this.deleteBanner = this._deleteBanner.bind(this)
 	  	this.addTheme = this._addTheme.bind(this)
 	  	this.deleteTheme = this._deleteTheme.bind(this)
-	  	this.fetchMoreThemes = () => this.props.fetchTheme(true)
+	  	this.fetchMoreThemes = this._fetchMoreThemes.bind(this)
 	}
 	componentWillMount() {
-		this.props.fetchBanner()
-		this.props.fetchTheme()
+		if(!this.props.bannerLoaded){
+			this.props.fetchBanner()
+		}
+		if(!this.props.themeLoaded){
+			this.props.fetchTheme()
+		}
+	}
+	_fetchMoreThemes() {
+
+		if(this.props.noMore){
+			return alert('no more')
+		}
+		this.props.fetchThemeMore()
 	}
 	_addBanner() {
 		if (confirm('创建一个新Banner？')) {
@@ -55,9 +66,9 @@ export default class ExplorePage extends Component{
 		        <br></br>
 		        <If test={this.props.bannerList}>
 		          <Row>
-		            {this.props.bannerList.map((banner) => {
+		            {this.props.bannerList.map((banner,index) => {
 		              return (
-		                <Col key={'b_'+banner.id} sm={6}>
+		                <Col key={'b_'+banner.id+index} sm={6}>
 		                  <div className="box">
 		                    <div className="box-header with-border">
 		                      <h3 className="box-title">
@@ -102,9 +113,9 @@ export default class ExplorePage extends Component{
 		        <br></br>
 		        <If test={this.props.themeList}>
 		          <Row>
-		            {this.props.themeList.map((theme) => {
+		            {this.props.themeList.map((theme,index) => {
 		              return (
-		                <Col key={'b_'+theme.id} sm={6}>
+		                <Col key={'b_'+theme.id+index} sm={6}>
 		                  <div className="box">
 		                    <div className="box-header with-border">
 		                      <h3 className="box-title">

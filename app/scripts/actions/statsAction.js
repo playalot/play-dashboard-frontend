@@ -1,19 +1,19 @@
 import Request from 'superagent'
 
-export const RECEIVE_STATS = 'RECEIVE_STATS'
+export const HOME_RECEIVE_STATS = 'HOME_RECEIVE_STATS'
 
 function receiveStats(res) {
     return {
-        type: RECEIVE_STATS,
+        type: HOME_RECEIVE_STATS,
         res
     }
 }
 
 export function fetchStats() {
-    return function(dispatch) {
+    return (dispatch) => {
         return Request
             .get(`/api/stats`)
-            .end(function(err,res){
+            .end((err,res) => {
                 dispatch(receiveStats(res.body))
             })
     }

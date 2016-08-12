@@ -432,8 +432,7 @@ export default class EditArticle extends Component {
           			</Dropzone>
 				</div>
 				<div className="edit-section">
-					<p className="title">文章标题</p>
-					<input type="text" value={this.state.title} className="input" onChange={this.handleTitleChange}/>
+					<input type="text" value={this.state.title} className="input" onChange={this.handleTitleChange} placeholder="输入文章标题"/>
 				</div>
 				<div className="edit-section">
 					<div className="edit-root">
@@ -521,7 +520,7 @@ export default class EditArticle extends Component {
 				</div>
 				<div className="edit-section">
 					<p className="title">作者ID</p>
-					<input type="text" value={this.state.authorId} className="input" onChange={this.handleAuthorIdChange}/>
+					<input type="text" value={this.state.authorId} className="form-control" onChange={this.handleAuthorIdChange}/>
 				</div>
 		      	<div className="edit-section">
 					<button className="btn btn-primary" onClick={this.publish}>发布文章</button>

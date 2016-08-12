@@ -104,8 +104,9 @@ class MarkupGenerator {
   totalBlocks: number;
   wrapperTag: ?string;
 
-  constructor(contentState: ContentState) {
+  constructor(contentState: ContentState,options) {
     this.contentState = contentState;
+    this.options = options;
   }
 
   generate(): string {
@@ -123,6 +124,7 @@ class MarkupGenerator {
   }
 
   processBlock() {
+    let blockRenderers = this.options.blockRenderers;
     let block = this.blocks[this.currentBlock];
     let blockType = block.getType();
     let newWrapperTag = getWrapperTag(blockType);
@@ -135,6 +137,16 @@ class MarkupGenerator {
       }
     }
     this.indent();
+    var customRenderer = blockRenderers != null && blockRenderers.hasOwnProperty(blockType) ? blockRenderers[blockType] : null;
+    var customRendererOutput = customRenderer ? customRenderer(block) : null;
+    // Renderer can return null, which will cause processing to continue as normal.
+    if (customRendererOutput != null) {
+      this.output.push(customRendererOutput);
+      this.output.push('\n');
+      this.currentBlock += 1;
+      return;
+    }
+
     this.writeStartTag(blockType);
     this.output.push(this.renderBlockContent(block));
     // Look ahead and see if we will nest list.
@@ -332,6 +344,6 @@ function encodeAttr(text: string): string {
     .split('"').join('&quot;');
 }
 
-export default function stateToHTML(content: ContentState): string {
-  return new MarkupGenerator(content).generate();
+export default function stateToHTML(content: ContentState,options): string {
+  return new MarkupGenerator(content,options).generate();
 }

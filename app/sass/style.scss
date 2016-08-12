@@ -9,6 +9,11 @@
 $fa-font-path: "~font-awesome/fonts";
 @import "~font-awesome/scss/font-awesome";
 
+
+//editor style
+@import '~draft-js/dist/Draft.css';
+@import '~react-select/dist/react-select.css';
+@import '~react-tagsinput/react-tagsinput.css';
 //custom style
 @import "layout/_main";
 @import "layout/_draft";

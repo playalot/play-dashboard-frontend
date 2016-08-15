@@ -28,6 +28,7 @@ export default class Post extends Component{
 	  	this.removePostClassification = (pid,c) => this._removePostClassification(pid,c)
 
 	  	this.search = this._search.bind(this)
+	  	this.getUnCls = () => this.props.getUnCls()
 	}
 	componentWillMount() {
 		this.search()
@@ -91,8 +92,13 @@ export default class Post extends Component{
 	          <div className="page-header">
 	            <Form inline>
 	              <FormGroup>
-	                <Col smOffset={2} style={{marginRight: '25px'}}>
+	                <Col smOffset={2} style={{marginRight: '5px'}}>
 	                  <Link to="/video/edit"><Button bsStyle='success'>发布视频</Button></Link>
+	                </Col>
+	              </FormGroup>
+	              <FormGroup>
+	                <Col smOffset={2} style={{marginRight: '25px'}}>
+	                  <Button bsStyle='success' onClick={this.getUnCls}>未定义标签</Button>
 	                </Col>
 	              </FormGroup>
 	              <FormGroup>

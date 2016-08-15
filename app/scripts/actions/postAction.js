@@ -11,6 +11,7 @@ export const PL_SET_CLASSIFICATION = 'PL_SET_CLASSIFICATION'
 export const PL_REMOVE_CLASSIFICATION = 'PL_REMOVE_CLASSIFICATION'
 export const PL_ADD_SKU = 'PL_ADD_SKU'
 export const PL_DELETE_POST = 'PL_DELETE_POST'
+export const PL_GET_UN_CLS = 'PL_GET_UN_CLS'
 
 function receivePost(res) {
     return {
@@ -81,6 +82,16 @@ function _deletePost(id) {
     return {
         type: PL_DELETE_POST,
         id
+    }
+}
+function _getUnCls() {
+    return {
+        type: PL_GET_UN_CLS,
+    }
+}
+export const getUnCls = () => {
+    return (dispatch) => {
+        dispatch(_getUnCls())
     }
 }
 export const addTag = (id, text) => {

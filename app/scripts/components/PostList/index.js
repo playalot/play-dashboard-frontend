@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { fetchPost, setClassification, removeClassification } from '../../actions/postAction'
+import { fetchPost, setClassification, removeClassification, getUnCls } from '../../actions/postAction'
 import { fetchTagClass } from '../../actions/tagClassAction'
 import PostList from './PostList'
 
@@ -8,6 +8,7 @@ const mapActionCreators ={
 	fetchTagClass,
 	setClassification,
 	removeClassification,
+	getUnCls,
 }
 
 const mapStateToProps = (state) => {

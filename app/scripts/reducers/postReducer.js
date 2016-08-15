@@ -11,6 +11,7 @@ import {
     PL_REMOVE_CLASSIFICATION,
     PL_ADD_SKU,
     PL_DELETE_POST,
+    PL_GET_UN_CLS,
 } from '../actions/postAction'
 
 export default (state = Immutable.fromJS({ posts:[] }),action)=>{
@@ -116,6 +117,12 @@ export default (state = Immutable.fromJS({ posts:[] }),action)=>{
                 return posts.delete(posts.findKey((post) => {
                     return post.get('id') === action.id
                 }))
+            })
+        case PL_GET_UN_CLS:
+            return state.updateIn(['posts'], (posts) => {
+                return posts.filter((item) => {
+                    return item.get('cls').size === 0
+                })
             })
         default:
             return state

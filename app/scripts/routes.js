@@ -12,6 +12,9 @@ import TagList from './components/TagList/index'
 
 import UserDetail from './components/UserDetail/index'
 import EditArticle from './components/EditArticle/EditArticle'
+import SkuList from './components/SkuList/index'
+
+
 //old
 // import UserDetail from './components/userdetail'
 // import Home from './components/home';
@@ -19,7 +22,7 @@ import EditArticle from './components/EditArticle/EditArticle'
 // import ExplorePage from './components/explorepage';
 // import TagList from './components/taglist';
 // import UserList from './components/userlist';
-import SkuList from './components/skulist';
+// import SkuList from './components/skulist';
 import StickerList from './components/stickerlist';
 // import ArticleList from './components/articlelist';
 

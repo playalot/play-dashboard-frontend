@@ -11,6 +11,7 @@ import tagReducer from './reducers/tagReducer'
 import exploreReducer from './reducers/exploreReducer'
 import userReducer from './reducers/userReducer'
 import articleReducer from './reducers/articleReducer'
+import skuReducer from './reducers/skuReducer'
 export const makeRootReducer = (asyncReducers) => {
 	return combineReducers({
 		// Add sync reducers here
@@ -23,6 +24,7 @@ export const makeRootReducer = (asyncReducers) => {
 		exploreReducer,
 		userReducer,
 		articleReducer,
+		skuReducer,
 		router,
 		...asyncReducers
 	})

@@ -11,7 +11,7 @@ import tagReducer from './reducers/tagReducer'
 import exploreReducer from './reducers/exploreReducer'
 import userReducer from './reducers/userReducer'
 import articleReducer from './reducers/articleReducer'
-import skuReducer from './reducers/skuReducer'
+import toyReducer from './reducers/toyReducer'
 import stickerReducer from './reducers/stickerReducer'
 export const makeRootReducer = (asyncReducers) => {
 	return combineReducers({
@@ -25,7 +25,7 @@ export const makeRootReducer = (asyncReducers) => {
 		exploreReducer,
 		userReducer,
 		articleReducer,
-		skuReducer,
+		toyReducer,
 		stickerReducer,
 		router,
 		...asyncReducers
@@ -57,6 +57,6 @@ export default ( history, initialState ) => {
 	)
 
 	store.asyncReducers = {}
-	
+
 	return store
 }

@@ -1,22 +1,22 @@
 import Request from 'superagent'
 
-export const SKL_RECEIVE_SKU = 'SKL_RECEIVE_SKU'
-export const SKL_RECEIVE_SKU_NEW = 'SKL_RECEIVE_SKU_NEW'
+export const SKL_RECEIVE_TOY = 'SKL_RECEIVE_TOY'
+export const SKL_RECEIVE_TOY_NEW = 'SKL_RECEIVE_TOY_NEW'
 
 export const SKL_TOGGLE_R18 = 'SKL_TOGGLE_R18'
 export const SKL_TOGGLE_RECOMMEND = 'SKL_TOGGLE_RECOMMEND'
-export const SKL_DELETE_SKU = 'SKL_DELETE_SKU'
-export const SKL_ADD_SKU = 'SKL_ADD_SKU'
+export const SKL_DELETE_TOY = 'SKL_DELETE_TOY'
+export const SKL_ADD_TOY = 'SKL_ADD_TOY'
 
-function receiveSku(res) {
+function receiveToy(res) {
     return {
-        type: SKL_RECEIVE_SKU,
+        type: SKL_RECEIVE_TOY,
         res
     }
 }
-function receiveSkuNew(res) {
+function receiveToyNew(res) {
     return {
-        type: SKL_RECEIVE_SKU_NEW,
+        type: SKL_RECEIVE_TOY_NEW,
         res
     }
 }
@@ -32,27 +32,27 @@ function _toggleRecommend(id) {
         id
     }
 }
-function _deleteSku(id) {
+function _deleteToy(id) {
     return {
-        type: SKL_DELETE_SKU,
+        type: SKL_DELETE_TOY,
         id
     }
 }
-function _addSku(res) {
+function _addToy(res) {
     return {
-        type: SKL_ADD_SKU,
+        type: SKL_ADD_TOY,
         res
     }
 }
 export function toggleR18(id) {
     return (dispatch,getState) => {
         let value = null
-        let index = getState().skuReducer.get('skus').findIndex((item) => {
+        let index = getState().toyReducer.get('toys').findIndex((item) => {
             value = item.get('id') === id ? item.get('isR18') : null
             return item.get('id') === id
         })
         Request
-            .post(`/api/sku/${id}/r18`)
+            .post(`/api/toy/${id}/r18`)
             .send({
                 r18: !value
             })
@@ -64,12 +64,12 @@ export function toggleR18(id) {
 export function toggleRecommend(id) {
     return (dispatch,getState) => {
         let value = null
-        let index = getState().skuReducer.get('skus').findIndex((item) => {
+        let index = getState().toyReducer.get('toys').findIndex((item) => {
             value = item.get('id') === id ? item.get('isRec') : null
             return item.get('id') === id
         })
         Request
-            .post(`/api/sku/${id}/recommend`)
+            .post(`/api/toy/${id}/recommend`)
             .send({
                 recommend: !value
             })
@@ -78,12 +78,12 @@ export function toggleRecommend(id) {
             })
     }
 }
-export function deleteSku(id) {
+export function deleteToy(id) {
     return (dispatch) => {
         Request
-            .del(`/api/sku/${id}`)
+            .del(`/api/toy/${id}`)
             .end((err,res) => {
-                dispatch(_deleteSku(id))
+                dispatch(_deleteToy(id))
             })
     }
 }
@@ -96,23 +96,23 @@ export function recommend(id) {
             })
     }
 }
-export function addSku() {
+export function addToy() {
     $.ajax({
-          url: '/api/sku',
+          url: '/api/toy',
           dataType: 'json',
           type: 'POST',
           context: this,
           success: function(data) {
             console.log(data);
-            this.skus.unshift(data);
-            this.trigger(this.skus);
+            this.toys.unshift(data);
+            this.trigger(this.toys);
           }
       });
     return (dispatch) => {
         Request
-            .post(`/api/sku`)
+            .post(`/api/toy`)
             .end((err,res) => {
-                dispatch(_addSku(res.body))
+                dispatch(_addToy(res.body))
             })
     }
 }
@@ -123,7 +123,7 @@ const status = {
     page: 0,
     overload: false,
 }
-export function fetchSku(filter, query, sort) {
+export function fetchToys(filter, query, sort) {
     if (status.query !== query || status.filter !== filter || status.sort !== sort) {
           status.filter = filter
           status.query = query
@@ -132,7 +132,7 @@ export function fetchSku(filter, query, sort) {
           status.overload = true
     } else {
         status.overload = false
-    }   
+    }
     let params = {}
     if (status.page !== 0) {
         params.page = status.page
@@ -148,11 +148,11 @@ export function fetchSku(filter, query, sort) {
     }
     return (dispatch) => {
         return Request
-            .get(`/api/skus`)
+            .get(`/api/toys`)
             .query(params)
             .end((err,res) => {
                 status.page = res.body.nextPage
-                status.overload ? dispatch(receiveSkuNew(res.body.skus)) : dispatch(receiveSku(res.body.skus))
+                status.overload ? dispatch(receiveToyNew(res.body.toys)) : dispatch(receiveToy(res.body.toys))
             })
     }
 }

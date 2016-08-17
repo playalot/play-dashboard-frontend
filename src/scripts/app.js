@@ -8,7 +8,7 @@ import RecommendHome from './components/recommendhome';
 import ExplorePage from './components/explorepage';
 import PostList from './components/postlist';
 import UserList from './components/userlist';
-import SkuList from './components/skulist';
+import ToyList from './components/toylist';
 import UserDetail from './components/userdetail';
 import TagList from './components/taglist';
 import StickerList from './components/stickerlist';
@@ -19,7 +19,7 @@ import EditShortVideo from './components/editshortvideo';
 import EditSticker from './components/editsticker';
 import EditStickerSet from './components/editstickerset';
 import EditRecommend from './components/editrecommend';
-import EditSku from './components/editsku';
+import EditToy from './components/edittoy';
 import EditArticle from './components/editarticle';
 
 import Test from './components/test';
@@ -36,14 +36,14 @@ ReactDOM.render((
 			<Route path="article" component={ArticleList} />
 			<Route path="user" component={UserList} />
 			<Route path="tag" component={TagList} />
-			<Route path="sku" component={SkuList} />
+			<Route path="toy" component={ToyList} />
 			<Route path="sticker" component={StickerList} />
 			<Route path="/user/:id" component={UserDetail} />
 			<Route path="/tag/:id" component={EditTag} />
 			<Route path="/sticker/set/:id/edit" component={EditStickerSet} />
 			<Route path="/sticker/set/:id/add" component={EditSticker} />
 			<Route path="/recommend/:id/edit" component={EditRecommend} />
-			<Route path="/sku/:id/edit" component={EditSku} />
+			<Route path="/toy/:id/edit" component={EditToy} />
 			<Route path="video/edit" component={EditShortVideo} />
 			<Route path="article/edit" component={EditArticle} />
 	    <Route path="test" component={Test} />

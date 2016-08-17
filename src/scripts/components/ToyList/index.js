@@ -1,9 +1,9 @@
 import { connect } from 'react-redux'
 import ToyList from './ToyList'
-import { fetchToy, recommend, toggleR18, toggleRecommend, deleteToy, addToy } from '../../actions/toyAction'
+import { fetchToys, recommend, toggleR18, toggleRecommend, deleteToy, addToy } from '../../actions/toyAction'
 
 const mapActionCreators = {
-	fetchToy,
+	fetchToys,
 	recommend,
 	toggleR18,
 	toggleRecommend,

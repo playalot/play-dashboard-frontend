@@ -9,7 +9,7 @@ import ArticleList from './components/ArticleList/index'
 import UserList from './components/UserList/index'
 import TagList from './components/TagList/index'
 import UserDetail from './components/UserDetail/index'
-import SkuList from './components/SkuList/index'
+import ToyList from './components/ToyList/index'
 import StickerList from './components/StickerList/index'
 
 import EditArticle from './components/EditArticle/EditArticle'
@@ -20,7 +20,7 @@ import EditArticle from './components/EditArticle/EditArticle'
 // import ExplorePage from './components/explorepage';
 // import TagList from './components/taglist';
 // import UserList from './components/userlist';
-// import SkuList from './components/skulist';
+// import ToyList from './components/toylist';
 // import StickerList from './components/stickerlist';
 // import ArticleList from './components/articlelist';
 
@@ -29,7 +29,7 @@ import EditShortVideo from './components/editshortvideo';
 import EditSticker from './components/editsticker';
 import EditStickerSet from './components/editstickerset';
 import EditRecommend from './components/editrecommend';
-import EditSku from './components/editsku';
+import EditToy from './components/edittoy';
 // import EditArticle from './components/editarticle';
 
 import Test from './components/test';
@@ -46,15 +46,15 @@ export default {
         { path:'/article', component:ArticleList },
         { path:'/user', component:UserList },
         { path:'/tag', component:TagList },
-        { path:'/sku', component:SkuList },
+        { path:'/toy', component:ToyList },
         { path:'/sticker', component:StickerList },
-        
+
         { path:'/user/:id', component:UserDetail },
         { path:'/tag/:id', component:EditTag },
         { path:'/sticker/set/:id/edit', component:EditStickerSet },
         { path:'/sticker/set/:id/add', component:EditSticker },
         { path:'/recommend/:id/edit', component:EditRecommend },
-        { path:'/sku/:id/edit', component:EditSku },
+        { path:'/toy/:id/edit', component:EditToy },
         { path:'/video/edit', component:EditShortVideo },
         { path:'/article/edit', component:EditArticle },
         { path:'/test', component:Test },

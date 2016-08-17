@@ -1,7 +1,7 @@
 import React,{ Component } from 'react'
 import { Link } from 'react-router'
 import {
-	Col, ButtonToolbar, 
+	Col, ButtonToolbar,
 } from 'react-bootstrap'
 import Moment from 'moment'
 const _ = require('lodash')
@@ -9,7 +9,7 @@ const _ = require('lodash')
 export default class PostPanel extends Component{
 	constructor(props) {
 	  	super(props);
-	
+
 	  	this.state = {}
 	  	this.toggleRecommend = this._toggleRecommend.bind(this)
 	  	this.toggleBlock = this._toggleBlock.bind(this)
@@ -59,10 +59,10 @@ export default class PostPanel extends Component{
 
 
 	    let skuDiv = ''
-	    if (this.props.post.toys !== undefined && this.props.post.toys !== null) {
+	    if (this.props.post.toy !== undefined && this.props.post.toy !== null) {
 	      	skuDiv  = (
-	      		<Link to={'/sku/'+this.props.post.toys.id+'/edit'}>
-	      			<span className='label label-success label-margin'>{this.props.post.toys.name.substring(0, 25)+'...'}</span>
+	      		<Link to={'/sku/'+this.props.post.toy.id+'/edit'}>
+	      			<span className='label label-success label-margin'>{this.props.post.toy.name.substring(0, 25)+'...'}</span>
 	      		</Link>
 	      	)
 	    }
@@ -80,15 +80,15 @@ export default class PostPanel extends Component{
 	      	contentDiv = (
 	      		<div className="box-body no-padding" style={{paddingBottom:'2px !important'}}>
 			        <div>
-			          	<img className="img-responsive" src={this.props.post.photos[0].url} alt="Photo" onClick={ this.props.openImage.bind(null, this.props.post.photos[0].url) } />
+			          	<img className="img-responsive" src={this.props.post.photos[0].url640} alt="Photo" onClick={ this.props.openImage.bind(null, this.props.post.photos[0].url1080) } />
 			        </div>
 			        <div className="panel-photos">
 			          	{
 			          		this.props.post.photos.slice(1, this.props.post.photos.length).map(function (photo, i) {
 			            		return (
 			            			<div key={'p_'+this.props.post.id+'_'+i}  className="pull-left">
-			            				<img className="img-responsive panel-photos-small" 
-			            					src={photo.url} alt="Photo" 
+			            				<img className="img-responsive panel-photos-small"
+			            					src={photo.url} alt="Photo"
 			            					onClick={ this.props.openImage.bind(null, photo.url) } />
 			            			</div>)
 			          		}, this)
@@ -115,7 +115,7 @@ export default class PostPanel extends Component{
 	            </div>
 	            <div className="box-body no-top-padding">
 	              {this.props.post.tags.map(function (t) {
-	                return (<span key={'p_'+this.props.post.id+'_t_'+t.id} className='label label-info label-margin' bsStyle='success'><Link to={'/tag/'+t.id}>{t.text}</Link>{" "}<i className="fa fa-close" onClick={ () => this.removeTag(t.id)}></i></span>);
+	                return (<span key={'p_'+this.props.post.id+'_t_'+t.id} className='label label-info label-margin'><Link to={'/tag/'+t.id}>{t.text}</Link>{" "}<i className="fa fa-close" onClick={ () => this.removeTag(t.id)}></i></span>);
 	              },this)}
 	              {skuDiv}
 	            </div>

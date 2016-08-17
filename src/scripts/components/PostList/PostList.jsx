@@ -11,11 +11,11 @@ export default class Post extends Component{
 	constructor(props) {
 	  	super(props)
 	  	this.state = {
-			filter: '',
-			query: '',
-			showModal: false,
-			showImage: '',
-			selectedPost: null
+				filter: '',
+				query: '',
+				showModal: false,
+				showImage: '',
+				selectedPost: null
 	  	}
 	  	this.onChangeQuery = (e) => this.setState({ query: e.target.value })
 	  	this.onChangeFilter = (e) => this.setState({ filter: e.target.value })
@@ -63,7 +63,7 @@ export default class Post extends Component{
 				               	{
 				               		this.state.selectedPost.cls.map(function(c){
 					                 	return (
-					                 		<span key={'t_c_m_'+c} 
+					                 		<span key={'t_c_m_'+c}
 					                 		onClick={ () => this.removePostClassification( this.state.selectedPost.id, c) }
 					                 		className="label label-warning label-margin" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>);
 					               	}, this)
@@ -74,9 +74,9 @@ export default class Post extends Component{
 					            {
 					             	cls.map((c,key) => {
 					             		return (
-					             			<span key={'c_m_'+key} 
-					             			className='label label-info label-margin' 
-					             			bsStyle='success' 
+					             			<span key={'c_m_'+key}
+					             			className='label label-info label-margin'
+					             			bsStyle='success'
 					             			onClick={() => this.setPostClassification(this.state.selectedPost.id, c.id) }>{c.name}</span>
 					             		)
 					             	})
@@ -121,16 +121,16 @@ export default class Post extends Component{
 	          </div>
 	          <Row>
 	          	{
-	          		this.props.posts ? 
+	          		this.props.posts ?
 	            	this.props.posts.map(function (post) {
 		              return (
 		                <PostPanel key={'p_'+post.id} post={post} openImage={this.openImage} openClass={this.openClass}/>
 		              );
 		            }, this):null
 
-	          			
+
 	          	}
-	    
+
 	          </Row>
 	          <Row>
 	            <div className="load-more-btn" onClick={this.search}>Load More</div>

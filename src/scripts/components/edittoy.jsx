@@ -27,7 +27,7 @@ var EditSku = React.createClass({
     };
   },
   componentDidMount: function() {
-    $.get('/api/sku/'+this.props.params.id, function(data) {
+    $.get('/api/toy/'+this.props.params.id, function(data) {
       console.log(data);
       if (this.isMounted()) {
         this.refs.form.resetModel(data);
@@ -49,7 +49,7 @@ var EditSku = React.createClass({
     var formData = new FormData();
     formData.append('file', images[0]);
     $.ajax({
-         url : '/api/upload?key=sku/cover/'+this.props.params.id + '.jpg',
+         url : '/api/upload?key=toy/cover/'+this.props.params.id + '.jpg',
          type : 'POST',
          data : formData,
          processData: false,  // tell jQuery not to process the data
@@ -66,7 +66,7 @@ var EditSku = React.createClass({
     var formData = new FormData();
     formData.append('file', images[0]);
     $.ajax({
-         url : '/api/upload?key=sku/img/'+this.props.params.id + '_' + (Date.now() / 1000) + '.jpg',
+         url : '/api/upload?key=toy/img/'+this.props.params.id + '_' + (Date.now() / 1000) + '.jpg',
          type : 'POST',
          data : formData,
          processData: false,  // tell jQuery not to process the data
@@ -116,7 +116,7 @@ var EditSku = React.createClass({
     console.log(filteredModel);
 
     $.ajax({
-      url: '/api/sku/'+this.props.params.id,  //Server script to process data
+      url: '/api/toy/'+this.props.params.id,  //Server script to process data
       type: 'POST',
       data: JSON.stringify(filteredModel),
       contentType: 'application/json; charset=utf-8',
@@ -128,7 +128,7 @@ var EditSku = React.createClass({
     });
   },
   onConfirm: function() {
-    this.context.router.push('/sku');
+    this.context.router.push('/toy');
   },
   onClose: function() {
      this.setState({alert: false});

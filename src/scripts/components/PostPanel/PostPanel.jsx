@@ -59,10 +59,10 @@ export default class PostPanel extends Component{
 
 
 	    let skuDiv = ''
-	    if (this.props.post.sku !== 'undefined' && this.props.post.sku !== null) {
+	    if (this.props.post.toys !== undefined && this.props.post.toys !== null) {
 	      	skuDiv  = (
-	      		<Link to={'/sku/'+this.props.post.sku.id+'/edit'}>
-	      			<span className='label label-success label-margin'>{this.props.post.sku.name.substring(0, 25)+'...'}</span>
+	      		<Link to={'/sku/'+this.props.post.toys.id+'/edit'}>
+	      			<span className='label label-success label-margin'>{this.props.post.toys.name.substring(0, 25)+'...'}</span>
 	      		</Link>
 	      	)
 	    }

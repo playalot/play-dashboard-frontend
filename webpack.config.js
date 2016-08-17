@@ -6,7 +6,7 @@ module.exports = {
 	entry: {
 		app: ['webpack/hot/dev-server',
 			'webpack-dev-server/client?http://localhost:8081',
-			path.resolve(__dirname, 'app/scripts/main.js')
+			path.resolve(__dirname, 'src/scripts/main.js')
 		],
 		vendor: [
 			'jquery',
@@ -18,7 +18,7 @@ module.exports = {
 		extensions: ['', '.js', '.jsx']
 	},
 	output: {
-		path: path.resolve(__dirname, 'app'),
+		path: path.resolve(__dirname, 'src'),
 		filename: '/scripts/bundle.js'
 	},
 	module: {
@@ -26,7 +26,7 @@ module.exports = {
 			test: /\.jsx?$/,
 			// exclude:/node_modules/,
 			loaders: ['babel'],
-			include: [path.join(__dirname, 'app')]
+			include: [path.join(__dirname, 'src')]
 		}, {
 			test: /\.scss$/,
 			loader: 'style!css!autoprefixer?browsers=last 5 version!sass',
@@ -57,7 +57,7 @@ module.exports = {
 		})
 	],
 	devServer: {
-		contentBase: "app",
+		contentBase: "src",
 		hot: true,
 		progress: true,
 		inline: true,

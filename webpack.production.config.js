@@ -9,7 +9,7 @@ const ExtractMain = new ExtractTextPlugin('styles/main.css');
 
 const config = {
     entry: {
-        app: path.resolve(__dirname, 'app/scripts/main.js'),
+        app: path.resolve(__dirname, 'src/scripts/main.js'),
         vendor: [
             'jquery',
             'bootstrap-sass/assets/javascripts/bootstrap.js',
@@ -17,7 +17,7 @@ const config = {
         ]
     },
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'build'),
         filename: 'scripts/bundle.js'
     },
     resolve: {
@@ -29,7 +29,7 @@ const config = {
                 test: /\.jsx?$/,
                 exclude: [node_modules_dir],
                 loaders: ['babel'],
-                include: [path.join(__dirname, 'app')]
+                include: [path.join(__dirname, 'src')]
             }, 
             // {
             //     test: /\.less$/,
@@ -65,8 +65,8 @@ const config = {
             "window.jQuery": "jquery"
         }),
         new CopyWebpackPlugin([{
-            from: path.resolve(__dirname, "app/index.html"),
-            to: path.resolve(__dirname, "dist/index.html")
+            from: path.resolve(__dirname, "src/index.html"),
+            to: path.resolve(__dirname, "build/index.html")
         }]),
         // ExtractVendor,
         ExtractMain,

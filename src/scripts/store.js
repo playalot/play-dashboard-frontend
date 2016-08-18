@@ -13,6 +13,8 @@ import userReducer from './reducers/userReducer'
 import articleReducer from './reducers/articleReducer'
 import toyReducer from './reducers/toyReducer'
 import stickerReducer from './reducers/stickerReducer'
+import reportReducer from './reducers/reportReducer'
+import feedbackReducer from './reducers/feedbackReducer'
 export const makeRootReducer = (asyncReducers) => {
 	return combineReducers({
 		// Add sync reducers here
@@ -27,6 +29,8 @@ export const makeRootReducer = (asyncReducers) => {
 		articleReducer,
 		toyReducer,
 		stickerReducer,
+		reportReducer,
+		feedbackReducer,
 		router,
 		...asyncReducers
 	})

@@ -61,6 +61,17 @@ export default class App extends Component{
 		              <li><Link to="/toy" activeClassName="active"><i className="fa fa-rocket"></i><span>玩具</span></Link></li>
 		              <li><Link to="/tag" activeClassName="active"><i className="fa fa-tags"></i><span>标签</span></Link></li>
 		              <li><Link to="/sticker" activeClassName="active"><i className="fa fa-paw"></i><span>贴纸</span></Link></li>
+		              <li>
+		                <a href="#">
+		                  <i className="fa fa-info-circle"></i>
+		                  <span>投诉</span>
+		                  <i className="fa fa-angle-left pull-right"></i>
+		                </a>
+		                <ul className="treeview-menu">
+		                  <li><Link to="/report" activeClassName="active"><i className="fa fa-info-circle"></i><span>举报</span></Link></li>
+		                  <li><Link to="/feedback" activeClassName="active"><i className="fa fa-info-circle"></i><span>反馈</span></Link></li>
+		                </ul>
+		              </li>	
 		            </ul>
 		          </section>
 		        </div>

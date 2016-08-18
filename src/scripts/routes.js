@@ -11,6 +11,8 @@ import TagList from './components/TagList/index'
 import UserDetail from './components/UserDetail/index'
 import ToyList from './components/ToyList/index'
 import StickerList from './components/StickerList/index'
+import ReportList from './components/ReportList/index'
+import FeedbackList from './components/FeedbackList/index'
 
 import EditArticle from './components/EditArticle/EditArticle'
 //old
@@ -48,6 +50,8 @@ export default {
         { path:'/tag', component:TagList },
         { path:'/toy', component:ToyList },
         { path:'/sticker', component:StickerList },
+        { path:'/report', component:ReportList },
+        { path:'/feedback', component:FeedbackList },
 
         { path:'/user/:id', component:UserDetail },
         { path:'/tag/:id', component:EditTag },

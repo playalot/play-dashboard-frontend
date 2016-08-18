@@ -13,6 +13,7 @@ import {
     UD_SET_CLASSIFICATION,
     UD_REMOVE_CLASSIFICATION,
     UD_ADD_SKU,
+    UD_REMOVE_TOY,
 } from '../actions/userDetailAction'
 
 export default ( state = Immutable.fromJS({user:{},posts:[],status:{ts:''}}),action ) => {
@@ -39,7 +40,17 @@ export default ( state = Immutable.fromJS({user:{},posts:[],status:{ts:''}}),act
                     posts.findIndex((item) => {
                         return item.get('id') === action.id
                     }), (item) => {
-                        return item.set('sku', action.sku)
+                        return item.set('toy', action.toy)
+                    }
+                )
+            })
+        case UD_REMOVE_TOY:
+            return state.updateIn(['posts'],(posts) => {
+                return posts.update(
+                    posts.findIndex((item) => {
+                        return item.get('id') === action.id
+                    }), (item) => {
+                        return item.set('toy',null)
                     }
                 )
             })

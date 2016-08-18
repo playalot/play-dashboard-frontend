@@ -9,6 +9,7 @@ import {
 	toggleR18,
 	addSku, 
 	deletePost,
+	removeToy,
 } from '../../actions/userDetailAction'
 
 const mapActionCreators ={
@@ -18,6 +19,7 @@ const mapActionCreators ={
 	addTag,
 	removeTag,
 	addSku,
+	removeToy,
 	deletePost,
 }
 

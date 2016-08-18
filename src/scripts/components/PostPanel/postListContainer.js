@@ -9,6 +9,7 @@ import {
 	toggleR18,
 	addSku, 
 	deletePost,
+	removeToy,
 } from '../../actions/postAction'
 
 const mapActionCreators ={
@@ -19,6 +20,7 @@ const mapActionCreators ={
 	removeTag,
 	addSku,
 	deletePost,
+	removeToy,
 }
 
 const mapStateToProps = (state) => {

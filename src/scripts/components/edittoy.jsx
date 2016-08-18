@@ -209,7 +209,7 @@ var EditSku = React.createClass({
                   </Dropzone>
                   {this.state.images.map(function (img) {
                     return (
-                      <div className="pull-left" style={{'margin-left':'5px'}} key={'img_'+img}>
+                      <div className="pull-left" style={{'marginLeft':'5px'}} key={'img_'+img}>
                         <img className="img-responsive" style={{maxHeight:'100px'}} src={img?CDN.show(img):''}/>
                       </div>
                     );

@@ -14,6 +14,7 @@ export const UD_REMOVE_TAG = 'UD_REMOVE_TAG'
 export const UD_SET_CLASSIFICATION = 'UD_SET_CLASSIFICATION'
 export const UD_REMOVE_CLASSIFICATION = 'UD_REMOVE_CLASSIFICATION'
 export const UD_ADD_SKU = 'UD_ADD_SKU'
+export const UD_REMOVE_TOY = 'UD_REMOVE_TOY'
 
 function receiveUserDetailInfo(res) {
     return {
@@ -104,11 +105,17 @@ function _removeClassification(pid,c) {
         c
     }
 }
-function _addSku(id,sku) {
+function _addSku(id,toy) {
     return {
         type: UD_ADD_SKU,
         id,
-        sku
+        toy
+    }
+}
+function _removeToy(id) {
+    return {
+        type: UD_REMOVE_TOY,
+        id
     }
 }
 function _deletePost(id) {
@@ -203,9 +210,18 @@ export const removeClassification = (pid,c) => {
 export const addSku = (id,sid) => {
     return (dispatch,getState) => {
         return Request
-            .post(`/api/post/${id}/sku/${sid}`)
+            .post(`/api/post/${id}/toy/${sid}`)
             .end(function(err,res){
                 dispatch(_addSku(id,res.body))
+            })
+    }
+}
+export const removeToy = (id) => {
+    return (dispatch) => {
+        return Request
+            .del(`/api/post/${id}/toy`)
+            .end((err,res) => {
+                dispatch(_removeToy(id))
             })
     }
 }

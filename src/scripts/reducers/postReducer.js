@@ -10,6 +10,7 @@ import {
     PL_SET_CLASSIFICATION,
     PL_REMOVE_CLASSIFICATION,
     PL_ADD_SKU,
+    PL_REMOVE_TOY,
     PL_DELETE_POST,
     PL_GET_UN_CLS,
 } from '../actions/postAction'
@@ -26,7 +27,17 @@ export default (state = Immutable.fromJS({ posts:[] }),action)=>{
                     posts.findIndex((item) => {
                         return item.get('id') === action.id
                     }), (item) => {
-                        return item.set('sku',action.sku)
+                        return item.set('toy',action.toy)
+                    }
+                )
+            })
+        case PL_REMOVE_TOY:
+            return state.updateIn(['posts'],(posts) => {
+                return posts.update(
+                    posts.findIndex((item) => {
+                        return item.get('id') === action.id
+                    }), (item) => {
+                        return item.set('toy',null)
                     }
                 )
             })

@@ -10,6 +10,7 @@ export const PL_REMOVE_TAG = 'PL_REMOVE_TAG'
 export const PL_SET_CLASSIFICATION = 'PL_SET_CLASSIFICATION'
 export const PL_REMOVE_CLASSIFICATION = 'PL_REMOVE_CLASSIFICATION'
 export const PL_ADD_SKU = 'PL_ADD_SKU'
+export const PL_REMOVE_TOY = 'PL_REMOVE_TOY'
 export const PL_DELETE_POST = 'PL_DELETE_POST'
 export const PL_GET_UN_CLS = 'PL_GET_UN_CLS'
 
@@ -71,11 +72,17 @@ function _removeClassification(pid, c) {
         c
     }
 }
-function _addSku(id, sku) {
+function _addSku(id, toy) {
     return {
         type: PL_ADD_SKU,
         id,
-        sku
+        toy
+    }
+}
+function _removeToy(id) {
+    return {
+        type: PL_REMOVE_TOY,
+        id
     }
 }
 function _deletePost(id) {
@@ -186,9 +193,18 @@ export const removeClassification = (pid, c) => {
 export const addSku = (id, sid) => {
     return (dispatch, getState) => {
         return Request
-            .post(`/api/post/${id}/sku/${sid}`)
+            .post(`/api/post/${id}/toy/${sid}`)
             .end(function(err, res) {
                 dispatch(_addSku(id, res.body))
+            })
+    }
+}
+export const removeToy = (id) => {
+    return (dispatch) => {
+        return Request
+            .del(`/api/post/${id}/toy`)
+            .end((err,res) => {
+                dispatch(_removeToy(id))
             })
     }
 }

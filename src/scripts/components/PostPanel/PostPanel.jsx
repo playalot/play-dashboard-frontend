@@ -17,6 +17,7 @@ export default class PostPanel extends Component{
 	  	this.addTag = this._addTag.bind(this)
 	  	this.removeTag = this._removeTag.bind(this)
 	  	this.addSku = this._addSku.bind(this)
+	  	this.removeToy = this._removeToy.bind(this)
 	  	this.deletePost = this._deletePost.bind(this)
 	}
 	componentWillMount() {
@@ -41,6 +42,11 @@ export default class PostPanel extends Component{
 			this.props.addSku(this.props.post.id,id)
 		}
 	}
+	_removeToy() {
+		if (confirm('删除这个玩具标签?')) {
+			this.props.removeToy(this.props.post.id)
+		}
+	}
 	_addTag() {
 		let text = prompt('输入标签')
 		if (text) {
@@ -61,9 +67,12 @@ export default class PostPanel extends Component{
 	    let skuDiv = ''
 	    if (this.props.post.toy !== undefined && this.props.post.toy !== null) {
 	      	skuDiv  = (
-	      		<Link to={'/sku/'+this.props.post.toy.id+'/edit'}>
-	      			<span className='label label-success label-margin'>{this.props.post.toy.name.substring(0, 25)+'...'}</span>
-	      		</Link>
+	      		<span className='label label-success label-margin'>
+		      		<Link to={'/toy/'+this.props.post.toy.id+'/edit'}>{this.props.post.toy.name.substring(0, 25)+'...'}
+		      		</Link>
+		      		<i className="fa fa-close" onClick={ () => this.removeToy()}></i>
+	      		</span>
+	      		
 	      	)
 	    }
 	    let contentDiv = ''

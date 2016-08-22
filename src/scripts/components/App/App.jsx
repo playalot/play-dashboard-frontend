@@ -68,8 +68,8 @@ export default class App extends Component{
 		                  <i className="fa fa-angle-left pull-right"></i>
 		                </a>
 		                <ul className="treeview-menu">
-		                  <li><Link to="/report" activeClassName="active"><i className="fa fa-info-circle"></i><span>举报</span></Link></li>
-		                  <li><Link to="/feedback" activeClassName="active"><i className="fa fa-info-circle"></i><span>反馈</span></Link></li>
+		                  <li><Link to="/report" activeClassName="active"><i className="fa fa-circle-o"></i><span>举报</span></Link></li>
+		                  <li><Link to="/feedback" activeClassName="active"><i className="fa fa-circle-o"></i><span>反馈</span></Link></li>
 		                </ul>
 		              </li>	
 		            </ul>

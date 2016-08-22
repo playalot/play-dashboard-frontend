@@ -1,9 +1,10 @@
 import { connect } from 'react-redux'
 import FeedbackList from './FeedbackList'
 
-import {fetchFeedback} from '../../actions/feedbackAction'
+import { fetchFeedback, deleteFeedback } from '../../actions/feedbackAction'
 const mapActionCreators = {
-	fetchFeedback
+	fetchFeedback,
+	deleteFeedback
 }
 
 const mapStateToProps = (state) => {

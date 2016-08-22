@@ -17,7 +17,7 @@ var FeedbackStore = Reflux.createStore({
       return this.feedbacklist;
     },
     onFetchFeedbackList: function() {
-      var sourceUrl = '/api/feedback/' + this.page;
+      var sourceUrl = '/api/feedbacks' //+ this.page;
       $.ajax({
           url: sourceUrl,
           dataType: 'json',

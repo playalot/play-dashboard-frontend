@@ -6,10 +6,21 @@ import { Link } from 'react-router'
 import Moment from 'moment'
 
 export default class ReportList extends Component{
+	constructor(props) {
+	  	super(props);
+	
+	  	this.state = {};
+	  	this.deleteFeedback = this._deleteFeedback.bind(this)
+	}
 	componentWillMount() {
 		if(!this.props.loaded){
 			this.props.fetchFeedback()
 		}
+	}
+	_deleteFeedback(id) {
+		if (confirm('Delete this Feedback?')) {
+			this.props.deleteFeedback(id)
+    	}
 	}
 	render() {
 		return(
@@ -23,15 +34,13 @@ export default class ReportList extends Component{
 	              			return(
 			                    <tr key={`r_${feedback.id}`}>
 			                      <td>{feedback.id}</td>
-			                      <td>{feedback.user.nickname}</td>
+			                      <td><Link to={'/user/'+feedback.user.id}><img src={feedback.user.avatar} style={{width:'50px',height:'50px'}} className="img-circle"/></Link></td>
 			                      <td>{feedback.content}</td>
 			                      <td>{Moment.unix(feedback.created / 1000).fromNow()}</td>
 			                      <td>
-			                      	<div className="btn-group">
-			                      	  <button type="button" className="btn btn-danger"><i className="fa fa-trash"></i></button>
-									  <button type="button" className="btn btn-warning"><i className="fa fa-eye-slash"></i></button>
-									  <button type="button" className="btn btn-success"><i className="fa fa-check"></i></button>
-			                        </div>
+			                      	<ButtonToolbar>
+			                      	  <a className="btn btn-danger btn-block btn-flat" onClick={() => this.deleteFeedback(feedback.id)}>Delete</a>
+			                      	</ButtonToolbar>
 			                      </td>
 			                    </tr>
 	              			)

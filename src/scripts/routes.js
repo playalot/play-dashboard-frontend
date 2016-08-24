@@ -15,6 +15,7 @@ import ReportList from './components/ReportList/index'
 import FeedbackList from './components/FeedbackList/index'
 
 import EditArticle from './components/EditArticle/EditArticle'
+// import EditStickerSet from './components/EditStickerSet/EditStickerSet'
 //old
 // import UserDetail from './components/userdetail'
 // import Home from './components/home';

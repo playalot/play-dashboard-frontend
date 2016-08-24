@@ -5,7 +5,7 @@ import {
 } from 'react-bootstrap'
 const _ = require('lodash')
 
-import PostPanel from '../PostPanel/postListContainer'
+import PostPanel from '../PostPanel/index'
 
 export default class Post extends Component{
 	constructor(props) {
@@ -36,6 +36,9 @@ export default class Post extends Component{
 			this.props.fetchTagClass()
 		}
 	}
+	componentWillUnmount() {
+        this.props.clearPost()
+    }
 	_setPostClassification(pid,cid) {
 		this.state.selectedPost.cls.push(cid)
 		this.props.setClassification(pid,cid)

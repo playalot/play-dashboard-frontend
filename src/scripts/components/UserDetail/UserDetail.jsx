@@ -5,7 +5,7 @@ import {
 } from 'react-bootstrap'
 const _ = require('lodash')
 
-import PostPanel from '../PostPanel/userDetailContainer'
+import PostPanel from '../PostPanel/index'
 
 export default class UserDetail extends Component{
     constructor(props) {
@@ -34,7 +34,7 @@ export default class UserDetail extends Component{
         }
     }
     componentWillUnmount() {
-        this.props.clearUserDetailPost()
+        this.props.clearPost()
     }
     _fetchMorePosts() {
         this.props.fetchUserPost(this.props.params.id)

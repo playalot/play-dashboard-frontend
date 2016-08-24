@@ -7,7 +7,7 @@ var Formsy = require('formsy-react');
 var Modal = require('react-modal');
 var RB = require('react-bootstrap');
 var FRC = require('formsy-react-components');
-var CDN = require('../widgets/cdn');
+import CDN from '../widgets/cdn'
 
 var EditStickerSet = React.createClass({
   contextTypes: {
@@ -93,7 +93,7 @@ var EditStickerSet = React.createClass({
                     <div>将图片拖入该区域</div>
                   </Dropzone>
                   <div className="col-sm-3">
-                    <img className="img-responsive" style={{maxHeight:'100px'}} src={this.state.image?CDN.show(this.state.image):''}/>
+                    <img className="img-responsive" style={{maxHeight:'100px'}} src={this.state.image? CDN.show(this.state.image):''}/>
                   </div>
                 </div>
                 <FRC.Checkbox ref="active" name="active" value={false} label="check me out" rowLabel="Active" />

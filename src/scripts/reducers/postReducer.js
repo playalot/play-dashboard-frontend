@@ -1,27 +1,35 @@
 import Immutable from 'immutable'
 import { 
-    PL_RECEIVE_POST, 
-    PL_RECEIVE_POST_NEW, 
-    PL_TOGGLE_RECOMMEND, 
-    PL_TOGGLE_BLOCK, 
-    PL_TOGGLE_R18,
-    PL_ADD_TAG, 
-    PL_REMOVE_TAG,
-    PL_SET_CLASSIFICATION,
-    PL_REMOVE_CLASSIFICATION,
-    PL_ADD_SKU,
-    PL_REMOVE_TOY,
-    PL_DELETE_POST,
-    PL_GET_UN_CLS,
+    POST_RECEIVE_POST, 
+    POST_TOGGLE_RECOMMEND, 
+    POST_TOGGLE_BLOCK, 
+    POST_TOGGLE_R18,
+    POST_ADD_TAG, 
+    POST_REMOVE_TAG,
+    POST_SET_CLASSIFICATION,
+    POST_REMOVE_CLASSIFICATION,
+    POST_ADD_TOY,
+    POST_REMOVE_TOY,
+    POST_DELETE_POST,
+    POST_GET_UN_CLS,
+    POST_CLEAR_POST,
 } from '../actions/postAction'
 
-export default (state = Immutable.fromJS({ posts:[] }),action)=>{
+export default (state = Immutable.fromJS({ posts:[],status:{ts:'',filter:'',query:''} }),action)=>{
     switch (action.type) {
-        case PL_RECEIVE_POST:
-            return state.updateIn(['posts'], (posts) => posts.concat(Immutable.fromJS(action.res.posts)))
-        case PL_RECEIVE_POST_NEW:
-            return state.updateIn(['posts'], (posts) => posts.clear().concat(Immutable.fromJS(action.res.posts)))
-        case PL_ADD_SKU:
+        case POST_CLEAR_POST:
+            return state
+                .updateIn(['posts'],(posts) => posts.clear())
+                .updateIn(['status'],(status) => status.set('ts',''))
+        case POST_RECEIVE_POST:
+            return state
+                .updateIn(['posts'], (posts) => posts.clear().concat(Immutable.fromJS(action.res)))
+                .updateIn(['status'],(status) => {
+                    return status.set('ts',action.ts)
+                        .set('filter',action.filter)
+                        .set('query',action.query)
+                })
+        case POST_ADD_TOY:
             return state.updateIn(['posts'], (posts) => {
                 return posts.update(
                     posts.findIndex((item) => {
@@ -31,7 +39,7 @@ export default (state = Immutable.fromJS({ posts:[] }),action)=>{
                     }
                 )
             })
-        case PL_REMOVE_TOY:
+        case POST_REMOVE_TOY:
             return state.updateIn(['posts'],(posts) => {
                 return posts.update(
                     posts.findIndex((item) => {
@@ -41,7 +49,7 @@ export default (state = Immutable.fromJS({ posts:[] }),action)=>{
                     }
                 )
             })
-        case PL_TOGGLE_RECOMMEND:
+        case POST_TOGGLE_RECOMMEND:
             return state.updateIn(['posts'], (posts) => {
                 return posts.update(
                     posts.findIndex((item) => { 
@@ -51,7 +59,7 @@ export default (state = Immutable.fromJS({ posts:[] }),action)=>{
                     }
                 )
             })
-        case PL_ADD_TAG: 
+        case POST_ADD_TAG: 
             return state.updateIn(['posts'], (posts) => {
                 return posts.update(
                     posts.findIndex((item) => {
@@ -63,7 +71,7 @@ export default (state = Immutable.fromJS({ posts:[] }),action)=>{
                     }
                 )
             })
-        case PL_REMOVE_TAG:
+        case POST_REMOVE_TAG:
             return state.updateIn(['posts'], (posts) => {
                 return posts.update(
                     posts.findIndex((item) => {
@@ -77,7 +85,7 @@ export default (state = Immutable.fromJS({ posts:[] }),action)=>{
                     }
                 )
             })
-        case PL_TOGGLE_BLOCK:
+        case POST_TOGGLE_BLOCK:
             return state.updateIn(['posts'], (posts) => {
                 return posts.update(
                     posts.findIndex((item) => { 
@@ -87,7 +95,7 @@ export default (state = Immutable.fromJS({ posts:[] }),action)=>{
                     }
                 )
             })
-        case PL_TOGGLE_R18:
+        case POST_TOGGLE_R18:
             return state.updateIn(['posts'], (posts) => {
                 return posts.update(
                     posts.findIndex((item) => { 
@@ -97,7 +105,7 @@ export default (state = Immutable.fromJS({ posts:[] }),action)=>{
                     }
                 )
             })
-        case PL_SET_CLASSIFICATION:
+        case POST_SET_CLASSIFICATION:
             return state.updateIn(['posts'], (posts) => {
                 return posts.update(
                     posts.findIndex((item) => {
@@ -109,7 +117,7 @@ export default (state = Immutable.fromJS({ posts:[] }),action)=>{
                     }
                 )
             })
-        case PL_REMOVE_CLASSIFICATION:
+        case POST_REMOVE_CLASSIFICATION:
             return state.updateIn(['posts'], (posts) => {
                 return posts.update(
                     posts.findIndex((item) => {
@@ -123,13 +131,13 @@ export default (state = Immutable.fromJS({ posts:[] }),action)=>{
                     }
                 )
             })
-        case PL_DELETE_POST: 
+        case POST_DELETE_POST: 
             return state.updateIn(['posts'], (posts) => {
                 return posts.delete(posts.findKey((post) => {
                     return post.get('id') === action.id
                 }))
             })
-        case PL_GET_UN_CLS:
+        case POST_GET_UN_CLS:
             return state.updateIn(['posts'], (posts) => {
                 return posts.filter((item) => {
                     return item.get('cls').size === 0

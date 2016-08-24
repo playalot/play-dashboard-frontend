@@ -7,7 +7,7 @@ import {
 	removeTag, 
 	toggleBlock, 
 	toggleR18,
-	addSku, 
+	addToy, 
 	deletePost,
 	removeToy,
 } from '../../actions/postAction'
@@ -18,7 +18,7 @@ const mapActionCreators ={
 	toggleR18,
 	addTag,
 	removeTag,
-	addSku,
+	addToy,
 	deletePost,
 	removeToy,
 }

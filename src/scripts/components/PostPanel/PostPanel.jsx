@@ -16,7 +16,7 @@ export default class PostPanel extends Component{
 	  	this.toggleR18 = this._toggleR18.bind(this)
 	  	this.addTag = this._addTag.bind(this)
 	  	this.removeTag = this._removeTag.bind(this)
-	  	this.addSku = this._addSku.bind(this)
+	  	this.addToy = this._addToy.bind(this)
 	  	this.removeToy = this._removeToy.bind(this)
 	  	this.deletePost = this._deletePost.bind(this)
 	}
@@ -36,10 +36,10 @@ export default class PostPanel extends Component{
 	_toggleR18() {
 		this.props.toggleR18(this.props.post.id)
 	}
-	_addSku() {
+	_addToy() {
 		let id = prompt('输入玩具ID')
 		if (id) {
-			this.props.addSku(this.props.post.id,id)
+			this.props.addToy(this.props.post.id,id)
 		}
 	}
 	_removeToy() {
@@ -135,7 +135,7 @@ export default class PostPanel extends Component{
 	            </div>
 	            <div className="box-footer">
 	              <ButtonToolbar className="pull-right">
-	                <span onClick={ this.addSku } className="btn btn-sm"><i className="fa fa-plus"></i></span>
+	                <span onClick={ this.addToy } className="btn btn-sm"><i className="fa fa-plus"></i></span>
 	                <span onClick={ this.addTag } className="btn btn-sm"><i className="fa fa-tag"></i></span>
 	                <span onClick={ this.props.openClass.bind(null, this.props.post) } className="btn btn-sm"><i className="fa fa-th-large"></i></span>
 	                <span onClick={ this.toggleR18 } className={r18Class}><i className="fa fa-venus-mars"></i></span>

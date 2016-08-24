@@ -30,6 +30,8 @@ export default class TagList extends Component{
 
 	  	this.recommendTag = (tid) => this._recommendTag(tid)
 	  	this.deleteTag = (tid) => this._deleteTag(tid)
+
+	  	this.stop = (e) => e.preventDefault()
 	}
 	componentWillMount() {
 		this.props.fetchTag(this.state.query)
@@ -116,7 +118,7 @@ export default class TagList extends Component{
 		            </FormGroup>
 		            <FormGroup>
 		              <InputGroup>
-		                <FormControl type="text" placeholder='搜索标签' value={this.state.query} onChange={this.onChangeQuery} />
+		                <FormControl type="text" placeholder='搜索标签' value={this.state.query} onKeyDown={this.stop} onChange={this.onChangeQuery} />
 		                <InputGroup.Button>
 		                  <Button onClick={this.search}>搜索</Button>
 		                </InputGroup.Button>

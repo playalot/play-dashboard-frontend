@@ -66,7 +66,7 @@ export default class ReportList extends Component{
 			<div className="content">
 	          <div className="table-responsive">
 	            <table className="table table-striped">
-	           	  <thead><tr><th>#ID</th><th>Reporter</th><th>Targeter</th><th>Reason</th><th style={{'minWidth': '150px'}}>Created</th><th style={{'minWidth': '150px'}}>Action</th></tr></thead>
+	           	  <thead><tr><th>Reporter</th><th>Targeter</th><th>Reason</th><th style={{'minWidth': '150px'}}>Created</th><th>Type</th><th style={{'minWidth': '150px'}}>Action</th></tr></thead>
 	              <tbody>
 	              	{
 	              		this.props.reports.map((report) => {
@@ -76,18 +76,17 @@ export default class ReportList extends Component{
 	              			let invisibleClass = report.target.isBlk === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
 	              			return(
 			                    <tr key={`report_${report.id}`}>
-			                      <td>{report.id}</td>
 			                      <td>
-			                      	<Link to={`/user/${report.user.id}`}>{report.user.nickname}</Link>
+			                      	<Link to={`/user/${report.user.id}`}><img style={{width:'45px'}} src={report.user.avatar} className="img-circle"/></Link>
 			                      </td>
 			                      <td>
-			                      	<Link to={`/user/${report.target.user.id}`}>{report.target.user.nickname}</Link>
+			                      	<Link to={`/user/${report.target.user.id}`}><img style={{width:'45px'}} src={report.target.user.avatar} className="img-circle"/></Link>
 			                      </td>
 			                      <td>{report.reason}</td>
 			                      <td>{Moment.unix(report.created / 1000).fromNow()}</td>
+			                      <td><img onClick={() => this.openModal(report.target.photos)} src={report.target.preview} style={{width:'45px'}} className="img-thumbnail"/></td>
 			                      <td>
 			                      	<ButtonToolbar>
-	                				  <span className="btn btn-sm" onClick={() => this.openModal(report.target.photos)}><i className="fa fa-image"></i></span>
 	                				  <span className={invisibleClass} onClick={() => this.toggleBlk(report.targetId)}><i className="fa fa-eye-slash"></i></span>
 	                				  <span className="btn btn-sm" onClick={() => this.deleteReport(report.id)}><i className="fa fa-check"></i></span>
 	                				</ButtonToolbar>

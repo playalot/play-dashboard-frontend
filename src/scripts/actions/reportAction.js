@@ -34,7 +34,7 @@ export function fetchReport() {
 export function deleteReport(id) {
     return (dispatch) => {
         return Request
-            .del(`/api/reports/${id}`)
+            .del(`/api/report/${id}`)
             .end((err,res) => {
                 dispatch(_deleteReport(id))
             })

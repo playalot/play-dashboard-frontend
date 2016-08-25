@@ -102,26 +102,19 @@ export default class toyList extends Component{
 		              <Col className="col" xs={6} sm={3} lg={3} key={'toy_'+toy.id}>
 		                  <div className="box box-solid">
 		                    <div className="box-body toy-item">
-		                      <ul className="products-list product-list-in-box">
-		                        <li className="item">
-		                          <Link to={'/toy/' + toy.id + '/edit'} >
-		                          <div className="product-img">
-		                            <img src={toy.cover} alt={toy.name} />
-		                          </div>
-		                          <div className="product-info">
-		                            <p className="product-title">{toy.name}</p>
-		                            <span className="product-description">
-		                              {toy.company} <br/>
-		                              {toy.release} <br/>
-		                              {toy.money}
-		                            </span>
-		                          </div>
-		                          </Link>
-		                        </li>
-		                      </ul>
+													<div className="toy-item-img">
+			                      <img src={toy.cover} alt={toy.name} />
+			                    </div>
+			                    <div className="toy-item-info">
+			                      <span className="toy-item-name">{toy.name}</span>
+			                      <span className="toy-item-desc">{'厂商 ' + toy.company}</span>
+			                      <span className="toy-item-desc">{'发售 ' + toy.release}</span>
+			                      <span className="toy-item-desc">{'价格 ' + toy.money? toy.money : '不知道呀'}</span>
+			                    </div>
 		                    </div>
 		                    <div className="box-footer">
 		                      <ButtonToolbar className="pull-right">
+														<Link to={'/toy/' + toy.id + '/edit'} ><span className="btn btn-sm"><i className="fa fa-edit"></i></span></Link>
 		                        <span onClick={() =>  this.recommend(toy.id) } className="btn btn-sm"><i className="fa fa-bookmark-o"></i></span>
                         		<span onClick={() =>  this.toggleR18(toy.id) } className={r18Class}><i className="fa fa-venus-mars"></i></span>
                         		<span onClick={() =>  this.toggleRecommend(toy.id) } className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span>

@@ -124,31 +124,7 @@ video {
 }
 // panel end...
 
-.toy-item .products-list .product-img img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  object-position: 0px 0px;
-}
 
-.toy-item .products-list .product-info {
-  margin-left: 110px;
-}
-
-.products-list .product-title {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-.toy-item .products-list .product-title {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  word-break: break-all;
-  overflow: hidden;
-  line-height: 1.1em;
-  height: 2.2em;
-}
 
 .label {
   font-size: 100% !important;

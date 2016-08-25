@@ -1,0 +1,33 @@
+.toy-item {
+  .toy-item-img {
+    float: left;
+    img {
+      object-fit:contain;
+      width: 100px;
+      height: 100px;
+    }
+  }
+
+  .toy-item-info {
+    margin-left: 110px;
+    .toy-item-name {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: -webkit-box;
+      font-size: 15px;
+      line-height: 21px;     /* fallback */
+      max-height: 42px;      /* fallback */
+      -webkit-line-clamp: 2; /* number of lines to show */
+      -webkit-box-orient: vertical;
+      min-height: 42px;
+    }
+    .toy-item-desc {
+      font-size: 14px;
+      color: #999;
+      display: block;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+}

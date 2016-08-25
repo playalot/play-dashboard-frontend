@@ -30,7 +30,11 @@ export default class Post extends Component{
 	  	this.search = this._search.bind(this)
 	  	this.getUnCls = () => this.props.getUnCls()
 
-	  	this.stop = (e) => e.preventDefault()
+	  	this.stop = (e) => {
+	  		if(e.keyCode === 13){
+	  			e.preventDefault()
+	  		}
+	  	}
 	}
 	componentWillMount() {
 		this.search()
@@ -116,7 +120,7 @@ export default class Post extends Component{
 	              </FormGroup>
 	              <FormGroup>
 	                <InputGroup>
-	                  <FormControl type="text" placeholder='Search by Tag' value={this.state.query} onChange={this.onChangeQuery} />
+	                  <FormControl type="text" placeholder='Search by Tag' value={this.state.query} onKeyDown={this.stop} onChange={this.onChangeQuery} />
 	                  <InputGroup.Button>
 	                    <Button onClick={this.search}>搜索</Button>
 	                  </InputGroup.Button>

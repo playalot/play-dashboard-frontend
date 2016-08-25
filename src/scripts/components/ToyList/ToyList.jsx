@@ -26,7 +26,11 @@ export default class toyList extends Component{
 	  	this.deletetoy = this._deletetoy.bind(this)
 	  	this.addtoy = this._addtoy.bind(this)
 
-	  	this.stop = (e) => e.preventDefault()
+	  	this.stop = (e) => {
+	  		if(e.keyCode === 13){
+	  			e.preventDefault()
+	  		}
+	  	}
 	}
 	componentWillMount() {
 		if(!this.props.loaded){
@@ -76,7 +80,7 @@ export default class toyList extends Component{
 		            </FormGroup>
 		            <FormGroup>
 		                <InputGroup>
-		                  <FormControl type="text" value={this.state.query} onChange={this.onChangeQuery} />
+		                  <FormControl type="text" value={this.state.query} onKeyDown={this.stop} onChange={this.onChangeQuery} />
 		                  <InputGroup.Button>
 		                    <Button onClick={this.search}>搜索</Button>
 		                  </InputGroup.Button>

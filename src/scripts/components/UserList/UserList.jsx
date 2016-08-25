@@ -15,7 +15,12 @@ export default class UserList extends Component{
 	  	this.search = () => this.props.fetchUser(this.state.query)
 	  	this.onChangeQuery = (e) => this.setState({query:e.target.value})
 	  	this.recommend = (id) => this.props.recommendUser(id)
-	  	this.stop = (e) => e.preventDefault()
+	  	this.stop = (e) => {
+	  		if(e.keyCode === 13){
+	  			e.preventDefault()
+	  		}
+	  	}
+
 	  	// this.fetchMoreUsers = () => this.props.fetchUser(this.state.query)
 	}
 	componentWillMount() {
@@ -41,7 +46,7 @@ export default class UserList extends Component{
 	            <Form inline>
 	              <FormGroup>
 	                <InputGroup>
-	                  <FormControl type="text" placeholder='搜索用户名或手机号' value={this.state.query} onChange={this.onChangeQuery} />
+	                  <FormControl type="text" placeholder='搜索用户名或手机号' value={this.state.query} onKeyDown={this.stop} onChange={this.onChangeQuery} />
 	                  <InputGroup.Button>
 	                    <Button onClick={this.search}>搜索</Button>
 	                  </InputGroup.Button>

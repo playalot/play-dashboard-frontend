@@ -492,3 +492,29 @@ img.img-corona {
 }
 
 
+.btn-pre{
+    position:absolute;
+    top:50%;
+    left:20px;
+    transform:translateY(-50%);
+    font-size:80px;
+    padding:10px;
+    cursor:pointer;
+    transition:color .3s;
+    &:hover{
+      color:#ccc;
+    }
+}
+.btn-next{
+    position:absolute;
+    top:50%;
+    right:20px;
+    transform:translateY(-50%);
+    font-size:80px;
+    padding:10px;
+    cursor:pointer;
+    transition:color .3s;
+    &:hover{
+      color:#ccc;
+    }
+}

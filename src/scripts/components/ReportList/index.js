@@ -1,10 +1,11 @@
 import { connect } from 'react-redux'
 import ReportList from './ReportList'
 
-import { fetchReport, deleteReport } from '../../actions/reportAction'
+import { fetchReport, deleteReport, toggleBlk } from '../../actions/reportAction'
 const mapActionCreators = {
 	fetchReport,
-	deleteReport
+	deleteReport,
+	toggleBlk
 }
 
 const mapStateToProps = (state) => {

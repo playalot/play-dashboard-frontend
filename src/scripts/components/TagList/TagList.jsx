@@ -118,7 +118,7 @@ export default class TagList extends Component{
 		            </FormGroup>
 		            <FormGroup>
 		              <InputGroup>
-		                <FormControl type="text" placeholder='搜索标签' value={this.state.query} onKeyDown={this.stop} onChange={this.onChangeQuery} />
+		                <FormControl type="text" placeholder='搜索标签' value={this.state.query} onChange={this.onChangeQuery} />
 		                <InputGroup.Button>
 		                  <Button onClick={this.search}>搜索</Button>
 		                </InputGroup.Button>

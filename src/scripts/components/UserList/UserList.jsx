@@ -41,7 +41,7 @@ export default class UserList extends Component{
 	            <Form inline>
 	              <FormGroup>
 	                <InputGroup>
-	                  <FormControl type="text" placeholder='搜索用户名或手机号' value={this.state.query} onKeyDown={this.stop} onChange={this.onChangeQuery} />
+	                  <FormControl type="text" placeholder='搜索用户名或手机号' value={this.state.query} onChange={this.onChangeQuery} />
 	                  <InputGroup.Button>
 	                    <Button onClick={this.search}>搜索</Button>
 	                  </InputGroup.Button>

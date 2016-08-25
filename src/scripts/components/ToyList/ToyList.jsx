@@ -76,7 +76,7 @@ export default class toyList extends Component{
 		            </FormGroup>
 		            <FormGroup>
 		                <InputGroup>
-		                  <FormControl type="text" value={this.state.query} onKeyDown={this.stop} onChange={this.onChangeQuery} />
+		                  <FormControl type="text" value={this.state.query} onChange={this.onChangeQuery} />
 		                  <InputGroup.Button>
 		                    <Button onClick={this.search}>搜索</Button>
 		                  </InputGroup.Button>

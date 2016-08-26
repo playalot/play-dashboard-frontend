@@ -15,15 +15,18 @@ export default class extends Component{
 	  		name:'',
 	  		nameRaw:'',
 	  		release:'',
-	  		currency:'rmb',
+	  		currency:'',
 	  		money:0,
 	  		isR18:false,
 	  		company:'',
-	  		detail:'...',
+	  		detail:'',
 	  		otherInfo:[],
 			images: [],
 			scale:0,
-
+			character:'',
+			artist:'',
+			series:'',
+			origin:'',
 			newKey: '',
 			newValue: '',
 			tags: [],
@@ -46,14 +49,19 @@ export default class extends Component{
 			.end((err,res) => {
 				this.setState({
 					cover:res.body.cover,
-					name:res.body.name,
-					nameRaw:res.body.nameRaw,
-					release:res.body.release,
-					currency:res.body.info.currency,
-					money:res.body.info.money,
+					name:res.body.name ? res.body.name : '空',
+					nameRaw:res.body.nameRaw ? res.body.nameRaw : '空',
+					release:res.body.release ? res.body.release : '空',
+					currency:res.body.info.currency ? res.body.info.currency : 'rmb',
+					money:res.body.info.money ? res.body.info.money : 0,
+					scale:res.body.info.scale ? res.body.info.scale.substring(2) : 0,
+					character:res.body.info.character ? res.body.info.character : '空',
+					artist:res.body.info.artist ? res.body.info.artist : '空',
+					series:res.body.info.series ? res.body.info.series : '空',
+					origin:res.body.info.origin ? res.body.info.origin : '空',
 					isR18:res.body.isR18,
-					company:res.body.info.company,
-					detail: res.body.info.detail ? res.body.info.detail : '...',
+					company:res.body.info.company ? res.body.info.company : '空',
+					detail: res.body.info.detail ? res.body.info.detail : '空',
 					otherInfo: res.body.otherInfo,
 					images: res.body.images
 				})
@@ -151,7 +159,7 @@ export default class extends Component{
 		  		currency,
 		  		money,
 		  		isR18,
-		  		scale,
+		  		scale:`1/${scale}`,
 		  		company,
 		  		detail,
 		  		otherInfo,
@@ -193,6 +201,46 @@ export default class extends Component{
 								propName="nameRaw"
 							  /> 
 							</Col>
+							<Col sm={6} className="edit-toy-item">
+		          		  		<span>角色:&nbsp;&nbsp;</span>
+		          		  		<RIEInput
+									value={this.state.character}
+									change={this.virtualServerCallback}
+									validate={this.isEmpty}
+									classInvalid="edit-toy-invalid"
+									propName="character"
+								/>
+		          		  	</Col>
+		          		  	<Col sm={6} className="edit-toy-item">
+		          		  		<span>系列:&nbsp;&nbsp;</span>
+		          		  		<RIEInput
+									value={this.state.series}
+									change={this.virtualServerCallback}
+									validate={this.isEmpty}
+									classInvalid="edit-toy-invalid"
+									propName="series"
+								/>
+		          		  	</Col>
+		          		  	<Col sm={6} className="edit-toy-item">
+		          		  		<span>作者:&nbsp;&nbsp;</span>
+		          		  		<RIEInput
+									value={this.state.artist}
+									change={this.virtualServerCallback}
+									validate={this.isEmpty}
+									classInvalid="edit-toy-invalid"
+									propName="artist"
+								/>
+		          		  	</Col>
+		          		  	<Col sm={6} className="edit-toy-item">
+		          		  		<span>原著:&nbsp;&nbsp;</span>
+		          		  		<RIEInput
+									value={this.state.origin}
+									change={this.virtualServerCallback}
+									validate={this.isEmpty}
+									classInvalid="edit-toy-invalid"
+									propName="origin"
+								/>
+		          		  	</Col>
 		          		  	<Col sm={6} className="edit-toy-item">
 		          		  		<span >发售日:&nbsp;&nbsp;</span>
 		          		  		<RIEInput

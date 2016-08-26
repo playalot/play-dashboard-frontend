@@ -1,0 +1,312 @@
+import React,{ Component } from 'react'
+import Request from 'superagent'
+import Dropzone from 'react-dropzone'
+import {
+	Row, Col, FromControl
+} from 'react-bootstrap'
+import CDN from '../../widgets/cdn'
+import {RIEInput, RIEToggle, RIETextArea, RIENumber, RIETags} from 'riek'
+export default class extends Component{
+	constructor(props) {
+	  	super(props)
+	
+	  	this.state = {
+	  		cover: '',
+	  		name:'',
+	  		nameRaw:'',
+	  		release:'',
+	  		currency:'rmb',
+	  		money:0,
+	  		isR18:false,
+	  		company:'',
+	  		detail:'...',
+	  		otherInfo:[],
+			images: [],
+			scale:0,
+
+			newKey: '',
+			newValue: '',
+			tags: [],
+			alert: false
+	  	}
+	  	this.changeCurrency = (e) => this.setState({currency:e.target.value})
+	  	this.virtualServerCallback = this._virtualServerCallback.bind(this)
+	  	this.removeOtherInfo = this._removeOtherInfo.bind(this)
+	  	this.addOtherInfo = this._addOtherInfo.bind(this)
+	  	this.changeNewKey = (e) => this.setState({newKey:e.target.value})
+	  	this.changeNewValue = (e) => this.setState({newValue:e.target.value})
+	  	this.onDropOfficialImage = this._onDropOfficialImage.bind(this)
+	  	this.onDropCover = this._onDropCover.bind(this)
+
+	  	this.submit = this._submit.bind(this)
+	}
+	componentWillMount() {
+		Request
+			.get(`/api/toy/${this.props.params.id}`)
+			.end((err,res) => {
+				this.setState({
+					cover:res.body.cover,
+					name:res.body.name,
+					nameRaw:res.body.nameRaw,
+					release:res.body.release,
+					currency:res.body.info.currency,
+					money:res.body.info.money,
+					isR18:res.body.isR18,
+					company:res.body.info.company,
+					detail: res.body.info.detail ? res.body.info.detail : '...',
+					otherInfo: res.body.otherInfo,
+					images: res.body.images
+				})
+			})
+	}
+	_virtualServerCallback(newState) {
+		this.setState(newState)
+  	}
+  	isNumber(num) {
+  		let re = /^[0-9]+(\.[0-9]+)?$/
+  		console.info(re.test(num))
+  		return re.test(num)
+  	}
+  	isEmpty(text) {
+  		return text.trim()
+  	}
+  	_removeOtherInfo(i) {
+  		let tmpArr = this.state.otherInfo
+  		tmpArr.splice(i,1)
+  		this.setState({
+  			otherInfo: tmpArr
+  		})
+  	}
+  	_addOtherInfo() {
+  		if(!this.state.newKey.trim() || !this.state.newValue.trim()){
+  			return alert('字段不能为空')
+  		}
+  		let tmpArr = this.state.otherInfo
+  		tmpArr.push({
+  			key:this.state.newKey,
+  			value:this.state.newValue
+  		})
+  		this.setState({
+  			otherInfo:tmpArr
+  		},() => {
+  			this.setState({
+  				newKey:'',
+  				newValue:''
+  			})
+  		})
+  	}
+  	_onDropOfficialImage(images) {
+		let formData = new FormData()
+		formData.append('file', images[0])
+		$.ajax({
+			url: `/api/upload?key=toy/img/${this.props.params.id}_${(Date.now() / 1000)}.jpg`,
+			type: 'POST',
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function(data) {
+				this.state.images.push(data)
+				this.setState({
+					images: this.state.images
+				})
+			}.bind(this)
+		})
+  	}
+  	_onDropCover(images) {
+	    let formData = new FormData();
+	    formData.append('file', images[0]);
+	    $.ajax({
+	         url : `/api/upload?key=toy/cover/${this.props.params.id}.jpg`,
+	         type : 'POST',
+	         data : formData,
+	         processData: false,
+	         contentType: false,
+	         success : function(data) {
+	            this.setState({cover: data});
+	         }.bind(this)
+	    })
+  	}
+  	_submit() {
+    	let {
+            cover,
+	  		name,
+	  		nameRaw,
+	  		release,
+	  		currency,
+	  		money,
+	  		isR18,
+	  		scale,
+	  		company,
+	  		detail,
+	  		otherInfo,
+			images
+        } = this.state
+    	Request
+    		.post(`/api/toy/${this.props.params.id}`)
+    		.send({
+    			cover,
+		  		name,
+		  		nameRaw,
+		  		release,
+		  		currency,
+		  		money,
+		  		isR18,
+		  		scale,
+		  		company,
+		  		detail,
+		  		otherInfo,
+				images
+    		})
+    		.end((err,res) => {
+    			alert('success!')
+    		})
+  	}
+	render() {
+
+		return(
+			<div className="content">
+        	  <div className="box box-solid">
+          		<div className="box-body">
+	     			<Row>
+	     			  	<Dropzone onDrop={this.onDropCover} className="col-sm-3 edit-toy-cover">
+	                    	<img className="img-responsive" src={this.state.cover?CDN.show(this.state.cover):''}/>
+	                    	<div className="edit-toy-cover-text">
+	                    		<span>更换封面</span>
+	                    	</div>
+	                  	</Dropzone>
+	      				<Col sm={9}>
+						  	<RIEInput
+								value={this.state.name}
+								change={this.virtualServerCallback}
+								classInvalid="edit-toy-invalid"
+								validate={this.isEmpty}
+								propName="name"
+								className="edit-toy-title"
+						  	/> <br/>
+							<Col sm={12} className="edit-toy-item">
+			          		  <span>原名:&nbsp;&nbsp;</span>
+			          		  <RIEInput
+								value={this.state.nameRaw}
+								change={this.virtualServerCallback}
+								validate={this.isEmpty}
+								classInvalid="edit-toy-invalid"
+								propName="nameRaw"
+							  /> 
+							</Col>
+		          		  	<Col sm={6} className="edit-toy-item">
+		          		  		<span >发售日:&nbsp;&nbsp;</span>
+		          		  		<RIEInput
+									value={this.state.release}
+									change={this.virtualServerCallback}
+									validate={this.isEmpty}
+									classInvalid="edit-toy-invalid"
+									propName="release"
+								/>
+		          		  	</Col>
+		          		  	<Col sm={6} className="edit-toy-item">
+		          		  		<span>价格:&nbsp;&nbsp;</span>
+								 <RIENumber
+						          	value={this.state.money}
+						          	change={this.virtualServerCallback}
+						          	propName="money"
+						        />
+		          		  	</Col>
+		          		  	<Col sm={6} className="edit-toy-item">
+		          		  		<span>货币:&nbsp;&nbsp;</span>
+		          		  		<select value={this.state.currency} onChange={this.changeCurrency}>
+		          		  			<option value="rmb">人民币</option>
+		          		  			<option value="yen">日元</option>
+		          		  			<option value="dollar">美元</option>
+		          		  			<option value="euro">欧元</option>
+		          		  		</select>
+		          		  	</Col>
+		          		  	<Col sm={6} className="edit-toy-item">
+		          		  		<span>R18:&nbsp;&nbsp;</span>
+		          		  		<RIEToggle
+								  value={this.state.isR18}
+								  change={this.virtualServerCallback}
+								  propName="isR18" />
+		          		  	</Col>
+		          		  	<Col sm={6} className="edit-toy-item">
+		          		  		<span>比例:&nbsp;&nbsp;1:</span>
+		          		  		<RIEInput
+								  value={this.state.scale}
+								  change={this.virtualServerCallback}
+								  validate={this.isNumber}
+								  classInvalid="edit-toy-invalid"
+								  propName="scale" />
+		          		  	</Col>
+		          		  	<Col sm={6} className="edit-toy-item">
+		          		  		<span>公司:&nbsp;&nbsp;</span>
+		          		  		<RIEInput
+								  value={this.state.company}
+								  change={this.virtualServerCallback}
+								  validate={this.isEmpty}
+								  classInvalid="edit-toy-invalid"
+								  propName="company" />
+		          		  	</Col>
+		          		  	<Col sm={12} className="edit-toy-item">
+		          		  		<span>详细描述:&nbsp;&nbsp;</span>
+		          		  		<RIETextArea
+								  value={this.state.detail}
+								  change={this.virtualServerCallback}
+								  validate={this.isEmpty}
+								  classInvalid="edit-toy-invalid"
+								  propName="detail"
+								/>
+		          		  	</Col>
+	      				</Col>
+	      			</Row>
+      			  	<legend>其他信息</legend>
+      		  		{
+      		  			this.state.otherInfo.map((info,i) => {
+      		  				return (
+      		  					<Row key={`otherInfo_${i}`} >
+	          		  				<Col  xs={2} smOffset={3}>
+	          		  					<span>{info.key}</span>
+	          		  				</Col>
+	          		  				<Col xs={2} >
+	          		  					<span>{info.value}</span>
+	          		  				</Col>
+	          		  				<Col  xs={2} smOffset={1} xsOffset={1}>
+	          		  					<span onClick={() => this.removeOtherInfo(i)} className="fa fa-minus-circle"></span>
+	          		  				</Col>
+      		  					</Row>
+      		  				)
+      		  			})
+      		  		}
+          		  	<Row>
+          		  		<Col xs={2} smOffset={3}>
+          		  			<input  className="form-control" type="text" value={this.state.newKey} onChange={this.changeNewKey} placeholder="key"></input>
+          		  		</Col>
+          		  		<Col xs={2} >
+	                      <input  className="form-control"  type="text" value={this.state.newValue} onChange={this.changeNewValue} placeholder="value"></input>
+  		  				</Col>
+  		  				<Col  xs={2} smOffset={1} xsOffset={1}>
+	                      <button className="btn btn-primary" onClick={this.addOtherInfo}>添加</button>
+  		  				</Col>
+	                </Row>
+      			  	<legend>官方图片</legend>
+      			  	<div>
+                  		<Dropzone onDrop={this.onDropOfficialImage} className="col-sm-2" style={{height:100, borderWidth: 2, borderColor: '#666', borderStyle: 'dashed'}}>
+                    		<p>将图片拖入该区域</p>
+	                  	</Dropzone>
+	                  	{
+	                  		this.state.images.map((img) => {
+			                    return (
+			                      <div className="pull-left" style={{'marginLeft':'5px'}} key={'img_'+img}>
+			                        <img className="img-responsive" style={{maxHeight:'100px'}} src={img?CDN.show(img):''}/>
+			                      </div>
+			                    )
+			                })
+	                  	}
+                	</div>
+                	<legend style={{paddingTop:'15px'}}></legend>
+                	<button className="btn btn-primary col-xs-offset-3" onClick={this.submit}>Submit</button>
+          		</div>
+          	  </div>
+          	</div>
+
+		)
+	}
+}

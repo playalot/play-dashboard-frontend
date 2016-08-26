@@ -39,6 +39,7 @@
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0",
     "reflux": "^0.4.1",
+    "riek": "^1.0.3",
     "superagent": "^2.2.0"
   },
   "devDependencies": {

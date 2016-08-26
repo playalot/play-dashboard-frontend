@@ -1,0 +1,28 @@
+.edit-toy-title{
+	font-size:20px;
+	padding-bottom:10px;
+}
+.edit-toy-item{
+	border-bottom: 1px dashed #e3e3e3;
+	padding:5px;
+}
+.edit-toy-invalid{
+	outline-color: orangered !important;
+}
+.edit-toy-cover{
+	position:relative;
+	&:hover{
+		.edit-toy-cover-text{
+			display:flex;
+		}
+	}
+}
+.edit-toy-cover-text{
+	position:absolute;
+	top:0;left:15px;right:15px;bottom:0;
+	background-color:rgba(0,0,0,.3);
+	display:none;
+	justify-content:center;
+	align-items:center;
+	color:white;
+}

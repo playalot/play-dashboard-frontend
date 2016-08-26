@@ -18,6 +18,7 @@ import EditArticle from './components/EditArticle/EditArticle'
 import EditStickerSet from './components/EditStickerSet/EditStickerSet'
 import EditSticker from './components/EditSticker/EditSticker'
 import EditTag from './components/EditTag/EditTag'
+import EditToy from './components/EditToy/EditToy'
 //old
 // import UserDetail from './components/userdetail'
 // import Home from './components/home';
@@ -34,7 +35,7 @@ import EditShortVideo from './components/editshortvideo';
 // import EditSticker from './components/editsticker';
 // import EditStickerSet from './components/editstickerset';
 import EditRecommend from './components/editrecommend';
-import EditToy from './components/edittoy';
+// import EditToy from './components/edittoy';
 // import EditArticle from './components/editarticle';
 
 import Test from './components/test';

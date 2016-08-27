@@ -164,26 +164,29 @@ export default class EditToy extends Component {
   		otherInfo,
 			images
     } = this.state
+
+		const data = {
+			cover,
+			name,
+			nameRaw,
+			release,
+			money,
+			currency,
+			scale,
+			detail,
+			company,
+			character,
+			artist,
+			series,
+			origin,
+			isR18,
+			otherInfo,
+			images
+		}
+		Object.keys(data).forEach(key => data[key] === '' || data[key] === 0 ? delete data[key] : '')
   	Request
   		.post(`/api/toy/${this.props.params.id}`)
-  		.send({
-				cover,
-	  		name,
-	  		nameRaw,
-	  		release,
-				money,
-	  		currency,
-	  		scale,
-				detail,
-				company,
-				character,
-				artist,
-				series,
-				origin,
-	  		isR18,
-	  		otherInfo,
-				images
-  		})
+  		.send(data)
   		.end((err,res) => {
   			alert('success!')
   		})

@@ -48,18 +48,18 @@ export default class EditToy extends Component {
 			.end((err,res) => {
 				this.setState({
 					cover:res.body.cover,
-					name:res.body.name ? res.body.name : '',
-					nameRaw:res.body.nameRaw ? res.body.nameRaw : '',
-					release:res.body.release ? res.body.release : '',
-					currency:res.body.info.currency ? res.body.info.currency : '',
+					name:res.body.name ? res.body.name : '空',
+					nameRaw:res.body.nameRaw ? res.body.nameRaw : '空',
+					release:res.body.release ? res.body.release : '空',
+					currency:res.body.info.currency ? res.body.info.currency : '空',
 					money:res.body.info.money ? res.body.info.money : 0,
-					scale:res.body.info.scale ? res.body.info.scale : '',
-					company:res.body.info.company ? res.body.info.company : '',
-					character:res.body.info.character ? res.body.info.character : '',
-					artist:res.body.info.artist ? res.body.info.artist : '',
-					series:res.body.info.series ? res.body.info.series : '',
-					origin:res.body.info.origin ? res.body.info.origin : '',
-					detail: res.body.info.detail ? res.body.info.detail : '',
+					scale:res.body.info.scale ? res.body.info.scale : '空',
+					company:res.body.info.company ? res.body.info.company : '空',
+					character:res.body.info.character ? res.body.info.character : '空',
+					artist:res.body.info.artist ? res.body.info.artist : '空',
+					series:res.body.info.series ? res.body.info.series : '空',
+					origin:res.body.info.origin ? res.body.info.origin : '空',
+					detail: res.body.info.detail ? res.body.info.detail : '空',
 					isR18:res.body.isR18,
 					otherInfo: res.body.otherInfo,
 					images: res.body.images
@@ -124,11 +124,11 @@ export default class EditToy extends Component {
 		Request.get('/api/uptoken')
 			.withCredentials()
 			.end(function(err, res) {
-				let uploadToken = res.body.uptoken;
-				const file = files[0];
-				const img = new Image();
+				let uploadToken = res.body.uptoken
+				const file = images[0]
+				const img = new Image()
 				img.onload = () => {
-					const uploadKey = 'toy/cover/'+this.props.params.id+'_w_'+img.width+'_h_'+img.height+'.'+file.name.split('.').pop();
+					const uploadKey = 'toy/cover/'+_this.props.params.id+'_w_'+img.width+'_h_'+img.height+'.'+file.name.split('.').pop();
 					Request
 						.post('http://upload.qiniu.com/')
 						.field('key', uploadKey)
@@ -142,7 +142,8 @@ export default class EditToy extends Component {
 								cover: uploadKey
 							});
 						});
-				};
+				}
+				img.src = file.preview
 			})
 	}
 	_submit() {
@@ -183,12 +184,17 @@ export default class EditToy extends Component {
 			otherInfo,
 			images
 		}
-		Object.keys(data).forEach(key => data[key] === '' || data[key] === 0 ? delete data[key] : '')
+		Object.keys(data).forEach(key => data[key] === '空' || data[key] === 0 ? delete data[key] : '')
   	Request
   		.post(`/api/toy/${this.props.params.id}`)
   		.send(data)
   		.end((err,res) => {
-  			alert('success!')
+				if (err || !res.ok) {
+					console.log(err)
+		 			alert('保存失败!')
+		 		} else {
+		 			alert('保存成功.')
+  			}
   		})
 	}
 	render() {

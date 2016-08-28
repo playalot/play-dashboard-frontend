@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { 
+import {
 	Row, Form, FormGroup, FormControl, Button, InputGroup, ButtonToolbar, Modal
 } from 'react-bootstrap'
 import { Link } from 'react-router'
@@ -45,7 +45,7 @@ export default class ReportList extends Component{
 				showImage:this.state.photos[this.state.showIndex].url
 			})
 		})
-		
+
 	}
 	_nextPhoto() {
 		this.setState({
@@ -70,22 +70,27 @@ export default class ReportList extends Component{
 	              <tbody>
 	              	{
 	              		this.props.reports.map((report) => {
-	              			if(!report.target){
-	              				return
-	              			}
-	              			let invisibleClass = report.target.isBlk === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
+	              			let invisibleClass = report.target && report.target.isBlk === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
 	              			return(
 			                    <tr key={`report_${report.id}`}>
 			                      <td>
 			                      	<Link to={`/user/${report.user.id}`}><img style={{width:'45px'}} src={report.user.avatar} className="img-circle"/></Link>
 			                      </td>
-			                      <td>
-			                      	<Link to={`/user/${report.target.user.id}`}><img style={{width:'45px'}} src={report.target.user.avatar} className="img-circle"/></Link>
-			                      </td>
+														{
+															report.target ?
+															<td>
+																<Link to={`/user/${report.target.user.id}`}><img style={{width:'45px'}} src={report.target.user.avatar} className="img-circle"/></Link>
+															</td>
+															: '<td></td>'
+														}
 			                      <td>{report.reason}</td>
 			                      <td>{Moment.unix(report.created / 1000).fromNow()}</td>
-			                      <td><img onClick={() => this.openModal(report.target.photos)} src={report.target.preview} style={{width:'45px'}} className="img-thumbnail"/></td>
-			                      <td>
+														{
+															report.target ?
+			                      	<td><img onClick={() => this.openModal(report.target.photos)} src={report.target.preview} style={{width:'45px'}} className="img-thumbnail"/></td>
+															: '<td></td>'
+														}
+														<td>
 			                      	<ButtonToolbar>
 	                				  <span className={invisibleClass} onClick={() => this.toggleBlk(report.targetId)}><i className="fa fa-eye-slash"></i></span>
 	                				  <span className="btn btn-sm" onClick={() => this.deleteReport(report.id)}><i className="fa fa-check"></i></span>
@@ -111,7 +116,7 @@ export default class ReportList extends Component{
                 		<span onClick={this.nextPhoto} className="fa fa-angle-right btn-next"></span>
                 		:null
                 	}
-                	
+
                 </Modal.Body>
               </Modal>
           	</div>

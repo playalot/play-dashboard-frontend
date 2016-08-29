@@ -41,6 +41,7 @@ export default class EditToy extends Component {
 	  	this.onDropCover = this._onDropCover.bind(this)
 
 	  	this.submit = this._submit.bind(this)
+	  	this.removeImg = this._removeImg.bind(this)
 	}
 	componentWillMount() {
 		Request
@@ -51,7 +52,7 @@ export default class EditToy extends Component {
 					name:res.body.name ? res.body.name : '空',
 					nameRaw:res.body.nameRaw ? res.body.nameRaw : '空',
 					release:res.body.release ? res.body.release : '空',
-					currency:res.body.info.currency ? res.body.info.currency : '空',
+					currency:res.body.info.currency ? res.body.info.currency : 'rmb',
 					money:res.body.info.money ? res.body.info.money : 0,
 					scale:res.body.info.scale ? res.body.info.scale : '空',
 					company:res.body.info.company ? res.body.info.company : '空',
@@ -146,6 +147,13 @@ export default class EditToy extends Component {
 				img.src = file.preview
 			})
 	}
+	_removeImg(index) {
+        let tmpImg = this.state.images
+        tmpImg.splice(index,1)
+        this.setState({
+            images: tmpImg
+        })
+    }
 	_submit() {
   	let {
       cover,
@@ -372,10 +380,11 @@ export default class EditToy extends Component {
                 		<p>将图片拖入该区域</p>
                 	</Dropzone>
                 	{
-                		this.state.images.map((img) => {
+                		this.state.images.map((img,index) => {
 	                    return (
 	                      <div className="pull-left edit-toy-image-box" key={'img_'+img}>
 	                        <img className="img-responsive" src={img?CDN.show(img):''}/>
+	                        <span className="fa fa-times-circle delete" onClick={() => this.removeImg(index)}></span>
 	                      </div>
 	                    )
 	                })

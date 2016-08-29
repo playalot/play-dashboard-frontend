@@ -30,7 +30,17 @@
 .edit-toy-image-box {
 	margin-left: 5px;
 	margin-bottom: 5px;
+	position: relative;
 	img {
 		height: 100px;
 	}
+	.delete{
+        position:absolute;
+        top:0;
+        right:0;
+        color:red;
+        padding:0 0 10px 10px;
+        font-size:20px;
+        cursor:pointer;
+    }
 }

@@ -97,17 +97,6 @@ export function recommend(id) {
     }
 }
 export function addToy() {
-    $.ajax({
-          url: '/api/toy',
-          dataType: 'json',
-          type: 'POST',
-          context: this,
-          success: function(data) {
-            console.log(data);
-            this.toys.unshift(data);
-            this.trigger(this.toys);
-          }
-      });
     return (dispatch) => {
         Request
             .post(`/api/toy`)

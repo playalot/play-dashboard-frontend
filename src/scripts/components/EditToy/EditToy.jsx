@@ -2,7 +2,7 @@ import React,{ Component } from 'react'
 import Request from 'superagent'
 import Dropzone from 'react-dropzone'
 import {
-	Row, Col, FromControl
+	Row, Col, FromControl, Modal, 
 } from 'react-bootstrap'
 import CDN from '../../widgets/cdn'
 import {RIEInput, RIEToggle, RIETextArea, RIENumber, RIETags} from 'riek'
@@ -11,26 +11,27 @@ export default class EditToy extends Component {
 	  	super(props)
 
 	  	this.state = {
-	  		cover: '',
-	  		name:'',
-	  		nameRaw:'',
-	  		release:'',
-				money:0,
-	  		currency:'',
-				scale:'',
-	  		detail:'',
-				company:'',
-				character:'',
-	  		artist:'',
-				series:'',
-				origin:'',
-				isR18:false,
-	  		otherInfo:[],
-				images: [],
-				newKey: '',
-				newValue: '',
-				alert: false
-	  	}
+			cover: '',
+			name: '',
+			nameRaw: '',
+			release: '',
+			money: 0,
+			currency: '',
+			scale: '',
+			detail: '',
+			company: '',
+			character: '',
+			artist: '',
+			series: '',
+			origin: '',
+			isR18: false,
+			otherInfo: [],
+			images: [],
+			newKey: '',
+			newValue: '',
+			showModal: false,
+			showImage:null,
+		}
 	  	this.changeCurrency = (e) => this.setState({currency:e.target.value})
 	  	this.virtualServerCallback = this._virtualServerCallback.bind(this)
 	  	this.removeOtherInfo = this._removeOtherInfo.bind(this)
@@ -41,6 +42,18 @@ export default class EditToy extends Component {
 	  	this.onDropCover = this._onDropCover.bind(this)
 
 	  	this.submit = this._submit.bind(this)
+	  	this.removeImg = this._removeImg.bind(this)
+
+	  	this.openModal = (img) => {
+	  		this.setState({
+	  			showImage:CDN.show(img),
+	  			showModal:true,
+	  		})
+	  	}
+	  	this.closeModal = () => this.setState({
+	  		showModal:false,
+	  		showImage:null
+	  	})
 	}
 	componentWillMount() {
 		Request
@@ -51,7 +64,7 @@ export default class EditToy extends Component {
 					name:res.body.name ? res.body.name : '空',
 					nameRaw:res.body.nameRaw ? res.body.nameRaw : '空',
 					release:res.body.release ? res.body.release : '空',
-					currency:res.body.info.currency ? res.body.info.currency : '空',
+					currency:res.body.info.currency ? res.body.info.currency : 'rmb',
 					money:res.body.info.money ? res.body.info.money : 0,
 					scale:res.body.info.scale ? res.body.info.scale : '空',
 					company:res.body.info.company ? res.body.info.company : '空',
@@ -68,7 +81,7 @@ export default class EditToy extends Component {
 	}
 	_virtualServerCallback(newState) {
 		this.setState(newState)
-  }
+  	}
 	isNumber(num) {
 		let re = /^[0-9]+(\.[0-9]+)?$/
 		console.info(re.test(num))
@@ -146,25 +159,34 @@ export default class EditToy extends Component {
 				img.src = file.preview
 			})
 	}
+	_removeImg(index) {
+		if (confirm('删除这个图片?')) {
+			let tmpImg = this.state.images
+	        tmpImg.splice(index,1)
+	        this.setState({
+	            images: tmpImg
+	        })
+		}
+    }
 	_submit() {
-  	let {
-      cover,
-  		name,
-  		nameRaw,
-  		release,
+	  	let {
+			cover,
+			name,
+			nameRaw,
+			release,
 			money,
-  		currency,
-  		scale,
+			currency,
+			scale,
 			detail,
 			company,
 			character,
 			artist,
 			series,
 			origin,
-  		isR18,
-  		otherInfo,
+			isR18,
+			otherInfo,
 			images
-    } = this.state
+	    } = this.state
 
 		const data = {
 			cover,
@@ -185,157 +207,157 @@ export default class EditToy extends Component {
 			images
 		}
 		Object.keys(data).forEach(key => data[key] === '空' || data[key] === 0 ? delete data[key] : '')
-  	Request
-  		.post(`/api/toy/${this.props.params.id}`)
-  		.send(data)
-  		.end((err,res) => {
-				if (err || !res.ok) {
-					console.log(err)
-		 			alert('保存失败!')
-		 		} else {
-		 			alert('保存成功.')
-  			}
-  		})
+  		Request
+	  		.post(`/api/toy/${this.props.params.id}`)
+	  		.send(data)
+	  		.end((err,res) => {
+					if (err || !res.ok) {
+						console.log(err)
+			 			alert('保存失败!')
+			 		} else {
+			 			alert('保存成功.')
+	  			}
+	  		})
 	}
 	render() {
 		return(
 			<div className="content">
         	  <div className="box box-solid">
           		<div className="box-body">
-	     				<Row>
+	     			<Row>
 	     			  	<Dropzone onDrop={this.onDropCover} className="col-sm-3 edit-toy-cover">
-                	<img className="img-responsive" src={this.state.cover?CDN.show(this.state.cover):''}/>
-                	<div className="edit-toy-cover-text">
-                		<span>更换封面</span>
-                	</div>
-              	</Dropzone>
+		                	<img className="img-responsive" src={this.state.cover?CDN.show(this.state.cover):''}/>
+		                	<div className="edit-toy-cover-text">
+		                		<span>更换封面</span>
+		                	</div>
+		              	</Dropzone>
 	      				<Col sm={9}>
-									<Col sm={12}>
-								  	<RIEInput
-											value={this.state.name}
-											change={this.virtualServerCallback}
-											classInvalid="edit-toy-invalid"
-											validate={this.isEmpty}
-											propName="name"
-											className="edit-toy-title"
-										/>
-									</Col>
-									<Col sm={12} className="edit-toy-item">
-			          		<span>原名:&nbsp;&nbsp;</span>
-			          		<RIEInput
-											value={this.state.nameRaw}
-											change={this.virtualServerCallback}
-											validate={this.isEmpty}
-											classInvalid="edit-toy-invalid"
-											propName="nameRaw"
-										/>
-									</Col>
-									<Col sm={6} className="edit-toy-item">
-										<span >发售日:&nbsp;&nbsp;</span>
-										<RIEInput
-											value={this.state.release}
-											change={this.virtualServerCallback}
-											validate={this.isEmpty}
-											classInvalid="edit-toy-invalid"
-											propName="release"
-										/>
-									</Col>
-									<Col sm={6} className="edit-toy-item">
-										<span>价格:&nbsp;&nbsp;</span>
-					 					<RIENumber
-												value={this.state.money}
-												change={this.virtualServerCallback}
-												propName="money"
-										/>&nbsp;
-										<select value={this.state.currency} onChange={this.changeCurrency}>
-											<option value=""></option>
-											<option value="rmb">人民币</option>
-											<option value="yen">日元</option>
-											<option value="dollar">美元</option>
-											<option value="euro">欧元</option>
-										</select>
-									</Col>
-									<Col sm={6} className="edit-toy-item">
-										<span>公司:&nbsp;&nbsp;</span>
-										<RIEInput
-											value={this.state.company}
-											change={this.virtualServerCallback}
-											validate={this.isEmpty}
-											classInvalid="edit-toy-invalid"
-											propName="company"
-										/>
-									</Col>
-									<Col sm={6} className="edit-toy-item">
-										<span>比例:&nbsp;&nbsp;</span>
-										<RIEInput
-											value={this.state.scale}
-											change={this.virtualServerCallback}
-											validate={this.isNumber}
-											classInvalid="edit-toy-invalid"
-											propName="scale"
-										/>
-									</Col>
-									<Col sm={6} className="edit-toy-item">
-			          		<span>系列:&nbsp;&nbsp;</span>
-			          		<RIEInput
-											value={this.state.series}
-											change={this.virtualServerCallback}
-											validate={this.isEmpty}
-											classInvalid="edit-toy-invalid"
-											propName="series"
-										/>
-			          	</Col>
-									<Col sm={6} className="edit-toy-item">
-		          		  <span>角色:&nbsp;&nbsp;</span>
-		          		  <RIEInput
-											value={this.state.character}
-											change={this.virtualServerCallback}
-											validate={this.isEmpty}
-											classInvalid="edit-toy-invalid"
-											propName="character"
-										/>
-			          	</Col>
-									<Col sm={6} className="edit-toy-item">
-										<span>原著:&nbsp;&nbsp;</span>
-										<RIEInput
-											value={this.state.origin}
-											change={this.virtualServerCallback}
-											validate={this.isEmpty}
-											classInvalid="edit-toy-invalid"
-											propName="origin"
-										/>
-									</Col>
-			          	<Col sm={6} className="edit-toy-item">
-	        		  		<span>原型师:&nbsp;&nbsp;</span>
-	        		  		<RIEInput
-											value={this.state.artist}
-											change={this.virtualServerCallback}
-											validate={this.isEmpty}
-											classInvalid="edit-toy-invalid"
-											propName="artist"
-										/>
-			          	</Col>
-			          	<Col sm={6} className="edit-toy-item">
-	        		  		<span>R18:&nbsp;&nbsp;</span>
-	        		  		<RIEToggle
-										  value={this.state.isR18}
-										  change={this.virtualServerCallback}
-										  propName="isR18"
-										/>
-			          	</Col>
-			          	<Col sm={12} className="edit-toy-item">
-	        		  		<span>详细描述:&nbsp;&nbsp;</span>
-	        		  		<RIETextArea
-											rows={30}
-											cols={60}
-										  value={this.state.detail}
-										  change={this.virtualServerCallback}
-										  validate={this.isEmpty}
-										  classInvalid="edit-toy-invalid"
-										  propName="detail"
-										/>
-			          	</Col>
-								</Col>
+							<Col sm={12}>
+								<RIEInput
+									value={this.state.name}
+									change={this.virtualServerCallback}
+									classInvalid="edit-toy-invalid"
+									validate={this.isEmpty}
+									propName="name"
+									className="edit-toy-title"
+								/>
+							</Col>
+							<Col sm={12} className="edit-toy-item">
+			          			<span>原名:&nbsp;&nbsp;</span>
+			          			<RIEInput
+									value={this.state.nameRaw}
+									change={this.virtualServerCallback}
+									validate={this.isEmpty}
+									classInvalid="edit-toy-invalid"
+									propName="nameRaw"
+								/>
+							</Col>
+							<Col sm={6} className="edit-toy-item">
+								<span >发售日:&nbsp;&nbsp;</span>
+								<RIEInput
+									value={this.state.release}
+									change={this.virtualServerCallback}
+									validate={this.isEmpty}
+									classInvalid="edit-toy-invalid"
+									propName="release"
+								/>
+							</Col>
+							<Col sm={6} className="edit-toy-item">
+								<span>价格:&nbsp;&nbsp;</span>
+			 					<RIENumber
+										value={this.state.money}
+										change={this.virtualServerCallback}
+										propName="money"
+								/>&nbsp;
+								<select value={this.state.currency} onChange={this.changeCurrency}>
+									<option value=""></option>
+									<option value="rmb">人民币</option>
+									<option value="yen">日元</option>
+									<option value="dollar">美元</option>
+									<option value="euro">欧元</option>
+								</select>
+							</Col>
+							<Col sm={6} className="edit-toy-item">
+								<span>公司:&nbsp;&nbsp;</span>
+								<RIEInput
+									value={this.state.company}
+									change={this.virtualServerCallback}
+									validate={this.isEmpty}
+									classInvalid="edit-toy-invalid"
+									propName="company"
+								/>
+							</Col>
+							<Col sm={6} className="edit-toy-item">
+								<span>比例:&nbsp;&nbsp;</span>
+								<RIEInput
+									value={this.state.scale}
+									change={this.virtualServerCallback}
+									validate={this.isNumber}
+									classInvalid="edit-toy-invalid"
+									propName="scale"
+								/>
+							</Col>
+							<Col sm={6} className="edit-toy-item">
+			          			<span>系列:&nbsp;&nbsp;</span>
+			          			<RIEInput
+									value={this.state.series}
+									change={this.virtualServerCallback}
+									validate={this.isEmpty}
+									classInvalid="edit-toy-invalid"
+									propName="series"
+								/>
+			          		</Col>
+							<Col sm={6} className="edit-toy-item">
+		          		  		<span>角色:&nbsp;&nbsp;</span>
+		          		  		<RIEInput
+									value={this.state.character}
+									change={this.virtualServerCallback}
+									validate={this.isEmpty}
+									classInvalid="edit-toy-invalid"
+									propName="character"
+								/>
+			          		</Col>
+							<Col sm={6} className="edit-toy-item">
+								<span>原著:&nbsp;&nbsp;</span>
+								<RIEInput
+									value={this.state.origin}
+									change={this.virtualServerCallback}
+									validate={this.isEmpty}
+									classInvalid="edit-toy-invalid"
+									propName="origin"
+								/>
+							</Col>
+			          		<Col sm={6} className="edit-toy-item">
+	        		  			<span>原型师:&nbsp;&nbsp;</span>
+	        		  			<RIEInput
+									value={this.state.artist}
+									change={this.virtualServerCallback}
+									validate={this.isEmpty}
+									classInvalid="edit-toy-invalid"
+									propName="artist"
+								/>
+			          		</Col>
+			          		<Col sm={6} className="edit-toy-item">
+	        		  			<span>R18:&nbsp;&nbsp;</span>
+	        		  			<RIEToggle
+								  value={this.state.isR18}
+								  change={this.virtualServerCallback}
+								  propName="isR18"
+								/>
+			          		</Col>
+			          		<Col sm={12} className="edit-toy-item">
+	        		  			<span>详细描述:&nbsp;&nbsp;</span>
+	        		  			<RIETextArea
+									rows={30}
+									cols={60}
+								  	value={this.state.detail}
+								  	change={this.virtualServerCallback}
+								  	validate={this.isEmpty}
+								  	classInvalid="edit-toy-invalid"
+								  	propName="detail"
+								/>
+			          		</Col>
+						</Col>
 	      			</Row>
       			  	<legend>其他信息</legend>
       		  		{
@@ -372,17 +394,25 @@ export default class EditToy extends Component {
                 		<p>将图片拖入该区域</p>
                 	</Dropzone>
                 	{
-                		this.state.images.map((img) => {
-	                    return (
-	                      <div className="pull-left edit-toy-image-box" key={'img_'+img}>
-	                        <img className="img-responsive" src={img?CDN.show(img):''}/>
-	                      </div>
-	                    )
-	                })
+                		this.state.images.map((img,index) => {
+		                    return (
+		                      <div className="pull-left edit-toy-image-box" key={'img_'+img}>
+		                        <img className="img-responsive" onClick={() => this.openModal(img)} src={img?CDN.show(img):''}/>
+		                        <span className="fa fa-close delete" onClick={() => this.removeImg(index)}></span>
+		                      </div>
+		                    )
+		                })
                 	}
             		</div>
               	<legend style={{paddingTop:'15px'}}></legend>
                 <button className="btn btn-primary col-xs-offset-3" onClick={this.submit}>Submit</button>
+                {
+                	<Modal show={this.state.showModal} onHide={this.closeModal}>
+		                <Modal.Body>
+		               		<img className="image-modal" src={this.state.showImage}/>                	
+		                </Modal.Body>
+		            </Modal>
+                }
           		</div>
           	  </div>
           	</div>

@@ -1,6 +1,7 @@
 import React,{ Component } from 'react'
 import { Row, Col } from 'react-bootstrap'
 import CDN from '../../widgets/cdn'
+import { Link } from 'react-router'
 
 export default class RecommendHome extends Component{
 	constructor(props) {
@@ -37,7 +38,7 @@ export default class RecommendHome extends Component{
 		                      <ul className="products-list product-list-in-box">
 		                        <li className="item">
 		                          <div className="product-img">
-		                            <img src={ad.image?CDN.show(ad.image):''} alt="Ad Image" />
+		                          	<Link to={`/user/${ad.targetId}`}><img src={ad.image?CDN.show(ad.image):''} alt="Ad Image" /></Link>
 		                          </div>
 		                          <div className="product-info">
 		                            <a className="product-title">

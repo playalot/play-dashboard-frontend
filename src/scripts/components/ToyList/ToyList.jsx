@@ -39,7 +39,7 @@ export default class toyList extends Component{
 	}
 	_deletetoy(id) {
 		if (confirm('Delete this toy?')) {
-			this.props.deletetoy(id)
+			this.props.deleteToy(id)
 	    }
 	}
 	_recommend(id) {
@@ -49,7 +49,7 @@ export default class toyList extends Component{
 	}
 	_addtoy() {
 		if (confirm('创建一个新的玩具？')) {
-      		this.props.addtoy()
+      		this.props.addToy()
     	}
 	}
 	render() {

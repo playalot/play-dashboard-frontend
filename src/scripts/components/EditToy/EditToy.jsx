@@ -384,7 +384,7 @@ export default class EditToy extends Component {
 	                    return (
 	                      <div className="pull-left edit-toy-image-box" key={'img_'+img}>
 	                        <img className="img-responsive" src={img?CDN.show(img):''}/>
-	                        <span className="fa fa-times-circle delete" onClick={() => this.removeImg(index)}></span>
+	                        <span className="fa fa-close delete" onClick={() => this.removeImg(index)}></span>
 	                      </div>
 	                    )
 	                })

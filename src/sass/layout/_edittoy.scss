@@ -39,9 +39,15 @@
         position:absolute;
         top:0;
         right:0;
-        color:red;
-        padding:0 0 10px 10px;
+        color:#ccc;
+        padding:5px;
         font-size:20px;
         cursor:pointer;
+        border-radius:5px;
+        transition: color .3s,background-color .3s;
+        &:hover{
+			background-color:#a00;
+			color:white;
+        }
     }
 }

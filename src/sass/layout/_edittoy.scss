@@ -12,6 +12,7 @@
 }
 .edit-toy-cover {
 	position:relative;
+	min-height:100px;
 	&:hover{
 		.edit-toy-cover-text{
 			display:flex;

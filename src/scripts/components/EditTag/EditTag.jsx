@@ -149,7 +149,7 @@ export default class EditTag extends Component{
                               <option value="company">品牌公司</option>
                               <option value="character">动漫人物</option>
                               <option value="series">玩具系列</option>
-                              <option value="artist">原型师</option>
+                              <option value="person">真人</option>
                               <option value="origin">原著</option>
                               <option value="topic">话题</option>
                               <option value="event">活动</option>

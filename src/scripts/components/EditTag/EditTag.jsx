@@ -4,7 +4,7 @@ import { Router } from 'react-router'
 import Dropzone from 'react-dropzone'
 import CDN from '../../widgets/cdn'
 import Request from 'superagent'
-
+import TagsInput from 'react-tagsinput'
 export default class EditTag extends Component{
     constructor(props) {
         super(props)
@@ -15,6 +15,10 @@ export default class EditTag extends Component{
             type: '',
             description: '',
             classifications:[],
+            otherInfo:[],
+            newKey: '',
+            newValue: '',
+            alias:[],
         }
         this.onDropImage = this._onDropImage.bind(this)
         this.changeDescription = (e) => this.setState({
@@ -23,7 +27,17 @@ export default class EditTag extends Component{
         this.changeType = (e) => this.setState({
             type: e.target.value
         })
+        this.removeOtherInfo = this._removeOtherInfo.bind(this)
+        this.addOtherInfo = this._addOtherInfo.bind(this)
+        this.changeNewKey = (e) => this.setState({newKey:e.target.value})
+        this.changeNewValue = (e) => this.setState({newValue:e.target.value})
+        this.handleTagsChange = (alias) => { this.setState({ alias }) }
         this.submit = this._submit.bind(this)
+        this.stop = (e) => {
+            if(e.keyCode === 13){
+                e.preventDefault()
+            }
+        }
     }
     componentWillMount() {
         Request
@@ -34,9 +48,37 @@ export default class EditTag extends Component{
                     image: res.body.image,
                     description: res.body.description ? res.body.description : '',
                     type: res.body.type ? res.body.type : '',
-                    classifications: res.body.classifications
+                    classifications: res.body.classifications,
+                    otherInfo:res.body.otherInfo ? res.body.otherInfo : [],
+                    alias: res.body.alias.length ? res.body.alias : [],
                 })
             })
+    }
+    _removeOtherInfo(i) {
+        let tmpArr = this.state.otherInfo
+        tmpArr.splice(i,1)
+        this.setState({
+            otherInfo: tmpArr
+        })
+    }
+    _addOtherInfo(e) {
+        e.preventDefault()
+        if(!this.state.newKey.trim() || !this.state.newValue.trim()){
+            return alert('字段不能为空')
+        }
+        let tmpArr = this.state.otherInfo
+        tmpArr.push({
+            key:this.state.newKey,
+            value:this.state.newValue
+        })
+        this.setState({
+            otherInfo:tmpArr
+        },() => {
+            this.setState({
+                newKey:'',
+                newValue:''
+            })
+        })
     }
     _onDropImage(files) {
         let file = files[0];
@@ -64,6 +106,8 @@ export default class EditTag extends Component{
             image,
             description,
             type,
+            otherInfo,
+            alias,
         } = this.state
         Request
             .post(`/api/tag/${this.props.params.id}`)
@@ -71,6 +115,8 @@ export default class EditTag extends Component{
                 image,
                 description,
                 type,
+                otherInfo,
+                alias,
             })
             .end((err, res) => {
                 alert("success!")
@@ -101,9 +147,48 @@ export default class EditTag extends Component{
                           </Col>
                         </FormGroup>
                         <FormGroup>
-                          <Col className="control-label" sm={3}><strong>Description</strong></Col>
+                          <Col className="control-label" sm={3}><strong>别名</strong></Col>
+                          <Col sm={9}>
+                            <TagsInput value={this.state.alias} onChange={(alias) => this.handleTagsChange(alias)} />
+                          </Col>
+                        </FormGroup>
+                        <FormGroup>
+                          <Col className="control-label" sm={3}><strong>详细描述</strong></Col>
                           <Col sm={9}>
                             <textarea className="form-control" value={this.state.description} onChange={this.changeDescription}></textarea>
+                          </Col>
+                        </FormGroup>
+                        <FormGroup>
+                          <Col className="control-label" sm={3}><strong>其他信息</strong></Col>
+                          <Col sm={9}>
+                            {
+                                this.state.otherInfo.map((info,i) => {
+                                    return (
+                                        <Row key={`otherInfo_${i}`} >
+                                            <Col  xs={3}>
+                                                <span>{info.key}</span>
+                                            </Col>
+                                            <Col xs={3} >
+                                                <span>{info.value}</span>
+                                            </Col>
+                                            <Col  xs={2} smOffset={1} xsOffset={1}>
+                                                <span onClick={() => this.removeOtherInfo(i)} className="fa fa-minus-circle"></span>
+                                            </Col>
+                                        </Row>
+                                    )
+                                })
+                            }
+                            <Row>
+                                <Col xs={3}>
+                                    <input  className="form-control" type="text" value={this.state.newKey} onKeyDown={this.stop} onChange={this.changeNewKey} placeholder="key"></input>
+                                </Col>
+                                <Col xs={3} >
+                                  <input  className="form-control"  type="text" value={this.state.newValue} onKeyDown={this.stop} onChange={this.changeNewValue} placeholder="value"></input>
+                                </Col>
+                                <Col  xs={2} smOffset={1} xsOffset={1}>
+                                  <button className="btn btn-primary" onClick={this.addOtherInfo}>添加</button>
+                                </Col>
+                            </Row>
                           </Col>
                         </FormGroup>
                         <FormGroup>

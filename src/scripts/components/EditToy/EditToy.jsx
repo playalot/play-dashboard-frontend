@@ -292,7 +292,7 @@ export default class EditToy extends Component {
 								<RIEInput
 									value={this.state.scale}
 									change={this.virtualServerCallback}
-									validate={this.isNumber}
+									validate={this.isEmpty}
 									classInvalid="edit-toy-invalid"
 									propName="scale"
 								/>

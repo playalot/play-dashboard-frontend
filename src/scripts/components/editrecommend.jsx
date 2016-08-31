@@ -77,7 +77,7 @@ var EditBannerSet = React.createClass({
         {value: 'toy', label: '玩具'},
         {value: 'promotion', label: '商品集'}
     ];
-    var placeOptions = [
+    var typeOptions = [
         {value: 'banner', label: '发现页面Banner'},
         {value: 'toy', label: '玩具页面Banner'},
         {value: 'home', label: '首页推荐'},
@@ -103,7 +103,7 @@ var EditBannerSet = React.createClass({
               <fieldset>
                 <FRC.Input ref="id" name="id" id="id" value={this.props.params.id} label="ID" type="text" disabled />
                 <FRC.Input ref="title" name="title" id="title" value="" label="标题" type="text" placeholder="Input the banner title" required/>
-                <FRC.RadioGroup name="place" type="inline" value="banner" label="位置" options={placeOptions} />
+                <FRC.RadioGroup name="type" type="inline" value="banner" label="位置" options={typeOptions} />
                 <FRC.RadioGroup name="targetType" type="inline" value="post" label="目标类型" options={radioOptions} />
                 <FRC.Input ref="targetId" name="targetId" id="targetId" value="" label="目标ID" type="text" placeholder="target id" />
                 <FRC.Input ref="targetUrl" name="targetUrl" id="targetUrl" value="" label="目标Url" type="text" placeholder="target url" />

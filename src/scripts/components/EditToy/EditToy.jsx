@@ -2,7 +2,7 @@ import React,{ Component } from 'react'
 import Request from 'superagent'
 import Dropzone from 'react-dropzone'
 import {
-	Row, Col, FromControl, Modal, 
+	Row, Col, FromControl, Modal,
 } from 'react-bootstrap'
 import CDN from '../../widgets/cdn'
 import {RIEInput, RIEToggle, RIETextArea, RIENumber, RIETags} from 'riek'
@@ -206,6 +206,7 @@ export default class EditToy extends Component {
 			otherInfo,
 			images
 		}
+		data.money = parseInt(data.money)
 		Object.keys(data).forEach(key => data[key] === '空' || data[key] === 0 ? delete data[key] : '')
   		Request
 	  		.post(`/api/toy/${this.props.params.id}`)
@@ -409,7 +410,7 @@ export default class EditToy extends Component {
                 {
                 	<Modal show={this.state.showModal} onHide={this.closeModal}>
 		                <Modal.Body>
-		               		<img className="image-modal" src={this.state.showImage}/>                	
+		               		<img className="image-modal" src={this.state.showImage}/>
 		                </Modal.Body>
 		            </Modal>
                 }

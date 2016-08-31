@@ -72,7 +72,7 @@ export default class PostPanel extends Component{
 		      		</Link>
 		      		<i className="fa fa-close" onClick={ () => this.removeToy()}></i>
 	      		</span>
-	      		
+
 	      	)
 	    }
 	    let contentDiv = ''
@@ -97,7 +97,7 @@ export default class PostPanel extends Component{
 			            		return (
 			            			<div key={'p_'+this.props.post.id+'_'+i}  className="pull-left">
 			            				<img className="img-responsive panel-photos-small"
-			            					src={photo.url} alt="Photo"
+			            					src={photo.url320} alt="Photo"
 			            					onClick={ this.props.openImage.bind(null, photo.url) } />
 			            			</div>)
 			          		}, this)

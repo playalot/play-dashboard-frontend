@@ -6,9 +6,11 @@ import {
     TL_REMOVE_CLASSIFICATION,
     TL_RECOMMEND_TAG,
     TL_DELETE_TAG,
+    TL_RECEIVE_SUGGESTION,
+    TL_CLEAR_SUGGESTION,
 } from '../actions/tagAction'
 
-export default (state = Immutable.fromJS({ tags:[] }),action)=>{
+export default (state = Immutable.fromJS({ tags:[],suggestions:[] }),action)=>{
     switch (action.type) {
         case TL_RECEIVE_TAG:
             return state.updateIn(['tags'], (tags) => tags.concat(Immutable.fromJS(action.res.tags)))
@@ -55,6 +57,14 @@ export default (state = Immutable.fromJS({ tags:[] }),action)=>{
                 return tags.delete(tags.findKey((tag) => {
                     return tag.get('id') === action.tid
                 }))
+            })
+        case TL_RECEIVE_SUGGESTION:
+            return state.updateIn(['suggestions'],(suggestions) => {
+                return suggestions.clear().concat(Immutable.fromJS(action.res))
+            })
+        case TL_CLEAR_SUGGESTION:
+            return state.updateIn(['suggestions'],(suggestions) => {
+                return suggestions.clear()
             })
         default:
             return state

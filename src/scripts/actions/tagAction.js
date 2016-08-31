@@ -8,6 +8,8 @@ export const TL_REMOVE_CLASSIFICATION = 'TL_REMOVE_CLASSIFICATION'
 
 export const TL_RECOMMEND_TAG = 'TL_RECOMMEND_TAG'
 export const TL_DELETE_TAG = 'TL_DELETE_TAG'
+export const TL_RECEIVE_SUGGESTION = 'TL_RECEIVE_SUGGESTION'
+export const TL_CLEAR_SUGGESTION = 'TL_CLEAR_SUGGESTION'
 
 function receiveTag(res) {
     return {
@@ -45,6 +47,17 @@ function _deleteTag(tid) {
     return {
         type: TL_DELETE_TAG,
         tid,
+    }
+}
+function receiveSuggestion(res) {
+    return {
+        type: TL_RECEIVE_SUGGESTION,
+        res
+    }
+}
+function _clearSuggestion() {
+    return {
+        type: TL_CLEAR_SUGGESTION
     }
 }
 const status = {
@@ -112,5 +125,22 @@ export const deleteTag = (tid) => {
             .end((err,res) => {
                 dispatch(_deleteTag(tid))
             })
+    }
+}
+
+export const fetchSuggestion = (q) => {
+    return (dispatch) => {
+        return Request
+            .get(`/api/tags/search`)
+            .query({ q })
+            .end((err,res) => {
+                dispatch(receiveSuggestion(res.body.tags))
+            })
+    }
+}
+
+export const clearSuggestion = () => {
+    return (dispatch) => {
+        dispatch(_clearSuggestion())            
     }
 }

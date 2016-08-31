@@ -6,7 +6,17 @@ import {
 import { Link } from 'react-router'
 import CDN from '../../widgets/cdn'
 import If from '../../widgets/if'
+import Autosuggest from 'react-autosuggest'
 
+function renderSuggestion(suggestion) {
+  return (
+    <div className="search-item">
+  		<img src={suggestion.image} alt=""/>
+    	<span className="item-name">{suggestion.id}</span>
+    	<span className="item-desc">{suggestion.text}</span>
+  	</div>
+  );
+}
 export default class TagList extends Component{
 	constructor(props) {
 	  	super(props)
@@ -14,7 +24,8 @@ export default class TagList extends Component{
 	  	this.state = {
 	  		query:'',
 	  		filter:'',
-	  		selectedTag: null
+	  		selectedTag: null,
+	  		value: ''
 	  	}
 	  	this.onChangeFilter = (e) => this.setState({ 
 	  		query: this.props.classifications[e.target.value].name,
@@ -34,9 +45,28 @@ export default class TagList extends Component{
 	  	this.stop = (e) => {
 	  		if(e.keyCode === 13){
 	  			e.preventDefault()
+	  			this.search()
 	  		}
 	  	}
+	  	this.onChangeQ = (e,{newValue}) => this.setState({query:newValue})
+	    this.onSuggestionsFetchRequested = ({value}) => this.props.fetchSuggestion(value)
+	    this.onSuggestionsClearRequested = () => this.props.clearSuggestion()
+	    this.onSuggestionSelected = (e,{suggestionValue}) => {
+	    	this.search()
+	    }
 	}
+  	renderSuggestion(suggestion) {
+	  	return (
+		    <div className="search-item">
+		  		<img src={suggestion.image} alt=""/>
+		    	<span className="item-name">{suggestion.id}</span>
+		    	<span className="item-desc">{suggestion.text}</span>
+		  	</div>
+	  	)
+	}
+  	getSuggestionValue(suggestion) {
+  		return suggestion.text;     
+  	}
 	componentWillMount() {
 		this.props.fetchTag(this.state.query)
 		if(!this.props.classLoaded){
@@ -63,6 +93,11 @@ export default class TagList extends Component{
     	}
 	}
 	render() {
+	    const inputProps = {
+	      placeholder: 'Type a keyword',
+	      value:this.state.query,
+	      onChange: this.onChangeQ
+	    }
 		let modal = (<div></div>)
 	    if (this.state.selectedTag !== null) {
 	      	let cls = _.filter(this.props.classifications, function(c){
@@ -104,31 +139,16 @@ export default class TagList extends Component{
 		return(
 			<div className="content">
 		        <div className="page-header">
-		          <Form inline>
-		            <FormGroup>
-		              <If test={!_.isEmpty(this.props.classifications)}>
-		                <FormControl componentClass="select" placeholder="select" value={this.state.filter} onChange={this.onChangeFilter}>
-		                  <option value="">All</option>
-		                  {_.map(this.props.classifications, function (c, key) {
-		                    return (<option key={'opt_'+c.id} value={c.id}>{c.name}</option>);
-		                  })}
-		                </FormControl>
-		              </If>
-		              <If test={_.isEmpty(this.props.classifications)}>
-		                <FormControl componentClass="select" placeholder="select" value={this.state.filter} onChange={this.onChangeFilter}>
-		                  <option value="">All</option>
-		                </FormControl>
-		              </If>
-		            </FormGroup>
-		            <FormGroup>
-		              <InputGroup>
-		                <FormControl type="text" placeholder='搜索标签' value={this.state.query} onKeyDown={this.stop} onChange={this.onChangeQuery} />
-		                <InputGroup.Button>
-		                  <Button onClick={this.search}>搜索</Button>
-		                </InputGroup.Button>
-		              </InputGroup>
-		            </FormGroup>
-		          </Form>
+	                <Autosuggest
+				        suggestions={this.props.suggestions}
+				        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+				        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+				        onSuggestionSelected={this.onSuggestionSelected}
+				        getSuggestionValue={this.getSuggestionValue}
+				        renderSuggestion={this.renderSuggestion}
+				        focusFirstSuggestion={true}
+				        inputProps={inputProps} />
+	                <Button onClick={this.search}>搜索</Button>
 		        </div>
 		        <Row>
 		          	{

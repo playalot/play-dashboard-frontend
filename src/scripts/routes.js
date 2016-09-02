@@ -65,6 +65,7 @@ export default {
         { path:'/toy/:id/edit', component:EditToy },
         { path:'/video/edit', component:EditShortVideo },
         { path:'/article/edit', component:EditArticle },
+        { path:'/article/edit/:id', component:EditArticle },
         { path:'/test', component:Test },
     ]
 }

@@ -1,9 +1,10 @@
 import { connect } from 'react-redux'
 import ArticleList from './ArticleList'
-import { fetchArticle, fetchArticleMore } from '../../actions/articleAction'
+import { fetchArticle, fetchArticleMore, togglePub } from '../../actions/articleAction'
 const mapActionCreators = {
 	fetchArticle,
-	fetchArticleMore
+	fetchArticleMore,
+	togglePub,
 }
 
 const mapStateToProps = (state) => {

@@ -1,5 +1,5 @@
 import Immutable from 'immutable'
-import { AL_RECEIVE_ARTICLE, AL_RECEIVE_ARTICLE_MORE } from '../actions/articleAction'
+import { AL_RECEIVE_ARTICLE, AL_RECEIVE_ARTICLE_MORE, AL_TOGGLE_PUB } from '../actions/articleAction'
 
 export default (state = Immutable.fromJS({ articles: [], loaded:false,ts:null }),action)=>{
     switch (action.type) {
@@ -11,6 +11,16 @@ export default (state = Immutable.fromJS({ articles: [], loaded:false,ts:null })
         	return state.updateIn(['articles'],(articles) => {
         		return articles.concat(Immutable.fromJS(action.res))
         	}).set('ts',action.ts)
+        case AL_TOGGLE_PUB:
+            return state.updateIn(['articles'], (articles) => {
+                return articles.update(
+                    articles.findIndex((item) => { 
+                        return item.get('id') === action.id 
+                    }), (item) => {
+                        return item.set('isPub', !item.get('isPub'));
+                    }
+                )
+            })
         default:
             return state
     }

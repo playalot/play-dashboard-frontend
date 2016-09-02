@@ -306,8 +306,9 @@ export default class EditArticle extends Component {
 		this.setState({
 			showUploadDialog:true
 		},()=> {
+			let path = this.props.params.id ? `/api/page/save` : `/api/page/publish`
 		Request
-		 	.post('/api/article/publish')
+		 	.post(path)
 		 	.send(data)
 		 	.end(function(err, res) {
 		 		console.log(err);
@@ -365,7 +366,7 @@ export default class EditArticle extends Component {
 	}
 	componentDidMount() {
 		const data = window.localStorage.getItem('editor-draft')
-		if (data !== null) {
+		if (data !== null && !this.props.params.id) {
 			if (confirm('请问是否要载入保存的草稿')) {
 				const draftData = JSON.parse(data)
 				let { title, cover, tags, category, gallery, raw, authorId } = draftData
@@ -375,6 +376,19 @@ export default class EditArticle extends Component {
 					editorState: EditorState.push(this.state.editorState, rawData)
 				})
 			}
+		}
+		if(this.props.params.id) {
+			Request
+				.get(`/api/page/${this.props.params.id}/raw`)
+				.end((err,res) => {
+					let { title, cover, tags, category, gallery, raw, authorId } = res.body
+					let rawData = convertFromRaw(raw)
+					this.setState({
+						title: title, cover: cover, tags: tags, category: category, gallery: gallery,
+						authorId:authorId.$oid,
+						editorState: EditorState.push(this.state.editorState, rawData)
+					})
+				})
 		}
 		this.intervalId = setInterval(() => {
 			let {

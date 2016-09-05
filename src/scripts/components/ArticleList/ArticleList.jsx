@@ -12,10 +12,16 @@ export default class ArticleList extends Component{
 	  	this.state = {};
 	  	this.fetchMoreArticle = () => this.props.fetchArticleMore()
 	  	this.togglePub = (id) => this.props.togglePub(id)
+	  	this.deleteArticle = this._deleteArticle.bind(this)
 	}
 	componentWillMount() {
 		if(!this.props.loaded){
 			this.props.fetchArticle()
+		}
+	}
+	_deleteArticle(id) {
+		if (confirm('删除这个文章?')) {
+			this.props.deleteArticle(id)
 		}
 	}
 	render() {
@@ -40,6 +46,7 @@ export default class ArticleList extends Component{
 	                      <td>{Moment.unix(article.created / 1000).fromNow()}</td>
 	                      <td><Link to={`/article/edit/${article.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.togglePub(article.id)} className={isPubClass}><i className="fa fa-check"></i></span></td>
+	                      <td><span style={{color:'#333'}} onClick={() => this.deleteArticle(article.id)} className="btn btn-sm"><i className="fa fa-trash"></i></span></td>
 	                      <td><a target="_blank" href={`http://www.playalot.cn/article/${article.id}.html`}>预览</a></td>
 	                    </tr>
 	                  )

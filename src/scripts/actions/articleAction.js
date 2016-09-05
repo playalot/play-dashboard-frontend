@@ -3,6 +3,7 @@ import Request from 'superagent'
 export const AL_RECEIVE_ARTICLE = 'AL_RECEIVE_ARTICLE'
 export const AL_RECEIVE_ARTICLE_MORE = 'AL_RECEIVE_ARTICLE_MORE'
 export const AL_TOGGLE_PUB = 'AL_TOGGLE_PUB'
+export const AL_DELETE_ARTICLE = 'AL_DELETE_ARTICLE'
 
 function receiveArticle(res,ts) {
     return {
@@ -24,7 +25,12 @@ function _togglePub(id) {
         id
     }
 }
-
+function _deleteArticle(id) {
+    return {
+        type: AL_DELETE_ARTICLE,
+        id
+    }
+}
 export function fetchArticle() {
     return (dispatch) => {
         return Request
@@ -61,6 +67,16 @@ export function togglePub(id) {
             })
             .end((err,res) => {
                 dispatch(_togglePub(id))
+            })
+    }
+}
+
+export function deleteArticle(id) {
+    return (dispatch) => {
+        Request
+            .del(`/api/page/${id}`)
+            .end((err,res) => {
+                dispatch(_deleteArticle(id))
             })
     }
 }

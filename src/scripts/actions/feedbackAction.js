@@ -28,7 +28,7 @@ export function fetchFeedback() {
 export function deleteFeedback(id) {
     return (dispatch) => {
         return Request
-            .del(`/api/feedbacks/${id}`)
+            .del(`/api/feedback/${id}`)
             .end((err,res) => {
                 dispatch(_deleteFeedback(id))
             })

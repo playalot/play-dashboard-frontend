@@ -18,16 +18,6 @@ export default class ArticleList extends Component{
 			this.props.fetchArticle()
 		}
 	}
-	delete() {
-		Request
-            .post(`/api/page/57c92668170000bc07c7ba63/publish`)
-            .send({
-            	public:false
-            })
-            .end(function(err, res) {
-            	alert('ok')
-            })
-	}
 	render() {
 		return(
 			<div className="content">
@@ -59,7 +49,6 @@ export default class ArticleList extends Component{
 	            </table>
 	          </div>
 	          <Row>
-	          	<div onClick={this.delete}>delte</div>
 	            <div className="load-more-btn" onClick={this.fetchMoreArticle}>Load More</div>
 	          </Row>
 	        </div>

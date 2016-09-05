@@ -48,7 +48,19 @@ export function fetchArticleMore() {
 }
 
 export function togglePub(id) {
-    return (dispatch) => {
-        dispatch(_togglePub(id))
+    return (dispatch,getState) => {
+        let value = null
+        let index = getState().articleReducer.get('articles').findIndex((item) => {
+            value = item.get('id') === id ? item.get('isPub') : null
+            return item.get('id') === id
+        })
+        return Request
+            .post(`/api/page/${id}/pub`)
+            .send({
+                isPub: !value
+            })
+            .end((err,res) => {
+                dispatch(_togglePub(id))
+            })
     }
 }

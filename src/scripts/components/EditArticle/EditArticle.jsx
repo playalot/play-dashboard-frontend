@@ -306,7 +306,7 @@ export default class EditArticle extends Component {
 		this.setState({
 			showUploadDialog:true
 		},()=> {
-			let path = this.props.params.id ? `/api/page/save` : `/api/page/publish`
+			let path = this.props.params.id ? `/api/page/${this.props.params.id}/publish` : `/api/page/publish`
 		Request
 		 	.post(path)
 		 	.send(data)

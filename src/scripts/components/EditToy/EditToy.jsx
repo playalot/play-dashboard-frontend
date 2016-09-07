@@ -116,20 +116,22 @@ export default class EditToy extends Component {
 		})
 	}
 	_onDropOfficialImage(images) {
-		let formData = new FormData()
-		formData.append('file', images[0])
-		$.ajax({
-			url: `/api/upload?key=toy/img/${this.props.params.id}_${(Date.now() / 1000)}.jpg`,
-			type: 'POST',
-			data: formData,
-			processData: false,
-			contentType: false,
-			success: function(data) {
-				this.state.images.push(data)
-				this.setState({
-					images: this.state.images
-				})
-			}.bind(this)
+		images.forEach((image,index) => {
+			let formData = new FormData()
+			formData.append('file', image)
+			$.ajax({
+				url: `/api/upload?key=toy/img/${this.props.params.id}_${(Date.now() / 1000)}_${index}.jpg`,
+				type: 'POST',
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function(data) {
+					this.state.images.push(data)
+					this.setState({
+						images: this.state.images
+					})
+				}.bind(this)
+			})
 		})
 	}
 	_onDropCover(images) {
@@ -391,7 +393,7 @@ export default class EditToy extends Component {
 	                </Row>
       			  	<legend>官方图片</legend>
       			  	<div>
-              		<Dropzone onDrop={this.onDropOfficialImage} className="col-sm-2 edit-toy-image-box" style={{height:100, borderWidth: 2, borderColor: '#666', borderStyle: 'dashed'}}>
+              		<Dropzone onDrop={this.onDropOfficialImage}  className="col-sm-2 edit-toy-image-box" style={{height:100, borderWidth: 2, borderColor: '#666', borderStyle: 'dashed'}}>
                 		<p>将图片拖入该区域</p>
                 	</Dropzone>
                 	{

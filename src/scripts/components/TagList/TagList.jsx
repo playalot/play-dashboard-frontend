@@ -20,19 +20,17 @@ function renderSuggestion(suggestion) {
 export default class TagList extends Component{
 	constructor(props) {
 	  	super(props)
-	
 	  	this.state = {
 	  		query:'',
-	  		filter:'',
+	  		type:'',
 	  		selectedTag: null,
 	  		value: ''
 	  	}
-	  	this.onChangeFilter = (e) => this.setState({ 
-	  		query: this.props.classifications[e.target.value].name,
-	  		// filter:e.target.value 
+	  	this.onChangeType = (e) => this.setState({
+	  		type:e.target.value
 	  	})
 	  	this.onChangeQuery = (e) => this.setState({query:e.target.value})
-	  	this.search = () => this.props.fetchTag(this.state.query)
+	  	this.search = () => this.props.fetchTag(this.state.query, this.state.type)
 
 	  	this.setTagClassification = (tid,cid) => this._setTagClassification(tid,cid)
 	  	this.removeTagClassification = (tid,c) => this._removeTagClassification(tid,c)
@@ -64,9 +62,9 @@ export default class TagList extends Component{
 		  	</div>
 	  	)
 	}
-  	getSuggestionValue(suggestion) {
-  		return suggestion.text;     
-  	}
+	getSuggestionValue(suggestion) {
+		return suggestion.text;
+	}
 	componentWillMount() {
 		this.props.fetchTag(this.state.query)
 		if(!this.props.classLoaded){
@@ -93,13 +91,13 @@ export default class TagList extends Component{
     	}
 	}
 	render() {
-	    const inputProps = {
-	      placeholder: 'Type a keyword',
-	      value:this.state.query,
-	      onChange: this.onChangeQ
-	    }
+    const inputProps = {
+      placeholder: 'Type a keyword',
+      value:this.state.query,
+      onChange: this.onChangeQ
+    }
 		let modal = (<div></div>)
-	    if (this.state.selectedTag !== null) {
+    if (this.state.selectedTag !== null) {
 	      	let cls = _.filter(this.props.classifications, function(c){
 	        	return this.state.selectedTag.cls.indexOf(c.id) === -1
 	      	}.bind(this))
@@ -112,7 +110,7 @@ export default class TagList extends Component{
 				               	{
 				               		this.state.selectedTag.cls.map(function(c){
 					                 	return (
-					                 		<span key={'t_c_m_'+c} 
+					                 		<span key={'t_c_m_'+c}
 					                 		onClick={ () => this.removeTagClassification( this.state.selectedTag.id, c) }
 					                 		className="label label-warning label-margin" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>);
 					               	}, this)
@@ -123,9 +121,9 @@ export default class TagList extends Component{
 					            {
 					             	cls.map((c,key) => {
 					             		return (
-					             			<span key={'c_m_'+key} 
-					             			className='label label-info label-margin' 
-					             			bsStyle='success' 
+					             			<span key={'c_m_'+key}
+					             			className='label label-info label-margin'
+					             			bsStyle='success'
 					             			onClick={() => this.setTagClassification(this.state.selectedTag.id, c.id) }>{c.name}</span>
 					             		)
 					             	})
@@ -138,18 +136,28 @@ export default class TagList extends Component{
 	    }
 		return(
 			<div className="content">
-		        <div className="page-header">
-	                <Autosuggest
-				        suggestions={this.props.suggestions}
-				        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-				        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-				        onSuggestionSelected={this.onSuggestionSelected}
-				        getSuggestionValue={this.getSuggestionValue}
-				        renderSuggestion={this.renderSuggestion}
-				        focusFirstSuggestion={true}
-				        inputProps={inputProps} />
-	                <Button onClick={this.search}>搜索</Button>
-		        </div>
+        <div className="page-header">
+					<FormGroup className="inline-blk">
+						<FormControl componentClass="select" placeholder="select" value={this.state.type} onChange={this.onChangeType}>
+							<option value="">全部</option>
+							<option value="company">品牌</option>
+							<option value="series">系列</option>
+							<option value="topic">话题</option>
+							<option value="person">人物</option>
+						</FormControl>
+					</FormGroup>
+          <Autosuggest
+		        suggestions={this.props.suggestions}
+		        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+		        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+		        onSuggestionSelected={this.onSuggestionSelected}
+		        getSuggestionValue={this.getSuggestionValue}
+		        renderSuggestion={this.renderSuggestion}
+		        focusFirstSuggestion={true}
+		        inputProps={inputProps}
+						/>
+          <Button onClick={this.search}>搜索</Button>
+		    </div>
 		        <Row>
 		          	{
 		          		this.props.tags.map( (tag) => {

@@ -61,14 +61,14 @@ function _clearSuggestion() {
     }
 }
 const status = {
-    filter: '',
+    query: '',
     page:0,
     overload: false,
 }
-export const fetchTag = (filter) => {
+export const fetchTag = (query, type) => {
 
-    if (filter !== status.filter) {
-        status.filter = filter
+    if (query !== status.query) {
+        status.query = query
         status.page = 0
         status.overload = true
     } else {
@@ -76,8 +76,11 @@ export const fetchTag = (filter) => {
     }
     let params = {}
     params.page = status.page
-    if (status.filter !== '') {
-        params.filter = status.filter
+    if (status.query !== '') {
+        params.query = status.query
+    }
+    if (status.type !== '') {
+        params.type = status.type
     }
     return function(dispatch) {
         return Request
@@ -141,6 +144,6 @@ export const fetchSuggestion = (q) => {
 
 export const clearSuggestion = () => {
     return (dispatch) => {
-        dispatch(_clearSuggestion())            
+        dispatch(_clearSuggestion())
     }
 }

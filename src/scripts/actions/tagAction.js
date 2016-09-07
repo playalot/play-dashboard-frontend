@@ -62,13 +62,15 @@ function _clearSuggestion() {
 }
 const status = {
     query: '',
+    type: '',
     page:0,
     overload: false,
 }
 export const fetchTag = (query, type) => {
 
-    if (query !== status.query) {
+    if (query !== status.query || type !== status.type) {
         status.query = query
+        status.type = type
         status.page = 0
         status.overload = true
     } else {

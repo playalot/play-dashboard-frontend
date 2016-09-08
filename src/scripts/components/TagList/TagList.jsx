@@ -48,7 +48,9 @@ export default class extends Component{
 	  	)
 	}
 	componentWillMount() {
-		this.props.fetchTag(this.state.query,this.state.type)
+		if(!this.props.tagLoaded){
+			this.props.fetchTag(this.state.query,this.state.type)
+		}
 		if(!this.props.classLoaded){
 			this.props.fetchTagClass()
 		}

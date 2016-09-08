@@ -10,12 +10,16 @@ import {
     TL_CLEAR_SUGGESTION,
 } from '../actions/tagAction'
 
-export default (state = Immutable.fromJS({ tags:[],suggestions:[] }),action)=>{
+export default (state = Immutable.fromJS({ tags:[],suggestions:[],tagLoaded:false }),action)=>{
     switch (action.type) {
         case TL_RECEIVE_TAG:
-            return state.updateIn(['tags'], (tags) => tags.concat(Immutable.fromJS(action.res.tags)))
+            return state
+                .updateIn(['tags'], (tags) => tags.concat(Immutable.fromJS(action.res.tags)))
+                .set('tagLoaded',true)
         case TL_RECEIVE_TAG_NEW:
-            return state.updateIn(['tags'], (tags) => tags.clear().concat(Immutable.fromJS(action.res.tags)))
+            return state
+                .updateIn(['tags'], (tags) => tags.clear().concat(Immutable.fromJS(action.res.tags)))
+                .set('tagLoaded',true)
         case TL_SET_CLASSIFICATION:
             return state.updateIn(['tags'], (tags) => {
                 return tags.update(

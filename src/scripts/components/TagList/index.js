@@ -16,12 +16,13 @@ const mapActionCreators = {
 
 const mapStateToProps = (state) => {
 	const { classifications, loaded } = state.tagClassReducer.toJS()
-	const { tags,suggestions } = state.tagReducer.toJS()
+	const { tags,suggestions, tagLoaded } = state.tagReducer.toJS()
 	return {
 		tags,
 		suggestions,
 		classifications,
-		classLoaded:loaded
+		classLoaded:loaded,
+		tagLoaded
 	}
 }
 

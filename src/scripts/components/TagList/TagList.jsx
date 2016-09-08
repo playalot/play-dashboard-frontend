@@ -5,32 +5,19 @@ import {
 } from 'react-bootstrap'
 import { Link } from 'react-router'
 import CDN from '../../widgets/cdn'
-import If from '../../widgets/if'
 import Autosuggest from 'react-autosuggest'
 
-function renderSuggestion(suggestion) {
-  return (
-    <div className="search-item">
-  		<img src={suggestion.image} alt=""/>
-    	<span className="item-name">{suggestion.id}</span>
-    	<span className="item-desc">{suggestion.text}</span>
-  	</div>
-  );
-}
-export default class TagList extends Component{
+export default class extends Component{
 	constructor(props) {
 	  	super(props)
 	  	this.state = {
 	  		query:'',
 	  		type:'',
 	  		selectedTag: null,
-	  		value: ''
 	  	}
-	  	this.onChangeType = (e) => this.setState({
-	  		type:e.target.value
-	  	})
-	  	this.onChangeQuery = (e) => this.setState({query:e.target.value})
+	  	this.onChangeType = (e) => this.setState({ type:e.target.value })
 	  	this.search = () => this.props.fetchTag(this.state.query, this.state.type)
+	  	this.searchNew = () => this.props.fetchTag(this.state.query, this.state.type,true)
 
 	  	this.setTagClassification = (tid,cid) => this._setTagClassification(tid,cid)
 	  	this.removeTagClassification = (tid,c) => this._removeTagClassification(tid,c)
@@ -43,15 +30,13 @@ export default class TagList extends Component{
 	  	this.stop = (e) => {
 	  		if(e.keyCode === 13){
 	  			e.preventDefault()
-	  			this.search()
+	  			this.searchNew()
 	  		}
 	  	}
 	  	this.onChangeQ = (e,{newValue}) => this.setState({query:newValue})
 	    this.onSuggestionsFetchRequested = ({value}) => this.props.fetchSuggestion(value)
 	    this.onSuggestionsClearRequested = () => this.props.clearSuggestion()
-	    this.onSuggestionSelected = (e,{suggestionValue}) => {
-	    	this.search()
-	    }
+	    this.onSuggestionSelected = () => this.searchNew()
 	}
   	renderSuggestion(suggestion) {
 	  	return (
@@ -62,11 +47,8 @@ export default class TagList extends Component{
 		  	</div>
 	  	)
 	}
-	getSuggestionValue(suggestion) {
-		return suggestion.text;
-	}
 	componentWillMount() {
-		this.props.fetchTag(this.state.query)
+		this.props.fetchTag(this.state.query,this.state.type)
 		if(!this.props.classLoaded){
 			this.props.fetchTagClass()
 		}
@@ -91,13 +73,13 @@ export default class TagList extends Component{
     	}
 	}
 	render() {
-    const inputProps = {
-      placeholder: 'Type a keyword',
-      value:this.state.query,
-      onChange: this.onChangeQ
-    }
+		const inputProps = {
+			placeholder: 'Type a keyword',
+			value: this.state.query,
+			onChange: this.onChangeQ
+		}
 		let modal = (<div></div>)
-    if (this.state.selectedTag !== null) {
+    	if (this.state.selectedTag !== null) {
 	      	let cls = _.filter(this.props.classifications, function(c){
 	        	return this.state.selectedTag.cls.indexOf(c.id) === -1
 	      	}.bind(this))
@@ -136,7 +118,7 @@ export default class TagList extends Component{
 	    }
 		return(
 			<div className="content">
-        <div className="page-header">
+        		<div className="page-header">
 					<FormGroup className="inline-blk">
 						<FormControl componentClass="select" placeholder="select" value={this.state.type} onChange={this.onChangeType}>
 							<option value="">全部</option>
@@ -146,17 +128,17 @@ export default class TagList extends Component{
 							<option value="person">人物</option>
 						</FormControl>
 					</FormGroup>
-          <Autosuggest
+          		<Autosuggest
 		        suggestions={this.props.suggestions}
 		        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
 		        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
 		        onSuggestionSelected={this.onSuggestionSelected}
-		        getSuggestionValue={this.getSuggestionValue}
+		        getSuggestionValue={s => s.text}
 		        renderSuggestion={this.renderSuggestion}
 		        focusFirstSuggestion={true}
 		        inputProps={inputProps}
 						/>
-          <Button onClick={this.search}>搜索</Button>
+          <Button onClick={this.searchNew}>搜索</Button>
 		    </div>
 		        <Row>
 		          	{

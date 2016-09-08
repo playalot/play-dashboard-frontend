@@ -66,9 +66,8 @@ const status = {
     page:0,
     overload: false,
 }
-export const fetchTag = (query, type) => {
-
-    if (query !== status.query || type !== status.type) {
+export const fetchTag = (query, type, newPage) => {
+    if (query !== status.query || type !== status.type || newPage) {
         status.query = query
         status.type = type
         status.page = 0

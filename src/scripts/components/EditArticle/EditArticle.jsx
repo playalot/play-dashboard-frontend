@@ -3,6 +3,7 @@ import Dropzone from 'react-dropzone'
 import Select from 'react-select'
 import Request from 'superagent'
 import TagsInput from 'react-tagsinput'
+import ReactDOM from 'react-dom'
 
 import {
 	Editor,
@@ -47,6 +48,11 @@ export default class EditArticle extends Component {
 			showUploadDialog:false,
 			showVideoDialog:false,
 			showLinkDialog:false,
+
+			videoMode: true,
+			progress:null,
+			uploadKey:null,
+			videoUrl:null,
 		}
 		this.handleTitleChange = (e) => this.setState({ title: e.target.value })
 		this.handleAuthorIdChange = (e) => this.setState({ authorId: e.target.value })
@@ -70,13 +76,20 @@ export default class EditArticle extends Component {
 		this.addVideo = () => this._addVideo()
 		this.onChangeVideoCode = (e) => this.setState({videoCode: e.target.value})
 		this.uploadImg = this._uploadImg.bind(this)
+		this.onDropVideo = this._onDropVideo.bind(this)
+		this.uploadQiniu = this._uploadQiniu.bind(this)
 
 		this.publish = () => this._publish();
 		this.resizeImg = (entityKey,size) => this._resizeImg(entityKey,size)
 
 		//dialog controller
 		this.showVideoDialog = () => this.setState({ showVideoDialog:true })
-		this.closeVideoDialog = () => this.setState({ showVideoDialog:false })
+		this.closeVideoDialog = () => this.setState({ 
+			showVideoDialog:false,
+			progress:null,
+			uploadKey:null,
+			videoUrl:null, 
+		})
 		this.showLinkDialog = () => this.setState({ showLinkDialog:true })
 		this.closeLinkDialog = () => this.setState({ showLinkDialog:false })
 
@@ -167,7 +180,25 @@ export default class EditArticle extends Component {
 	    });
 	    return req;
 	  }
+	_uploadQiniu(file, uploadKey, uploadToken) {
+		if (!file || file.size === 0) {
+			return null;
+		}
+		const req = Request
+			.post(this.state.uploadUrl)
+			.field('key', uploadKey)
+			.field('token', uploadToken)
+			.field('x:filename', file.name)
+			.field('x:size', file.size)
+			.attach('file', file, file.name)
+			.set('Accept', 'application/json');
 
+		req.on('progress', file.onprogress);
+		req.end(function(err, res) {
+			console.log('done!')
+		});
+		return req
+	}
 	//链接操作
 	_promptForLink(e) {
 		e.preventDefault();
@@ -241,23 +272,91 @@ export default class EditArticle extends Component {
     ));
   }
 	_addVideo() {
-		if (this.state.videoCode.trim().length === 0) {
-			return false;
+		if(this.state.videoMode){
+			if (this.state.videoCode.trim().length === 0) {
+				return false;
+			}
+			const html = this.state.videoCode.trim().replace("width=510", "width=640");
+			const type = 'video'
+			const entityKey = Entity.create('video', 'IMMUTABLE', {
+				html,type
+			});
+			this.onChange(AtomicBlockUtils.insertAtomicBlock(
+				this.state.editorState,
+				entityKey,
+				' '
+			));
+			this.setState({
+				videoCode: '',
+				showVideoDialog: false
+			})
+		}else{
+			if (parseInt(this.state.progress) !== 100) { 
+				return alert('正在上傳請稍等..')
+			}
+			const html = `<video width="100%" src="${CDN.show(this.state.uploadKey)}" controls>`
+			const type = 'video'
+			const entityKey = Entity.create('video', 'IMMUTABLE', {
+				html,type
+			});
+			this.onChange(AtomicBlockUtils.insertAtomicBlock(
+				this.state.editorState,
+				entityKey,
+				' '
+			));
+			this.setState({
+				uploadKey: '',
+				showVideoDialog: false
+			})
 		}
-		const html = this.state.videoCode.trim().replace("width=510", "width=640");
-		const type = 'video'
-		const entityKey = Entity.create('video', 'IMMUTABLE', {
-			html,type
-		});
-		this.onChange(AtomicBlockUtils.insertAtomicBlock(
-			this.state.editorState,
-			entityKey,
-			' '
-		));
+		
+	}
+	_onDropVideo(files) {
+		let video = files[0];
+
+		// 初始化progress
+		let _this = this;
+		video.onprogress = function(e) {
+			// console.log(e.percent);
+			_this.setState({
+				progress: e.percent.toFixed(2)
+			});
+		};
+
+		// 获取视频meta
+		let URL = window.URL || window.webkitURL;
+		video.preview = URL.createObjectURL(video);
+
+		let vdom = ReactDOM.findDOMNode(this.refs.vtag);
+
 		this.setState({
-			videoCode: '',
-			showVideoDialog: false
+			videoUrl: video.preview
 		});
+
+		let timer = setInterval(function() {
+			// console.warn(Date.now())
+			if (vdom.readyState === 4) {
+				let d = new Date();
+				let id = makeid();
+				let uploadKey = 'user/video/file/' + id + '_' + Math.round(d.getTime() / 1000) + '_w_' + vdom.videoWidth +
+					'_h_' + vdom.videoHeight + '_d_' + Math.floor(vdom.duration) + '_' + _this.state.userId + '.mp4';
+				// console.log(uploadKey);
+				Request
+					.get(`/api/uptoken`)
+					.query({
+						key:uploadKey
+					})
+					.end((err,res) => {
+						// console.info(res.body.uptoken)
+						let uploadToken = res.body.uptoken
+						_this.setState({
+							uploadKey: uploadKey
+						});
+						video.request = _this._uploadQiniu(video, uploadKey, uploadToken);
+					})
+				clearInterval(timer);
+			}
+		}, 500);
 	}
 	_publish() {
 		let _this = this
@@ -487,11 +586,30 @@ export default class EditArticle extends Component {
 	                	this.state.showVideoDialog ?
 	                	<div className="modal">
 	                		<div className="dialog">
-	                			<p className="dialog-title">粘贴视频通用代码</p>
 	                			<span onClick={this.closeVideoDialog} className="dialog-close">×</span>
-	                			<div>
-	                				<textarea className="video-code" value={this.state.videoCode} onChange={this.onChangeVideoCode}/>
-	                			</div>
+	                			<ul className="nav nav-tabs">
+								  <li className={this.state.videoMode ? 'active':''}><a onClick={() => this.setState({videoMode:true})}>粘贴视频通用代码</a></li>
+								  <li className={this.state.videoMode ? '':'active'}><a onClick={() => this.setState({videoMode:false})}>上傳視頻</a></li>
+								</ul>
+								<br/>
+								{
+									this.state.videoMode ?
+									<div>
+										<textarea className="video-code" value={this.state.videoCode} onChange={this.onChangeVideoCode}/>
+									</div>
+									:<div>
+										<Dropzone onDrop={this.onDropVideo} multiple={false} style={{width:'100%',height:'100px',border: '2px dashed rgb(204, 204, 204)', 'borderRadius': '5px'}}>
+								            <div>将视频文件拖入该区域</div>
+								        </Dropzone>
+								        <br/>
+								        <div className="progress">
+										  <div className="progress-bar" style={{width:`${this.state.progress}%`}}>
+										  	{(this.state.progress || 0)}
+										  </div>
+										</div>
+								        <video style={{display:'none'}} ref="vtag" className="" src={this.state.videoUrl} controls></video>
+									</div>
+								}
 	                			<div className="dialog-footer">
 					                <button className="btn btn-primary" onClick={this.addVideo}>插入</button>
 					            </div>

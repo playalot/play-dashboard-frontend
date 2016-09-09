@@ -43,7 +43,8 @@ export default class EditToy extends Component {
 
 	  	this.submit = this._submit.bind(this)
 	  	this.removeImg = this._removeImg.bind(this)
-
+	  	this.upImg = this._upImg.bind(this)
+	  	this.downImg = this._downImg.bind(this)
 	  	this.openModal = (img) => {
 	  		this.setState({
 	  			showImage:CDN.show(img),
@@ -169,6 +170,26 @@ export default class EditToy extends Component {
 	            images: tmpImg
 	        })
 		}
+    }
+    _upImg(index) {
+    	if(index <= 0){ return }
+    	let tmpImg = this.state.images
+    	let tmp = tmpImg[index-1]
+    	tmpImg[index-1] = tmpImg[index]
+    	tmpImg[index] = tmp
+    	this.setState({
+            images: tmpImg
+        })
+    }
+    _downImg(index) {
+		if(index >= (this.state.images.length - 1)){ return }
+    	let tmpImg = this.state.images
+    	let tmp = tmpImg[index+1]
+    	tmpImg[index+1] = tmpImg[index]
+    	tmpImg[index] = tmp
+    	this.setState({
+            images: tmpImg
+        })
     }
 	_submit() {
 	  	let {
@@ -402,6 +423,8 @@ export default class EditToy extends Component {
 		                      <div className="pull-left edit-toy-image-box" key={'img_'+img}>
 		                        <img className="img-responsive" onClick={() => this.openModal(img)} src={img?CDN.show(img):''}/>
 		                        <span className="fa fa-close delete" onClick={() => this.removeImg(index)}></span>
+		                        <span className="fa fa-angle-left left" onClick={() => this.upImg(index)}></span>
+		                        <span className="fa fa-angle-right right" onClick={() => this.downImg(index)}></span>
 		                      </div>
 		                    )
 		                })

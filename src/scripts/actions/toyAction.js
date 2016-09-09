@@ -111,12 +111,16 @@ const status = {
     sort: 'created',
     page: 0,
     overload: false,
+    year:'',
+    month:'',
 }
-export function fetchToys(filter, query, sort) {
-    if (status.query !== query || status.filter !== filter || status.sort !== sort) {
+export function fetchToys(filter, query, sort, year, month, newPage) {
+    if (status.query !== query || status.filter !== filter || status.sort !== sort || status.year !== year || status.month !== month || newPage) {
           status.filter = filter
           status.query = query
           status.sort = sort
+          status.year = year
+          status.month = month
           status.page = 0
           status.overload = true
     } else {
@@ -131,6 +135,12 @@ export function fetchToys(filter, query, sort) {
     }
     if (status.query !== '') {
         params.query = status.query
+    }
+    if (status.year !== '') {
+        params.year = status.year
+    }
+    if (status.year !=='' && status.month !== '') {
+        params.month = status.month
     }
     if (status.sort !== '') {
         params.sort = status.sort

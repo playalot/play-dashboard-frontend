@@ -12,13 +12,17 @@ export default class toyList extends Component{
 	  	this.state = {
 	  		filter: '',
 	  		query: '',
-	  		sort: 'created'
+	  		sort: 'created',
+	  		month:'',
+	  		year:'',
 	  	}
 	  	this.onChangeSort = (e) => this.setState({sort:e.target.value})
 	  	this.onChangeFilter = (e) => this.setState({filter:e.target.value})
 	  	this.onChangeQuery = (e) => this.setState({query:e.target.value})
-	  	this.search = () => this.props.fetchToys(this.state.filter,this.state.query.trim(),this.state.sort)
-
+	  	this.onChangeYear= (e) => this.setState({year:e.target.value})
+	  	this.onChangeMonth = (e) => this.setState({month:e.target.value})
+	  	this.search = () => this.props.fetchToys(this.state.filter,this.state.query.trim(),this.state.sort,this.state.year,this.state.month)
+	  	this.searchNew = () => this.props.fetchToys(this.state.filter,this.state.query.trim(),this.state.sort,this.state.year,this.state.month,true)
 
 	  	this.recommend = this._recommend.bind(this)
 	  	this.toggleR18 = (id) => this.props.toggleR18(id)
@@ -71,18 +75,45 @@ export default class toyList extends Component{
 		                <option value="counts.owns">拥有最多</option>
 		              </FormControl>
 		            </FormGroup>
+		            
 		            <FormGroup>
-		              <FormControl componentClass="select" placeholder="select" value={this.state.filter} onChange={this.onChangeFilter}>
+		              <FormControl componentClass="select" value={this.state.filter} onChange={this.onChangeFilter}>
 		                <option value="">全部</option>
 		                <option value="isRec">推荐</option>
 		                <option value="isR18">R18</option>
 		              </FormControl>
 		            </FormGroup>
 		            <FormGroup>
+		              <FormControl componentClass="select" value={this.state.year} onChange={this.onChangeYear}>
+		              	<option value="">全部年份</option>
+		                <option value="2016">2016年</option>
+		                <option value="2015">2015年</option>
+		                <option value="2014">2014年</option>
+		              </FormControl>
+		            </FormGroup>
+		            <FormGroup>
+		              <FormControl componentClass="select" value={this.state.month} onChange={this.onChangeMonth}>
+		              	<option value="">全部月份</option>
+		                <option value="1">一月</option>
+		                <option value="2">二月</option>
+		                <option value="3">三月</option>
+		                <option value="4">四月</option>
+		                <option value="5">五月</option>
+		                <option value="6">六月</option>
+		                <option value="7">七月</option>
+		                <option value="8">八月</option>
+		                <option value="9">九月</option>
+		                <option value="10">十月</option>
+		                <option value="11">十一月</option>
+		                <option value="12">十二月</option>
+		              </FormControl>
+		            </FormGroup>
+		            
+		            <FormGroup>
 		                <InputGroup>
 		                  <FormControl type="text" value={this.state.query} onKeyDown={this.stop} onChange={this.onChangeQuery} />
 		                  <InputGroup.Button>
-		                    <Button onClick={this.search}>搜索</Button>
+		                    <Button onClick={this.searchNew}>搜索</Button>
 		                  </InputGroup.Button>
 		                </InputGroup>
 		            </FormGroup>

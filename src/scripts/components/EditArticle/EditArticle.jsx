@@ -41,7 +41,7 @@ export default class EditArticle extends Component {
 			gallery:[],
 			tags: [],
 			cover:'',
-			category:'评测',
+			category:'随笔',
 			onFocusKey:'',
 			readOnly:false,
 			showUploadDialog:false,
@@ -424,7 +424,8 @@ export default class EditArticle extends Component {
 		    { value: '评测', label: '评测' },
 		    { value: '新闻', label: '新闻' },
 		    { value: '访谈', label: '访谈' },
-		    { value: '随笔', label: '随笔' }
+		    { value: '随笔', label: '随笔' },
+				{ value: '干货', label: '干货' }
 		];
 		return (
 			<div className="editarticle">

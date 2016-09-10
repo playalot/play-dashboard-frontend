@@ -130,7 +130,8 @@ export default class extends Component{
 							<option value="person">人物</option>
 						</FormControl>
 					</FormGroup>
-          		<Autosuggest
+					{' '}
+          <Autosuggest
 		        suggestions={this.props.suggestions}
 		        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
 		        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
@@ -140,6 +141,7 @@ export default class extends Component{
 		        focusFirstSuggestion={true}
 		        inputProps={inputProps}
 						/>
+						{' '}
           <Button onClick={this.searchNew}>搜索</Button>
 		    </div>
 		        <Row>

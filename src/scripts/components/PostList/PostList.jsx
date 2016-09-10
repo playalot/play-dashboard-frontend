@@ -101,15 +101,17 @@ export default class Post extends Component{
 	          <div className="page-header">
 	            <Form inline>
 	              <FormGroup>
-	                <Col smOffset={2} style={{marginRight: '5px'}}>
+	                <Col smOffset={2}>
 	                  <Link to="/video/edit"><Button bsStyle='success'>发布视频</Button></Link>
 	                </Col>
 	              </FormGroup>
+								{' '}
 	              <FormGroup>
-	                <Col smOffset={2} style={{marginRight: '25px'}}>
+	                <Col smOffset={2}>
 	                  <Button bsStyle='success' onClick={this.getUnCls}>未定义标签</Button>
 	                </Col>
 	              </FormGroup>
+								{' '}
 	              <FormGroup>
 	                <FormControl componentClass="select" placeholder="select" value={this.state.filter} onChange={this.onChangeFilter}>
 	                  <option value="">全部</option>
@@ -118,6 +120,7 @@ export default class Post extends Component{
 	                  <option value="isBlk">屏蔽</option>
 	                </FormControl>
 	              </FormGroup>
+								{' '}
 	              <FormGroup>
 	                <InputGroup>
 	                  <FormControl type="text" placeholder='Search by Tag' value={this.state.query} onKeyDown={this.stop} onChange={this.onChangeQuery} />

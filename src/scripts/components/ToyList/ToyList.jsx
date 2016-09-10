@@ -75,7 +75,7 @@ export default class toyList extends Component{
 		                <option value="counts.owns">拥有最多</option>
 		              </FormControl>
 		            </FormGroup>
-		            
+								{' '}
 		            <FormGroup>
 		              <FormControl componentClass="select" value={this.state.filter} onChange={this.onChangeFilter}>
 		                <option value="">全部</option>
@@ -83,32 +83,35 @@ export default class toyList extends Component{
 		                <option value="isR18">R18</option>
 		              </FormControl>
 		            </FormGroup>
+								{' '}
 		            <FormGroup>
 		              <FormControl componentClass="select" value={this.state.year} onChange={this.onChangeYear}>
 		              	<option value="">全部年份</option>
+										<option value="2017">2017年</option>
 		                <option value="2016">2016年</option>
 		                <option value="2015">2015年</option>
 		                <option value="2014">2014年</option>
 		              </FormControl>
 		            </FormGroup>
+								{' '}
 		            <FormGroup>
 		              <FormControl componentClass="select" value={this.state.month} onChange={this.onChangeMonth}>
 		              	<option value="">全部月份</option>
-		                <option value="1">一月</option>
-		                <option value="2">二月</option>
-		                <option value="3">三月</option>
-		                <option value="4">四月</option>
-		                <option value="5">五月</option>
-		                <option value="6">六月</option>
-		                <option value="7">七月</option>
-		                <option value="8">八月</option>
-		                <option value="9">九月</option>
-		                <option value="10">十月</option>
-		                <option value="11">十一月</option>
-		                <option value="12">十二月</option>
+		                <option value="1">1月</option>
+		                <option value="2">2月</option>
+		                <option value="3">3月</option>
+		                <option value="4">4月</option>
+		                <option value="5">5月</option>
+		                <option value="6">6月</option>
+		                <option value="7">7月</option>
+		                <option value="8">8月</option>
+		                <option value="9">9月</option>
+		                <option value="10">10月</option>
+		                <option value="11">11月</option>
+		                <option value="12">12月</option>
 		              </FormControl>
 		            </FormGroup>
-		            
+		            {' '}
 		            <FormGroup>
 		                <InputGroup>
 		                  <FormControl type="text" value={this.state.query} onKeyDown={this.stop} onChange={this.onChangeQuery} />

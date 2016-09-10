@@ -498,3 +498,12 @@ img.img-corona {
 .inline-blk {
   display: inline-block;
 }
+
+input.form-control {
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+}
+
+.form-control, .react-autosuggest__container input {
+  font-size: 15px;
+}

@@ -13,6 +13,7 @@ export default class ArticleList extends Component{
 	  	this.fetchMoreArticle = () => this.props.fetchArticleMore()
 	  	this.togglePub = (id) => this.props.togglePub(id)
 	  	this.deleteArticle = this._deleteArticle.bind(this)
+	  	this.toggleRecommend = (id) => this.props.toggleRecommend(id)
 	}
 	componentWillMount() {
 		if(!this.props.loaded){
@@ -35,16 +36,24 @@ export default class ArticleList extends Component{
 	              <tbody>
 	                {this.props.articles.map((article) => {
 	                	let isPubClass = article.isPub === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
+	                	let recommendClass = article.isRec === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
 	                  return (
 	                    <tr key={article.id}>
 	                      <td><img style={{width:'70px'}} src={article.cover} className="img-thumbnail"/></td>
 	                      <td>{article.title}</td>
 	                      <td>{article.author}</td>
 	                      <td>{article.category}</td>
-	                      <td>{article.tags.join()}</td>
+	                      <td>
+	                      	{
+	                      		article.tags.map((tag,index) => {
+	                      			return (<span className="label label-info label-margin" key={`tag_${index}`}>{tag}</span>)
+	                      		})
+	                      	}
+	                      </td>
 	                      <td>{article.counts.views} views</td>
 	                      <td>{Moment.unix(article.created / 1000).fromNow()}</td>
 	                      <td><Link to={`/article/edit/${article.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link></td>
+	                      <td><span style={{color:'#333'}} onClick={() => this.toggleRecommend(article.id)} className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.togglePub(article.id)} className={isPubClass}><i className="fa fa-check"></i></span></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.deleteArticle(article.id)} className="btn btn-sm"><i className="fa fa-trash"></i></span></td>
 	                      <td><a target="_blank" href={`http://www.playalot.cn/article/${article.id}.html`}>预览</a></td>

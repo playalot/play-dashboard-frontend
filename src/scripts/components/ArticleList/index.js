@@ -1,10 +1,11 @@
 import { connect } from 'react-redux'
 import ArticleList from './ArticleList'
-import { fetchArticle, fetchArticleMore, togglePub, deleteArticle } from '../../actions/articleAction'
+import { fetchArticle, fetchArticleMore, togglePub, toggleRecommend, deleteArticle } from '../../actions/articleAction'
 const mapActionCreators = {
 	fetchArticle,
 	fetchArticleMore,
 	togglePub,
+	toggleRecommend,
 	deleteArticle,
 }
 

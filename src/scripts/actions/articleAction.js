@@ -3,6 +3,7 @@ import Request from 'superagent'
 export const AL_RECEIVE_ARTICLE = 'AL_RECEIVE_ARTICLE'
 export const AL_RECEIVE_ARTICLE_MORE = 'AL_RECEIVE_ARTICLE_MORE'
 export const AL_TOGGLE_PUB = 'AL_TOGGLE_PUB'
+export const AL_TOGGLE_REC = 'AL_TOGGLE_REC'
 export const AL_DELETE_ARTICLE = 'AL_DELETE_ARTICLE'
 
 function receiveArticle(res,ts) {
@@ -22,6 +23,12 @@ function receiveArticleMore(res,ts) {
 function _togglePub(id) {
     return {
         type: AL_TOGGLE_PUB,
+        id
+    }
+}
+function _toggleRecommend(id) {
+    return {
+        type: AL_TOGGLE_REC,
         id
     }
 }
@@ -70,7 +77,23 @@ export function togglePub(id) {
             })
     }
 }
-
+export function toggleRecommend(id) {
+    return (dispatch,getState) => {
+        let value = null
+        let index = getState().articleReducer.get('articles').findIndex((item) => {
+            value = item.get('id') === id ? item.get('isRec') : null
+            return item.get('id') === id
+        })
+        return Request
+            .post(`/api/page/${id}/recommend`)
+            .send({
+                isRec: !value
+            })
+            .end((err,res) => {
+                dispatch(_toggleRecommend(id))
+            })
+    }
+}
 export function deleteArticle(id) {
     return (dispatch) => {
         Request

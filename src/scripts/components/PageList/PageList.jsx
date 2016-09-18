@@ -5,7 +5,7 @@ import Moment from 'moment'
 import Request from 'superagent'
 
 
-export default class ArticleList extends Component{
+export default class extends Component{
 	constructor(props) {
 	  	super(props);
 	
@@ -29,7 +29,7 @@ export default class ArticleList extends Component{
 		return(
 			<div className="content">
 	          <div className="page-header">
-	            <Link to="/article/edit"><Button bsStyle='success'>发布文章</Button></Link>
+	            <Link to="/page/edit"><Button bsStyle='success'>发布文章</Button></Link>
 	          </div>
 	          <div className="table-responsive">
 	            <table className="table table-striped">
@@ -52,7 +52,7 @@ export default class ArticleList extends Component{
 	                      </td>
 	                      <td>{article.counts.views} views</td>
 	                      <td>{Moment.unix(article.created / 1000).fromNow()}</td>
-	                      <td><Link to={`/article/edit/${article.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link></td>
+	                      <td><Link to={`/page/edit/${article.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.toggleRecommend(article.id)} className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.togglePub(article.id)} className={isPubClass}><i className="fa fa-check"></i></span></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.deleteArticle(article.id)} className="btn btn-sm"><i className="fa fa-trash"></i></span></td>

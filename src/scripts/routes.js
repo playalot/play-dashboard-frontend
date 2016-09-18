@@ -5,7 +5,7 @@ import Home from './components/Home/index'
 import ExplorePage from './components/ExplorePage/index'
 import RecommendHome from './components/RecommendHome/index'
 import PostList from './components/PostList/index'
-import ArticleList from './components/ArticleList/index'
+import PageList from './components/PageList/index'
 import UserList from './components/UserList/index'
 import TagList from './components/TagList/index'
 import UserDetail from './components/UserDetail/index'
@@ -49,7 +49,7 @@ export default {
         { path:'/recommendhome', component:RecommendHome },
         { path:'/explorepage', component:ExplorePage },
         { path:'/post', component:PostList },
-        { path:'/article', component:ArticleList },
+        { path:'/page', component:PageList },
         { path:'/user', component:UserList },
         { path:'/tag', component:TagList },
         { path:'/toy', component:ToyList },
@@ -64,8 +64,8 @@ export default {
         { path:'/recommend/:id/edit', component:EditRecommend },
         { path:'/toy/:id/edit', component:EditToy },
         { path:'/video/edit', component:EditShortVideo },
-        { path:'/article/edit', component:EditArticle },
-        { path:'/article/edit/:id', component:EditArticle },
+        { path:'/page/edit', component:EditArticle },
+        { path:'/page/edit/:id', component:EditArticle },
         { path:'/test', component:Test },
     ]
 }

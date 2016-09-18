@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import ArticleList from './ArticleList'
+import PageList from './PageList'
 import { fetchArticle, fetchArticleMore, togglePub, toggleRecommend, deleteArticle } from '../../actions/articleAction'
 const mapActionCreators = {
 	fetchArticle,
@@ -18,4 +18,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, mapActionCreators)(ArticleList)
+export default connect(mapStateToProps, mapActionCreators)(PageList)

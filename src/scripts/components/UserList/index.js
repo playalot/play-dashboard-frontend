@@ -2,12 +2,13 @@ import { connect } from 'react-redux'
 import UserList from './UserList'
 
 import {
-	fetchUser, recommendUser
+	fetchUser, recommendUser, approveUser
 } from '../../actions/userAction'
 
 const mapActionCreators = {
 	fetchUser,
-	recommendUser
+	recommendUser,
+	approveUser
 }
 
 const mapStateToProps = (state) => {

@@ -15,6 +15,7 @@ export default class UserList extends Component{
 	  	this.search = () => this.props.fetchUser(this.state.query)
 	  	this.onChangeQuery = (e) => this.setState({query:e.target.value})
 	  	this.recommend = (id) => this.props.recommendUser(id)
+	  	this.approve = this._approve.bind(this)
 	  	this.stop = (e) => {
 	  		if(e.keyCode === 13){
 	  			e.preventDefault()
@@ -25,6 +26,12 @@ export default class UserList extends Component{
 	}
 	componentWillMount() {
 		this.search()
+	}
+	_approve(id) {
+		let txt = prompt('输入认证信息')
+		if (txt) {
+			this.props.approveUser(id,txt)
+		}
 	}
 	renderAccounts(accounts) {
 	    return (
@@ -66,7 +73,10 @@ export default class UserList extends Component{
 	                      <td>{user.counts.posts}</td>
 	                      <td>{this.renderAccounts(user.accounts)}</td>
 	                      <td>{Moment.unix(user.lastSeen / 1000).fromNow()}</td>
-	                      <td><Button onClick={() => this.recommend(user.id)}>推荐</Button></td>
+	                      <td>
+	                      	<Button onClick={() => this.recommend(user.id)}>推荐</Button>
+	                      	<Button style={{marginLeft:'5px'}} onClick={() => this.approve(user.id)}>认证</Button>
+	                      </td>
 	                    </tr>
 	                  );
 	                })}

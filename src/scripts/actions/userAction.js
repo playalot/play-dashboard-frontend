@@ -52,3 +52,15 @@ export function recommendUser(id) {
             })
     }
 }
+
+export function approveUser(id,txt) {
+    return (dispatch) => {
+        return Request
+            .post(`/api/user/${id}/approve`)
+            .send({
+                approval: txt
+            })
+            .end((err,res) => {
+            })
+    }
+}

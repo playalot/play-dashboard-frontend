@@ -121,7 +121,7 @@ export default class EditToy extends Component {
 			let formData = new FormData()
 			formData.append('file', image)
 			$.ajax({
-				url: `/api/upload?key=toy/img/${this.props.params.id}_${(Date.now() / 1000)}_${index}.jpg`,
+				url: `/api/upload?key=toy/img/${this.props.params.id}_(size).${image.name.split('.').pop()}`,
 				type: 'POST',
 				data: formData,
 				processData: false,

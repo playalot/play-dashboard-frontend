@@ -5,8 +5,8 @@ import thunk from 'redux-thunk'
 import postReducer from './reducers/postReducer'
 import tagClassReducer from './reducers/tagClassReducer'
 import userDetailReducer from './reducers/userDetailReducer'
-import statsReducer from './reducers/statsReducer'
-import recommendHomeReducer from './reducers/recommendHomeReducer'
+import stats from './reducers/statsReducer'
+import recommendHome from './reducers/recommendHomeReducer'
 import tagReducer from './reducers/tagReducer'
 import exploreReducer from './reducers/exploreReducer'
 import userReducer from './reducers/userReducer'
@@ -22,8 +22,8 @@ export const makeRootReducer = (asyncReducers) => {
 		postReducer,
 		tagClassReducer,
 		userDetailReducer,
-		statsReducer,
-		recommendHomeReducer,
+		stats,
+		recommendHome,
 		tagReducer,
 		exploreReducer,
 		userReducer,

@@ -8,7 +8,7 @@ const mapActionCreators = {
 }
 
 const mapStateToProps = (state) => {
-    const { homeads, loaded }  = state.recommendHomeReducer.toJS()
+    const { homeads, loaded }  = state.recommendHome.toJS()
     return {
         homeads, loaded
     }

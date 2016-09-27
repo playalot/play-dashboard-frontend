@@ -7,7 +7,7 @@ const mapActionCreators = {
 }
 
 const mapStateToProps = (state) => {
-    const { stats, loaded }  = state.statsReducer.toJS()
+    const { stats, loaded }  = state.stats.toJS()
     return {
         stats, loaded
     }

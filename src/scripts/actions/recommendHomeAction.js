@@ -1,17 +1,17 @@
 import Request from 'superagent'
 
-export const RH_RECEIVE_HOMEADS = 'RH_RECEIVE_HOMEADS'
-export const RH_DELETE_HOMEAD = 'RH_DELETE_HOMEAD'
+export const REC_HOME_RECEIVE_HOMEADS = 'REC_HOME_RECEIVE_HOMEADS'
+export const REC_HOME_DELETE_HOMEAD = 'REC_HOME_DELETE_HOMEAD'
 
 function receiveHomeads(res) {
     return {
-        type: RH_RECEIVE_HOMEADS,
+        type: REC_HOME_RECEIVE_HOMEADS,
         res
     }
 }
 function _deleteHomeAd(id) {
     return {
-        type: RH_DELETE_HOMEAD,
+        type: REC_HOME_DELETE_HOMEAD,
         id
     }
 }
@@ -25,7 +25,6 @@ export const fetchHomeads = () => {
             })
     }
 }
-
 export const deleteHomeAd = (id) => {
     return (dispatch) => {
         return Request

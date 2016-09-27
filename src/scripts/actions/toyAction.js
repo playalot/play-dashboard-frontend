@@ -1,46 +1,46 @@
 import Request from 'superagent'
 
-export const SKL_RECEIVE_TOY = 'SKL_RECEIVE_TOY'
-export const SKL_RECEIVE_TOY_NEW = 'SKL_RECEIVE_TOY_NEW'
+export const TOL_RECEIVE_TOY = 'TOL_RECEIVE_TOY'
+export const TOL_RECEIVE_TOY_NEW = 'TOL_RECEIVE_TOY_NEW'
 
-export const SKL_TOGGLE_R18 = 'SKL_TOGGLE_R18'
-export const SKL_TOGGLE_RECOMMEND = 'SKL_TOGGLE_RECOMMEND'
-export const SKL_DELETE_TOY = 'SKL_DELETE_TOY'
-export const SKL_ADD_TOY = 'SKL_ADD_TOY'
+export const TOL_TOGGLE_R18 = 'TOL_TOGGLE_R18'
+export const TOL_TOGGLE_RECOMMEND = 'TOL_TOGGLE_RECOMMEND'
+export const TOL_DELETE_TOY = 'TOL_DELETE_TOY'
+export const TOL_ADD_TOY = 'TOL_ADD_TOY'
 
 function receiveToy(res) {
     return {
-        type: SKL_RECEIVE_TOY,
+        type: TOL_RECEIVE_TOY,
         res
     }
 }
 function receiveToyNew(res) {
     return {
-        type: SKL_RECEIVE_TOY_NEW,
+        type: TOL_RECEIVE_TOY_NEW,
         res
     }
 }
 function _toggleR18(id) {
     return {
-        type: SKL_TOGGLE_R18,
+        type: TOL_TOGGLE_R18,
         id,
     }
 }
 function _toggleRecommend(id) {
     return {
-        type: SKL_TOGGLE_RECOMMEND,
+        type: TOL_TOGGLE_RECOMMEND,
         id
     }
 }
 function _deleteToy(id) {
     return {
-        type: SKL_DELETE_TOY,
+        type: TOL_DELETE_TOY,
         id
     }
 }
 function _addToy(res) {
     return {
-        type: SKL_ADD_TOY,
+        type: TOL_ADD_TOY,
         res
     }
 }

@@ -72,6 +72,7 @@ export default class App extends Component{
 		                  <li><Link to="/feedback" activeClassName="active"><i className="fa fa-circle-o"></i><span>反馈</span></Link></li>
 		                </ul>
 		              </li>	
+		              <li><Link to="/sku" activeClassName="active"><i className="fa fa-shopping-cart"></i><span>商品</span></Link></li>
 		            </ul>
 		          </section>
 		        </div>

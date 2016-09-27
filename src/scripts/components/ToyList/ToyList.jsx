@@ -1,10 +1,10 @@
 import React,{ Component } from 'react'
 const _ = require('lodash')
 import {
-	Col, Row, Modal, Form, FormGroup, InputGroup, FormControl, Button, ButtonToolbar, DropdownButton
+	Col, Row, Modal, Form, FormGroup, InputGroup, FormControl, Button, ButtonToolbar, DropdownButton, Checkbox
 } from 'react-bootstrap'
 import { Link } from 'react-router'
-
+import Request from 'superagent'
 export default class toyList extends Component{
 	constructor(props) {
 	  	super(props)
@@ -15,6 +15,13 @@ export default class toyList extends Component{
 	  		sort: 'created',
 	  		month:'',
 	  		year:'',
+	  		showModal:false,
+	  		id:'',
+	  		price:'',
+	  		savings:'',
+	  		tbUrl:'',
+	  		merchant:'a',
+	  		quantity:'',
 	  	}
 	  	this.onChangeSort = (e) => this.setState({sort:e.target.value})
 	  	this.onChangeFilter = (e) => this.setState({filter:e.target.value})
@@ -23,8 +30,37 @@ export default class toyList extends Component{
 	  	this.onChangeMonth = (e) => this.setState({month:e.target.value})
 	  	this.search = () => this.props.fetchToys(this.state.filter,this.state.query.trim(),this.state.sort,this.state.year,this.state.month)
 	  	this.searchNew = () => this.props.fetchToys(this.state.filter,this.state.query.trim(),this.state.sort,this.state.year,this.state.month,true)
-
+	  	this.open = () => this.setState({ showModal: true })
+	  	this.close = () => this.setState({ 
+	  		showModal: false, 
+	  		id:'',
+	  		price:'',
+	  		savings:'',
+	  		tbUrl:'',
+	  		merchant:'a',
+	  		quantity:'',
+	  	})
+	  	this.submit = () => {
+	  		const {
+	  			id,price,savings,tbUrl,merchant,quantity
+	  		} = this.state
+	  		let data = {
+	  			price:parseInt(price),savings:parseInt(savings),tbUrl,merchant,quantity:parseInt(quantity)
+	  		}
+	  		Request
+	  			.post(`/api/toy/${id}/sku`)
+	  			.send(data)
+	  			.end((err,res) => {
+	  				if(err) {
+	  					console.warn(err)
+	  				}else{
+	  					this.close()
+	  					alert('添加商品成功')
+	  				}
+	  			})
+	  	}
 	  	this.recommend = this._recommend.bind(this)
+	  	this.addGoods = this._addGoods.bind(this)
 	  	this.toggleR18 = (id) => this.props.toggleR18(id)
 	  	this.toggleRecommend = (id) => this.props.toggleRecommend(id)
 	  	this.deletetoy = this._deletetoy.bind(this)
@@ -55,6 +91,13 @@ export default class toyList extends Component{
 		if (confirm('创建一个新的玩具？')) {
       		this.props.addToy()
     	}
+	}
+	_addGoods(id) {
+		this.setState({
+			id
+		},() => {
+			this.open()
+		})
 	}
 	render() {
 		return(
@@ -87,13 +130,13 @@ export default class toyList extends Component{
 		            <FormGroup>
 		              <FormControl componentClass="select" value={this.state.year} onChange={this.onChangeYear}>
 		              	<option value="">全部年份</option>
-										<option value="2017">2017年</option>
+						<option value="2017">2017年</option>
 		                <option value="2016">2016年</option>
 		                <option value="2015">2015年</option>
 		                <option value="2014">2014年</option>
 		              </FormControl>
 		            </FormGroup>
-								{' '}
+					{' '}
 		            <FormGroup>
 		              <FormControl componentClass="select" value={this.state.month} onChange={this.onChangeMonth}>
 		              	<option value="">全部月份</option>
@@ -136,7 +179,7 @@ export default class toyList extends Component{
 		              <Col className="col" xs={6} sm={3} lg={3} key={'toy_'+toy.id}>
 		                  <div className="box box-solid">
 		                    <div className="box-body toy-item">
-													<div className="toy-item-img">
+								<div className="toy-item-img">
 			                      <img src={toy.cover} alt={toy.name} />
 			                    </div>
 			                    <div className="toy-item-info">
@@ -148,7 +191,8 @@ export default class toyList extends Component{
 		                    </div>
 		                    <div className="box-footer">
 		                      <ButtonToolbar className="pull-right">
-														<Link to={'/toy/' + toy.id + '/edit'} ><span className="btn btn-sm"><i className="fa fa-edit"></i></span></Link>
+		                        <span onClick={() =>  this.addGoods(toy.id) } className="btn btn-sm"><i className="fa fa-plus"></i></span>
+								<Link to={'/toy/' + toy.id + '/edit'} ><span className="btn btn-sm"><i className="fa fa-edit"></i></span></Link>
 		                        <span onClick={() =>  this.recommend(toy.id) } className="btn btn-sm"><i className="fa fa-bookmark-o"></i></span>
                         		<span onClick={() =>  this.toggleR18(toy.id) } className={r18Class}><i className="fa fa-venus-mars"></i></span>
                         		<span onClick={() =>  this.toggleRecommend(toy.id) } className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span>
@@ -163,6 +207,72 @@ export default class toyList extends Component{
 		        <Row>
 		          <div className="load-more-btn" onClick={this.search}>Load More</div>
 		        </Row>
+		        <Modal show={this.state.showModal} onHide={this.close}>
+		          <Modal.Header closeButton>
+		            <Modal.Title>添加商品</Modal.Title>
+		          </Modal.Header>
+		          <Modal.Body>
+		            <Form horizontal>
+		            	<FormGroup>
+					      <Col sm={2} className="sm-2-label">
+					        ID
+					      </Col>
+					      <Col sm={10}>
+					        <FormControl type="text" defaultValue={this.state.id} readOnly/>
+					      </Col>
+					    </FormGroup>
+					    <FormGroup>
+					      <Col sm={2} className="sm-2-label">
+					        数量
+					      </Col>
+					      <Col sm={10}>
+					        <FormControl value={this.state.quantity} type="number" onChange={(e) => this.setState({quantity:e.target.value})}/>
+					      </Col>
+					    </FormGroup>
+					    <FormGroup>
+					      <Col sm={2} className="sm-2-label">
+					        原价
+					      </Col>
+					      <Col sm={10}>
+					        <FormControl value={this.state.price} type="number" onChange={(e) => this.setState({price:e.target.value})}/>
+					      </Col>
+					    </FormGroup>
+					    <FormGroup>
+					      <Col sm={2} className="sm-2-label">
+					        折扣价
+					      </Col>
+					      <Col sm={10}>
+					        <FormControl value={this.state.savings} type="number" onChange={(e) => this.setState({savings:e.target.value})}/>
+					      </Col>
+					    </FormGroup>
+					    <FormGroup>
+					      <Col sm={2} className="sm-2-label">
+					        卖家
+					      </Col>
+					      <Col sm={10}>
+					      	<FormControl componentClass="select" value={this.state.merchant} onChange={(e) => this.setState({merchant:e.target.value})}>
+					        	<option value="a">商家A</option>
+					        	<option value="b">商家B</option>
+					      	</FormControl>
+					      </Col>
+					    </FormGroup>
+					    <FormGroup>
+					      <Col sm={2} className="sm-2-label">
+					        淘宝链接
+					      </Col>
+					      <Col sm={10}>
+					        <FormControl type="text" value={this.state.tbUrl} onChange={(e) => this.setState({tbUrl:e.target.value})}/>
+					      </Col>
+					    </FormGroup>
+					  </Form>
+
+
+		          </Modal.Body>
+		          <Modal.Footer>
+		            <Button onClick={this.close}>取消</Button>
+		            <Button bsStyle="primary" onClick={this.submit}>提交</Button>
+		          </Modal.Footer>
+		        </Modal>
 		    </div>
 
 		)

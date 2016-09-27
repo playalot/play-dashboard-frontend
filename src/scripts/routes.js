@@ -13,6 +13,7 @@ import ToyList from './components/ToyList/index'
 import StickerList from './components/StickerList/index'
 import ReportList from './components/ReportList/index'
 import FeedbackList from './components/FeedbackList/index'
+import SkuList from './components/SkuList/index'
 
 import EditArticle from './components/EditArticle/EditArticle'
 import EditStickerSet from './components/EditStickerSet/EditStickerSet'
@@ -58,6 +59,7 @@ export default {
         { path:'/sticker', component:StickerList },
         { path:'/report', component:ReportList },
         { path:'/feedback', component:FeedbackList },
+        { path:'/sku', component:SkuList },
 
         { path:'/user/:id', component:UserDetail },
         { path:'/tag/:id', component:EditTag },

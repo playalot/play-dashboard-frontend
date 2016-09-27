@@ -31,3 +31,14 @@
     }
   }
 }
+.sm-2-label{
+  padding:7px;
+  text-align: right;
+}
+@media screen and  (max-width: 768px) { 
+  .sm-2-label{
+    text-align: left;
+    padding:7px;
+    padding-left: 15px;
+  }
+}

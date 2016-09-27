@@ -12,7 +12,7 @@
 }
 .edit-toy-cover {
 	position:relative;
-	min-height:100px;
+	min-height:250px;
 	&:hover{
 		.edit-toy-cover-text{
 			display:flex;
@@ -56,8 +56,14 @@
     	left:0;
     	padding:8px;
     	transform:translateY(-50%);
-    	color:white;
-    	font-size:16px;
+    	color:#ccc;
+    	font-size:22px;
+        border-radius:5px;
+        transition: color .3s,background-color .3s;
+        &:hover{
+            background-color:#a00;
+            color:white;
+        }
     }
     .right{
     	position:absolute;
@@ -65,7 +71,13 @@
     	right:0;
     	padding:8px;
     	transform:translateY(-50%);
-    	color:white;
-    	font-size:16px;
+    	color:#ccc;
+    	font-size:22px;
+        border-radius:5px;
+        transition: color .3s,background-color .3s;
+        &:hover{
+            background-color:#a00;
+            color:white;
+        }
     }
 }

@@ -1,9 +1,11 @@
 import { connect } from 'react-redux'
 import SkuList from './SkuList'
-import { fetchSku } from '../../actions/skuAction'
+import { fetchSku, toggleRec, toggleBlk } from '../../actions/skuAction'
 
 const mapActionCreators = {
-	fetchSku
+	fetchSku,
+	toggleRec,
+	toggleBlk,
 }
 
 const mapStateToProps = (state) => {

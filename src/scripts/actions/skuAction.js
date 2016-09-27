@@ -3,6 +3,9 @@ import Request from 'superagent'
 export const SKL_RECEIVE_SKU = 'SKL_RECEIVE_SKU'
 export const SKL_RECEIVE_SKU_NEW = 'SKL_RECEIVE_SKU_NEW'
 
+export const SKL_TOGGLE_REC = 'SKL_TOGGLE_REC'
+export const SKL_TOGGLE_BLK = 'SKL_TOGGLE_BLK'
+
 function receiveSku(res) {
     return {
         type: SKL_RECEIVE_SKU,
@@ -13,6 +16,28 @@ function receiveSkuNew(res) {
     return {
         type: SKL_RECEIVE_SKU_NEW,
         res
+    }
+}
+function _toggleRec(id) {
+    return {
+        type: SKL_TOGGLE_REC,
+        id
+    }
+}
+function _toggleBlk(id) {
+    return {
+        type: SKL_TOGGLE_BLK,
+        id
+    }
+}
+export function toggleBlk(id) {
+    return (dispatch) => {
+        dispatch(_toggleBlk(id))
+    }
+}
+export function toggleRec(id) {
+    return (dispatch) => {
+        dispatch(_toggleRec(id))
     }
 }
 

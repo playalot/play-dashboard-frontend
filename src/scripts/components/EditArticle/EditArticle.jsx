@@ -421,7 +421,7 @@ export default class EditArticle extends Component {
 					_this.setState({
 						showUploadDialog:false,
 					},()=>{
-						_this.context.router.push('/article')
+						_this.context.router.push('/page')
 					})
 		 		}
 		 	});

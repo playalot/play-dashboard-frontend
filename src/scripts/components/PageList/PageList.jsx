@@ -4,16 +4,13 @@ import {Row, Button} from 'react-bootstrap'
 import Moment from 'moment'
 import Request from 'superagent'
 
-
 export default class extends Component{
 	constructor(props) {
-	  	super(props);
-	
-	  	this.state = {};
+	  	super(props)
 	  	this.fetchMoreArticle = () => this.props.fetchArticleMore()
 	  	this.togglePub = (id) => this.props.togglePub(id)
+	  	this.toggleRec = (id) => this.props.toggleRec(id)
 	  	this.deleteArticle = this._deleteArticle.bind(this)
-	  	this.toggleRecommend = (id) => this.props.toggleRecommend(id)
 	}
 	componentWillMount() {
 		if(!this.props.loaded){
@@ -53,7 +50,7 @@ export default class extends Component{
 	                      <td>{article.counts.views} views</td>
 	                      <td>{Moment.unix(article.created / 1000).fromNow()}</td>
 	                      <td><Link to={`/page/edit/${article.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link></td>
-	                      <td><span style={{color:'#333'}} onClick={() => this.toggleRecommend(article.id)} className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span></td>
+	                      <td><span style={{color:'#333'}} onClick={() => this.toggleRec(article.id)} className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.togglePub(article.id)} className={isPubClass}><i className="fa fa-check"></i></span></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.deleteArticle(article.id)} className="btn btn-sm"><i className="fa fa-trash"></i></span></td>
 	                      <td><a target="_blank" href={`http://www.playalot.cn/article/${article.id}.html`}>预览</a></td>

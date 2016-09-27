@@ -1,17 +1,22 @@
 import Immutable from 'immutable'
-import { AL_RECEIVE_ARTICLE, AL_RECEIVE_ARTICLE_MORE, AL_TOGGLE_PUB, AL_TOGGLE_REC, AL_DELETE_ARTICLE } from '../actions/articleAction'
-
+import {
+    PAGE_L_RECEIVE_ARTICLE,
+    PAGE_L_RECEIVE_ARTICLE_MORE,
+    PAGE_L_TOGGLE_PUB,
+    PAGE_L_TOGGLE_REC,
+    PAGE_L_DELETE_ARTICLE,
+} from '../actions/pageAction'
 export default (state = Immutable.fromJS({ articles: [], loaded:false,ts:null }),action)=>{
     switch (action.type) {
-        case AL_RECEIVE_ARTICLE:
+        case PAGE_L_RECEIVE_ARTICLE:
         	return state.updateIn(['articles'],(articles) => {
         		return articles.clear().concat(Immutable.fromJS(action.res))
         	}).set('loaded',true).set('ts',action.ts)
-        case AL_RECEIVE_ARTICLE_MORE:
+        case PAGE_L_RECEIVE_ARTICLE_MORE:
         	return state.updateIn(['articles'],(articles) => {
         		return articles.concat(Immutable.fromJS(action.res))
         	}).set('ts',action.ts)
-        case AL_TOGGLE_PUB:
+        case PAGE_L_TOGGLE_PUB:
             return state.updateIn(['articles'], (articles) => {
                 return articles.update(
                     articles.findIndex((item) => { 
@@ -21,7 +26,7 @@ export default (state = Immutable.fromJS({ articles: [], loaded:false,ts:null })
                     }
                 )
             })
-        case AL_TOGGLE_REC:
+        case PAGE_L_TOGGLE_REC:
             return state.updateIn(['articles'], (articles) => {
                 return articles.update(
                     articles.findIndex((item) => { 
@@ -31,7 +36,7 @@ export default (state = Immutable.fromJS({ articles: [], loaded:false,ts:null })
                     }
                 )
             })
-        case AL_DELETE_ARTICLE:
+        case PAGE_L_DELETE_ARTICLE:
             return state.updateIn(['articles'],(articles) => {
                 return articles.delete(articles.findKey((article) => {
                     return article.get('id') === action.id

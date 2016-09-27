@@ -1,17 +1,16 @@
 import { connect } from 'react-redux'
 import PageList from './PageList'
-import { fetchArticle, fetchArticleMore, togglePub, toggleRecommend, deleteArticle } from '../../actions/articleAction'
+import { fetchArticle, fetchArticleMore, togglePub, toggleRec, deleteArticle } from '../../actions/pageAction'
 const mapActionCreators = {
 	fetchArticle,
 	fetchArticleMore,
 	togglePub,
-	toggleRecommend,
+	toggleRec,
 	deleteArticle,
 }
 
 const mapStateToProps = (state) => {
-	const { articles } = state.articleReducer.toJS()
-	const loaded = state.articleReducer.get('loaded')
+	const { articles, loaded } = state.page.toJS()
     return {
     	articles,
     	loaded

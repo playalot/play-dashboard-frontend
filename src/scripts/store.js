@@ -8,8 +8,8 @@ import userDetailReducer from './reducers/userDetailReducer'
 import stats from './reducers/statsReducer'
 import recommendHome from './reducers/recommendHomeReducer'
 import tagReducer from './reducers/tagReducer'
-import exploreReducer from './reducers/exploreReducer'
-import userReducer from './reducers/userReducer'
+import explore from './reducers/exploreReducer'
+import user from './reducers/userReducer'
 import page from './reducers/pageReducer'
 import toyReducer from './reducers/toyReducer'
 import stickerReducer from './reducers/stickerReducer'
@@ -25,8 +25,8 @@ export const makeRootReducer = (asyncReducers) => {
 		stats,
 		recommendHome,
 		tagReducer,
-		exploreReducer,
-		userReducer,
+		explore,
+		user,
 		page,
 		toyReducer,
 		stickerReducer,

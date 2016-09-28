@@ -16,10 +16,10 @@ const mapActionCreators = {
 }
 
 const mapStateToProps = (state) => {
-    const { bannerList, themeList }  = state.exploreReducer.toJS()
-    const themeLoaded = state.exploreReducer.getIn(['status','themeLoaded'])
-    const noMore = state.exploreReducer.getIn(['status','noMore'])
-    const bannerLoaded = state.exploreReducer.getIn(['status','bannerLoaded'])
+    const { bannerList, themeList }  = state.explore.toJS()
+    const themeLoaded = state.explore.getIn(['status','themeLoaded'])
+    const noMore = state.explore.getIn(['status','noMore'])
+    const bannerLoaded = state.explore.getIn(['status','bannerLoaded'])
     return {
         bannerList,
         bannerLoaded,

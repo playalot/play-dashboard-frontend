@@ -1,17 +1,17 @@
 import Request from 'superagent'
 
-export const RECEIVE_USER = 'RECEIVE_USER'
-export const RECEIVE_USER_NEW = 'RECEIVE_USER_NEW'
+export const USER_L_RECEIVE_USER = 'USER_L_RECEIVE_USER'
+export const USER_L_RECEIVE_USER_NEW = 'USER_L_RECEIVE_USER_NEW'
 
 function receiveUser(res) {
     return {
-        type: RECEIVE_USER,
+        type: USER_L_RECEIVE_USER,
         res
     }
 }
 function receiveUserNew(res) {
     return {
-        type: RECEIVE_USER_NEW,
+        type: USER_L_RECEIVE_USER_NEW,
         res
     }
 }

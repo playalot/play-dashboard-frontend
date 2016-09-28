@@ -1,60 +1,60 @@
 import Request from 'superagent'
 
-export const EP_RECEIVE_BANNER = 'EP_RECEIVE_BANNER'
-export const EP_RECEIVE_THEME = 'EP_RECEIVE_THEME'
-export const EP_RECEIVE_THEME_MORE = 'EP_RECEIVE_THEME_MORE'
-export const EP_SET_THEME_NO_MORE = 'EP_SET_THEME_NO_MORE'
+export const EXPLORE_RECEIVE_BANNER = 'EXPLORE_RECEIVE_BANNER'
+export const EXPLORE_RECEIVE_THEME = 'EXPLORE_RECEIVE_THEME'
+export const EXPLORE_RECEIVE_THEME_MORE = 'EXPLORE_RECEIVE_THEME_MORE'
+export const EXPLORE_SET_THEME_NO_MORE = 'EXPLORE_SET_THEME_NO_MORE'
 
-export const EP_ADD_BANNER = 'EP_ADD_BANNER'
-export const EP_DELETE_BANNER = 'EP_DELETE_BANNER'
-export const EP_ADD_THEME = 'EP_ADD_THEME'
-export const EP_DELETE_THEME = 'EP_DELETE_THEME'
+export const EXPLORE_ADD_BANNER = 'EXPLORE_ADD_BANNER'
+export const EXPLORE_DELETE_BANNER = 'EXPLORE_DELETE_BANNER'
+export const EXPLORE_ADD_THEME = 'EXPLORE_ADD_THEME'
+export const EXPLORE_DELETE_THEME = 'EXPLORE_DELETE_THEME'
 
 function receiveBanner(res) {
     return {
-        type: EP_RECEIVE_BANNER,
+        type: EXPLORE_RECEIVE_BANNER,
         res
     }
 }
 function receiveTheme(res) {
     return {
-        type: EP_RECEIVE_THEME,
+        type: EXPLORE_RECEIVE_THEME,
         res
     }
 }
 function receiveThemeMore(res) {
     return {
-        type: EP_RECEIVE_THEME_MORE,
+        type: EXPLORE_RECEIVE_THEME_MORE,
         res
     }
 }
 function setThemeNoMore(flag) {
     return {
-        type: EP_SET_THEME_NO_MORE,
+        type: EXPLORE_SET_THEME_NO_MORE,
         flag
     }
 }
 function _addBanner(res) {
     return {
-        type: EP_ADD_BANNER,
+        type: EXPLORE_ADD_BANNER,
         res
     }
 }
 function _deleteBanner(id) {
     return {
-        type: EP_DELETE_BANNER,
+        type: EXPLORE_DELETE_BANNER,
         id
     }
 }
 function _addTheme(res) {
     return {
-        type: EP_ADD_THEME,
+        type: EXPLORE_ADD_THEME,
         res
     }
 }
 function _deleteTheme(id) {
     return {
-        type: EP_DELETE_THEME,
+        type: EXPLORE_DELETE_THEME,
         id
     }
 }
@@ -66,9 +66,6 @@ export function fetchBanner() {
                 dispatch(receiveBanner(res.body.banners))
             })
     }
-}
-const status = {
-    page:0,
 }
 export function fetchTheme() {
     return (dispatch) => {
@@ -82,8 +79,7 @@ export function fetchTheme() {
 }
 export function fetchThemeMore() {
     return (dispatch,getState) => {
-        let page = getState().exploreReducer.getIn(['status','page'])
-        console.warn(page)
+        let page = getState().explore.getIn(['status','page'])
         return Request
             .get(`/api/themes`)
             .query({page})

@@ -1,10 +1,10 @@
 import Immutable from 'immutable'
 import { 
-	EP_RECEIVE_THEME, EP_RECEIVE_THEME_MORE, EP_RECEIVE_BANNER, EP_SET_THEME_NO_MORE,
-	EP_ADD_BANNER,
-	EP_DELETE_BANNER, 
-	EP_ADD_THEME,
-	EP_DELETE_THEME
+	EXPLORE_RECEIVE_THEME, EXPLORE_RECEIVE_THEME_MORE, EXPLORE_RECEIVE_BANNER, EXPLORE_SET_THEME_NO_MORE,
+	EXPLORE_ADD_BANNER,
+	EXPLORE_DELETE_BANNER, 
+	EXPLORE_ADD_THEME,
+	EXPLORE_DELETE_THEME
 } from '../actions/exploreAction'
 
 export default (state = Immutable.fromJS({ 
@@ -17,39 +17,39 @@ export default (state = Immutable.fromJS({
     }
 }),action) => {
     switch (action.type) {
-        case EP_RECEIVE_BANNER:
+        case EXPLORE_RECEIVE_BANNER:
             return state.updateIn(['bannerList'],(bannerList) => {
             	return bannerList.clear().concat(Immutable.fromJS(action.res))
             }).setIn(['status','bannerLoaded'],true)
-        case EP_ADD_BANNER:
+        case EXPLORE_ADD_BANNER:
         	return state.updateIn(['bannerList'],(bannerList) => {
         		return bannerList.unshift(Immutable.fromJS(action.res))
         	})
-        case EP_DELETE_BANNER:
+        case EXPLORE_DELETE_BANNER:
         	return state.updateIn(['bannerList'],(bannerList) => {
         		return bannerList.delete(bannerList.findKey((banner) => {
         			return banner.get('id') === action.id
         		}))
         	})
-		case EP_RECEIVE_THEME:
+		case EXPLORE_RECEIVE_THEME:
             return state.updateIn(['themeList'],(themeList) => {
             	return themeList.clear().concat(Immutable.fromJS(action.res))
             }).setIn(['status','themeLoaded'],true).updateIn(['status','page'],(page) =>{
                 return ++page
             })
-        case EP_RECEIVE_THEME_MORE:
+        case EXPLORE_RECEIVE_THEME_MORE:
         	return state.updateIn(['themeList'],(themeList) => {
             	return themeList.concat(Immutable.fromJS(action.res))
             }).updateIn(['status','page'],(page) =>{
                 return ++page
             })
-        case EP_SET_THEME_NO_MORE:
+        case EXPLORE_SET_THEME_NO_MORE:
             return state.setIn(['status','noMore'],action.flag)
-        case EP_ADD_THEME:
+        case EXPLORE_ADD_THEME:
         	return state.updateIn(['themeList'],(themeList) => {
         		return themeList.unshift(Immutable.fromJS(action.res))
         	})
-        case EP_DELETE_THEME:
+        case EXPLORE_DELETE_THEME:
         	return state.updateIn(['themeList'],(themeList) => {
         		return themeList.delete(themeList.findKey((theme) => {
         			return theme.get('id') === action.id

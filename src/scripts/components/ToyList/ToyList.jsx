@@ -17,12 +17,12 @@ export default class toyList extends Component{
 	  		year:'',
 	  		showModal:false,
 	  		id:'',
-	  		price:'',
-	  		savings:'',
+	  		price:'9999',
+	  		savings:'0',
 	  		tbUrl:'',
-	  		merchant:'a',
-	  		quantity:'',
-	  		freight:'',
+	  		merchant:'手办同萌会',
+	  		quantity:'1',
+			freight:'0'
 	  	}
 	  	this.onChangeSort = (e) => this.setState({sort:e.target.value})
 	  	this.onChangeFilter = (e) => this.setState({filter:e.target.value})
@@ -32,24 +32,24 @@ export default class toyList extends Component{
 	  	this.search = () => this.props.fetchToys(this.state.filter,this.state.query.trim(),this.state.sort,this.state.year,this.state.month)
 	  	this.searchNew = () => this.props.fetchToys(this.state.filter,this.state.query.trim(),this.state.sort,this.state.year,this.state.month,true)
 	  	this.open = () => this.setState({ showModal: true })
-	  	this.close = () => this.setState({ 
-	  		showModal: false, 
+	  	this.close = () => this.setState({
+	  		showModal: false,
 	  		id:'',
-	  		price:'',
-	  		savings:'',
-	  		tbUrl:'',
-	  		merchant:'a',
-	  		quantity:'',
-	  		freight:'',
+			merchant:'手办同萌会',
+			quantity:'1',
+	  		price:'9999',
+	  		savings:'0',
+			freight:'0',
+			tbUrl:''
 	  	})
 	  	this.submit = () => {
 	  		const {
-	  			id,price,savings,tbUrl,merchant,quantity, freight
+	  			id,price,savings,tbUrl,merchant,quantity,freight
 	  		} = this.state
 	  		let data = {
-	  			price:parseInt(price),savings:parseInt(savings),tbUrl,merchant,quantity:parseInt(quantity),
-	  			freight:parseInt(freight),
+	  			price:parseInt(price),savings:parseInt(savings),tbUrl,merchant,quantity:parseInt(quantity),freight:parseInt(freight)
 	  		}
+			Object.keys(data).forEach(key => data[key] === '' || data[key] === 0 ? delete data[key] : '')
 	  		Request
 	  			.post(`/api/toy/${id}/sku`)
 	  			.send(data)
@@ -248,7 +248,7 @@ export default class toyList extends Component{
 					        <FormControl value={this.state.savings} type="number" onChange={(e) => this.setState({savings:e.target.value})}/>
 					      </Col>
 					    </FormGroup>
-					    <FormGroup>
+							<FormGroup>
 					      <Col sm={2} className="sm-2-label">
 					        运费
 					      </Col>
@@ -262,9 +262,9 @@ export default class toyList extends Component{
 					      </Col>
 					      <Col sm={10}>
 					      	<FormControl componentClass="select" value={this.state.merchant} onChange={(e) => this.setState({merchant:e.target.value})}>
-					        	<option value="a">手办同萌会</option>
-					        	<option value="b">拆盒网</option>
-					        	<option value="c">塑唐玩具</option>
+					        	<option value="手办同萌会">手办同萌会</option>
+					        	<option value="拆盒网">拆盒网</option>
+								<option value="塑堂玩具">塑堂玩具</option>
 					      	</FormControl>
 					      </Col>
 					    </FormGroup>

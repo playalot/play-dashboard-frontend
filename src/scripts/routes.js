@@ -22,6 +22,7 @@ import EditTag from './components/EditTag/EditTag'
 import EditToy from './components/EditToy/EditToy'
 import EditRecommend from './components/EditRecommend/EditRecommend'
 import EditShortVideo from './components/EditShortVideo/EditShortVideo'
+import EditSku from './components/EditSku/EditSku'
 //old
 // import UserDetail from './components/userdetail'
 // import Home from './components/home';
@@ -67,6 +68,7 @@ export default {
         { path:'/sticker/set/:id/add', component:EditSticker },
         { path:'/recommend/:id/edit', component:EditRecommend },
         { path:'/toy/:id/edit', component:EditToy },
+        { path:'/sku/:id/edit', component:EditSku },
         { path:'/video/edit', component:EditShortVideo },
         { path:'/page/edit', component:EditArticle },
         { path:'/page/edit/:id', component:EditArticle },

@@ -31,7 +31,8 @@ export default class extends Component{
 				                      <span className="toy-item-name">{sku.title}</span>
 				                      <span className="toy-item-desc">{'商家 ' + sku.stocks[0].merchant}</span>
 				                      <span className="toy-item-desc">{'原价 ' + sku.stocks[0].price}</span>
-				                      <span className="toy-item-desc">{'折扣价 ' + sku.stocks[0].savings}</span>
+				                      <span className="toy-item-desc">{'折扣 ' + sku.stocks[0].savings}</span>
+				                      <span className="toy-item-desc">{'运费 ' + sku.stocks[0].freight}</span>
 				                    </div>
 			                    </div>
 			                    <div className="box-footer">

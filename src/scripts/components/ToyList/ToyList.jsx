@@ -22,6 +22,7 @@ export default class toyList extends Component{
 	  		tbUrl:'',
 	  		merchant:'a',
 	  		quantity:'',
+	  		freight:'',
 	  	}
 	  	this.onChangeSort = (e) => this.setState({sort:e.target.value})
 	  	this.onChangeFilter = (e) => this.setState({filter:e.target.value})
@@ -39,13 +40,15 @@ export default class toyList extends Component{
 	  		tbUrl:'',
 	  		merchant:'a',
 	  		quantity:'',
+	  		freight:'',
 	  	})
 	  	this.submit = () => {
 	  		const {
-	  			id,price,savings,tbUrl,merchant,quantity
+	  			id,price,savings,tbUrl,merchant,quantity, freight
 	  		} = this.state
 	  		let data = {
-	  			price:parseInt(price),savings:parseInt(savings),tbUrl,merchant,quantity:parseInt(quantity)
+	  			price:parseInt(price),savings:parseInt(savings),tbUrl,merchant,quantity:parseInt(quantity),
+	  			freight:parseInt(freight),
 	  		}
 	  		Request
 	  			.post(`/api/toy/${id}/sku`)
@@ -239,10 +242,18 @@ export default class toyList extends Component{
 					    </FormGroup>
 					    <FormGroup>
 					      <Col sm={2} className="sm-2-label">
-					        折扣价
+					        折扣
 					      </Col>
 					      <Col sm={10}>
 					        <FormControl value={this.state.savings} type="number" onChange={(e) => this.setState({savings:e.target.value})}/>
+					      </Col>
+					    </FormGroup>
+					    <FormGroup>
+					      <Col sm={2} className="sm-2-label">
+					        运费
+					      </Col>
+					      <Col sm={10}>
+					        <FormControl value={this.state.freight} type="number" onChange={(e) => this.setState({freight:e.target.value})}/>
 					      </Col>
 					    </FormGroup>
 					    <FormGroup>
@@ -251,8 +262,9 @@ export default class toyList extends Component{
 					      </Col>
 					      <Col sm={10}>
 					      	<FormControl componentClass="select" value={this.state.merchant} onChange={(e) => this.setState({merchant:e.target.value})}>
-					        	<option value="a">商家A</option>
-					        	<option value="b">商家B</option>
+					        	<option value="a">手办同萌会</option>
+					        	<option value="b">拆盒网</option>
+					        	<option value="c">塑唐玩具</option>
 					      	</FormControl>
 					      </Col>
 					    </FormGroup>

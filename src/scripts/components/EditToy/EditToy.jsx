@@ -144,7 +144,7 @@ export default class EditToy extends Component {
 				const file = images[0]
 				const img = new Image()
 				img.onload = () => {
-					const uploadKey = 'toy/cover/'+_this.props.params.id+'_w_'+img.width+'_h_'+img.height+'.'+file.name.split('.').pop();
+					const uploadKey = 'toy/cover/'+_this.props.params.id+Date.now()+'_w_'+img.width+'_h_'+img.height+'.'+file.name.split('.').pop();
 					Request
 						.post('http://upload.qiniu.com/')
 						.field('key', uploadKey)

@@ -7,96 +7,119 @@ export default class extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            id:'',
-            quantity:'',
-            price:'',
-            savings:'',
-            merchant:'',
+            stockId:'',
+            quantity:0,
+            price:9999,
+            savings:0,
+            merchant:'手办同萌会',
             tbUrl:'',
+            freight:0,
+            preorder:0,
         }
         this.save = this._save.bind(this)
     }
     componentWillMount() {
+        let stock = this.props.stock.stocks[0]
         this.setState({
-            id:this.props.params.id,
-            quantity:55,
-            price:66,
-            savings:77,
-            merchant:'a',
-            tbUrl:'taobao.test.com',
+            stockId: stock.stockId,
+            quantity: stock.quantity ? stock.quantity : 0,
+            price: stock.price ? stock.price : 9999,
+            savings: stock.savings ? stock.savings : 0,
+            merchant: stock.merchant ? stock.merchant : '手办同萌会',
+            tbUrl: stock.tbUrl ? stock.tbUrl : '',
+            freight: stock.freight ? stock.freight : 0,
+            preorder: stock.preorder ? stock.preorder : 0,
         })
     }
     _save() {
         const {
-            id,price,savings,tbUrl,merchant,quantity
+            stockId,price,savings,tbUrl,merchant,quantity,freight, preorder
         } = this.state
         let data = {
-            price:parseInt(price),savings:parseInt(savings),tbUrl,merchant,quantity:parseInt(quantity)
+            price:parseInt(price),savings:parseInt(savings),tbUrl,merchant,
+            quantity:parseInt(quantity),freight:parseInt(freight),preorder:parseInt(preorder),
         }
+        Object.keys(data).forEach(key => data[key] === '' || data[key] === 0 ? delete data[key] : '')
         console.info(data)
     }
     render() {
         return(
             <div className="content">
-                    <Form horizontal>
-                        <FormGroup>
-                          <Col sm={2} className="sm-2-label">
-                            ID
-                          </Col>
-                          <Col sm={10}>
-                            <FormControl type="text" defaultValue={this.state.id} readOnly/>
-                          </Col>
-                        </FormGroup>
-                        <FormGroup>
-                          <Col sm={2} className="sm-2-label">
-                            数量
-                          </Col>
-                          <Col sm={10}>
-                            <FormControl value={this.state.quantity} type="number" onChange={(e) => this.setState({quantity:e.target.value})}/>
-                          </Col>
-                        </FormGroup>
-                        <FormGroup>
-                          <Col sm={2} className="sm-2-label">
-                            原价
-                          </Col>
-                          <Col sm={10}>
-                            <FormControl value={this.state.price} type="number" onChange={(e) => this.setState({price:e.target.value})}/>
-                          </Col>
-                        </FormGroup>
-                        <FormGroup>
-                          <Col sm={2} className="sm-2-label">
-                            折扣价
-                          </Col>
-                          <Col sm={10}>
-                            <FormControl value={this.state.savings} type="number" onChange={(e) => this.setState({savings:e.target.value})}/>
-                          </Col>
-                        </FormGroup>
-                        <FormGroup>
-                          <Col sm={2} className="sm-2-label">
-                            卖家
-                          </Col>
-                          <Col sm={10}>
-                            <FormControl componentClass="select" value={this.state.merchant} onChange={(e) => this.setState({merchant:e.target.value})}>
-                                <option value="a">手办同萌会</option>
-                                <option value="b">拆盒网</option>
-                                <option value="c">塑唐玩具</option>
-                            </FormControl>
-                          </Col>
-                        </FormGroup>
-                        <FormGroup>
-                          <Col sm={2} className="sm-2-label">
-                            淘宝链接
-                          </Col>
-                          <Col sm={10}>
-                            <FormControl type="text" value={this.state.tbUrl} onChange={(e) => this.setState({tbUrl:e.target.value})}/>
-                          </Col>
-                        </FormGroup>
-                        <Row>
-                            <Col sm={10} smOffset={2}>
-                                <Button bsStyle="primary" onClick={this.save}>保存</Button>
-                            </Col>
-                        </Row>
-                      </Form>
+            <Form horizontal>
+                <FormGroup>
+                  <Col sm={2} className="sm-2-label">
+                    stockId
+                  </Col>
+                  <Col sm={10}>
+                    <FormControl type="text" defaultValue={this.state.stockId} readOnly/>
+                  </Col>
+                </FormGroup>
+                <FormGroup>
+                  <Col sm={2} className="sm-2-label">
+                    数量
+                  </Col>
+                  <Col sm={10}>
+                    <FormControl value={this.state.quantity} type="number" onChange={(e) => this.setState({quantity:e.target.value})}/>
+                  </Col>
+                </FormGroup>
+                <FormGroup>
+                  <Col sm={2} className="sm-2-label">
+                    预定
+                  </Col>
+                  <Col sm={10}>
+                    <FormControl value={this.state.preorder} type="number" onChange={(e) => this.setState({preorder:e.target.value})}/>
+                  </Col>
+                </FormGroup>
+                <FormGroup>
+                  <Col sm={2} className="sm-2-label">
+                    原价
+                  </Col>
+                  <Col sm={10}>
+                    <FormControl value={this.state.price} type="number" onChange={(e) => this.setState({price:e.target.value})}/>
+                  </Col>
+                </FormGroup>
+                <FormGroup>
+                  <Col sm={2} className="sm-2-label">
+                    折扣
+                  </Col>
+                  <Col sm={10}>
+                    <FormControl value={this.state.freight} type="number" onChange={(e) => this.setState({freight:e.target.value})}/>
+                  </Col>
+                </FormGroup>
+                <FormGroup>
+                  <Col sm={2} className="sm-2-label">
+                    运费
+                  </Col>
+                  <Col sm={10}>
+                    <FormControl value={this.state.savings} type="number" onChange={(e) => this.setState({savings:e.target.value})}/>
+                  </Col>
+                </FormGroup>
+                <FormGroup>
+                  <Col sm={2} className="sm-2-label">
+                    卖家
+                  </Col>
+                  <Col sm={10}>
+                    <FormControl componentClass="select" value={this.state.merchant} onChange={(e) => this.setState({merchant:e.target.value})}>
+                        <option value="手办同萌会">手办同萌会</option>
+                        <option value="拆盒网">拆盒网</option>
+                        <option value="塑唐玩具">塑唐玩具</option>
+                    </FormControl>
+                  </Col>
+                </FormGroup>
+                <FormGroup>
+                  <Col sm={2} className="sm-2-label">
+                    淘宝链接
+                  </Col>
+                  <Col sm={10}>
+                    <FormControl type="text" value={this.state.tbUrl} onChange={(e) => this.setState({tbUrl:e.target.value})}/>
+                  </Col>
+                </FormGroup>
+                <Row>
+                    <Col sm={10} smOffset={2}>
+                        <Button bsStyle="primary" onClick={this.save}>保存</Button>
+                    </Col>
+                </Row>
+              </Form>
             </div>
 
         )

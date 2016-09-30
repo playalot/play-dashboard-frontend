@@ -17,12 +17,13 @@ export default class toyList extends Component{
 	  		year:'',
 	  		showModal:false,
 	  		id:'',
-	  		price:'9999',
-	  		savings:'0',
-	  		tbUrl:'',
-	  		merchant:'手办同萌会',
-	  		quantity:'1',
-			freight:'0'
+			quantity:0,
+            price:9999,
+            savings:0,
+            merchant:'手办同萌会',
+            tbUrl:'',
+            freight:0,
+            preorder:0,
 	  	}
 	  	this.onChangeSort = (e) => this.setState({sort:e.target.value})
 	  	this.onChangeFilter = (e) => this.setState({filter:e.target.value})
@@ -35,19 +36,21 @@ export default class toyList extends Component{
 	  	this.close = () => this.setState({
 	  		showModal: false,
 	  		id:'',
-			merchant:'手办同萌会',
-			quantity:'1',
-	  		price:'9999',
-	  		savings:'0',
-			freight:'0',
-			tbUrl:''
+			quantity:0,
+            price:9999,
+            savings:0,
+            merchant:'手办同萌会',
+            tbUrl:'',
+            freight:0,
+            preorder:0,
 	  	})
 	  	this.submit = () => {
 	  		const {
-	  			id,price,savings,tbUrl,merchant,quantity,freight
+	  			id,price,savings,tbUrl,merchant,quantity,freight,preorder
 	  		} = this.state
 	  		let data = {
-	  			price:parseInt(price),savings:parseInt(savings),tbUrl,merchant,quantity:parseInt(quantity),freight:parseInt(freight)
+	  			price:parseInt(price),savings:parseInt(savings),tbUrl,merchant,
+	  			quantity:parseInt(quantity),freight:parseInt(freight),preorder:parseInt(preorder)
 	  		}
 			Object.keys(data).forEach(key => data[key] === '' || data[key] === 0 ? delete data[key] : '')
 	  		Request
@@ -230,6 +233,14 @@ export default class toyList extends Component{
 					      </Col>
 					      <Col sm={10}>
 					        <FormControl value={this.state.quantity} type="number" onChange={(e) => this.setState({quantity:e.target.value})}/>
+					      </Col>
+					    </FormGroup>
+					    <FormGroup>
+					      <Col sm={2} className="sm-2-label">
+					        预定
+					      </Col>
+					      <Col sm={10}>
+					        <FormControl value={this.state.preorder} type="number" onChange={(e) => this.setState({preorder:e.target.value})}/>
 					      </Col>
 					    </FormGroup>
 					    <FormGroup>

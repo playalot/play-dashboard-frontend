@@ -22,7 +22,7 @@ import EditTag from './components/EditTag/EditTag'
 import EditToy from './components/EditToy/EditToy'
 import EditRecommend from './components/EditRecommend/EditRecommend'
 import EditShortVideo from './components/EditShortVideo/EditShortVideo'
-import EditSku from './components/EditSku/EditSku'
+import EditSku from './components/EditSku'
 //old
 // import UserDetail from './components/userdetail'
 // import Home from './components/home';

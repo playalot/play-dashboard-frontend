@@ -4,14 +4,19 @@ import {
 } from 'react-bootstrap'
 import { Link } from 'react-router'
 import CDN from '../../widgets/cdn'
-export default class extends Component{
+export default class SkuList extends Component{
 	constructor(props) {
 	  	super(props)
 		this.toggleRec = id => this.props.toggleRec(id)
 		this.toggleBlk = id => this.props.toggleBlk(id)
+		this.editSku = this._editSku.bind(this)
 	}
 	componentWillMount() {
 		this.props.fetchSku()
+	}
+	_editSku(sku) {
+		this.props.setStock(sku)
+		this.context.router.push(`/sku/${sku.title}/edit`)
 	}
 	render() {
 		return(
@@ -37,7 +42,7 @@ export default class extends Component{
 			                    </div>
 			                    <div className="box-footer">
 			                      <ButtonToolbar className="pull-right">
-			                      	<Link to={`/sku/${sku.id}/edit`} ><span className="btn btn-sm"><i className="fa fa-edit"></i></span></Link>
+			                      	<span onClick={() => this.editSku(sku) } className="btn btn-sm"><i className="fa fa-edit"></i></span>
 			                      	<span onClick={() => this.toggleRec(sku.id) } className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span>
 			                      	<span onClick={() => this.toggleBlk(sku.id) } className={invisibleClass}><i className="fa fa-eye-slash"></i></span>
 			                      </ButtonToolbar>
@@ -51,4 +56,8 @@ export default class extends Component{
 
 		)
 	}
+}
+
+SkuList.contextTypes = {
+  	router : React.PropTypes.object
 }

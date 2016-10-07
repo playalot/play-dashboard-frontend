@@ -17,13 +17,13 @@ export default class toyList extends Component{
 	  		year:'',
 	  		showModal:false,
 	  		id:'',
-			quantity:0,
-            price:9999,
-            savings:0,
-            merchant:'手办同萌会',
-            tbUrl:'',
-            freight:0,
-            preorder:0,
+				quantity:0,
+        price:9999,
+        savings:0,
+        merchant:'手办同萌会',
+        tbUrl:'',
+        freight:0,
+        preorder:0,
 	  	}
 	  	this.onChangeSort = (e) => this.setState({sort:e.target.value})
 	  	this.onChangeFilter = (e) => this.setState({filter:e.target.value})
@@ -36,21 +36,21 @@ export default class toyList extends Component{
 	  	this.close = () => this.setState({
 	  		showModal: false,
 	  		id:'',
-			quantity:0,
-            price:9999,
-            savings:0,
-            merchant:'手办同萌会',
-            tbUrl:'',
-            freight:0,
-            preorder:0,
+				quantity:0,
+        price:9999,
+        savings:0,
+        merchant:'手办同萌会',
+        tbUrl:'',
+        freight:0,
+        preorder:0,
 	  	})
 	  	this.submit = () => {
 	  		const {
 	  			id,price,savings,tbUrl,merchant,quantity,freight,preorder
 	  		} = this.state
 	  		let data = {
-	  			price:parseInt(price),savings:parseInt(savings),tbUrl,merchant,
-	  			quantity:parseInt(quantity),freight:parseInt(freight),preorder:parseInt(preorder)
+	  			price:parseFloat(price),parseFloat:parseInt(savings),tbUrl,merchant,
+	  			quantity:parseInt(quantity),freight:parseFloat(freight),preorder:parseFloat(preorder)
 	  		}
 			Object.keys(data).forEach(key => data[key] === '' || data[key] === 0 ? delete data[key] : '')
 	  		Request
@@ -288,14 +288,12 @@ export default class toyList extends Component{
 					      </Col>
 					    </FormGroup>
 					  </Form>
-
-
-		          </Modal.Body>
-		          <Modal.Footer>
-		            <Button onClick={this.close}>取消</Button>
-		            <Button bsStyle="primary" onClick={this.submit}>提交</Button>
-		          </Modal.Footer>
-		        </Modal>
+	          </Modal.Body>
+	          <Modal.Footer>
+	            <Button onClick={this.close}>取消</Button>
+	            <Button bsStyle="primary" onClick={this.submit}>提交</Button>
+	          </Modal.Footer>
+	        </Modal>
 		    </div>
 
 		)

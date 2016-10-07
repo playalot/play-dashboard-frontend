@@ -57,10 +57,10 @@ export default {
         { path:'/user', component:UserList },
         { path:'/tag', component:TagList },
         { path:'/toy', component:ToyList },
+        { path:'/sku', component:SkuList },
         { path:'/sticker', component:StickerList },
         { path:'/report', component:ReportList },
         { path:'/feedback', component:FeedbackList },
-        { path:'/sku', component:SkuList },
 
         { path:'/user/:id', component:UserDetail },
         { path:'/tag/:id', component:EditTag },

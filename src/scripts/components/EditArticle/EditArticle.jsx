@@ -81,6 +81,7 @@ export default class EditArticle extends Component {
 
 		this.publish = () => this._publish();
 		this.resizeImg = (entityKey,size) => this._resizeImg(entityKey,size)
+		this.removeImg = (entityKey) => this._removeImg(entityKey)
 
 		//dialog controller
 		this.showVideoDialog = () => this.setState({ showVideoDialog:true })
@@ -259,18 +260,18 @@ export default class EditArticle extends Component {
 			showLinkDialog: false
 		});
 	}
-  //媒体操作
-  _addImage(imageKey){
-  	const src = CDN.show(imageKey) + '?articlestyle';
-  	const size = 'auto'
-  	const type = 'image'
-    const entityKey = Entity.create('image', 'IMMUTABLE', {src,size,type});
-    this.onChange(AtomicBlockUtils.insertAtomicBlock(
-        this.state.editorState,
-        entityKey,
-        ' '
-    ));
-  }
+  	//媒体操作
+  	_addImage(imageKey){
+	  	const src = CDN.show(imageKey) + '?articlestyle';
+	  	const size = 'auto'
+	  	const type = 'image'
+	    const entityKey = Entity.create('image', 'IMMUTABLE', {src,size,type});
+	    this.onChange(AtomicBlockUtils.insertAtomicBlock(
+	        this.state.editorState,
+	        entityKey,
+	        ' '
+	    ))
+  	}
 	_addVideo() {
 		if(this.state.videoMode){
 			if (this.state.videoCode.trim().length === 0) {
@@ -366,7 +367,11 @@ export default class EditArticle extends Component {
 				const entity = Entity.get(block.getEntityAt(0));
 				const data = entity.getData();
 		      	if (data.type === 'image') {
-		        	return `<figure><img src="${data.src}" style="width:${data.size}" /></figure>`;
+		      		if(data.remove) {
+		      			return ''
+		      		}else{
+		        		return `<figure><img src="${data.src}" style="width:${data.size}" /></figure>`
+		      		}
 		      	}
 	    	},
 	  	},
@@ -379,7 +384,7 @@ export default class EditArticle extends Component {
 		} = this.state
 		let content = this.state.editorState.getCurrentContent()
 		let raw = convertToRaw(content)
-		let html = stateToHTML(content,options)
+		let html = stateToHTML(content,options).replace(/<p><br><\/p>/g,'')
 		let data = {
 			title,
 			authorId,
@@ -429,7 +434,11 @@ export default class EditArticle extends Component {
 	}
 	_resizeImg(entityKey,size) {
 		Entity.mergeData(entityKey, {size: size === 'auto' ? '100%' : 'auto' });
-		this.blur();
+		this.blur()
+	}
+	_removeImg(entityKey) {
+		Entity.mergeData(entityKey, {remove:true});
+		this.blur()
 	}
 	blockRenderer(block) {
 		if (block.getType() === 'atomic') {
@@ -438,7 +447,7 @@ export default class EditArticle extends Component {
 			    	const _this = this;
 						const entityKey = props.block.getEntityAt(0);
 						const entity = Entity.get(props.block.getEntityAt(0));
-						const {src, html, size} = entity.getData();
+						const {src, html, size, remove} = entity.getData();
 						const type = entity.getType();
 				  	let media;
 				  	if (type === 'image') {
@@ -447,9 +456,11 @@ export default class EditArticle extends Component {
 				    	media = (
 				    		<MediaImage
 					    		src={src}
+					    		remove={remove}
 					    		size={size}>
-					    		<p className="toolbar" onClick={()=>this.resizeImg(entityKey,size)}>
-					    			<i  className={sizeBar}></i>
+					    		<p className="toolbar">
+					    			<i onClick={()=>this.resizeImg(entityKey,size)} style={{marginRight:'5px'}} className={sizeBar}></i>
+					    			<i onClick={()=>this.removeImg(entityKey)} className="glyphicon glyphicon-remove"></i>
 					    		</p>
 				    		</MediaImage>
 				    	)
@@ -684,6 +695,9 @@ class MediaImage extends Component{
 		this.leave = () => this.setState({showBar:false})
 	}
 	render() {
+		if(this.props.remove) {
+			return null
+		}
 		return(
 			<div className="media-image-wrap" onMouseOver={this.enter} onMouseLeave={this.leave}>
 				{

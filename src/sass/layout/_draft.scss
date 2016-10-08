@@ -237,6 +237,10 @@
       background-color:rgba(0,0,0,.6);
       padding:4px 6px;
       color:white;
+      i:hover{
+        transition:color .3s;
+        color:#0ff;
+      }
     }
     img{
       max-width:100%;

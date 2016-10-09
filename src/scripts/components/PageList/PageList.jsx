@@ -3,6 +3,7 @@ import {Link} from 'react-router'
 import {Row, Button} from 'react-bootstrap'
 import Moment from 'moment'
 import Request from 'superagent'
+import Switch from 'rc-switch'
 
 export default class extends Component{
 	constructor(props) {
@@ -49,6 +50,14 @@ export default class extends Component{
 	                      </td>
 	                      <td>{article.counts.views} views</td>
 	                      <td>{Moment.unix(article.created / 1000).fromNow()}</td>
+	                      <td>
+	                      	<Switch onChange={value => this.props.setCoverType(value,article.id)}
+						        checkedChildren={'L'}
+						        unCheckedChildren={'S'}
+						        checked={article.coverType === 'l'}
+						      />
+
+	                      </td>
 	                      <td><Link to={`/page/edit/${article.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.toggleRec(article.id)} className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.togglePub(article.id)} className={isPubClass}><i className="fa fa-check"></i></span></td>

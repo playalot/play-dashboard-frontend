@@ -5,6 +5,7 @@ export const PAGE_L_RECEIVE_ARTICLE_MORE = 'PAGE_L_RECEIVE_ARTICLE_MORE'
 export const PAGE_L_TOGGLE_PUB = 'PAGE_L_TOGGLE_PUB'
 export const PAGE_L_TOGGLE_REC = 'PAGE_L_TOGGLE_REC'
 export const PAGE_L_DELETE_ARTICLE = 'PAGE_L_DELETE_ARTICLE'
+export const PAGE_L_SET_COVER_TYPE = 'PAGE_L_SET_COVER_TYPE'
 
 function receiveArticle(res,ts) {
     return {
@@ -35,6 +36,13 @@ function _toggleRec(id) {
 function _deleteArticle(id) {
     return {
         type: PAGE_L_DELETE_ARTICLE,
+        id
+    }
+}
+function _setCoverType(val,id) {
+    return {
+        type: PAGE_L_SET_COVER_TYPE,
+        val,
         id
     }
 }
@@ -98,6 +106,20 @@ export function deleteArticle(id) {
             .del(`/api/page/${id}`)
             .end((err,res) => {
                 dispatch(_deleteArticle(id))
+            })
+    }
+}
+
+export function setCoverType(val,id) {
+    return (dispatch) => {
+        let flag = val ? 'l' : 's'
+        Request
+            .post(`/api/page/${id}/cover`)
+            .send({
+                coverType: flag
+            })
+            .end((err,res) => {
+                dispatch(_setCoverType(val,id))    
             })
     }
 }

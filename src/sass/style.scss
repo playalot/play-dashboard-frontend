@@ -8,7 +8,8 @@
 //font-awesome
 $fa-font-path: "~font-awesome/fonts";
 @import "~font-awesome/scss/font-awesome";
-
+//rc-switch
+@import "~rc-switch/assets/index.css";
 
 //editor style
 @import '~draft-js/dist/Draft.css';

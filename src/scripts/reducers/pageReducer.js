@@ -5,6 +5,7 @@ import {
     PAGE_L_TOGGLE_PUB,
     PAGE_L_TOGGLE_REC,
     PAGE_L_DELETE_ARTICLE,
+    PAGE_L_SET_COVER_TYPE,
 } from '../actions/pageAction'
 export default (state = Immutable.fromJS({ articles: [], loaded:false,ts:null }),action)=>{
     switch (action.type) {
@@ -41,6 +42,17 @@ export default (state = Immutable.fromJS({ articles: [], loaded:false,ts:null })
                 return articles.delete(articles.findKey((article) => {
                     return article.get('id') === action.id
                 }))
+            })
+        case PAGE_L_SET_COVER_TYPE:
+            return state.updateIn(['articles'],(articles) => {
+                let flag = action.val ? 'l' : 's'
+                return articles.update(
+                    articles.findIndex((item) => { 
+                        return item.get('id') === action.id 
+                    }), (item) => {
+                        return item.set('coverType',flag)
+                    }
+                )
             })
         default:
             return state

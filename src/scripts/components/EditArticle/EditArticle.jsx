@@ -44,7 +44,6 @@ export default class EditArticle extends Component {
 			cover:'',
 			category:'随笔',
 			onFocusKey:'',
-			readOnly:false,
 			showUploadDialog:false,
 			showVideoDialog:false,
 			showLinkDialog:false,
@@ -81,7 +80,6 @@ export default class EditArticle extends Component {
 
 		this.publish = () => this._publish();
 		this.resizeImg = (entityKey,size) => this._resizeImg(entityKey,size)
-		this.removeImg = (entityKey) => this._removeImg(entityKey)
 
 		//dialog controller
 		this.showVideoDialog = () => this.setState({ showVideoDialog:true })
@@ -96,6 +94,19 @@ export default class EditArticle extends Component {
 
 		//下拉菜单
 		this.onChangeSelect = (newValue) => this.setState({category:newValue.value})
+
+		this.handleKeyCommand = this._handleKeyCommand.bind(this)
+	}
+	_handleKeyCommand(command) {
+		const {
+			editorState
+		} = this.state;
+		const newState = RichUtils.handleKeyCommand(editorState, command);
+		if (newState) {
+			this.onChange(newState);
+			return true;
+		}
+		return false;
 	}
 	_toggleBlockType(blockType) {
 		this.onChange(
@@ -114,10 +125,9 @@ export default class EditArticle extends Component {
 		);
 	}
 	_onDropCover(files) {
-		let _this = this
 		Request.get('/api/uptoken')
 			.withCredentials()
-			.end(function(err, res) {
+			.end((err, res) => {
 				let uploadToken = res.body.uptoken;
 				const file = files[0];
 				const img = new Image();
@@ -129,15 +139,15 @@ export default class EditArticle extends Component {
 					const date = new Date();
 					const uploadKey = 'article/cover/' + Math.round(date.getTime() / 1000) + '_w_' + img.width + '_h_' + img.height + '_' + id + '.' + file.name.split('.').pop();
 					Request
-						.post(_this.state.uploadUrl)
+						.post(this.state.uploadUrl)
 						.field('key', uploadKey)
 						.field('token', uploadToken)
 						.field('x:filename', file.name)
 						.field('x:size', file.size)
 						.attach('file', file, file.name)
 						.set('Accept', 'application/json')
-						.end(function(err, res) {
-							_this.setState({
+						.end((err, res) =>{
+							this.setState({
 								cover: uploadKey
 							});
 						});
@@ -146,59 +156,53 @@ export default class EditArticle extends Component {
 			})
 	}
 	_uploadImg(files) {
-		let _this = this
 		Request.get('/api/uptoken')
 		.withCredentials()
-       	.end(function(err, res) {
+       	.end((err, res) => {
         	let uploadToken = res.body.uptoken
         	files.forEach((file)=> {
-						let d = new Date()
-						let id = makeid()
+				let d = new Date()
+				let id = makeid()
 	       		let uploadKey = 'article/photo/' + Math.round(d.getTime()/1000)  + '_' + id + '.' + file.name.split('.').pop()
-	    			file.request = _this.uploadToQiniu(file, uploadKey, uploadToken)
+	    			file.request = this.uploadToQiniu(file, uploadKey, uploadToken)
     			})
         })
 	}
 	uploadToQiniu(file, uploadKey, uploadToken) {
 	    if (!file || file.size === 0) {
-	      return null;
+	      	return null;
 	    }
-	    let _this = this;
-	    const req = Request
-	      .post(this.state.uploadUrl)
-	      .field('key', uploadKey)
-	      .field('token', uploadToken)
-	      .field('x:filename', file.name)
-	      .field('x:size', file.size)
-	      .attach('file', file, file.name)
-	      .set('Accept', 'application/json');
-
-	    req.end(function(err, res){
-	      let value = _this.state.gallery.slice();
-	      value.push(uploadKey);
-	      _this.setState({gallery: value});
-	      _this.addImage(uploadKey)
-	    });
-	    return req;
-	  }
-	_uploadQiniu(file, uploadKey, uploadToken) {
-		if (!file || file.size === 0) {
-			return null;
-		}
-		const req = Request
+	    return Request
 			.post(this.state.uploadUrl)
 			.field('key', uploadKey)
 			.field('token', uploadToken)
 			.field('x:filename', file.name)
 			.field('x:size', file.size)
 			.attach('file', file, file.name)
-			.set('Accept', 'application/json');
-
-		req.on('progress', file.onprogress);
-		req.end(function(err, res) {
-			console.log('done!')
-		});
-		return req
+			.set('Accept', 'application/json')
+	 		.end((err, res) => {
+	      		let value = this.state.gallery.slice();
+	      		value.push(uploadKey);
+	      		this.setState({gallery: value});
+	      		this.addImage(uploadKey)
+	    })
+	}
+	_uploadQiniu(file, uploadKey, uploadToken) {
+		if (!file || file.size === 0) {
+			return null;
+		}
+		return Request
+			.post(this.state.uploadUrl)
+			.field('key', uploadKey)
+			.field('token', uploadToken)
+			.field('x:filename', file.name)
+			.field('x:size', file.size)
+			.attach('file', file, file.name)
+			.set('Accept', 'application/json')
+			.on('progress', file.onprogress)
+			.end((err, res) => {
+				console.log('done!')
+			})
 	}
 	//链接操作
 	_promptForLink(e) {
@@ -360,24 +364,20 @@ export default class EditArticle extends Component {
 		}, 500);
 	}
 	_publish() {
-		let _this = this
 		let options = {
-	  	blockRenderers: {
-	    	atomic: (block) => {
-				const entity = Entity.get(block.getEntityAt(0));
-				const data = entity.getData();
-		      	if (data.type === 'image') {
-		      		if(data.remove) {
-		      			return ''
-		      		}else{
-		        		return `<figure><img src="${data.src}" style="width:${data.size}" /></figure>`
-		      		}
-		      	}
-	    	},
-	  	},
-	  	inlineStyles: {
-	  		UNDERLINE: {style: {'text-decoration': 'underline'}},
-			},
+		  	blockRenderers: {
+		    	atomic: (block) => {
+					const entity = Entity.get(block.getEntityAt(0));
+					const data = entity.getData();
+			      	if (data.type === 'image') {
+			      		if(data.remove) {
+			      			return ''
+			      		}else{
+			        		return `<figure><img src="${data.src}" style="width:${data.size}" /></figure>`
+			      		}
+			      	}
+		    	},
+		  	}
 		}
 		let {
 			title, cover, tags, category, gallery,authorId
@@ -414,19 +414,16 @@ export default class EditArticle extends Component {
 		Request
 		 	.post(path)
 		 	.send(data)
-		 	.end(function(err, res) {
-		 		console.log(err);
-		 		console.log(res);
-		 		console.log((err || !res.ok));
+		 	.end((err, res) => {
 		 		if (err || !res.ok) {
 		 			alert('保存失败!');
 		 		} else {
 		 			alert('保存成功.');
 					window.localStorage.removeItem('editor-draft')
-					_this.setState({
+					this.setState({
 						showUploadDialog:false,
 					},()=>{
-						_this.context.router.push('/page')
+						this.context.router.push('/page')
 					})
 		 		}
 		 	});
@@ -434,11 +431,9 @@ export default class EditArticle extends Component {
 	}
 	_resizeImg(entityKey,size) {
 		Entity.mergeData(entityKey, {size: size === 'auto' ? '100%' : 'auto' });
-		this.blur()
-	}
-	_removeImg(entityKey) {
-		Entity.mergeData(entityKey, {remove:true});
-		this.blur()
+		this.setState({
+			editorState: EditorState.moveFocusToEnd(this.state.editorState)
+		})
 	}
 	blockRenderer(block) {
 		if (block.getType() === 'atomic') {
@@ -459,8 +454,7 @@ export default class EditArticle extends Component {
 					    		remove={remove}
 					    		size={size}>
 					    		<p className="toolbar">
-					    			<i onClick={()=>this.resizeImg(entityKey,size)} style={{marginRight:'5px'}} className={sizeBar}></i>
-					    			<i onClick={()=>this.removeImg(entityKey)} className="glyphicon glyphicon-remove"></i>
+					    			<i onClick={()=>this.resizeImg(entityKey,size)} className={sizeBar}></i>
 					    		</p>
 				    		</MediaImage>
 				    	)
@@ -535,7 +529,7 @@ export default class EditArticle extends Component {
 		    { value: '新闻', label: '新闻' },
 		    { value: '访谈', label: '访谈' },
 		    { value: '随笔', label: '随笔' },
-				{ value: '干货', label: '干货' }
+			{ value: '干货', label: '干货' }
 		];
 		return (
 			<div className="editarticle">
@@ -564,14 +558,11 @@ export default class EditArticle extends Component {
 				    <div className={className} onClick={this.focus}>
 							<Editor
 								blockRendererFn={this.blockRenderer.bind(this)}
-								blockStyleFn={getBlockStyle}
 								editorState={editorState}
 								onChange={this.onChange}
+								handleKeyCommand={this.handleKeyCommand}
 								placeholder="编辑文章内容"
 								ref="editor"
-								// spellCheck={true}
-								// customStyleMap={styleMap}
-								readOnly={this.state.readOnly}
 							/>
 				      </div>
 				        <InlineStyleControls
@@ -717,14 +708,7 @@ function makeid() {
     }
     return text;
 }
-function getBlockStyle(block) {
-	switch (block.getType()) {
-		case 'blockquote':
-			return 'edit-blockquote';
-		default:
-			return null;
-	}
-}
+
 //创建链接实体
 function findLinkEntities(contentBlock, callback) {
 	contentBlock.findEntityRanges(
@@ -748,20 +732,21 @@ const LINK = (props) => {
 	);
 };
 const InlineStyleControls = (props) => {
-	var currentStyle = props.editorState.getCurrentInlineStyle();
+	var currentStyle = props.editorState.getCurrentInlineStyle()
   	return (
 	    <div className="edit-controls">
       	{
-					INLINE_STYLES.map((type,index) =>
-	        <StyleButton
-	        	key={index}
-						active={currentStyle.has(type.style)}
-						label={type.label}
-						onToggle={props.onToggle}
-						style={type.style}
-						class={type.class}
-	        />
-      	)}
+			INLINE_STYLES.map((type,index) =>
+		        <StyleButton
+		        	key={index}
+					active={currentStyle.has(type.style)}
+					label={type.label}
+					onToggle={props.onToggle}
+					style={type.style}
+					class={type.class}
+		        />
+	      	)
+      	}
 	    </div>
   	);
 };
@@ -774,42 +759,41 @@ class StyleButton extends Component {
 		};
 	}
 	render() {
-		let className = 'edit-styleButton';
-		if (this.props.active) {
-			className += ' edit-activeButton ';
-		}
-  	return (
-    	<div className={className} style={this.props.view} onMouseDown={this.onToggle}>
-    		{
-    			this.props.class ? (<i className={this.props.class}></i>) : (<span>{this.props.label}</span>)
-    		}
-    	</div>
-    );
-  }
+		let className = 'edit-styleButton'
+		className+= this.props.active ? ' edit-activeButton ' :''
+  		return (
+	    	<div className={className} style={this.props.view} onMouseDown={this.onToggle}>
+	    		{
+	    			this.props.class ? (<i className={this.props.class}></i>) : (<span>{this.props.label}</span>)
+	    		}
+	    	</div>
+    	)
+  	}
 }
 const BlockStyleControls = (props) => {
-	const {editorState} = props;
-	const selection = editorState.getSelection();
+	const {editorState} = props
+	const selection = editorState.getSelection()
 	const blockType = editorState
-    .getCurrentContent()
-    .getBlockForKey(selection.getStartKey())
-    .getType();
+	    .getCurrentContent()
+	    .getBlockForKey(selection.getStartKey())
+	    .getType()
 
   	return (
 	    <div className="edit-controls">
 	      	{
 	      		BLOCK_TYPES.map((type,index) =>
-		        <StyleButton
-		        	key={index}
-							active={type.style === blockType}
-							label={type.label}
-							onToggle={props.onToggle}
-							style={type.style}
-							class={type.class}
-		        />
-	      	)}
+			        <StyleButton
+			        	key={index}
+						active={type.style === blockType}
+						label={type.label}
+						onToggle={props.onToggle}
+						style={type.style}
+						class={type.class}
+			        />
+	      		)
+	      	}
 	    </div>
-  	);
+  	)
 };
 const INLINE_STYLES = [
 	{label: 'Bold', style: 'BOLD',class:'fa fa-bold'},

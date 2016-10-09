@@ -80,7 +80,6 @@ export default class EditArticle extends Component {
 
 		this.publish = () => this._publish();
 		this.resizeImg = (entityKey,size) => this._resizeImg(entityKey,size)
-		this.removeImg = (entityKey) => this._removeImg(entityKey)
 
 		//dialog controller
 		this.showVideoDialog = () => this.setState({ showVideoDialog:true })
@@ -95,6 +94,19 @@ export default class EditArticle extends Component {
 
 		//下拉菜单
 		this.onChangeSelect = (newValue) => this.setState({category:newValue.value})
+
+		this.handleKeyCommand = this._handleKeyCommand.bind(this)
+	}
+	_handleKeyCommand(command) {
+		const {
+			editorState
+		} = this.state;
+		const newState = RichUtils.handleKeyCommand(editorState, command);
+		if (newState) {
+			this.onChange(newState);
+			return true;
+		}
+		return false;
 	}
 	_toggleBlockType(blockType) {
 		this.onChange(
@@ -423,12 +435,6 @@ export default class EditArticle extends Component {
 			editorState: EditorState.moveFocusToEnd(this.state.editorState)
 		})
 	}
-	_removeImg(entityKey) {
-		Entity.mergeData(entityKey, {remove:true});
-		this.setState({
-			editorState: EditorState.moveFocusToEnd(this.state.editorState)
-		})
-	}
 	blockRenderer(block) {
 		if (block.getType() === 'atomic') {
 			return {
@@ -448,8 +454,7 @@ export default class EditArticle extends Component {
 					    		remove={remove}
 					    		size={size}>
 					    		<p className="toolbar">
-					    			<i onClick={()=>this.resizeImg(entityKey,size)} style={{marginRight:'5px'}} className={sizeBar}></i>
-					    			<i onClick={()=>this.removeImg(entityKey)} className="glyphicon glyphicon-remove"></i>
+					    			<i onClick={()=>this.resizeImg(entityKey,size)} className={sizeBar}></i>
 					    		</p>
 				    		</MediaImage>
 				    	)
@@ -555,6 +560,7 @@ export default class EditArticle extends Component {
 								blockRendererFn={this.blockRenderer.bind(this)}
 								editorState={editorState}
 								onChange={this.onChange}
+								handleKeyCommand={this.handleKeyCommand}
 								placeholder="编辑文章内容"
 								ref="editor"
 							/>
@@ -702,14 +708,7 @@ function makeid() {
     }
     return text;
 }
-function getBlockStyle(block) {
-	switch (block.getType()) {
-		case 'blockquote':
-			return 'edit-blockquote';
-		default:
-			return null;
-	}
-}
+
 //创建链接实体
 function findLinkEntities(contentBlock, callback) {
 	contentBlock.findEntityRanges(
@@ -733,20 +732,21 @@ const LINK = (props) => {
 	);
 };
 const InlineStyleControls = (props) => {
-	var currentStyle = props.editorState.getCurrentInlineStyle();
+	var currentStyle = props.editorState.getCurrentInlineStyle()
   	return (
 	    <div className="edit-controls">
       	{
-					INLINE_STYLES.map((type,index) =>
-	        <StyleButton
-	        	key={index}
-						active={currentStyle.has(type.style)}
-						label={type.label}
-						onToggle={props.onToggle}
-						style={type.style}
-						class={type.class}
-	        />
-      	)}
+			INLINE_STYLES.map((type,index) =>
+		        <StyleButton
+		        	key={index}
+					active={currentStyle.has(type.style)}
+					label={type.label}
+					onToggle={props.onToggle}
+					style={type.style}
+					class={type.class}
+		        />
+	      	)
+      	}
 	    </div>
   	);
 };
@@ -759,42 +759,41 @@ class StyleButton extends Component {
 		};
 	}
 	render() {
-		let className = 'edit-styleButton';
-		if (this.props.active) {
-			className += ' edit-activeButton ';
-		}
-  	return (
-    	<div className={className} style={this.props.view} onMouseDown={this.onToggle}>
-    		{
-    			this.props.class ? (<i className={this.props.class}></i>) : (<span>{this.props.label}</span>)
-    		}
-    	</div>
-    );
-  }
+		let className = 'edit-styleButton'
+		className+= this.props.active ? ' edit-activeButton ' :''
+  		return (
+	    	<div className={className} style={this.props.view} onMouseDown={this.onToggle}>
+	    		{
+	    			this.props.class ? (<i className={this.props.class}></i>) : (<span>{this.props.label}</span>)
+	    		}
+	    	</div>
+    	)
+  	}
 }
 const BlockStyleControls = (props) => {
-	const {editorState} = props;
-	const selection = editorState.getSelection();
+	const {editorState} = props
+	const selection = editorState.getSelection()
 	const blockType = editorState
-    .getCurrentContent()
-    .getBlockForKey(selection.getStartKey())
-    .getType();
+	    .getCurrentContent()
+	    .getBlockForKey(selection.getStartKey())
+	    .getType()
 
   	return (
 	    <div className="edit-controls">
 	      	{
 	      		BLOCK_TYPES.map((type,index) =>
-		        <StyleButton
-		        	key={index}
-							active={type.style === blockType}
-							label={type.label}
-							onToggle={props.onToggle}
-							style={type.style}
-							class={type.class}
-		        />
-	      	)}
+			        <StyleButton
+			        	key={index}
+						active={type.style === blockType}
+						label={type.label}
+						onToggle={props.onToggle}
+						style={type.style}
+						class={type.class}
+			        />
+	      		)
+	      	}
 	    </div>
-  	);
+  	)
 };
 const INLINE_STYLES = [
 	{label: 'Bold', style: 'BOLD',class:'fa fa-bold'},

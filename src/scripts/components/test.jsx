@@ -1,7 +1,8 @@
 import React, {
   Component
 } from 'react'
-
+import CDN from '../widgets/cdn'
+import stateToHTML from '../utils/stateToHTML'
 import {
   AtomicBlockUtils,
   Editor,
@@ -96,7 +97,20 @@ export default class  extends Component {
         }
 
         _addImage() {
-          this._promptForMedia('image');
+          let imageKey = `https://www.baidu.com/img/2016_10_09logo_61d59f1e74db0be41ffe1d31fb8edef3.png`
+          const src = CDN.show(imageKey) + '?articlestyle';
+          const size = 'auto'
+          const type = 'image'
+          const entityKey = Entity.create('image', 'IMMUTABLE', {
+            src,
+            size,
+            type
+          });
+          this.onChange(AtomicBlockUtils.insertAtomicBlock(
+            this.state.editorState,
+            entityKey,
+            ' '
+          ))
         }
 
         _addVideo() {
@@ -175,7 +189,7 @@ export default class  extends Component {
                 <Editor
                   blockRendererFn={this.mediaBlockRenderer}
                   editorState={this.state.editorState}
-                  handleKeyCommand={this.handleKeyCommand}
+                  // handleKeyCommand={this.handleKeyCommand}
                   onChange={this.onChange}
                   placeholder="Enter some text..."
                   ref="editor"
@@ -267,3 +281,167 @@ export default class  extends Component {
       };
 
       
+      
+
+
+
+
+
+// import React, { Component } from 'react'
+// import Dropzone from 'react-dropzone'
+// import Select from 'react-select'
+// import Request from 'superagent'
+// import TagsInput from 'react-tagsinput'
+// import ReactDOM from 'react-dom'
+
+// import {
+//   Editor,
+//   EditorState,
+//   RichUtils,
+//   CompositeDecorator,
+//   Entity,
+//   ContentState,
+//   AtomicBlockUtils,
+//   convertToRaw,
+//   convertFromRaw,
+//   Modifier,
+//   SelectionState,
+// } from 'draft-js'
+// import CDN from '../widgets/cdn'
+// import stateToHTML from '../utils/stateToHTML'
+
+
+// export default class EditArticle extends Component {
+//   constructor(props) {
+//     super(props)
+//     this.state = {
+//       editorState: EditorState.createEmpty(),
+//     }
+//     this.focus = () => this.refs.editor.focus()
+//     this.blur = () => this.refs.editor.blur()
+//     this.onChange = (editorState) => this.setState({ editorState })
+//     this.addImage = this._addImage.bind(this)
+//     this.publish = () => this._publish();
+//   }
+//   _addImage() {
+//     let imageKey = `https://www.baidu.com/img/2016_10_09logo_61d59f1e74db0be41ffe1d31fb8edef3.png`
+//     const src = CDN.show(imageKey) + '?articlestyle';
+//     const size = 'auto'
+//     const type = 'image'
+//     const entityKey = Entity.create('image', 'IMMUTABLE', {
+//       src,
+//       size,
+//       type
+//     });
+//     this.onChange(AtomicBlockUtils.insertAtomicBlock(
+//       this.state.editorState,
+//       entityKey,
+//       ' '
+//     ))
+//   }
+//   _publish() {
+//     let options = {
+//       blockRenderers: {
+//         atomic: (block) => {
+//           const entity = Entity.get(block.getEntityAt(0));
+//           const data = entity.getData();
+//           if (data.type === 'image') {
+//             if (data.remove) {
+//               return ''
+//             } else {
+//               return `<figure><img src="${data.src}" style="width:${data.size}" /></figure>`
+//             }
+//           }
+//         },
+//       }
+//     }
+//     let content = this.state.editorState.getCurrentContent()
+//     let raw = convertToRaw(content)
+//     let html = stateToHTML(content, options).replace(/<p><br><\/p>/g, '')
+//     let data = {
+//       html,
+//       raw
+//     }
+//     console.info(data)
+
+//   }
+//   blockRenderer(block) {
+//     if (block.getType() === 'atomic') {
+//       return {
+//         component: (props) => {
+//           const _this = this;
+//           const entityKey = props.block.getEntityAt(0);
+//           const entity = Entity.get(props.block.getEntityAt(0));
+//           const {
+//             src,
+//             html,
+//             size,
+//           } = entity.getData();
+//           const type = entity.getType();
+//           let media;
+//           if (type === 'image') {
+//             let sizeBar = 'glyphicon '
+//             sizeBar += size === 'auto' ? 'glyphicon-resize-full' : 'glyphicon-resize-small'
+//             media = (
+//               <MediaImage
+//                   src={src}>
+//                 </MediaImage>
+//             )
+//           } else if (type === 'video') {
+//             media = <div dangerouslySetInnerHTML={{__html: html}}></div>;
+//           }
+//           return media;
+//         },
+//         editable: false,
+//       };
+//     }
+//     return null;
+//   }
+//   render() {
+//     const {editorState} = this.state;
+//     let className = 'edit-editor';
+//     let contentState = editorState.getCurrentContent();
+//     if (!contentState.hasText()) {
+//       if (contentState.getBlockMap().first().getType() !== 'unstyled') {
+//         className = ' edit-hidePlaceholder';
+//       }
+//     }
+//     return (
+//       <div className="editarticle">
+//         <div className="edit-section">
+//           <div className="edit-root">
+//             <div className={className} onClick={this.focus}>
+//               <Editor
+//                 blockRendererFn={this.blockRenderer.bind(this)}
+//                 editorState={editorState}
+//                 onChange={this.onChange}
+//                 placeholder="编辑文章内容"
+//                 ref="editor"
+//               />
+//               </div>
+//                 <div className="edit-controls">
+//                     <i className="fa fa-camera-retro" onClick={this.addImage}></i>
+
+//                 </div>
+//               </div>
+//         </div>
+       
+//         <div className="edit-section">
+//           <button className="btn btn-primary" onClick={this.publish}>发布文章</button>
+//         </div>
+//       </div>
+//     )
+//   }
+// }
+
+
+// class MediaImage extends Component{
+//   render() {
+//     return(
+//       <div className="media-image-wrap">
+//           <img src={this.props.src}/>
+//       </div>
+//     )
+//   }
+// }
+

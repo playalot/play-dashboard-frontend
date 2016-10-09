@@ -120,6 +120,7 @@ export default class toyList extends Component{
 		                <option value="created">最新录入</option>
 		                <option value="releaseDate">最新发售</option>
 		                <option value="counts.hits">点击最多</option>
+										<option value="counts.updates">本周点击最多</option>
 		                <option value="counts.wish">想要最多</option>
 		                <option value="counts.owns">拥有最多</option>
 		              </FormControl>
@@ -193,6 +194,7 @@ export default class toyList extends Component{
 			                      <span className="toy-item-desc">{'厂商 ' + toy.company}</span>
 			                      <span className="toy-item-desc">{'发售 ' + toy.release}</span>
 			                      <span className="toy-item-desc">{'价格 ' + toy.money? toy.money : '不知道呀'}</span>
+														<span className="toy-item-desc">{'本周热度 ' + toy.counts.updates}</span>
 			                    </div>
 		                    </div>
 		                    <div className="box-footer">

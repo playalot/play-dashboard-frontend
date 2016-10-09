@@ -37,9 +37,9 @@ export default class extends Component{
 	                	let recommendClass = article.isRec === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
 	                  return (
 	                    <tr key={article.id}>
-	                      <td><img style={{width:'70px'}} src={article.cover} className="img-thumbnail"/></td>
+	                      <td><img style={{width:'400px'}} src={article.cover} className="img-thumbnail"/></td>
 	                      <td>{article.title}</td>
-	                      <td>{article.author}</td>
+	                      <td><Link to={'/user/'+article.user.id}><img style={{width:'45px'}} src={article.user.avatar} className="img-circle"/></Link></td>
 	                      <td>{article.category}</td>
 	                      <td>
 	                      	{

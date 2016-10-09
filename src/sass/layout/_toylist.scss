@@ -3,8 +3,8 @@
     float: left;
     img {
       object-fit:contain;
-      width: 100px;
-      height: 100px;
+      width: 120px;
+      height: 120px;
     }
   }
 
@@ -35,7 +35,7 @@
   padding:7px;
   text-align: right;
 }
-@media screen and  (max-width: 768px) { 
+@media screen and  (max-width: 768px) {
   .sm-2-label{
     text-align: left;
     padding:7px;

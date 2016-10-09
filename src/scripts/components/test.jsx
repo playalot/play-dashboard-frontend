@@ -1,101 +1,269 @@
-import React,{ Component } from 'react'
-import Autosuggest from 'react-autosuggest'
+import React, {
+  Component
+} from 'react'
 
-const languages = [
-  {
-    name: 'C',
-    year: 19721
-  },
-  {
-    name: 'Elm',
-    year: 2012
-  },
-  {
-    name: 'C1',
-    year: 19
-  },
-  {
-    name: 'Elm1',
-    year: 20121
-  },
-];
+import {
+  AtomicBlockUtils,
+  Editor,
+  EditorState,
+  RichUtils,
+  convertToRaw,
+  Entity,
+} from 'draft-js'
+export default class  extends Component {
+        constructor(props) {
+          super(props);
 
-function getSuggestions(value) {
-	console.info(value)
-  const inputValue = value.trim().toLowerCase();
-  const inputLength = inputValue.length;
+          this.state = {
+            editorState: EditorState.createEmpty(),
+            showURLInput: false,
+            url: '',
+            urlType: '',
+          };
 
-  return inputLength === 0 ? [] : languages.filter(lang =>
-    lang.name.toLowerCase().slice(0, inputLength) === inputValue
-  );
-}
+          this.focus = () => this.refs.editor.focus();
+          this.logState = () => {
+            const content = this.state.editorState.getCurrentContent();
+            console.log(convertToRaw(content));
+          };
+          this.onChange = (editorState) => this.setState({editorState});
+          this.onURLChange = (e) => this.setState({urlValue: e.target.value});
 
-function getSuggestionValue(suggestion) { // when suggestion is selected, this function tells
-  return suggestion.name;                 // what should be the value of the input
-}
+          this.addAudio = this._addAudio.bind(this);
+          this.addImage = this._addImage.bind(this);
+          this.addVideo = this._addVideo.bind(this);
+          this.confirmMedia = this._confirmMedia.bind(this);
+          this.handleKeyCommand = this._handleKeyCommand.bind(this);
+          this.onURLInputKeyDown = this._onURLInputKeyDown.bind(this);
+        }
 
-function renderSuggestion(suggestion) {
-  return (
-    <div className="search-item">
-  		<img src="https://almsaeedstudio.com/themes/AdminLTE/dist/img/user2-160x160.jpg" alt=""/>
-    	<span className="item-name">{suggestion.name}</span>
-    	<span className="item-desc">{suggestion.year}</span>
-  	</div>
-  );
-}
+        _handleKeyCommand(command) {
+          const {editorState} = this.state;
+          const newState = RichUtils.handleKeyCommand(editorState, command);
+          if (newState) {
+            this.onChange(newState);
+            return true;
+          }
+          return false;
+        }
 
-export default class extends Component {
-  constructor() {
-    super();
+        _confirmMedia(e) {
+          e.preventDefault();
+          const {editorState, urlValue, urlType} = this.state;
+          const contentState = editorState.getCurrentContent();
+          const entityKey = Entity.create(
+            urlType,
+            'IMMUTABLE',
+            {src: urlValue}
+          );
+          // const newEditorState = EditorState.set(
+          //   editorState,
+          //   {currentContent: contentStateWithEntity}
+          // );
 
-    this.state = {
-      value: '',
-      suggestions: []
-    }
-    this.onChange = this._onChange.bind(this)
-    this.onSuggestionsFetchRequested = this._onSuggestionsFetchRequested.bind(this)
-    this.onSuggestionsClearRequested = this._onSuggestionsClearRequested.bind(this)
-    this.onSuggestionSelected = (e,{suggestionValue}) => {
-    	alert(suggestionValue)
-    }
-  }
+          this.setState({
+            editorState: AtomicBlockUtils.insertAtomicBlock(
+              this.state.editorState,
+              entityKey,
+              ' '
+            ),
+            showURLInput: false,
+            urlValue: '',
+          }, () => {
+            setTimeout(() => this.focus(), 0);
+          });
+        }
 
-  _onChange(event, { newValue }){
-    this.setState({
-      value: newValue
-    });
-  };
+        _onURLInputKeyDown(e) {
+          if (e.which === 13) {
+            this._confirmMedia(e);
+          }
+        }
 
-  _onSuggestionsFetchRequested({ value }){
-    this.setState({
-      suggestions: getSuggestions(value)
-    });
-  };
+        _promptForMedia(type) {
+          const {editorState} = this.state;
+          this.setState({
+            showURLInput: true,
+            urlValue: '',
+            urlType: type,
+          }, () => {
+            setTimeout(() => this.refs.url.focus(), 0);
+          });
+        }
 
-  _onSuggestionsClearRequested(){
-    this.setState({
-      suggestions: []
-    });
-  };
+        _addAudio() {
+          this._promptForMedia('audio');
+        }
 
-  render() {
-    const { value, suggestions } = this.state;
-    const inputProps = {
-      placeholder: 'Type a programming language',
-      value,
-      onChange: this.onChange
-    };
+        _addImage() {
+          this._promptForMedia('image');
+        }
 
-    return (
-      <Autosuggest
-        suggestions={suggestions}
-        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-        onSuggestionSelected={this.onSuggestionSelected}
-        getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
-        focusFirstSuggestion={true}
-        inputProps={inputProps} />
-    );
-  }
-}
+        _addVideo() {
+          this._promptForMedia('video');
+        }
+        mediaBlockRenderer(block) {
+        if (block.getType() === 'atomic') {
+          return {
+            component: (props) => {
+        const entity = Entity.get(props.block.getEntityAt(0));
+        const {src} = entity.getData();
+        const type = entity.getType();
+
+        let media;
+        if (type === 'audio') {
+          media = <Audio src={src} />;
+        } else if (type === 'image') {
+          media = <Image src={src}><p>abcdefg</p></Image>;
+        } else if (type === 'video') {
+          media = <Video src={src} />;
+        }
+
+        return media;
+      },
+            editable: false,
+          };
+        }
+
+        return null;
+      }
+        render() {
+          let urlInput;
+          if (this.state.showURLInput) {
+            urlInput =
+              <div style={styles.urlInputContainer}>
+                <input
+                  onChange={this.onURLChange}
+                  ref="url"
+                  style={styles.urlInput}
+                  type="text"
+                  value={this.state.urlValue}
+                  onKeyDown={this.onURLInputKeyDown}
+                />
+                <button onMouseDown={this.confirmMedia}>
+                  Confirm
+                </button>
+              </div>;
+          }
+
+          return (
+            <div style={styles.root}>
+              <div style={{marginBottom: 10}}>
+                Use the buttons to add audio, image, or video.
+              </div>
+              <div style={{marginBottom: 10}}>
+                Here are some local examples that can be entered as a URL:
+                <ul>
+                  <li>media.mp3</li>
+                  <li>media.png</li>
+                  <li>media.mp4</li>
+                </ul>
+              </div>
+              <div style={styles.buttons}>
+                <button onMouseDown={this.addAudio} style={{marginRight: 10}}>
+                  Add Audio
+                </button>
+                <button onMouseDown={this.addImage} style={{marginRight: 10}}>
+                  Add Image
+                </button>
+                <button onMouseDown={this.addVideo} style={{marginRight: 10}}>
+                  Add Video
+                </button>
+              </div>
+              {urlInput}
+              <div style={styles.editor} onClick={this.focus}>
+                <Editor
+                  blockRendererFn={this.mediaBlockRenderer}
+                  editorState={this.state.editorState}
+                  handleKeyCommand={this.handleKeyCommand}
+                  onChange={this.onChange}
+                  placeholder="Enter some text..."
+                  ref="editor"
+                />
+              </div>
+              <input
+                onClick={this.logState}
+                style={styles.button}
+                type="button"
+                value="Log State"
+              />
+            </div>
+          );
+        }
+      }
+
+      function mediaBlockRenderer(block) {
+        if (block.getType() === 'atomic') {
+          return {
+            component: Media,
+            editable: false,
+          };
+        }
+
+        return null;
+      }
+
+      const Audio = (props) => {
+        return <audio controls src={props.src} style={styles.media} />;
+      };
+      class Image extends Component{
+        render() {
+          return <div><p>sadfbasdlf</p>{this.props.children}<img src={this.props.src} style={styles.media} /></div>
+        }
+      }
+      
+
+      const Video = (props) => {
+        return <video controls src={props.src} style={styles.media} />;
+      };
+
+      const Media = (props) => {
+        const entity = Entity.get(props.block.getEntityAt(0));
+        const {src} = entity.getData();
+        const type = entity.getType();
+
+        let media;
+        if (type === 'audio') {
+          media = <Audio src={src} />;
+        } else if (type === 'image') {
+          media = <Image src={src} />;
+        } else if (type === 'video') {
+          media = <Video src={src} />;
+        }
+
+        return media;
+      };
+
+      const styles = {
+        root: {
+          fontFamily: '\'Georgia\', serif',
+          padding: 20,
+          width: 600,
+        },
+        buttons: {
+          marginBottom: 10,
+        },
+        urlInputContainer: {
+          marginBottom: 10,
+        },
+        urlInput: {
+          fontFamily: '\'Georgia\', serif',
+          marginRight: 10,
+          padding: 3,
+        },
+        editor: {
+          border: '1px solid #ccc',
+          cursor: 'text',
+          minHeight: 80,
+          padding: 10,
+        },
+        button: {
+          marginTop: 10,
+          textAlign: 'center',
+        },
+        media: {
+          width: '100%',
+        },
+      };
+
+      

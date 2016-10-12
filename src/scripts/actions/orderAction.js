@@ -1,11 +1,19 @@
 import Request from 'superagent'
 
 export const ORDER_L_RECEIVE_ORDER = 'ORDER_L_RECEIVE_ORDER'
+export const ORDER_L_ADD_TRACKING = 'ORDER_L_ADD_TRACKING'
 
 function receiveOrder(res) {
     return {
         type: ORDER_L_RECEIVE_ORDER,
         res
+    }
+}
+function _addTracking(id,trackNo) {
+    return {
+        type: ORDER_L_ADD_TRACKING,
+        id,
+        trackNo
     }
 }
 export function fetchOrder() {
@@ -26,6 +34,9 @@ export function addTracking(id,trackNo) {
                 trackNo
             })
             .end((err,res) => {
+                if(!err){
+                    dispatch(_addTracking(id,trackNo))
+                }
             })
     }
 }

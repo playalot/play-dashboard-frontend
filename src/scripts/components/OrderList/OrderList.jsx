@@ -32,15 +32,32 @@ export default class extends Component{
 	                  return (
 	                    <tr key={order.id}>
 	                      <td>{order.title}</td>
-	                      <td style={{maxWidth:100}}>{order.address}</td>
+	                      <td style={{maxWidth:150,whiteSpace: 'normal'}}>{order.address}</td>
 	                      <td>{Moment(order.created).format('MM-DD hh:mm')}</td>
-	                      <td style={{maxWidth:100}}>{order.note}</td>
+	                      <td style={{maxWidth:100,whiteSpace: 'normal'}}>{order.note}</td>
 	                      <td>{order.items[0]['quantity']}个</td>
 	                      <td>{order.totalPrice}元</td>
-	                      <td>
-	                      	<Button style={{marginRight:5}} onClick={() => this.addTracking(order.id)}>添加物流号</Button>
-	                      	<a className="btn btn-default" target="_blank" href={`http://wap.guoguo-app.com/wuliuDetail.htm?mailNo=${order.tracking.number}`}>查看物流</a>
-	                      </td>
+	                      {
+	                      	order.tracking.number ?
+	                      	<td>
+	                      		<span className="btn btn-sm" onClick={() => this.addTracking(order.id)}>
+	                      			{order.tracking.number}
+	                      			<i className="fa fa-edit"></i>
+	                      		</span>
+	                      		<span className="btn btn-sm">
+	                      			
+	                      			<a className="btn btn-sm" target="_blank" href={`http://wap.guoguo-app.com/wuliuDetail.htm?mailNo=${order.tracking.number}`}>
+	                      				查看
+	                      			</a>
+	                      		</span>
+	                      	</td>
+	                      	:<td>
+	                      		<span className="btn btn-sm" onClick={() => this.addTracking(order.id)}>
+	                      			添加
+	                      			<i className="fa fa-plus"></i>
+	                      		</span>
+	                      	</td>
+	                      }
 	                    </tr>
 	                  )
 	                })}

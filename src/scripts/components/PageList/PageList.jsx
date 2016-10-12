@@ -5,7 +5,7 @@ import Moment from 'moment'
 import Request from 'superagent'
 import Switch from 'rc-switch'
 
-export default class extends Component{
+export default class PageList extends Component{
 	constructor(props) {
 	  	super(props)
 	  	this.fetchMoreArticle = () => this.props.fetchArticleMore()
@@ -52,15 +52,14 @@ export default class extends Component{
 	                      <td>{Moment.unix(article.created / 1000).fromNow()}</td>
 	                      <td>
 	                      	<Switch onChange={value => this.props.setCoverType(value,article.id)}
-						        checkedChildren={'L'}
-						        unCheckedChildren={'S'}
-						        checked={article.coverType === 'l'}
-						      />
-
+											        checkedChildren={'L'}
+											        unCheckedChildren={'S'}
+											        checked={article.coverType === 'l'}
+											      />
 	                      </td>
 	                      <td><Link to={`/page/edit/${article.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.toggleRec(article.id)} className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span></td>
-	                      <td><span style={{color:'#333'}} onClick={() => this.togglePub(article.id)} className={isPubClass}><i className="fa fa-check"></i></span></td>
+	                      <td><span style={{color:'#333'}} onClick={() => this.togglePub(article.id)} className={isPubClass}><i className="fa fa-eye"></i></span></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.deleteArticle(article.id)} className="btn btn-sm"><i className="fa fa-trash"></i></span></td>
 	                      <td><a target="_blank" href={`http://www.playalot.cn/article/${article.id}.html`}>预览</a></td>
 	                    </tr>

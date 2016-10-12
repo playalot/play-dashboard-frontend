@@ -83,11 +83,11 @@ export default class EditArticle extends Component {
 
 		//dialog controller
 		this.showVideoDialog = () => this.setState({ showVideoDialog:true })
-		this.closeVideoDialog = () => this.setState({ 
+		this.closeVideoDialog = () => this.setState({
 			showVideoDialog:false,
 			progress:null,
 			uploadKey:null,
-			videoUrl:null, 
+			videoUrl:null,
 		})
 		this.showLinkDialog = () => this.setState({ showLinkDialog:true })
 		this.closeLinkDialog = () => this.setState({ showLinkDialog:false })
@@ -296,7 +296,7 @@ export default class EditArticle extends Component {
 				showVideoDialog: false
 			})
 		}else{
-			if (parseInt(this.state.progress) !== 100) { 
+			if (parseInt(this.state.progress) !== 100) {
 				return alert('正在上傳請稍等..')
 			}
 			const html = `<video width="100%" src="${CDN.show(this.state.uploadKey)}" controls>`
@@ -314,7 +314,7 @@ export default class EditArticle extends Component {
 				showVideoDialog: false
 			})
 		}
-		
+
 	}
 	_onDropVideo(files) {
 		let video = files[0];
@@ -525,11 +525,11 @@ export default class EditArticle extends Component {
 			}
 		}
 		const options = [
-		    { value: '评测', label: '评测' },
-		    { value: '新闻', label: '新闻' },
-		    { value: '访谈', label: '访谈' },
-		    { value: '随笔', label: '随笔' },
-			{ value: '干货', label: '干货' }
+		    { value: 'review', label: '评测' },
+		    { value: 'news', label: '新闻' },
+		    { value: 'interview', label: '访谈' },
+		    { value: 'essay', label: '随笔' },
+				{ value: 'knowledge', label: '干货' }
 		];
 		return (
 			<div className="editarticle">

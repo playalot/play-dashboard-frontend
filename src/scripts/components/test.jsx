@@ -11,437 +11,226 @@ import {
   convertToRaw,
   Entity,
 } from 'draft-js'
+import Dropzone from 'react-dropzone'
+
 export default class  extends Component {
-        constructor(props) {
-          super(props);
-
-          this.state = {
+    constructor(props) {
+        super(props)
+        this.state = {
             editorState: EditorState.createEmpty(),
-            showURLInput: false,
-            url: '',
-            urlType: '',
-          };
-
-          this.focus = () => this.refs.editor.focus();
-          this.logState = () => {
-            const content = this.state.editorState.getCurrentContent();
-            console.log(convertToRaw(content));
-          };
-          this.onChange = (editorState) => this.setState({editorState});
-          this.onURLChange = (e) => this.setState({urlValue: e.target.value});
-
-          this.addAudio = this._addAudio.bind(this);
-          this.addImage = this._addImage.bind(this);
-          this.addVideo = this._addVideo.bind(this);
-          this.confirmMedia = this._confirmMedia.bind(this);
-          this.handleKeyCommand = this._handleKeyCommand.bind(this);
-          this.onURLInputKeyDown = this._onURLInputKeyDown.bind(this);
         }
+        this.onChange = editorState => this.setState({ editorState })
+        this.focus = () => this.refs.editor.focus()
+        this.handleKeyCommand = this._handleKeyCommand.bind(this)
 
-        _handleKeyCommand(command) {
-          const {editorState} = this.state;
-          const newState = RichUtils.handleKeyCommand(editorState, command);
-          if (newState) {
-            this.onChange(newState);
-            return true;
-          }
-          return false;
+        //行内,块儿样式
+        this.toggleBlockType = (type) => this._toggleBlockType(type)
+        this.toggleInlineStyle = (style) => this._toggleInlineStyle(style)
+    }
+    _handleKeyCommand(command) {
+        const newState = RichUtils.handleKeyCommand(this.state.editorState, command);
+        if (newState) {
+            this.onChange(newState)
+            return true
         }
-
-        _confirmMedia(e) {
-          e.preventDefault();
-          const {editorState, urlValue, urlType} = this.state;
-          const contentState = editorState.getCurrentContent();
-          const entityKey = Entity.create(
-            urlType,
-            'IMMUTABLE',
-            {src: urlValue}
-          );
-          // const newEditorState = EditorState.set(
-          //   editorState,
-          //   {currentContent: contentStateWithEntity}
-          // );
-
-          this.setState({
-            editorState: AtomicBlockUtils.insertAtomicBlock(
-              this.state.editorState,
-              entityKey,
-              ' '
-            ),
-            showURLInput: false,
-            urlValue: '',
-          }, () => {
-            setTimeout(() => this.focus(), 0);
-          });
+        return false
+    }
+    _toggleBlockType(blockType) {
+        this.onChange(
+            RichUtils.toggleBlockType(
+                this.state.editorState,
+                blockType
+            )
+        )
+    }
+    _toggleInlineStyle(inlineStyle) {
+        this.onChange(
+            RichUtils.toggleInlineStyle(
+                this.state.editorState,
+                inlineStyle
+            )
+        );
+    }
+    render() {
+        const {editorState} = this.state;
+        let className = 'edit-editor'
+        let contentState = editorState.getCurrentContent()
+        if (!contentState.hasText()) {
+            if (contentState.getBlockMap().first().getType() !== 'unstyled') {
+                className = ' edit-hidePlaceholder'
+            }
         }
-
-        _onURLInputKeyDown(e) {
-          if (e.which === 13) {
-            this._confirmMedia(e);
-          }
-        }
-
-        _promptForMedia(type) {
-          const {editorState} = this.state;
-          this.setState({
-            showURLInput: true,
-            urlValue: '',
-            urlType: type,
-          }, () => {
-            setTimeout(() => this.refs.url.focus(), 0);
-          });
-        }
-
-        _addAudio() {
-          this._promptForMedia('audio');
-        }
-
-        _addImage() {
-          let imageKey = `https://www.baidu.com/img/2016_10_09logo_61d59f1e74db0be41ffe1d31fb8edef3.png`
-          const src = CDN.show(imageKey) + '?articlestyle';
-          const size = 'auto'
-          const type = 'image'
-          const entityKey = Entity.create('image', 'IMMUTABLE', {
-            src,
-            size,
-            type
-          });
-          this.onChange(AtomicBlockUtils.insertAtomicBlock(
-            this.state.editorState,
-            entityKey,
-            ' '
-          ))
-        }
-
-        _addVideo() {
-          this._promptForMedia('video');
-        }
-        mediaBlockRenderer(block) {
-        if (block.getType() === 'atomic') {
-          return {
-            component: (props) => {
-        const entity = Entity.get(props.block.getEntityAt(0));
-        const {src} = entity.getData();
-        const type = entity.getType();
-
-        let media;
-        if (type === 'audio') {
-          media = <Audio src={src} />;
-        } else if (type === 'image') {
-          media = <Image src={src}><p>abcdefg</p></Image>;
-        } else if (type === 'video') {
-          media = <Video src={src} />;
-        }
-
-        return media;
-      },
-            editable: false,
-          };
-        }
-
-        return null;
-      }
-        render() {
-          let urlInput;
-          if (this.state.showURLInput) {
-            urlInput =
-              <div style={styles.urlInputContainer}>
-                <input
-                  onChange={this.onURLChange}
-                  ref="url"
-                  style={styles.urlInput}
-                  type="text"
-                  value={this.state.urlValue}
-                  onKeyDown={this.onURLInputKeyDown}
-                />
-                <button onMouseDown={this.confirmMedia}>
-                  Confirm
-                </button>
-              </div>;
-          }
-
-          return (
+        return (
             <div style={styles.root}>
-              <div style={{marginBottom: 10}}>
-                Use the buttons to add audio, image, or video.
-              </div>
-              <div style={{marginBottom: 10}}>
-                Here are some local examples that can be entered as a URL:
-                <ul>
-                  <li>media.mp3</li>
-                  <li>media.png</li>
-                  <li>media.mp4</li>
-                </ul>
-              </div>
-              <div style={styles.buttons}>
-                <button onMouseDown={this.addAudio} style={{marginRight: 10}}>
-                  Add Audio
-                </button>
-                <button onMouseDown={this.addImage} style={{marginRight: 10}}>
-                  Add Image
-                </button>
-                <button onMouseDown={this.addVideo} style={{marginRight: 10}}>
-                  Add Video
-                </button>
-              </div>
-              {urlInput}
-              <div style={styles.editor} onClick={this.focus}>
-                <Editor
-                  blockRendererFn={this.mediaBlockRenderer}
-                  editorState={this.state.editorState}
-                  // handleKeyCommand={this.handleKeyCommand}
-                  onChange={this.onChange}
-                  placeholder="Enter some text..."
-                  ref="editor"
+                <div className={className} onClick={this.focus}>
+                    <Editor
+                        editorState={this.state.editorState}
+                        handleKeyCommand={this.handleKeyCommand}
+                        onChange={this.onChange}
+                        placeholder="Enter some text..."
+                        ref="editor"
+                    />
+                </div>
+                <InlineStyleControls
+                    editorState={editorState}
+                    onToggle={this.toggleInlineStyle}
                 />
-              </div>
-              <input
-                onClick={this.logState}
-                style={styles.button}
-                type="button"
-                value="Log State"
-              />
+                <BlockStyleControls
+                    editorState={editorState}
+                    onToggle={this.toggleBlockType}
+                />
+                <div style={styles.editControls}>
+                    <span style={styles.editBtn} onClick={() => console.log('link')}>
+                        <i className="fa fa-link"></i>
+                    </span>
+                    <Dropzone style={styles.editBtn} accept="image/*" onDrop={() => console.log('img')}>
+                        <i className="fa fa-camera-retro"></i>
+                    </Dropzone>
+                    <span style={styles.editBtn} onClick={() => console.log('camera')}>
+                        <i className="fa fa-video-camera"></i>
+                    </span>
+                </div>
             </div>
-          );
+        )
+    }
+}
+const InlineStyleControls = (props) => {
+    var currentStyle = props.editorState.getCurrentInlineStyle()
+    return (
+        <div style={styles.editControls}>
+        {
+            INLINE_STYLES.map((inline,index) =>
+                <StyleButton
+                    key={index}
+                    onToggle={props.onToggle}
+                    active={currentStyle.has(inline.type)}
+                    label={inline.label}
+                    style={inline.type}
+                    class={inline.classes}
+                />
+            )
         }
-      }
+        </div>
+    );
+};
 
-      function mediaBlockRenderer(block) {
-        if (block.getType() === 'atomic') {
-          return {
-            component: Media,
-            editable: false,
-          };
-        }
+const BlockStyleControls = (props) => {
+    const {editorState} = props
+    const selection = editorState.getSelection()
+    const blockType = editorState
+        .getCurrentContent()
+        .getBlockForKey(selection.getStartKey())
+        .getType()
 
-        return null;
-      }
+    return (
+        <div style={styles.editControls}>
+            {
+                BLOCK_TYPES.map((block,index) =>
+                    <StyleButton
+                        key={index}
+                        onToggle={props.onToggle}
+                        active={block.type === blockType}
+                        label={block.label}
+                        style={block.type}
+                        class={block.classes}
+                    />
+                )
+            }
+        </div>
+    )
+};
+class StyleButton extends Component {
+    constructor() {
+        super()
+        this.onToggle = (e) => {
+            e.preventDefault();
+            this.props.onToggle(this.props.style);
+        };
+    }
+    render() {
+        let styleName = this.props.active ? styles.editBtnActive : styles.editBtn
+        return (
+            <div style={styleName} onMouseDown={this.onToggle}>
+                {
+                    this.props.class ? (<i className={this.props.class}></i>) : (<span>{this.props.label}</span>)
+                }
+            </div>
+        )
+    }
+}
 
-      const Audio = (props) => {
-        return <audio controls src={props.src} style={styles.media} />;
-      };
-      class Image extends Component{
-        render() {
-          return <div><p>sadfbasdlf</p>{this.props.children}<img src={this.props.src} style={styles.media} /></div>
-        }
-      }
+const INLINE_STYLES = [
+    {label: 'Bold', type: 'BOLD',classes:'fa fa-bold'},
+    {label: 'Italic', type: 'ITALIC',classes:'fa fa-italic'},
+    {label: 'Underline', type: 'UNDERLINE',classes:'fa fa-underline'},
+];
+const BLOCK_TYPES = [
+    {label: 'H1', type: 'header-one'},
+    {label: 'H2', type: 'header-two'},
+    {label: 'Ul', type: 'unordered-list-item',classes:'fa fa-list'},
+    {label: 'Ol', type: 'ordered-list-item',classes:'fa fa-list-ol'},
+    {label: 'Quote', type: 'blockquote',classes:'fa fa-quote-left'},
+];
+
+
+
+const styles = {
+    root: {
+        fontFamily: '\'Georgia\', serif',
+        background: '#fff',
+        fontSize: 16,
+        padding: 15,
+    },
+    buttons: {
+        marginBottom: 10,
+    },
+    editControls: {
+        fontSize: 14,
+        marginBottom: 5,
+        userSelect: 'none',
+        display: 'inline-flex',
+        marginTop: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    editBtn: {
+        color: '#999',
+        cursor: 'pointer',
+        marginRight: 16,
+        padding: '2px 0',
+        display: 'inline-block',
+    },
+    editBtnActive: {
+        color: '#5890ff',
+        cursor: 'pointer',
+        marginRight: 16,
+        padding: '2px 0',
+        display: 'inline-block',
+    },
+    urlInputContainer: {
+        marginBottom: 10,
+    },
+    urlInput: {
+        fontFamily: '\'Georgia\', serif',
+        marginRight: 10,
+        padding: 3,
+    },
+    editor: {
+        border: '1px solid #ccc',
+        cursor: 'text',
+        minHeight: 80,
+        padding: 10,
+    },
+    button: {
+        marginTop: 10,
+        textAlign: 'center',
+    },
+    media: {
+        width: '100%',
+    },
+}
+      
       
 
-      const Video = (props) => {
-        return <video controls src={props.src} style={styles.media} />;
-      };
 
-      const Media = (props) => {
-        const entity = Entity.get(props.block.getEntityAt(0));
-        const {src} = entity.getData();
-        const type = entity.getType();
-
-        let media;
-        if (type === 'audio') {
-          media = <Audio src={src} />;
-        } else if (type === 'image') {
-          media = <Image src={src} />;
-        } else if (type === 'video') {
-          media = <Video src={src} />;
-        }
-
-        return media;
-      };
-
-      const styles = {
-        root: {
-          fontFamily: '\'Georgia\', serif',
-          padding: 20,
-          width: 600,
-        },
-        buttons: {
-          marginBottom: 10,
-        },
-        urlInputContainer: {
-          marginBottom: 10,
-        },
-        urlInput: {
-          fontFamily: '\'Georgia\', serif',
-          marginRight: 10,
-          padding: 3,
-        },
-        editor: {
-          border: '1px solid #ccc',
-          cursor: 'text',
-          minHeight: 80,
-          padding: 10,
-        },
-        button: {
-          marginTop: 10,
-          textAlign: 'center',
-        },
-        media: {
-          width: '100%',
-        },
-      };
-
-      
-      
-
-
-
-
-
-// import React, { Component } from 'react'
-// import Dropzone from 'react-dropzone'
-// import Select from 'react-select'
-// import Request from 'superagent'
-// import TagsInput from 'react-tagsinput'
-// import ReactDOM from 'react-dom'
-
-// import {
-//   Editor,
-//   EditorState,
-//   RichUtils,
-//   CompositeDecorator,
-//   Entity,
-//   ContentState,
-//   AtomicBlockUtils,
-//   convertToRaw,
-//   convertFromRaw,
-//   Modifier,
-//   SelectionState,
-// } from 'draft-js'
-// import CDN from '../widgets/cdn'
-// import stateToHTML from '../utils/stateToHTML'
-
-
-// export default class EditArticle extends Component {
-//   constructor(props) {
-//     super(props)
-//     this.state = {
-//       editorState: EditorState.createEmpty(),
-//     }
-//     this.focus = () => this.refs.editor.focus()
-//     this.blur = () => this.refs.editor.blur()
-//     this.onChange = (editorState) => this.setState({ editorState })
-//     this.addImage = this._addImage.bind(this)
-//     this.publish = () => this._publish();
-//   }
-//   _addImage() {
-//     let imageKey = `https://www.baidu.com/img/2016_10_09logo_61d59f1e74db0be41ffe1d31fb8edef3.png`
-//     const src = CDN.show(imageKey) + '?articlestyle';
-//     const size = 'auto'
-//     const type = 'image'
-//     const entityKey = Entity.create('image', 'IMMUTABLE', {
-//       src,
-//       size,
-//       type
-//     });
-//     this.onChange(AtomicBlockUtils.insertAtomicBlock(
-//       this.state.editorState,
-//       entityKey,
-//       ' '
-//     ))
-//   }
-//   _publish() {
-//     let options = {
-//       blockRenderers: {
-//         atomic: (block) => {
-//           const entity = Entity.get(block.getEntityAt(0));
-//           const data = entity.getData();
-//           if (data.type === 'image') {
-//             if (data.remove) {
-//               return ''
-//             } else {
-//               return `<figure><img src="${data.src}" style="width:${data.size}" /></figure>`
-//             }
-//           }
-//         },
-//       }
-//     }
-//     let content = this.state.editorState.getCurrentContent()
-//     let raw = convertToRaw(content)
-//     let html = stateToHTML(content, options).replace(/<p><br><\/p>/g, '')
-//     let data = {
-//       html,
-//       raw
-//     }
-//     console.info(data)
-
-//   }
-//   blockRenderer(block) {
-//     if (block.getType() === 'atomic') {
-//       return {
-//         component: (props) => {
-//           const _this = this;
-//           const entityKey = props.block.getEntityAt(0);
-//           const entity = Entity.get(props.block.getEntityAt(0));
-//           const {
-//             src,
-//             html,
-//             size,
-//           } = entity.getData();
-//           const type = entity.getType();
-//           let media;
-//           if (type === 'image') {
-//             let sizeBar = 'glyphicon '
-//             sizeBar += size === 'auto' ? 'glyphicon-resize-full' : 'glyphicon-resize-small'
-//             media = (
-//               <MediaImage
-//                   src={src}>
-//                 </MediaImage>
-//             )
-//           } else if (type === 'video') {
-//             media = <div dangerouslySetInnerHTML={{__html: html}}></div>;
-//           }
-//           return media;
-//         },
-//         editable: false,
-//       };
-//     }
-//     return null;
-//   }
-//   render() {
-//     const {editorState} = this.state;
-//     let className = 'edit-editor';
-//     let contentState = editorState.getCurrentContent();
-//     if (!contentState.hasText()) {
-//       if (contentState.getBlockMap().first().getType() !== 'unstyled') {
-//         className = ' edit-hidePlaceholder';
-//       }
-//     }
-//     return (
-//       <div className="editarticle">
-//         <div className="edit-section">
-//           <div className="edit-root">
-//             <div className={className} onClick={this.focus}>
-//               <Editor
-//                 blockRendererFn={this.blockRenderer.bind(this)}
-//                 editorState={editorState}
-//                 onChange={this.onChange}
-//                 placeholder="编辑文章内容"
-//                 ref="editor"
-//               />
-//               </div>
-//                 <div className="edit-controls">
-//                     <i className="fa fa-camera-retro" onClick={this.addImage}></i>
-
-//                 </div>
-//               </div>
-//         </div>
-       
-//         <div className="edit-section">
-//           <button className="btn btn-primary" onClick={this.publish}>发布文章</button>
-//         </div>
-//       </div>
-//     )
-//   }
-// }
-
-
-// class MediaImage extends Component{
-//   render() {
-//     return(
-//       <div className="media-image-wrap">
-//           <img src={this.props.src}/>
-//       </div>
-//     )
-//   }
-// }
 

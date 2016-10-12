@@ -59,8 +59,19 @@ export default class App extends Component{
 		              <li><Link to="/page" activeClassName="active"><i className="fa fa-edit"></i><span>文章</span></Link></li>
 		              <li><Link to="/user" activeClassName="active"><i className="fa fa-users"></i><span>用户</span></Link></li>
 		              <li><Link to="/toy" activeClassName="active"><i className="fa fa-rocket"></i><span>玩具</span></Link></li>
-									<li><Link to="/sku" activeClassName="active"><i className="fa fa-shopping-cart"></i><span>商品</span></Link></li>
-									<li><Link to="/tag" activeClassName="active"><i className="fa fa-tags"></i><span>标签</span></Link></li>
+		              <li>
+		                <a href="#">
+		                  <i className="fa fa-shopping-cart"></i>
+		                  <span>商家</span>
+		                  <i className="fa fa-angle-left pull-right"></i>
+		                </a>
+		                <ul className="treeview-menu">
+		                  <li><Link to="/sku" activeClassName="active"><i className="fa fa-circle-o"></i><span>商品</span></Link></li>
+		                  <li><Link to="/order" activeClassName="active"><i className="fa fa-circle-o"></i><span>订单</span></Link></li>
+		                </ul>
+		              </li>
+					  
+					  <li><Link to="/tag" activeClassName="active"><i className="fa fa-tags"></i><span>标签</span></Link></li>
 		              <li><Link to="/sticker" activeClassName="active"><i className="fa fa-paw"></i><span>贴纸</span></Link></li>
 		              <li>
 		                <a href="#">

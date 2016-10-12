@@ -26,11 +26,13 @@ export default class extends Component{
 			<div className="content">
 	          <div className="table-responsive">
 	            <table className="table table-striped">
-	            	<thead><tr><th>订单</th><th>地址</th><th>下单时间</th><th>备注</th><th>数量</th><th>总计</th><th></th></tr></thead>
+	            	<thead><tr><th>用户</th><th>商家</th><th>订单</th><th>地址</th><th>下单时间</th><th>备注</th><th>数量</th><th>总计</th><th></th></tr></thead>
 	              <tbody>
 	                {this.props.orders.map((order) => {
 	                  return (
 	                    <tr key={order.id}>
+	                      <td><Link to={'/user/'+order.user.id}><img style={{width:'45px'}} src={order.user.avatar} className="img-circle"/></Link></td>
+	                      <td>{order.items[0]['merchant']}</td>
 	                      <td>{order.title}</td>
 	                      <td style={{maxWidth:150,whiteSpace: 'normal'}}>{order.address}</td>
 	                      <td>{Moment(order.created).format('MM-DD hh:mm')}</td>

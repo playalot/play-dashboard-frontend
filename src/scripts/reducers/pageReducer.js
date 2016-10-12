@@ -19,7 +19,6 @@ export default (state = Immutable.fromJS({ pages: [], loaded:false,ts:null }),ac
         	}).set('ts',action.ts)
         case PAGE_L_TOGGLE_PUB:
             return state.updateIn(['pages'], (pages) => {
-                console.info('here')
                 return pages.update(
                     pages.findIndex((item) => { 
                         return item.get('id') === action.id 

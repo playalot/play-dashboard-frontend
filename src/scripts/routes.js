@@ -16,7 +16,7 @@ import FeedbackList from './components/FeedbackList/index'
 import SkuList from './components/SkuList/index'
 import OrderList from './components/OrderList/index'
 
-import EditArticle from './components/EditArticle/EditArticle'
+import EditPage from './components/EditPage/EditPage'
 import EditStickerSet from './components/EditStickerSet/EditStickerSet'
 import EditSticker from './components/EditSticker/EditSticker'
 import EditTag from './components/EditTag/EditTag'
@@ -72,8 +72,8 @@ export default {
         { path:'/toy/:id/edit', component:EditToy },
         { path:'/sku/:id/edit', component:EditSku },
         { path:'/video/edit', component:EditShortVideo },
-        { path:'/page/edit', component:EditArticle },
-        { path:'/page/edit/:id', component:EditArticle },
+        { path:'/page/edit', component:EditPage },
+        { path:'/page/edit/:id', component:EditPage },
         { path:'/test', component:Test },
     ]
 }

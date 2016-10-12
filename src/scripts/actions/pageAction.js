@@ -51,7 +51,7 @@ export function fetchArticle() {
         return Request
             .get(`/api/pages`)
             .end((err,res) => {
-                dispatch(receiveArticle(res.body.articles,res.body.nextTs))
+                dispatch(receiveArticle(res.body.pages,res.body.nextTs))
             })
     }
 }
@@ -62,14 +62,14 @@ export function fetchArticleMore() {
             .get(`/api/pages`)
             .query({ts})
             .end((err,res) => {
-                dispatch(receiveArticleMore(res.body.articles,res.body.nextTs))
+                dispatch(receiveArticleMore(res.body.pages,res.body.nextTs))
             })
     }
 }
 export function togglePub(id) {
     return (dispatch,getState) => {
         let value = null
-        let index = getState().page.get('articles').findIndex((item) => {
+        let index = getState().page.get('pages').findIndex((item) => {
             value = item.get('id') === id ? item.get('isPub') : null
             return item.get('id') === id
         })
@@ -86,7 +86,7 @@ export function togglePub(id) {
 export function toggleRec(id) {
     return (dispatch,getState) => {
         let value = null
-        let index = getState().page.get('articles').findIndex((item) => {
+        let index = getState().page.get('pages').findIndex((item) => {
             value = item.get('id') === id ? item.get('isRec') : null
             return item.get('id') === id
         })

@@ -11,9 +11,9 @@ const mapActionCreators = {
 }
 
 const mapStateToProps = (state) => {
-	const { articles, loaded } = state.page.toJS()
+	const { pages, loaded } = state.page.toJS()
     return {
-    	articles,
+    	pages,
     	loaded
     }
 }

@@ -22,7 +22,7 @@ import CDN from '../../widgets/cdn'
 import stateToHTML from '../../utils/stateToHTML'
 
 
-export default class EditArticle extends Component {
+export default class EditPage extends Component {
 	constructor(props) {
 		super(props)
 		const decorator = new CompositeDecorator([
@@ -410,23 +410,25 @@ export default class EditArticle extends Component {
 		this.setState({
 			showUploadDialog:true
 		},()=> {
-			let path = this.props.params.id ? `/api/page/${this.props.params.id}/publish` : `/api/page/publish`
-		Request
-		 	.post(path)
-		 	.send(data)
-		 	.end((err, res) => {
-		 		if (err || !res.ok) {
-		 			alert('保存失败!');
-		 		} else {
-		 			alert('保存成功.');
-					window.localStorage.removeItem('editor-draft')
-					this.setState({
-						showUploadDialog:false,
-					},()=>{
-						this.context.router.push('/page')
-					})
-		 		}
-		 	});
+			if(this.props.params.id) {
+				data.id = this.props.params.id
+			}
+			Request
+			 	.post(`/api/page/publish`)
+			 	.send(data)
+			 	.end((err, res) => {
+			 		if (err || !res.ok) {
+			 			alert('保存失败!');
+			 		} else {
+			 			alert('保存成功.');
+						window.localStorage.removeItem('editor-draft')
+						this.setState({
+							showUploadDialog:false,
+						},()=>{
+							this.context.router.push('/page')
+						})
+			 		}
+			 	})
 		})
 	}
 	_resizeImg(entityKey,size) {
@@ -674,7 +676,7 @@ export default class EditArticle extends Component {
 		)
 	}
 }
-EditArticle.contextTypes = {
+EditPage.contextTypes = {
   	router : React.PropTypes.object
 }
 

@@ -61,7 +61,7 @@ export default class PageList extends Component{
 	                      <td><span style={{color:'#333'}} onClick={() => this.toggleRec(pages.id)} className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.togglePub(pages.id)} className={isPubClass}><i className="fa fa-eye"></i></span></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.deleteArticle(pages.id)} className="btn btn-sm"><i className="fa fa-trash"></i></span></td>
-	                      <td><a target="_blank" href={`http://www.playalot.cn/article/${pages.id}.html`}>预览</a></td>
+	                      <td><a target="_blank" href={`http://www.playalot.cn/page/${pages.id}.html`}>预览</a></td>
 	                    </tr>
 	                  )
 	                })}

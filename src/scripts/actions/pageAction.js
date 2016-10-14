@@ -7,18 +7,16 @@ export const PAGE_L_TOGGLE_REC = 'PAGE_L_TOGGLE_REC'
 export const PAGE_L_DELETE_ARTICLE = 'PAGE_L_DELETE_ARTICLE'
 export const PAGE_L_SET_COVER_TYPE = 'PAGE_L_SET_COVER_TYPE'
 
-function receiveArticle(res,ts) {
+function receiveArticle(res) {
     return {
         type: PAGE_L_RECEIVE_ARTICLE,
         res,
-        ts
     }
 }
-function receiveArticleMore(res,ts) {
+function receiveArticleMore(res) {
     return {
         type: PAGE_L_RECEIVE_ARTICLE_MORE,
         res,
-        ts
     }
 }
 function _togglePub(id) {
@@ -46,26 +44,39 @@ function _setCoverType(val,id) {
         id
     }
 }
-export function fetchArticle() {
+const status = {
+    query: '',
+    ts: null,
+    overload: false,
+}
+export function fetchArticle(query) {
+    if (status.query !== query) {
+          status.query = query
+          status.overload = true
+          status.ts = null
+    } else {
+        status.overload = false
+    }
+    let params = {}
+    if (status.query !== '') {
+        params.query = status.query
+    }
+    if (status.ts !== null) {
+        params.ts = status.ts
+    }
     return (dispatch) => {
         return Request
             .get(`/api/pages`)
+            .query(params)
             .end((err,res) => {
-                dispatch(receiveArticle(res.body.pages,res.body.nextTs))
+                status.ts = res.body.nextTs
+                status.overload ? 
+                dispatch(receiveArticle(res.body.pages)) 
+                : dispatch(receiveArticleMore(res.body.pages))
             })
     }
 }
-export function fetchArticleMore() {
-    return (dispatch,getState) => {
-        let ts = getState().page.get('ts')
-        return Request
-            .get(`/api/pages`)
-            .query({ts})
-            .end((err,res) => {
-                dispatch(receiveArticleMore(res.body.pages,res.body.nextTs))
-            })
-    }
-}
+
 export function togglePub(id) {
     return (dispatch,getState) => {
         let value = null

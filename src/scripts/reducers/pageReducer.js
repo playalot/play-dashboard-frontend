@@ -7,16 +7,16 @@ import {
     PAGE_L_DELETE_ARTICLE,
     PAGE_L_SET_COVER_TYPE,
 } from '../actions/pageAction'
-export default (state = Immutable.fromJS({ pages: [], loaded:false,ts:null }),action)=>{
+export default (state = Immutable.fromJS({ pages: [], loaded:false }),action)=>{
     switch (action.type) {
         case PAGE_L_RECEIVE_ARTICLE:
         	return state.updateIn(['pages'],(pages) => {
         		return pages.clear().concat(Immutable.fromJS(action.res))
-        	}).set('loaded',true).set('ts',action.ts)
+        	}).set('loaded',true)
         case PAGE_L_RECEIVE_ARTICLE_MORE:
         	return state.updateIn(['pages'],(pages) => {
         		return pages.concat(Immutable.fromJS(action.res))
-        	}).set('ts',action.ts)
+        	})
         case PAGE_L_TOGGLE_PUB:
             return state.updateIn(['pages'], (pages) => {
                 return pages.update(

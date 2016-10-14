@@ -1,6 +1,6 @@
 import React,{Component} from 'react'
 import {Link} from 'react-router'
-import {Row, Button} from 'react-bootstrap'
+import {Row, Button,Form,FormGroup,InputGroup,FormControl} from 'react-bootstrap'
 import Moment from 'moment'
 import Request from 'superagent'
 import Switch from 'rc-switch'
@@ -8,14 +8,22 @@ import Switch from 'rc-switch'
 export default class PageList extends Component{
 	constructor(props) {
 	  	super(props)
-	  	this.fetchMoreArticle = () => this.props.fetchArticleMore()
+	  	this.state = {
+	  		query:''
+	  	}
+	  	this.fetchMoreArticle = () => this.props.fetchArticle(this.state.query)
 	  	this.togglePub = (id) => this.props.togglePub(id)
 	  	this.toggleRec = (id) => this.props.toggleRec(id)
 	  	this.deleteArticle = this._deleteArticle.bind(this)
+	  	this.stop = (e) => {
+	  		if(e.keyCode === 13){
+	  			e.preventDefault()
+	  		}
+	  	}
 	}
 	componentWillMount() {
 		if(!this.props.loaded){
-			this.props.fetchArticle()
+			this.props.fetchArticle(this.state.query)
 		}
 	}
 	_deleteArticle(id) {
@@ -26,8 +34,19 @@ export default class PageList extends Component{
 	render() {
 		return(
 			<div className="content">
+	            
 	          <div className="page-header">
-	            <Link to="/page/edit"><Button bsStyle='success'>发布文章</Button></Link>
+	            <Form inline>
+            	  <Link to="/page/edit"><Button bsStyle='success'>发布文章</Button></Link>
+	              <FormGroup style={{marginLeft:10}}>
+	                <InputGroup>
+	                  <FormControl type="text" placeholder='输入关键字' value={this.state.query} onKeyDown={this.stop} onChange={(e) => this.setState({query:e.target.value})} />
+	                  <InputGroup.Button>
+	                    <Button onClick={() => this.props.fetchArticle(this.state.query)}>搜索</Button>
+	                  </InputGroup.Button>
+	                </InputGroup>
+	              </FormGroup>
+	            </Form>
 	          </div>
 	          <div className="table-responsive">
 	            <table className="table table-striped">
@@ -52,10 +71,10 @@ export default class PageList extends Component{
 	                      <td>{Moment.unix(pages.created / 1000).fromNow()}</td>
 	                      <td>
 	                      	<Switch onChange={value => this.props.setCoverType(value,pages.id)}
-											        checkedChildren={'L'}
-											        unCheckedChildren={'S'}
-											        checked={pages.coverType === 'l'}
-											      />
+						        checkedChildren={'L'}
+						        unCheckedChildren={'S'}
+						        checked={pages.coverType === 'l'}
+						      />
 	                      </td>
 	                      <td><Link to={`/page/edit/${pages.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.toggleRec(pages.id)} className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span></td>

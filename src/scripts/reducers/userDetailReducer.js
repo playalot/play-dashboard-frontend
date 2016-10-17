@@ -1,7 +1,8 @@
 import Immutable from 'immutable'
 import { 
     UD_RECEIVE_INFO, 
-    UD_RECEIVE_POST, 
+    UD_RECEIVE_POST,
+    UD_RECEIVE_PAGE, 
     UD_CLAER_POST,
     UD_DELETE_POST, 
     
@@ -14,9 +15,15 @@ import {
     UD_REMOVE_CLASSIFICATION,
     UD_ADD_SKU,
     UD_REMOVE_TOY,
+
+    //page
+    UD_PAGE_TOGGLE_PUB,
+    UD_PAGE_TOGGLE_REC,
+    UD_PAGE_DELETE_ARTICLE,
+    UD_PAGE_SET_COVER_TYPE,
 } from '../actions/userDetailAction'
 
-export default ( state = Immutable.fromJS({user:{},posts:[],status:{ts:''}}),action ) => {
+export default ( state = Immutable.fromJS({user:{},posts:[],pages:[],status:{ts:''}}),action ) => {
     switch (action.type) {
         case UD_RECEIVE_INFO:
             return state.updateIn(['user'], (user) => {
@@ -27,6 +34,10 @@ export default ( state = Immutable.fromJS({user:{},posts:[],status:{ts:''}}),act
                 return posts.concat(Immutable.fromJS(action.res))
             }).updateIn(['status'], (status) => {
                 return status.set('ts', action.ts)
+            })
+        case UD_RECEIVE_PAGE:
+            return state.updateIn(['pages'],pages => {
+                return pages.clear().concat(Immutable.fromJS(action.res))
             })
         case UD_CLAER_POST:
             return state.updateIn(['posts'], (posts) => {
@@ -141,6 +152,44 @@ export default ( state = Immutable.fromJS({user:{},posts:[],status:{ts:''}}),act
                 return posts.delete(posts.findKey((post) => {
                     return post.get('id') === action.id
                 }))
+            })
+        //page
+        case UD_PAGE_TOGGLE_PUB:
+            return state.updateIn(['pages'], (pages) => {
+                return pages.update(
+                    pages.findIndex((item) => { 
+                        return item.get('id') === action.id 
+                    }), (item) => {
+                        return item.set('isPub', !item.get('isPub'));
+                    }
+                )
+            })
+        case UD_PAGE_TOGGLE_REC:
+            return state.updateIn(['pages'], (pages) => {
+                return pages.update(
+                    pages.findIndex((item) => { 
+                        return item.get('id') === action.id 
+                    }), (item) => {
+                        return item.set('isRec', !item.get('isRec'));
+                    }
+                )
+            })
+        case UD_PAGE_DELETE_ARTICLE:
+            return state.updateIn(['pages'],(pages) => {
+                return pages.delete(pages.findKey((article) => {
+                    return article.get('id') === action.id
+                }))
+            })
+        case UD_PAGE_SET_COVER_TYPE:
+            return state.updateIn(['pages'],(pages) => {
+                let flag = action.val ? 'l' : 's'
+                return pages.update(
+                    pages.findIndex((item) => { 
+                        return item.get('id') === action.id 
+                    }), (item) => {
+                        return item.set('coverType',flag)
+                    }
+                )
             })
         default:
             return state

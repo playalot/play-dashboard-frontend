@@ -4,7 +4,8 @@ import {
     Row, Col, Modal, Tab, Tabs, ButtonToolbar
 } from 'react-bootstrap'
 const _ = require('lodash')
-
+import Moment from 'moment'
+import Switch from 'rc-switch'
 import PostPanel from '../PostPanel/index'
 
 export default class UserDetail extends Component{
@@ -25,6 +26,10 @@ export default class UserDetail extends Component{
 
         this.setClassification = (pid,cid) => this._setClassification(pid,cid)
         this.removeClassification = (pid,c) => this._removeClassification(pid,c)
+        //文章
+        this.togglePub = (id) => this.props.togglePub(id)
+        this.toggleRec = (id) => this.props.toggleRec(id)
+        this.deleteArticle = this._deleteArticle.bind(this)
     }
     componentWillMount() {
         this.props.fetchUserInfo(this.props.params.id)
@@ -32,6 +37,7 @@ export default class UserDetail extends Component{
         if(!this.props.classLoaded){
             this.props.fetchTagClass()
         }
+        this.props.fetchUserPage(this.props.params.id)
     }
     componentWillUnmount() {
         this.props.clearPost()
@@ -47,6 +53,11 @@ export default class UserDetail extends Component{
         let index = this.state.selectedPost.cls.indexOf(c)
         index !== -1 ? this.state.selectedPost.cls.splice(index, 1) : null
         this.props.removeClassification(pid, c)
+    }
+    _deleteArticle(id) {
+      if (confirm('删除这个文章?')) {
+        this.props.deleteArticle(id)
+      }
     }
     render() {
 
@@ -88,9 +99,8 @@ export default class UserDetail extends Component{
               </div>
           )
         }
-        if (this.props.user.id ) {
-            const user = this.props.user
-            const posts = this.props.posts
+        if (this.props.user.id && this.props.pages) {
+            const { user, posts, pages } = this.props
             return (
                 <div className="content">
                     <Row>
@@ -145,7 +155,48 @@ export default class UserDetail extends Component{
                                 <div className="load-more-btn" onClick={this.fetchMorePosts}>Load More</div>
                               </Row>
                             </Tab>
-                            <Tab eventKey={2} title="Settings">
+                            <Tab eventKey={2} title="Pages">
+                              <div className="table-responsive">
+                                <table className="table table-striped">
+                                  <tbody>
+                                    {pages.map((page) => {
+                                      let isPubClass = page.isPub === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
+                                      let recommendClass = page.isRec === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
+                                      return (
+                                        <tr key={page.id}>
+                                          <td><img style={{width:'400px'}} src={page.cover} className="img-thumbnail"/></td>
+                                          <td>{page.title}</td>
+                                          <td>{page.category}</td>
+                                          <td>
+                                            {
+                                              // page.tags.map((tag,index) => {
+                                              //   return (<span className="label label-info label-margin" key={`tag_${index}`}>{tag}</span>)
+                                              // })
+                                            }
+                                          </td>
+                                          <td>{page.counts.views} views</td>
+                                          <td>{Moment.unix(page.created / 1000).fromNow()}</td>
+                                          <td>
+                                            <Switch onChange={value => this.props.setCoverType(value,page.id)}
+                                              checkedChildren={'L'}
+                                              unCheckedChildren={'S'}
+                                              checked={page.coverType === 'l'}
+                                            />
+                                          </td>
+                                          <td><Link to={`/page/edit/${page.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link></td>
+                                          <td><span style={{color:'#333'}} onClick={() => this.toggleRec(page.id)} className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span></td>
+                                          <td><span style={{color:'#333'}} onClick={() => this.togglePub(page.id)} className={isPubClass}><i className="fa fa-eye"></i></span></td>
+                                          <td><span style={{color:'#333'}} onClick={() => this.deleteArticle(page.id)} className="btn btn-sm"><i className="fa fa-trash"></i></span></td>
+                                          <td><a target="_blank" href={`http://www.playalot.cn/page/${page.id}.html`}>预览</a></td>
+                                        </tr>
+                                      )
+                                    })}
+                                    <tr></tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </Tab>
+                            <Tab eventKey={3} title="Settings">
                               <form className="form-horizontal">
                                 <div className="form-group">
                                   <label for="inputName" className="col-sm-2 control-label">Nickname</label>

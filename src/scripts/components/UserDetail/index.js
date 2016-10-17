@@ -2,7 +2,11 @@ import { connect } from 'react-redux'
 import UserDetail from './UserDetail'
 
 import { 
-	fetchUserInfo, 
+	fetchUserInfo, fetchUserPage,
+	togglePub,
+	toggleRec,
+	deleteArticle,
+	setCoverType,
 } from '../../actions/userDetailAction'
 import {
 	fetchUserPost, setClassification, removeClassification, clearPost
@@ -12,19 +16,26 @@ import { fetchTagClass } from '../../actions/tagClassAction'
 const mapActionCreators = {
 	fetchUserInfo,
 	fetchUserPost,
+	fetchUserPage,
 	setClassification,
 	removeClassification,
 	fetchTagClass,
 	clearPost,
+
+	togglePub,
+	toggleRec,
+	deleteArticle,
+	setCoverType,
 }
 
 const mapStateToProps = (state) => {
-	const { user } = state.userDetailReducer.toJS()
+	const { user,pages } = state.userDetailReducer.toJS()
 	const { posts } = state.postReducer.toJS()
 	const { classifications, loaded } = state.tagClassReducer.toJS()
 	return {
 		user,
 		posts,
+		pages,
 		classifications,
 		classLoaded:loaded,
 	}

@@ -2,6 +2,7 @@ import Request from 'superagent'
 
 export const UD_RECEIVE_INFO = 'UD_RECEIVE_INFO'
 export const UD_RECEIVE_POST = 'UD_RECEIVE_POST'
+export const UD_RECEIVE_PAGE = 'UD_RECEIVE_PAGE'
 export const UD_CLAER_POST = 'UD_CLAER_POST'
 export const UD_DELETE_POST = 'UD_DELETE_POST'
 
@@ -16,9 +17,22 @@ export const UD_REMOVE_CLASSIFICATION = 'UD_REMOVE_CLASSIFICATION'
 export const UD_ADD_SKU = 'UD_ADD_SKU'
 export const UD_REMOVE_TOY = 'UD_REMOVE_TOY'
 
+//pages
+export const UD_PAGE_TOGGLE_PUB = 'UD_PAGE_TOGGLE_PUB'
+export const UD_PAGE_TOGGLE_REC = 'UD_PAGE_TOGGLE_REC'
+export const UD_PAGE_DELETE_ARTICLE = 'UD_PAGE_DELETE_ARTICLE'
+export const UD_PAGE_SET_COVER_TYPE = 'UD_PAGE_SET_COVER_TYPE'
+
+
 function receiveUserDetailInfo(res) {
     return {
         type: UD_RECEIVE_INFO,
+        res
+    }
+}
+function receiveUserDetailPage(res) {
+    return {
+        type: UD_RECEIVE_PAGE,
         res
     }
 }
@@ -58,7 +72,15 @@ export  function fetchUserPost(id) {
             })
     }
 }
-
+export function fetchUserPage(id) {
+    return (dispatch) => {
+        return Request
+            .get(`/api/user/${id}/pages`)
+            .end((err,res) => {
+                dispatch(receiveUserDetailPage(res.body.pages))
+            })
+    }
+}
 function _toggleRecommend(id) {
     return {
         type: UD_TOGGLE_RECOMMEND,
@@ -232,5 +254,90 @@ export const deletePost = (id) => {
             .end(function(err,res){
                 dispatch(_deletePost(id))
             })
+    }
+}
+
+export function togglePub(id) {
+    return (dispatch,getState) => {
+        let value = null
+        let index = getState().page.get('pages').findIndex((item) => {
+            value = item.get('id') === id ? item.get('isPub') : null
+            return item.get('id') === id
+        })
+        return Request
+            .post(`/api/page/${id}/pub`)
+            .send({
+                isPub: !value
+            })
+            .end((err,res) => {
+                dispatch(_togglePub(id))
+            })
+    }
+}
+export function toggleRec(id) {
+    return (dispatch,getState) => {
+        let value = null
+        let index = getState().page.get('pages').findIndex((item) => {
+            value = item.get('id') === id ? item.get('isRec') : null
+            return item.get('id') === id
+        })
+        return Request
+            .post(`/api/page/${id}/recommend`)
+            .send({
+                recommend: !value
+            })
+            .end((err,res) => {
+                dispatch(_toggleRec(id))
+            })
+    }
+}
+export function deleteArticle(id) {
+    return (dispatch) => {
+        Request
+            .del(`/api/page/${id}`)
+            .end((err,res) => {
+                dispatch(_deleteArticle(id))
+            })
+    }
+}
+
+export function setCoverType(val,id) {
+    return (dispatch) => {
+        let flag = val ? 'l' : 's'
+        Request
+            .post(`/api/page/${id}/cover`)
+            .send({
+                coverType: flag
+            })
+            .end((err,res) => {
+                dispatch(_setCoverType(val,id))    
+            })
+    }
+}
+
+
+function _togglePub(id) {
+    return {
+        type: UD_PAGE_TOGGLE_PUB,
+        id
+    }
+}
+function _toggleRec(id) {
+    return {
+        type: UD_PAGE_TOGGLE_REC,
+        id
+    }
+}
+function _deleteArticle(id) {
+    return {
+        type: UD_PAGE_DELETE_ARTICLE,
+        id
+    }
+}
+function _setCoverType(val,id) {
+    return {
+        type: UD_PAGE_SET_COVER_TYPE,
+        val,
+        id
     }
 }

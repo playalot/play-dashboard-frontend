@@ -89,18 +89,18 @@ export default class PostPanel extends Component{
 	      	contentDiv = (
 	      		<div className="box-body no-padding" style={{paddingBottom:'2px !important'}}>
 			        <div>
-			          	<img className="img-responsive" src={this.props.post.photos[0].url640} alt="Photo" onClick={ this.props.openImage.bind(null, this.props.post.photos[0].url1080) } />
+			          	<img className="img-responsive" src={this.props.post.photos[0].url640} alt="Photo" onClick={() => this.props.openImage(this.props.post.photos,0) } />
 			        </div>
 			        <div className="panel-photos">
 			          	{
-			          		this.props.post.photos.slice(1, this.props.post.photos.length).map(function (photo, i) {
+			          		this.props.post.photos.slice(1, this.props.post.photos.length).map((photo, i) => {
 			            		return (
 			            			<div key={'p_'+this.props.post.id+'_'+i}  className="pull-left">
 			            				<img className="img-responsive panel-photos-small"
 			            					src={photo.url320} alt="Photo"
-			            					onClick={ this.props.openImage.bind(null, photo.url) } />
+			            					onClick={() => this.props.openImage(this.props.post.photos,i+1) } />
 			            			</div>)
-			          		}, this)
+			          		})
 			          	}
 			        </div>
 		      	</div>

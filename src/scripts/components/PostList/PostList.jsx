@@ -15,14 +15,24 @@ export default class Post extends Component{
 				query: '',
 				showModal: false,
 				showImage: '',
-				selectedPost: null
+				selectedPost: null,
+				photos:[],
+				imageIndex:0,
 	  	}
 	  	this.onChangeQuery = (e) => this.setState({ query: e.target.value })
 	  	this.onChangeFilter = (e) => this.setState({ filter: e.target.value })
-	  	this.openImage = (img) => this.setState({ showModal: true, showImage: img })
+	  	this.openImage = (photos,i) => {
+	  		this.setState({ showModal: true, showImage: photos[i]['url'],photos,imageIndex:i })
+	  	}
+	  	this.changeImage = (num) => {
+	  		let { photos, imageIndex } = this.state
+	  		imageIndex = imageIndex+num 
+	  		let showImage = photos[imageIndex%photos.length]['url']
+	  		this.setState({showImage,imageIndex})
+	  	}
 	  	this.openClass = (post) => this.setState({ selectedPost: post })
 	  	this.closeClass = () => this.setState({ selectedPost: null })
-	  	this.closeImage = () => this.setState({ showModal: false })
+	  	this.closeImage = () => this.setState({ showModal: false,photos:[] })
 
 	  	this.setPostClassification = (pid,cid) => this._setPostClassification(pid,cid)
 	  	this.removePostClassification = (pid,c) => this._removePostClassification(pid,c)
@@ -150,7 +160,9 @@ export default class Post extends Component{
 	          <div>
 	            <Modal show={this.state.showModal} onHide={this.closeImage}>
 	              <Modal.Body>
-	                <img className="image-modal" src={this.state.showImage}/>
+	              	<span className="image-modal-left" onClick={() => this.changeImage(-1)}><i className="glyphicon glyphicon-chevron-left"></i></span>
+	                <img className="image-modal" onClick={this.closeImage} src={this.state.showImage}/>
+	              	<span className="image-modal-right" onClick={() => this.changeImage(1)}><i className="glyphicon glyphicon-chevron-right"></i></span>
 	              </Modal.Body>
 	            </Modal>
 	          </div>

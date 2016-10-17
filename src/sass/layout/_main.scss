@@ -274,6 +274,32 @@ a.desc:after {
   max-width: 100%;
 }
 
+.image-modal-direction{
+  position:absolute;
+  top:50%;
+  cursor:pointer;
+  transform:translateY(-50%);
+  background:#fff;
+  border-radius:50%;
+  width:40px;
+  height:40px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  i{
+    color:black;
+    font-size:20px;
+  }
+}
+
+.image-modal-left{
+  @extend .image-modal-direction;
+  left:20px;
+}
+.image-modal-right{
+  @extend .image-modal-direction;
+  right:20px;
+}
 .media, .media-body {
     overflow: hidden;
     zoom: 1;

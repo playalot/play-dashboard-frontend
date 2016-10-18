@@ -100,7 +100,7 @@ export default class extends Component{
                       <div className="col-md-12">
                         <div className="box box-widget widget-user">
                           <div className="widget-user-header bg-black" style={{background: "url('"+user.cover+"') center center"}}>
-                            <h3 className="widget-user-username">{user.nickname}</h3>
+          let gender = user.gender === 'm' ? 
                             <h5 className="widget-user-desc">{user.bio}</h5>
                           </div>
                           <div className="widget-user-image">

@@ -36,12 +36,18 @@ export default class UserList extends Component{
 	renderAccounts(accounts) {
 	    return (
 	    	<span>
-		      {accounts.map(function (acc) {
-		        if (acc.providerID === "weibo") {
-		          return (<a href={'http://weibo.com/'+acc.providerKey} style={{color:'#E71D34', marginRight: '5px'}}><i className="fa fa-weibo fa-lg"></i></a>);
-		        } else if (acc.providerID === "mobile") {
-		          return (<i className="fa fa-mobile-phone fa-lg" title={acc.providerKey}  style={{color:'#55acee', marginRight: '5px'}}></i>);
-		        }})
+		      {
+		      	accounts.map( acc => {
+			        if (acc.providerID === "weibo") {
+			          	return <a href={'http://weibo.com/'+acc.providerKey} style={{color:'#E71D34', marginRight: '5px'}}><i className="fa fa-weibo fa-lg"></i></a>
+			        } else if (acc.providerID === "mobile") {
+			          	return <a style={{color:'#55acee', marginRight: '5px'}}><i className="fa fa-mobile-phone fa-lg" title={acc.providerKey}  ></i></a>
+			        } else if (acc.providerID === 'qq') {
+			        	return <a style={{color:'rgb(21,167,240)', marginRight: '5px'}}><i className="fa fa-qq fa-lg"></i></a>
+			        } else if (acc.providerID === 'wechat') {
+			        	return <a style={{color:'rgb(73,190,56)', marginRight: '5px'}}><i className="fa fa-wechat fa-lg"></i></a>
+			        }
+		    	})
 		      }
 		    </span>
 	    )

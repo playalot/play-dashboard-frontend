@@ -384,7 +384,7 @@ export default class EditPage extends Component {
 		} = this.state
 		let content = this.state.editorState.getCurrentContent()
 		let raw = convertToRaw(content)
-		let html = stateToHTML(content,options).replace(/<p><br><\/p>/g,'')
+		let html = stateToHTML(content,options)
 		let data = {
 			title,
 			authorId,

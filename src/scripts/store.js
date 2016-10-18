@@ -4,7 +4,7 @@ import thunk from 'redux-thunk'
 
 import postReducer from './reducers/postReducer'
 import tagClassReducer from './reducers/tagClassReducer'
-import userDetailReducer from './reducers/userDetailReducer'
+import userDetail from './reducers/userDetailReducer'
 import stats from './reducers/statsReducer'
 import recommendHome from './reducers/recommendHomeReducer'
 import tagReducer from './reducers/tagReducer'
@@ -22,7 +22,7 @@ export const makeRootReducer = (asyncReducers) => {
 		// Add sync reducers here
 		postReducer,
 		tagClassReducer,
-		userDetailReducer,
+		userDetail,
 		stats,
 		recommendHome,
 		tagReducer,

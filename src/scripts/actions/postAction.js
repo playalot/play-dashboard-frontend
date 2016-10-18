@@ -108,7 +108,7 @@ export const addTag = (id, text) => {
     return (dispatch, getState) => {
         return Request
             .post(`/api/post/${id}/tag/${text}`)
-            .end(function(err, res) {
+            .end((err, res) => {
                 dispatch(_addTag(id, res.body))
             })
     }
@@ -117,7 +117,7 @@ export const removeTag = (id, tid) => {
     return (dispatch, getState) => {
         return Request
             .del(`/api/post/${id}/tag/${tid}`)
-            .end(function(err, res) {
+            .end((err, res) => {
                 dispatch(_removeTag(id, tid))
             })
     }
@@ -134,7 +134,7 @@ export const toggleR18 = (id) => {
             .send({
                 r18: !value
             })
-            .end(function(err, res) {
+            .end((err, res) => {
                 dispatch(_toggleR18(id))
             })
 
@@ -152,7 +152,7 @@ export const toggleBlock = (id) => {
             .send({
                 block: !value
             })
-            .end(function(err, res) {
+            .end((err, res) => {
                 dispatch(_toggleBlock(id))
             })
 
@@ -170,7 +170,7 @@ export const toggleRecommend = (id) => {
             .send({
                 recommend: !value
             })
-            .end(function(err, res) {
+            .end((err, res) => {
                 dispatch(_toggleRecommend(id))
             })
     }
@@ -179,7 +179,7 @@ export const setClassification = (pid, cid) => {
     return (dispatch, getState) => {
         return Request
             .post(`/api/post/${pid}/class/${cid}`)
-            .end(function(err, res) {
+            .end((err, res) =>{
                 dispatch(_setClassification(pid, cid))
             })
     }
@@ -188,7 +188,7 @@ export const removeClassification = (pid, c) => {
     return (dispatch, getState) => {
         return Request
             .del(`/api/post/${pid}/class/${c}`)
-            .end(function(err, res) {
+            .end((err, res) => {
                 dispatch(_removeClassification(pid, c))
             })
     }
@@ -197,7 +197,7 @@ export const addToy = (id, sid) => {
     return (dispatch, getState) => {
         return Request
             .post(`/api/post/${id}/toy/${sid}`)
-            .end(function(err, res) {
+            .end((err, res) => {
                 dispatch(_addToy(id, res.body))
             })
     }
@@ -215,12 +215,11 @@ export const deletePost = (id) => {
     return (dispatch, getState) => {
         return Request
             .del(`/api/post/${id}`)
-            .end(function(err, res) {
+            .end((err, res) => {
                 dispatch(_deletePost(id))
             })
     }
 }
-
 export const fetchPost = (f, q) => {
     return (dispatch,getState) => {
         let { ts,query,filter } = getState().postReducer.get('status').toJS()
@@ -242,13 +241,11 @@ export const fetchPost = (f, q) => {
         return Request
             .get(`/api/posts`)
             .query(params)
-            .end(function(err, res) {
-                dispatch(receivePost(res.body.posts,res.body.nextTs,filter,query)) 
+            .end((err, res) => {
+                res.body.posts.length ? dispatch(receivePost(res.body.posts,res.body.nextTs,filter,query)) : alert('no more posts')
             })
     }
 }
-
-
 export const fetchUserPost = (id) => {
     return (dispatch,getState) => {
         let ts = getState().postReducer.getIn(['status','ts'])
@@ -259,12 +256,11 @@ export const fetchUserPost = (id) => {
         return Request
             .get(`/api/user/${id}/posts`)
             .query(params)
-            .end(function(err,res){
-                dispatch(receivePost(res.body.posts,res.body.nextTs))
+            .end((err,res) => {
+                res.body.posts.length ? dispatch(receivePost(res.body.posts,res.body.nextTs)) : alert('no more posts')
             })
     }
 }
-
 export const clearPost = () => {
     return (dispatch) => {
         dispatch(_clearPost())

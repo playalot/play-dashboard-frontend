@@ -1,5 +1,6 @@
 import Immutable from 'immutable'
 import { 
+    POST_CLEAR_POST,
     POST_RECEIVE_POST, 
     POST_TOGGLE_RECOMMEND, 
     POST_TOGGLE_BLOCK, 
@@ -12,7 +13,6 @@ import {
     POST_REMOVE_TOY,
     POST_DELETE_POST,
     POST_GET_UN_CLS,
-    POST_CLEAR_POST,
 } from '../actions/postAction'
 
 export default (state = Immutable.fromJS({ posts:[],status:{ts:'',filter:'',query:''} }),action)=>{

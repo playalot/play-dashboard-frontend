@@ -94,13 +94,16 @@ export default class extends Component{
         }
         const { user, posts, pages } = this.props
         if (user.id) {
+          let gender = user.gender === 'm' ? 
+          <i style={{color:'deepskyblue'}} className="fa fa-mars"></i>
+          :<i style={{color:'pink'}} className="fa fa-venus"></i>
           return (
               <div className="content">
                   <Row>
                       <div className="col-md-12">
                         <div className="box box-widget widget-user">
                           <div className="widget-user-header bg-black" style={{background: "url('"+user.cover+"') center center"}}>
-          let gender = user.gender === 'm' ? 
+                            <h3 className="widget-user-username">{user.nickname}&nbsp;&nbsp;<small><sub><span style={{fontVariant: 'small-caps'}} className="label label-warning">LV{4}</span></sub></small> <sup>{gender}</sup> </h3>
                             <h5 className="widget-user-desc">{user.bio}</h5>
                           </div>
                           <div className="widget-user-image">

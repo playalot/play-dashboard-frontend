@@ -42,7 +42,7 @@ export default class EditPage extends Component {
 			gallery:[],
 			tags: [],
 			cover:'',
-			category:'随笔',
+			category:'news',
 			onFocusKey:'',
 			showUploadDialog:false,
 			showVideoDialog:false,
@@ -529,6 +529,7 @@ export default class EditPage extends Component {
 		const options = [
 		    { value: 'review', label: '评测' },
 		    { value: 'news', label: '新闻' },
+				{ value: 'info', label: '情报' },
 		    { value: 'interview', label: '访谈' },
 		    { value: 'essay', label: '随笔' },
 				{ value: 'knowledge', label: '干货' }

@@ -1,10 +1,11 @@
 import React,{ Component } from 'react'
-import { Form, FormGroup, Row, Col, Checkbox, FormControl, Alert } from 'react-bootstrap'
+import { Form, FormGroup, Row, Col, Checkbox, FormControl, Alert, Modal } from 'react-bootstrap'
 import { Router } from 'react-router'
 import Dropzone from 'react-dropzone'
 import CDN from '../../widgets/cdn'
 import Request from 'superagent'
 import TagsInput from 'react-tagsinput'
+const _ = require('lodash')
 export default class EditTag extends Component{
     constructor(props) {
         super(props)
@@ -19,6 +20,9 @@ export default class EditTag extends Component{
             newKey: '',
             newValue: '',
             alias:[],
+            cls:[],
+
+            openTag:false
         }
         this.onDropImage = this._onDropImage.bind(this)
         this.changeDescription = (e) => this.setState({
@@ -38,8 +42,14 @@ export default class EditTag extends Component{
                 e.preventDefault()
             }
         }
+        this.closeTag = () => this.setState({openTag:false})
+        this.removeTagClassification = (tid,c) => this._removeTagClassification(tid,c)
+        this.setTagClassification = (tid,cid) => this._setTagClassification(tid,cid)
     }
     componentWillMount() {
+        if(!this.props.classLoaded){
+            this.props.fetchTagClass()
+        }
         Request
             .get(`/api/tag/${this.props.params.id}`)
             .end((err,res) => {
@@ -51,6 +61,7 @@ export default class EditTag extends Component{
                     classifications: res.body.classifications,
                     otherInfo:res.body.otherInfo ? res.body.otherInfo : [],
                     alias: res.body.alias.length ? res.body.alias : [],
+                    cls:res.body.cls.length ? res.body.cls : [],
                 })
             })
     }
@@ -129,7 +140,37 @@ export default class EditTag extends Component{
             })
         return false
     }
+    _removeTagClassification(tid,cid) {
+        let index = this.state.cls.indexOf(cid)
+        if(index !== -1) {
+            let tmpCls = this.state.cls
+            tmpCls.splice(index,1)
+            this.setState({
+                cls:tmpCls
+            },() => {
+                Request
+                .del(`/api/tag/${tid}/class/${cid}`)
+                .end((err, res) => {
+                })
+            })
+        }
+        
+    }
+    _setTagClassification(tid,cid) {
+        let tmpCls = this.state.cls
+        tmpCls.push(cid)
+        this.setState({
+            cls:tmpCls
+        },() => {
+            Request
+            .post(`/api/tag/${tid}/class/${cid}`)
+            .end((err, res) => {
+            })
+        })
+        
+    }
     render() {
+        let cls = _.filter(this.props.classifications,c => this.state.cls.indexOf(c.id) === -1 )
         return(
             <div className="content">
                 <div className="box box-solid">
@@ -143,7 +184,7 @@ export default class EditTag extends Component{
                         </FormGroup>
                         <FormGroup>
                           <Col className="control-label" sm={3}><strong>标签类别</strong></Col>
-                          <Col sm={9}>
+                          <Col sm={7}>
                             <select value={this.state.type} className="form-control" onChange={this.changeType}>
                               <option value="">普通标签</option>
                               <option value="company">品牌公司</option>
@@ -154,6 +195,9 @@ export default class EditTag extends Component{
                               <option value="topic">话题</option>
                               <option value="event">活动</option>
                             </select>
+                          </Col>
+                          <Col sm={2}>
+                            <span onClick={() => this.setState({openTag:true})} className="btn btn-sm"><i className="fa fa-th-large"></i></span>
                           </Col>
                         </FormGroup>
                         <FormGroup>
@@ -218,6 +262,36 @@ export default class EditTag extends Component{
                       <button className="btn btn-default col-sm-offset-3" onClick={this.submit}>Submit</button>
                     </Form>
                   </div>
+                </div>
+                <div>
+                    <Modal className='modal-container' animation={false} show={this.state.openTag} onHide={this.closeTag}>
+                       <Modal.Body>
+                            <strong>已选类别</strong>
+                            <div>
+                                {
+                                    this.state.cls.map(c =>{
+                                        return (
+                                            <span key={'t_c_m_'+c}
+                                            onClick={ () => this.removeTagClassification( this.state.id, c) }
+                                            className="label label-warning label-margin" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>);
+                                    })
+                                }
+                            </div>
+                            <strong>全部类别</strong>
+                            <div>
+                                {
+                                    cls.map((c,key) => {
+                                        return (
+                                            <span key={'c_m_'+key}
+                                            className='label label-info label-margin'
+                                            bsStyle='success'
+                                            onClick={() => this.setTagClassification(this.state.id, c.id)}>{c.name}</span>
+                                        )
+                                    })
+                                }
+                            </div>
+                        </Modal.Body>
+                    </Modal>
                 </div>
             </div>
         )

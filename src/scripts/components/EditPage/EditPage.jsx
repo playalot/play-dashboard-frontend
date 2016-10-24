@@ -557,17 +557,7 @@ export default class EditPage extends Component {
 				</div>
 				<div className="edit-section">
 					<div className="edit-root">
-				    <div className={className} onClick={this.focus}>
-							<Editor
-								blockRendererFn={this.blockRenderer.bind(this)}
-								editorState={editorState}
-								onChange={this.onChange}
-								handleKeyCommand={this.handleKeyCommand}
-								placeholder="编辑文章内容"
-								ref="editor"
-							/>
-				      </div>
-				        <InlineStyleControls
+						<InlineStyleControls
 							editorState={editorState}
 							onToggle={this.toggleInlineStyle}
 				        />
@@ -586,6 +576,17 @@ export default class EditPage extends Component {
 				        		<i className="fa fa-video-camera"></i>
 				        	</span>
 				        </div>
+				    	<div className={className} onClick={this.focus}>
+							<Editor
+								blockRendererFn={this.blockRenderer.bind(this)}
+								editorState={editorState}
+								onChange={this.onChange}
+								handleKeyCommand={this.handleKeyCommand}
+								placeholder="编辑文章内容"
+								ref="editor"
+							/>
+				      	</div>
+				        
 	                {
 	                	this.state.showVideoDialog ?
 	                	<div className="modal">

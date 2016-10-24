@@ -139,7 +139,6 @@
     font-family: 'Georgia', serif;
     font-size: 16px;
     padding: 15px;
-
     .DraftEditor-editorContainer {
       h1 {
         font-weight: 600;
@@ -185,9 +184,16 @@
         }
       }
     }
+    .DraftEditor-root{
+      height:200px;
+      overflow-y:scroll;
+      overflow-x:hidden;
+      resize:vertical;
+      box-sizing:border-box;
+    }
   }
   .edit-editor {
-    border-bottom: 1px solid #ddd;
+    // border-bottom: 1px solid #ddd;
     cursor: text;
     font-size: 16px;
     padding-bottom: 15px;

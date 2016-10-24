@@ -299,11 +299,13 @@ export default class EditPage extends Component {
 			if (parseInt(this.state.progress) !== 100) {
 				return alert('正在上傳請稍等..')
 			}
-			const html = `<video width="100%" src="${CDN.show(this.state.uploadKey)}" controls>`
+			let src = CDN.show(this.state.uploadKey)
+			let poster = `${CDN.show(this.state.uploadKey)}?vframe/jpg/offset/1`
+			const html = `<video width="100%" src="${src}" poster="${poster}" controls>`
 			const type = 'video'
 			const entityKey = Entity.create('video', 'IMMUTABLE', {
-				html,type
-			});
+				html,type,src,poster
+			})
 			this.onChange(AtomicBlockUtils.insertAtomicBlock(
 				this.state.editorState,
 				entityKey,
@@ -370,11 +372,9 @@ export default class EditPage extends Component {
 					const entity = Entity.get(block.getEntityAt(0));
 					const data = entity.getData();
 			      	if (data.type === 'image') {
-			      		if(data.remove) {
-			      			return ''
-			      		}else{
-			        		return `<figure><img src="${data.src}" style="width:${data.size}" /></figure>`
-			      		}
+			        	return `<figure><img src="${data.src}" style="width:${data.size}" /></figure>`
+			      	} else if (data.type === 'video') {
+			      		return `<figure><video width="100%" src="${data.src}" poster="${data.poster}" controls /></figure>`
 			      	}
 		    	},
 		  	}
@@ -444,7 +444,7 @@ export default class EditPage extends Component {
 			    	const _this = this;
 						const entityKey = props.block.getEntityAt(0);
 						const entity = Entity.get(props.block.getEntityAt(0));
-						const {src, html, size, remove} = entity.getData();
+						const {src, html, size} = entity.getData();
 						const type = entity.getType();
 				  	let media;
 				  	if (type === 'image') {
@@ -453,7 +453,6 @@ export default class EditPage extends Component {
 				    	media = (
 				    		<MediaImage
 					    		src={src}
-					    		remove={remove}
 					    		size={size}>
 					    		<p className="toolbar">
 					    			<i onClick={()=>this.resizeImg(entityKey,size)} className={sizeBar}></i>
@@ -689,9 +688,6 @@ class MediaImage extends Component{
 		this.leave = () => this.setState({showBar:false})
 	}
 	render() {
-		if(this.props.remove) {
-			return null
-		}
 		return(
 			<div className="media-image-wrap" onMouseOver={this.enter} onMouseLeave={this.leave}>
 				{

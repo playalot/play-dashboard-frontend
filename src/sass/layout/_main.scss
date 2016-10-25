@@ -533,3 +533,18 @@ input.form-control {
 .form-control, .react-autosuggest__container input {
   font-size: 15px;
 }
+
+
+//userDetail
+.widget-user-active{
+  position:absolute;
+  top:20px;
+  right:20px;
+  cursor:pointer;
+  .btn{
+    font-size:20px;
+    &:hover{
+      color:#ccc;
+    }
+  }
+}

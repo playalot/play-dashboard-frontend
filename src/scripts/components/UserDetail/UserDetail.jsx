@@ -33,6 +33,7 @@ export default class extends Component{
 
         this.setClassification = (pid,cid) => this._setClassification(pid,cid)
         this.removeClassification = (pid,c) => this._removeClassification(pid,c)
+        this.setActive = this._setActive.bind(this)
     }
     componentWillMount() {
         this.props.fetchUserInfo(this.props.params.id)
@@ -52,6 +53,18 @@ export default class extends Component{
         let index = this.state.selectedPost.cls.indexOf(c)
         index !== -1 ? this.state.selectedPost.cls.splice(index, 1) : null
         this.props.removeClassification(pid, c)
+    }
+    _setActive() {
+      if(this.props.user.isActive) {
+        if (confirm('确定屏蔽这个用户吗?')) {
+          this.props.setActive(this.props.params.id)
+        }
+      }else {
+        if (confirm('确定解除屏蔽吗?')) {
+          this.props.setActive(this.props.params.id)
+        }
+      }
+      
     }
     render() {
         let modal = (<div></div>)
@@ -97,6 +110,7 @@ export default class extends Component{
           let gender = user.gender === 'm' ? 
           <i style={{color:'deepskyblue'}} className="fa fa-mars"></i>
           :<i style={{color:'pink'}} className="fa fa-venus"></i>
+          let isActiveClass = user.isActive ? 'btn btn-sm' : 'btn btn-sm bg-red'
           return (
               <div className="content">
                   <Row>
@@ -105,6 +119,11 @@ export default class extends Component{
                           <div className="widget-user-header bg-black" style={{background: "url('"+user.cover+"') center center"}}>
                             <h3 className="widget-user-username">{user.nickname}&nbsp;&nbsp;<small><sub><span style={{fontVariant: 'small-caps'}} className="label label-warning">LV{4}</span></sub></small> <sup>{gender}</sup> </h3>
                             <h5 className="widget-user-desc">{user.bio}</h5>
+                            <span className="widget-user-active" onClick={this.setActive}>
+                              <strong className={isActiveClass}>
+                                <i className="fa fa-eye-slash"></i>
+                              </strong>
+                            </span>
                           </div>
                           <div className="widget-user-image">
                             <img className="img-circle" src={user.avatar} alt="User Avatar" />
@@ -174,7 +193,7 @@ export default class extends Component{
                                 <div className="col-sm-offset-2 col-sm-10">
                                   <ButtonToolbar>
                                     <button className="btn btn-primary" >Submit</button>
-                                    <button className="btn btn-danger" ><i className="fa fa-exclamation"></i>{user.isActive?'ban':'activate'}</button>
+                                    <button className="btn btn-danger"><i className="fa fa-exclamation"></i>{user.isActive?'ban':'activate'}</button>
                                   </ButtonToolbar>
                                 </div>
                               </div>

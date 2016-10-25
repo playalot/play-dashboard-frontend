@@ -9,6 +9,8 @@ import {
 	toggleRec,
 	deletePage,
 	setCoverType,
+
+	setActive,
 } from '../../actions/userDetailAction'
 import {
 	fetchUserPost, setClassification, removeClassification, clearPost
@@ -30,6 +32,9 @@ const mapActionCreators = {
 	setCoverType,
 
 	fetchTagClass,
+
+	//用户操作
+	setActive,
 }
 
 const mapStateToProps = (state) => {

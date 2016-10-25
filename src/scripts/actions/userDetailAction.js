@@ -8,6 +8,9 @@ export const UD_PAGE_TOGGLE_REC = 'UD_PAGE_TOGGLE_REC'
 export const UD_PAGE_DELETE_PAGE = 'UD_PAGE_DELETE_PAGE'
 export const UD_PAGE_SET_COVER_TYPE = 'UD_PAGE_SET_COVER_TYPE'
 
+//user
+export const UD_USER_SET_ACTIVE = 'UD_USER_SET_ACTIVE'
+
 
 function receiveUserInfo(res) {
     return {
@@ -88,6 +91,25 @@ export function fetchUserPage(id) {
             .end((err,res) => {
                 dispatch(receiveUserPage(res.body.pages))
             })
+    }
+}
+
+export function setActive(id) {
+    return (dispatch,getState) => {
+        let act = getState().userDetail.getIn(['user','isActive'])
+        return Request
+            .post(`/api/user/${id}/active`)
+            .send({
+                active:!act
+            })
+            .end((err,res) => {
+                dispatch(_setActive())
+            })
+    }
+}
+function _setActive() {
+    return {
+        type: UD_USER_SET_ACTIVE
     }
 }
 function _togglePub(id) {

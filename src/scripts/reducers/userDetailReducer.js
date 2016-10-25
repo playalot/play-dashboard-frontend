@@ -7,6 +7,8 @@ import {
     UD_PAGE_TOGGLE_REC,
     UD_PAGE_DELETE_PAGE,
     UD_PAGE_SET_COVER_TYPE,
+
+    UD_USER_SET_ACTIVE,
 } from '../actions/userDetailAction'
 
 export default ( state = Immutable.fromJS({user:{},posts:[],pages:[],status:{ts:''}}),action ) => {
@@ -56,6 +58,10 @@ export default ( state = Immutable.fromJS({user:{},posts:[],pages:[],status:{ts:
                         return item.set('coverType',flag)
                     }
                 )
+            })
+        case UD_USER_SET_ACTIVE:
+            return state.updateIn(['user'],user => {
+                return user.set('isActive',!user.get('isActive'))
             })
         default:
             return state

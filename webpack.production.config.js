@@ -30,20 +30,17 @@ const config = {
                 exclude: [node_modules_dir],
                 loaders: ['babel'],
                 include: [path.join(__dirname, 'src')]
-            }, 
-            // {
-            //     test: /\.less$/,
-            //     loader: 'style!css!autoprefixer!less',
-            // }, 
+            },  
             {
                 test: /\.scss$/,
+                exclude:[path.resolve(__dirname,'node_modules/react-toolbox')],
                 loader: ExtractMain.extract('style-loader', 'css!autoprefixer?browsers=last 5 version!sass')
-                // loader: ExtractTextPlugin.extract('style','css','autoprefixer','sass'),
             }, 
-            // {
-            //     test: /\.css$/,
-            //     loader: ExtractTextPlugin.extract('style','css','autoprefixer')
-            // },
+            {
+                test: /\.scss$/,
+                include:[path.resolve(__dirname,'node_modules/react-toolbox')],
+                loader: ExtractMain.extract('style-loader', 'css?modules&localIdentName=[name]-[local]-[hash:base64:5]!autoprefixer?browsers=last 5 version!sass')
+            }, 
             {
                 test: /\.(png|jpg|gif)$/,
                 loader: 'url?limit=1&name=/images/[name].[ext]'

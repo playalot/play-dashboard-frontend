@@ -29,12 +29,7 @@ module.exports = {
 			include: [path.join(__dirname, 'src')]
 		}, {
 			test: /\.scss$/,
-			exclude:[path.resolve(__dirname,'node_modules/react-toolbox')],
 			loader: 'style!css!autoprefixer?browsers=last 5 version!sass',
-		}, {
-			test: /\.scss$/,
-			include:[path.resolve(__dirname,'node_modules/react-toolbox')],
-			loader: 'style!css?modules&localIdentName=[name]-[local]-[hash:base64:5]!autoprefixer?browsers=last 5 version!sass',
 		}, {
 			test: /\.less$/,
 			loader: 'style!css!autoprefixer?browsers=last 5 version!less',

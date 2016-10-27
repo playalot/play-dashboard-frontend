@@ -1,11 +1,12 @@
 const path = require('path');
 const webpack = require('webpack');
-const OpenBrowserPlugin = require('open-browser-webpack-plugin');
-const proxyIp = `http://121.41.51.24:4400`;
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+// const OpenBrowserPlugin = require('open-browser-webpack-plugin');
+// const proxyIp = `http://121.41.51.24:4400`;
 module.exports = {
 	entry: {
 		app: ['webpack/hot/dev-server',
-			'webpack-dev-server/client?http://localhost:8081',
+			// 'webpack-dev-server/client?http://localhost:8081',
 			path.resolve(__dirname, 'src/scripts/main.js')
 		],
 		vendor: [
@@ -15,11 +16,11 @@ module.exports = {
 		]
 	},
 	resolve: {
-		extensions: ['', '.js', '.jsx']
+		extensions: ['', '.js', '.jsx', '.scss', '.css']
 	},
 	output: {
-		path: path.resolve(__dirname, 'src'),
-		filename: '/scripts/bundle.js'
+		path: path.resolve(__dirname, 'build'),
+		filename: 'scripts/bundle.js'
 	},
 	module: {
 		loaders: [{
@@ -28,17 +29,17 @@ module.exports = {
 			loaders: ['babel'],
 			include: [path.join(__dirname, 'src')]
 		}, {
-			test: /\.scss$/,
-			loader: 'style!css!autoprefixer?browsers=last 5 version!sass',
-		}, {
-			test: /\.less$/,
-			loader: 'style!css!autoprefixer?browsers=last 5 version!less',
+			test:/\.scss$/,
+			loader:'style!css!autoprefixer!sass',
 		}, {
 			test: /\.css$/,
 			loader: 'style!css!autoprefixer?browsers=last 5 version',
 		}, {
-			test: /\.(gif|jpg|png|woff|svg|eot|ttf)\??.*$/,
-			loader: 'url?limit=50000'
+			test:/\.(woff|svg|eot|ttf)\??.*$/,
+			loader:'url?limit=8192&name=/fonts/[name].[ext]'
+		}, {
+			test:/\.(gif|jpg|png)\??.*$/,
+			loader:'url?limit=8192&name=/images/[name].[ext]'
 		}]
 	},
 	plugins: [
@@ -52,40 +53,8 @@ module.exports = {
 			jQuery: "jquery",
 			"window.jQuery": "jquery"
 		}),
-		new OpenBrowserPlugin({
-			url: 'http://localhost:8081'
-		})
-	],
-	devServer: {
-		contentBase: "src",
-		hot: true,
-		progress: true,
-		inline: true,
-		port: 8081,
-		proxy: {
-			'/query/*': {
-				target: proxyIp,
-				secure: false
-			},
-			'/api/*': {
-				target: proxyIp,
-				secure: false
-			},
-			'/signIn': {
-				target: proxyIp,
-				secure: false
-			},
-			'/webjars/*':{
-				target: proxyIp,
-				secure: false
-			},
-			'/authenticate/*':{
-				target: proxyIp,
-				secure: false
-			}
-		},
-		stats: {
-			colors: true
-		},
-	},
+		new CopyWebpackPlugin([
+			{ from: path.resolve(__dirname,"src/index.html"), to: path.resolve(__dirname,"build/index.html") }
+		])
+	]
 }

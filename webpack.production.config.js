@@ -21,7 +21,7 @@ const config = {
         filename: 'scripts/bundle.js'
     },
     resolve: {
-        extensions: ['', '.js', '.jsx']
+        extensions: ['', '.js', '.jsx', '.scss']
     },
     module: {
         loaders: [
@@ -30,16 +30,16 @@ const config = {
                 exclude: [node_modules_dir],
                 loaders: ['babel'],
                 include: [path.join(__dirname, 'src')]
-            }, 
+            },
             // {
             //     test: /\.less$/,
             //     loader: 'style!css!autoprefixer!less',
-            // }, 
+            // },
             {
                 test: /\.scss$/,
-                loader: ExtractMain.extract('style-loader', 'css!autoprefixer?browsers=last 5 version!sass')
+                loader:'style!css!autoprefixer!sass'
                 // loader: ExtractTextPlugin.extract('style','css','autoprefixer','sass'),
-            }, 
+            },
             // {
             //     test: /\.css$/,
             //     loader: ExtractTextPlugin.extract('style','css','autoprefixer')
@@ -47,7 +47,7 @@ const config = {
             {
                 test: /\.(png|jpg|gif)$/,
                 loader: 'url?limit=1&name=/images/[name].[ext]'
-            }, 
+            },
             {
                 test: /\.(woff|svg|eot|ttf)\??.*$/,
                 loader: 'url?limit=1&name=/fonts/[name].[ext]'

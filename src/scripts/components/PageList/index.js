@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import PageList from './PageList'
-import { fetchArticle, fetchArticleMore, togglePub, toggleRec, deleteArticle, setCoverType } from '../../actions/pageAction'
+import { fetchArticle, fetchArticleMore, togglePub, toggleRec, deleteArticle, setCoverType,addToy } from '../../actions/pageAction'
 const mapActionCreators = {
 	fetchArticle,
 	fetchArticleMore,
@@ -8,6 +8,7 @@ const mapActionCreators = {
 	toggleRec,
 	deleteArticle,
 	setCoverType,
+	addToy,
 }
 
 const mapStateToProps = (state) => {

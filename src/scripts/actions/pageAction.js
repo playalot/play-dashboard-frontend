@@ -6,6 +6,7 @@ export const PAGE_L_TOGGLE_PUB = 'PAGE_L_TOGGLE_PUB'
 export const PAGE_L_TOGGLE_REC = 'PAGE_L_TOGGLE_REC'
 export const PAGE_L_DELETE_ARTICLE = 'PAGE_L_DELETE_ARTICLE'
 export const PAGE_L_SET_COVER_TYPE = 'PAGE_L_SET_COVER_TYPE'
+export const PAGE_L_ADD_TOY = 'PAGE_L_ADD_TOY'
 
 function receiveArticle(res) {
     return {
@@ -42,6 +43,13 @@ function _setCoverType(val,id) {
         type: PAGE_L_SET_COVER_TYPE,
         val,
         id
+    }
+}
+function _addToy(id, toy) {
+    return {
+        type: PAGE_L_ADD_TOY,
+        id,
+        toy
     }
 }
 const status = {
@@ -131,6 +139,16 @@ export function setCoverType(val,id) {
             })
             .end((err,res) => {
                 dispatch(_setCoverType(val,id))    
+            })
+    }
+}
+
+export function addToy(id, sid) {
+    return (dispatch) => {
+        return Request
+            .post(`/api/page/${id}/toy/${sid}`)
+            .end((err, res) => {
+                dispatch(_addToy(id, res.body))
             })
     }
 }

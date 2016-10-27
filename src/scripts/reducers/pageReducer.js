@@ -6,6 +6,7 @@ import {
     PAGE_L_TOGGLE_REC,
     PAGE_L_DELETE_ARTICLE,
     PAGE_L_SET_COVER_TYPE,
+    PAGE_L_ADD_TOY,
 } from '../actions/pageAction'
 export default (state = Immutable.fromJS({ pages: [], loaded:false }),action)=>{
     switch (action.type) {
@@ -51,6 +52,15 @@ export default (state = Immutable.fromJS({ pages: [], loaded:false }),action)=>{
                         return item.get('id') === action.id 
                     }), (item) => {
                         return item.set('coverType',flag)
+                    }
+                )
+            })
+        case PAGE_L_ADD_TOY:
+            return state.updateIn(['pages'], (pages) => {
+                return pages.update(
+                    pages.findIndex((item) => {
+                        return item.get('id') === action.id
+                    }), (item) => {
                     }
                 )
             })

@@ -15,6 +15,7 @@ export default class PageList extends Component{
 	  	this.togglePub = (id) => this.props.togglePub(id)
 	  	this.toggleRec = (id) => this.props.toggleRec(id)
 	  	this.deleteArticle = this._deleteArticle.bind(this)
+	  	this.addToy = this._addToy.bind(this)
 	  	this.stop = (e) => {
 	  		if(e.keyCode === 13){
 	  			e.preventDefault()
@@ -24,6 +25,12 @@ export default class PageList extends Component{
 	componentWillMount() {
 		if(!this.props.loaded){
 			this.props.fetchArticle(this.state.query)
+		}
+	}
+	_addToy(pid) {
+		let id = prompt('输入玩具ID')
+		if (id) {
+			this.props.addToy(pid,id)
 		}
 	}
 	_deleteArticle(id) {
@@ -67,6 +74,13 @@ export default class PageList extends Component{
 	                      		})
 	                      	}
 	                      </td>
+	                      <td>
+	                      	{
+	                      		(<span className="label label-success label-margin">
+	                      		</span>)
+	                      		:null
+	                      	}
+	                      </td>
 	                      <td>{pages.counts.views} views</td>
 	                      <td>{Moment.unix(pages.created / 1000).fromNow()}</td>
 	                      <td>
@@ -76,6 +90,7 @@ export default class PageList extends Component{
 						        checked={pages.coverType === 'l'}
 						      />
 	                      </td>
+	                      <td><span style={{color:'#333'}} onClick={() => this.addToy(pages.id)} className="btn btn-sm"><i className="fa fa-plus"></i></span></td>
 	                      <td><Link to={`/page/edit/${pages.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.toggleRec(pages.id)} className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.togglePub(pages.id)} className={isPubClass}><i className="fa fa-eye"></i></span></td>

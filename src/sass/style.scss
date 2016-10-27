@@ -1,4 +1,6 @@
 //bootstrap
+// $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+// @import "~bootstrap-sass/assets/stylesheets/bootstrap";
 @import "~bootstrap/dist/css/bootstrap.css";
 //admin-lte
 @import "~admin-lte/dist/css/AdminLTE.css";
@@ -19,5 +21,3 @@ $fa-font-path: "~font-awesome/fonts";
 @import "layout/_draft";
 @import "layout/_edittoy";
 @import "layout/_autosuggest.scss";
-
-

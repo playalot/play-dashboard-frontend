@@ -373,7 +373,7 @@ export default class EditPage extends Component {
 					const data = entity.getData();
 			      	if (data.type === 'image') {
 			        	return `<figure><img src="${data.src}" style="width:${data.size}" /></figure>`
-			      	} else if (data.type === 'video') {
+			      	} else if (data.type === 'video' && data.src) {
 			      		return `<figure><video width="100%" src="${data.src}" poster="${data.poster}" controls /></figure>`
 			      	}
 		    	},

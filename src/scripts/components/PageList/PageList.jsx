@@ -41,7 +41,6 @@ export default class PageList extends Component{
 	render() {
 		return(
 			<div className="content">
-	            
 	          <div className="page-header">
 	            <Form inline>
             	  <Link to="/page/edit"><Button bsStyle='success'>发布文章</Button></Link>
@@ -58,46 +57,47 @@ export default class PageList extends Component{
 	          <div className="table-responsive">
 	            <table className="table table-striped">
 	              <tbody>
-	                {this.props.pages.map((pages) => {
-	                	let isPubClass = pages.isPub === true ? 'btn btn-sm' : 'btn bg-orange btn-sm'
-	                	let recommendClass = pages.isRec === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
+	                {this.props.pages.map((page) => {
+	                	let isPubClass = page.isPub === true ? 'btn btn-sm' : 'btn bg-orange btn-sm'
+	                	let recommendClass = page.isRec === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
 	                  return (
-	                    <tr key={pages.id}>
-	                      <td><img style={{width:'400px'}} src={pages.cover} className="img-thumbnail"/></td>
-	                      <td>{pages.title}</td>
-	                      <td><Link to={'/user/'+pages.user.id}><img style={{width:'45px'}} src={pages.user.avatar} className="img-circle"/></Link></td>
-	                      <td>{pages.category}</td>
+	                    <tr key={page.id}>
+	                      <td><img style={{width:'400px'}} src={page.cover} className="img-thumbnail"/></td>
+	                      <td>{page.title}</td>
+	                      <td><Link to={'/user/'+page.user.id}><img style={{width:'45px'}} src={page.user.avatar} className="img-circle"/></Link></td>
+	                      <td>{page.category}</td>
 	                      <td>
 	                      	{
-	                      		pages.tags.map((tag,index) => {
+	                      		page.tags.map((tag,index) => {
 	                      			return (<span className="label label-info label-margin" key={`tag_${index}`}>{tag}</span>)
 	                      		})
 	                      	}
-	                      </td>
-	                      <td>
 	                      	{
-	                      		pages.toys[0] !== null && pages.toys[0] !== undefined ?
-	                      		(<span className="label label-success label-margin">
-	                      			{pages.toys[0].text.substring(0, 25)+'...'}
-	                      		</span>)
-	                      		:null
+														page.toys.map((toy, index) => {
+															console.log(page);
+															console.log(toy);
+	                      		 	return (
+															 	<span className="label label-success label-margin">
+	                      			 		{ toy.name.substring(0, 25)+'...' }
+	                      			 	</span>)
+															})
 	                      	}
 	                      </td>
-	                      <td>{pages.counts.views} views</td>
-	                      <td>{Moment.unix(pages.created / 1000).fromNow()}</td>
+	                      <td>{page.counts.views} views</td>
+	                      <td>{Moment.unix(page.created / 1000).fromNow()}</td>
 	                      <td>
-	                      	<Switch onChange={value => this.props.setCoverType(value,pages.id)}
+	                      	<Switch onChange={value => this.props.setCoverType(value,page.id)}
 						        checkedChildren={'L'}
 						        unCheckedChildren={'S'}
-						        checked={pages.coverType === 'l'}
+						        checked={page.coverType === 'l'}
 						      />
 	                      </td>
-	                      <td><span style={{color:'#333'}} onClick={() => this.addToy(pages.id)} className="btn btn-sm"><i className="fa fa-plus"></i></span></td>
-	                      <td><Link to={`/page/edit/${pages.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link></td>
-	                      <td><span style={{color:'#333'}} onClick={() => this.toggleRec(pages.id)} className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span></td>
-	                      <td><span style={{color:'#333'}} onClick={() => this.togglePub(pages.id)} className={isPubClass}><i className="fa fa-eye-slash"></i></span></td>
-	                      <td><span style={{color:'#333'}} onClick={() => this.deleteArticle(pages.id)} className="btn btn-sm"><i className="fa fa-trash"></i></span></td>
-	                      <td><a target="_blank" href={`http://www.playalot.cn/page/${pages.id}.html`}>预览</a></td>
+	                      <td><span style={{color:'#333'}} onClick={() => this.addToy(page.id)} className="btn btn-sm"><i className="fa fa-plus"></i></span></td>
+	                      <td><Link to={`/page/edit/${page.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link></td>
+	                      <td><span style={{color:'#333'}} onClick={() => this.toggleRec(page.id)} className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span></td>
+	                      <td><span style={{color:'#333'}} onClick={() => this.togglePub(page.id)} className={isPubClass}><i className="fa fa-eye-slash"></i></span></td>
+	                      <td><span style={{color:'#333'}} onClick={() => this.deleteArticle(page.id)} className="btn btn-sm"><i className="fa fa-trash"></i></span></td>
+	                      <td><a target="_blank" href={`http://www.playalot.cn/page/${page.id}.html`}>预览</a></td>
 	                    </tr>
 	                  )
 	                })}

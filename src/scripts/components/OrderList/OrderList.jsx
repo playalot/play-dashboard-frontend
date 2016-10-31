@@ -40,14 +40,14 @@ export default class extends Component{
 	                      <td>{order.items[0]['quantity']}个</td>
 	                      <td>{order.totalPrice}元</td>
 	                      {
-	                      	order.tracking.number ?
+	                      	order.tracking?
 	                      	<td>
 	                      		<span className="btn btn-sm" onClick={() => this.addTracking(order.id)}>
 	                      			{order.tracking.number}
 	                      			<i className="fa fa-edit"></i>
 	                      		</span>
 	                      		<span className="btn btn-sm">
-	                      			
+
 	                      			<a className="btn btn-sm" target="_blank" href={`http://wap.guoguo-app.com/wuliuDetail.htm?mailNo=${order.tracking.number}`}>
 	                      				查看
 	                      			</a>

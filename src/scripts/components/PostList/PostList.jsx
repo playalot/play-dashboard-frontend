@@ -26,7 +26,7 @@ export default class Post extends Component{
 	  	}
 	  	this.changeImage = (num) => {
 	  		let { photos, imageIndex } = this.state
-	  		imageIndex = imageIndex+num 
+	  		imageIndex = imageIndex+num+photos.length
 	  		let showImage = photos[imageIndex%photos.length]['url']
 	  		this.setState({showImage,imageIndex})
 	  	}

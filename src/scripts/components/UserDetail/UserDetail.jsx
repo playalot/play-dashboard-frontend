@@ -8,6 +8,7 @@ import Moment from 'moment'
 import Switch from 'rc-switch'
 import PostPanel from '../PostPanel/index'
 import UserPage from './UserPage'
+import CDN from '../../widgets/cdn'
 export default class extends Component{
     constructor(props) {
         super(props)
@@ -22,7 +23,7 @@ export default class extends Component{
         }
         this.changeImage = (num) => {
             let { photos, imageIndex } = this.state
-            imageIndex = imageIndex+num 
+            imageIndex = imageIndex+num+photos.length 
             let showImage = photos[imageIndex%photos.length]['url']
             this.setState({showImage,imageIndex})
         }
@@ -44,6 +45,25 @@ export default class extends Component{
     }
     componentWillUnmount() {
         this.props.clearPost()
+    }
+    renderAccounts(accounts) {
+      return (
+        <span>
+          {
+            accounts.map( acc => {
+              if (acc.providerID === "weibo") {
+                  return <a href={'http://weibo.com/'+acc.providerKey} style={{color:'#E71D34', marginRight: '5px'}}><i className="fa fa-weibo fa-lg"></i></a>
+              } else if (acc.providerID === "mobile") {
+                  return <a style={{color:'#55acee', marginRight: '5px'}}><i className="fa fa-mobile-phone fa-lg" title={acc.providerKey}  ></i></a>
+              } else if (acc.providerID === 'qq') {
+                return <a style={{color:'rgb(21,167,240)', marginRight: '5px'}}><i className="fa fa-qq fa-lg"></i></a>
+              } else if (acc.providerID === 'wechat') {
+                return <a style={{color:'rgb(73,190,56)', marginRight: '5px'}}><i className="fa fa-wechat fa-lg"></i></a>
+              }
+          })
+          }
+        </span>
+      )
     }
     _setClassification(pid, cid) {
         this.state.selectedPost.cls.push(cid)
@@ -110,20 +130,12 @@ export default class extends Component{
           let gender = user.gender === 'm' ? 
           <i style={{color:'deepskyblue'}} className="fa fa-mars"></i>
           :<i style={{color:'pink'}} className="fa fa-venus"></i>
-          let isActiveClass = user.isActive ? 'btn btn-sm' : 'btn btn-sm bg-red'
           return (
               <div className="content">
                   <Row>
                       <div className="col-md-12">
                         <div className="box box-widget widget-user">
-                          <div className="widget-user-header bg-black" style={{background: "url('"+user.cover+"') center center"}}>
-                            <h3 className="widget-user-username">{user.nickname}&nbsp;&nbsp;<small><sub><span style={{fontVariant: 'small-caps'}} className="label label-warning">LV{4}</span></sub></small> <sup>{gender}</sup> </h3>
-                            <h5 className="widget-user-desc">{user.bio}</h5>
-                            <span className="widget-user-active" onClick={this.setActive}>
-                              <strong className={isActiveClass}>
-                                <i className="fa fa-eye-slash"></i>
-                              </strong>
-                            </span>
+                          <div className="widget-user-header bg-black" style={{background: "url('"+CDN.show(user.cover)+"') center center"}}>
                           </div>
                           <div className="widget-user-image">
                             <img className="img-circle" src={user.avatar} alt="User Avatar" />
@@ -169,35 +181,55 @@ export default class extends Component{
                           <Tab eventKey={2} title="Pages">
                               <UserPage id={this.props.params.id}/>
                           </Tab>
-                          <Tab eventKey={3} title="Settings">
-                            <form className="form-horizontal">
-                              <div className="form-group">
-                                <label for="inputName" className="col-sm-2 control-label">Nickname</label>
-                                <div className="col-sm-10">
-                                  <input type="text" className="form-control" placeholder="Nickname" value={user.nickname}  />
-                                </div>
+                          <Tab eventKey={3} title="Info">
+                            <div className="row">
+                              <div className="col-sm-2 sm-2-label">
+                                <b>Nickname</b>
                               </div>
-                              <div className="form-group">
-                                <label for="inputEmail" className="col-sm-2 control-label">Email</label>
-                                <div className="col-sm-10">
-                                  <input type="email" className="form-control" placeholder="Email" value={user.email}  />
-                                </div>
+                              <div className="col-sm-10" style={{padding:7}}>
+                                { user.nickname }
                               </div>
-                              <div className="form-group">
-                                <label for="inputMobile" className="col-sm-2 control-label">Mobile</label>
-                                <div className="col-sm-10">
-                                  <input type="text" className="form-control" id="inputName" placeholder="Mobile" value={user.mobile}  />
-                                </div>
+                            </div>
+                            <div className="row">
+                              <div className="col-sm-2 sm-2-label">
+                                <b>Level</b>
                               </div>
-                              <div className="form-group">
-                                <div className="col-sm-offset-2 col-sm-10">
-                                  <ButtonToolbar>
-                                    <button className="btn btn-primary" >Submit</button>
-                                    <button className="btn btn-danger"><i className="fa fa-exclamation"></i>{user.isActive?'ban':'activate'}</button>
-                                  </ButtonToolbar>
-                                </div>
+                              <div className="col-sm-10" style={{padding:7}}>
+                                <span className="label label-warning">lv{user.level}</span>
                               </div>
-                            </form>
+                            </div>
+                            <div className="row">
+                              <div className="col-sm-2 sm-2-label">
+                                <b>Gender</b>
+                              </div>
+                              <div className="col-sm-10" style={{padding:7}}>
+                                <span>{gender}</span>
+                              </div>
+                            </div>
+                            <div className="row">
+                              <div className="col-sm-2 sm-2-label">
+                                <b>Accounts</b>
+                              </div>
+                              <div className="col-sm-10" style={{padding:7}}>
+                                <span>{this.renderAccounts(user.accounts)}</span>
+                              </div>
+                            </div>
+                            <div className="row">
+                              <div className="col-sm-2 sm-2-label">
+                                <b>Introduction</b>
+                              </div>
+                              <div className="col-sm-10" style={{padding:7}}>
+                                { user.bio ? user.bio : '这家伙很懒' }
+                              </div>
+                            </div>
+                            <div className="row">
+                              <div className="col-sm-2 sm-2-label">
+                                <b>Active</b>
+                              </div>
+                              <div className="col-sm-10">
+                                <button onClick={this.setActive} className="btn btn-danger"><i className="fa fa-eye-slash">&nbsp;</i>{user.isActive?'ban':'activate'}</button>
+                              </div>
+                            </div>
                           </Tab>
                         </Tabs>
                       </Col>

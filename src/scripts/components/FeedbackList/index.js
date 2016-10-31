@@ -8,7 +8,7 @@ const mapActionCreators = {
 }
 
 const mapStateToProps = (state) => {
-	const { feedbacks,loaded }  = state.feedbackReducer.toJS()
+	const { feedbacks,loaded }  = state.feedback.toJS()
     return {
     	feedbacks,
     	loaded,

@@ -28,7 +28,7 @@ class UserPage extends Component{
 	            <table className="table table-striped">
 	              	<tbody>
 	                {this.props.pages.map((page) => {
-	                  	let isPubClass = page.isPub === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
+	                  	let isPubClass = page.isPub === true ? 'btn btn-sm' : 'btn btn-sm bg-orange'
 	                  	let isRecClass = page.isRec === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
 	                  	return (
 	                    <tr key={page.id}>
@@ -53,7 +53,7 @@ class UserPage extends Component{
 	                      </td>
 	                      <td><Link to={`/page/edit/${page.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.toggleRec(page.id)} className={isRecClass}><i className="fa fa-thumbs-o-up"></i></span></td>
-	                      <td><span style={{color:'#333'}} onClick={() => this.togglePub(page.id)} className={isPubClass}><i className="fa fa-eye"></i></span></td>
+	                      <td><span style={{color:'#333'}} onClick={() => this.togglePub(page.id)} className={isPubClass}><i className="fa fa-eye-slash"></i></span></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.deletePage(page.id)} className="btn btn-sm"><i className="fa fa-trash"></i></span></td>
 	                      <td><a target="_blank" href={`http://www.playalot.cn/page/${page.id}.html`}>预览</a></td>
 	                    </tr>

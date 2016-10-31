@@ -44,7 +44,7 @@ export function deleteReport(id) {
 export function toggleBlk(id) {
     return (dispatch, getState) => {
         let value = null
-        let index = getState().reportReducer.get('reports').findIndex((item) => {
+        let index = getState().report.get('reports').findIndex((item) => {
             value = item.get('targetId') === id ? item.getIn(['target','isBlk']) : null
             return item.get('targetId') === id
         })

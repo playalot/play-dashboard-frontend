@@ -135,7 +135,7 @@ export default class extends Component{
                   <Row>
                       <div className="col-md-12">
                         <div className="box box-widget widget-user">
-                          <div className="widget-user-header bg-black" style={{background: "url('"+CDN.show(user.cover)+"') center center"}}>
+                          <div className="widget-user-header bg-black" style={{background: "url('"+CDN.show(user.cover ? user.cover : 'default_cover.jpg')+"') center center"}}>
                           </div>
                           <div className="widget-user-image">
                             <img className="img-circle" src={user.avatar} alt="User Avatar" />

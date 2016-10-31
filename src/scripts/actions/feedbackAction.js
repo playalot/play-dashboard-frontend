@@ -1,17 +1,17 @@
 import Request from 'superagent'
 
-export const FEL_RECEIVE_FEEDBACK = 'FEL_RECEIVE_FEEDBACK'
-export const FEL_DELETE_FEEDBACK = 'FEL_DELETE_FEEDBACK'
+export const FB_L_RECEIVE_FEEDBACK = 'FB_L_RECEIVE_FEEDBACK'
+export const FB_L_DELETE_FEEDBACK = 'FB_L_DELETE_FEEDBACK'
 
 function receiveFeedback(res) {
     return {
-        type: FEL_RECEIVE_FEEDBACK,
+        type: FB_L_RECEIVE_FEEDBACK,
         res
     }
 }
 function _deleteFeedback(id) {
     return {
-        type: FEL_DELETE_FEEDBACK,
+        type: FB_L_DELETE_FEEDBACK,
         id
     }
 }

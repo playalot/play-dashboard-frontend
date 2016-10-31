@@ -59,7 +59,7 @@ export default class PageList extends Component{
 	            <table className="table table-striped">
 	              <tbody>
 	                {this.props.pages.map((pages) => {
-	                	let isPubClass = pages.isPub === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
+	                	let isPubClass = pages.isPub === true ? 'btn btn-sm' : 'btn bg-orange btn-sm'
 	                	let recommendClass = pages.isRec === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
 	                  return (
 	                    <tr key={pages.id}>
@@ -95,7 +95,7 @@ export default class PageList extends Component{
 	                      <td><span style={{color:'#333'}} onClick={() => this.addToy(pages.id)} className="btn btn-sm"><i className="fa fa-plus"></i></span></td>
 	                      <td><Link to={`/page/edit/${pages.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.toggleRec(pages.id)} className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span></td>
-	                      <td><span style={{color:'#333'}} onClick={() => this.togglePub(pages.id)} className={isPubClass}><i className="fa fa-eye"></i></span></td>
+	                      <td><span style={{color:'#333'}} onClick={() => this.togglePub(pages.id)} className={isPubClass}><i className="fa fa-eye-slash"></i></span></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.deleteArticle(pages.id)} className="btn btn-sm"><i className="fa fa-trash"></i></span></td>
 	                      <td><a target="_blank" href={`http://www.playalot.cn/page/${pages.id}.html`}>预览</a></td>
 	                    </tr>

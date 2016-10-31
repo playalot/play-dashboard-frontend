@@ -103,7 +103,7 @@ export default class ReportList extends Component{
 	              </tbody>
 	            </table>
 	          </div>
-	          <Modal show={this.state.showModal && this.state.photos} onHide={this.closeModal}>
+	          <Modal show={this.state.showModal && this.state.photos.length} onHide={this.closeModal}>
                 <Modal.Body>
                 	{
                 		this.state.showIndex > 0 ?

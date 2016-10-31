@@ -13,8 +13,8 @@ import user from './reducers/userReducer'
 import page from './reducers/pageReducer'
 import toyReducer from './reducers/toyReducer'
 import stickerReducer from './reducers/stickerReducer'
-import reportReducer from './reducers/reportReducer'
-import feedbackReducer from './reducers/feedbackReducer'
+import report from './reducers/reportReducer'
+import feedback from './reducers/feedbackReducer'
 import sku from './reducers/skuReducer'
 import order from './reducers/orderReducer'
 export const makeRootReducer = (asyncReducers) => {
@@ -31,8 +31,8 @@ export const makeRootReducer = (asyncReducers) => {
 		page,
 		toyReducer,
 		stickerReducer,
-		reportReducer,
-		feedbackReducer,
+		report,
+		feedback,
 		sku,
 		order,
 		router,

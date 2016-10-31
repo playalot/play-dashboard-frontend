@@ -66,7 +66,7 @@ export default class ReportList extends Component{
 			<div className="content">
 	          <div className="table-responsive">
 	            <table className="table table-striped">
-	           	  <thead><tr><th>Reporter</th><th>Targeter</th><th>Reason</th><th style={{'minWidth': '150px'}}>Created</th><th>Type</th><th style={{'minWidth': '150px'}}>Action</th></tr></thead>
+	           	  <thead><tr><th>Reporter</th><th>Targeter</th><th>Reason</th><th style={{'minWidth': '150px'}}>Created</th><th>Type</th></tr></thead>
 	              <tbody>
 	              	{
 	              		this.props.reports.map((report) => {
@@ -103,7 +103,7 @@ export default class ReportList extends Component{
 	              </tbody>
 	            </table>
 	          </div>
-	          <Modal show={this.state.showModal && this.state.photos.length} onHide={this.closeModal}>
+	          <Modal show={!!(this.state.showModal && this.state.photos.length)} onHide={this.closeModal}>
                 <Modal.Body>
                 	{
                 		this.state.showIndex > 0 ?

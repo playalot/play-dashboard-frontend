@@ -14,7 +14,8 @@ export default class EditToy extends Component {
 			cover: '',
 			name: '',
 			nameRaw: '',
-			release: '',
+			releaseYear: '空',
+			releaseMonth: '空',
 			money: 0,
 			currency: '',
 			scale: '',
@@ -64,7 +65,8 @@ export default class EditToy extends Component {
 					cover:res.body.cover,
 					name:res.body.name ? res.body.name : '空',
 					nameRaw:res.body.nameRaw ? res.body.nameRaw : '空',
-					release:res.body.release ? res.body.release : '空',
+					releaseYear:res.body.release ? res.body.release.split('/')[0] : '空',
+					releaseMonth:res.body.release ? res.body.release.split('/')[1] : '空',
 					currency:res.body.info.currency ? res.body.info.currency : 'rmb',
 					money:res.body.info.money ? res.body.info.money : 0,
 					scale:res.body.info.scale ? res.body.info.scale : '空',
@@ -196,7 +198,8 @@ export default class EditToy extends Component {
 			cover,
 			name,
 			nameRaw,
-			release,
+			releaseYear,
+			releaseMonth,
 			money,
 			currency,
 			scale,
@@ -210,7 +213,7 @@ export default class EditToy extends Component {
 			otherInfo,
 			images
 	    } = this.state
-
+	    let release = ( releaseYear === '空' || releaseMonth === '空' ) ? '空' : `${releaseYear}/${releaseMonth}`
 		const data = {
 			cover,
 			name,
@@ -279,11 +282,19 @@ export default class EditToy extends Component {
 							<Col sm={6} className="edit-toy-item">
 								<span >发售日:&nbsp;&nbsp;</span>
 								<RIEInput
-									value={this.state.release}
+									value={this.state.releaseYear}
 									change={this.virtualServerCallback}
 									validate={this.isEmpty}
 									classInvalid="edit-toy-invalid"
-									propName="release"
+									propName="releaseYear"
+								/>
+								&nbsp;/&nbsp;
+								<RIEInput
+									value={this.state.releaseMonth}
+									change={this.virtualServerCallback}
+									validate={this.isEmpty}
+									classInvalid="edit-toy-invalid"
+									propName="releaseMonth"
 								/>
 							</Col>
 							<Col sm={6} className="edit-toy-item">

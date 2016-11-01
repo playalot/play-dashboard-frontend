@@ -61,7 +61,9 @@ export default (state = Immutable.fromJS({ pages: [], loaded:false }),action)=>{
                     pages.findIndex((item) => {
                         return item.get('id') === action.id
                     }), (item) => {
-                        return item.set('toys',[{text:action.toy.name}])
+                        return item.updateIn(['toys'],toys => {
+                            return toys.push(Immutable.fromJS(action.toy))
+                        })
                     }
                 )
             })

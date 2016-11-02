@@ -7,7 +7,7 @@ export default class extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            stockId:'',
+            title:'',
             quantity:0,
             price:9999,
             savings:0,
@@ -19,9 +19,8 @@ export default class extends Component {
         this.save = this._save.bind(this)
     }
     componentWillMount() {
-        let stock = this.props.stock.stocks[0]
+        let stock = this.props.stock
         this.setState({
-            stockId: stock.stockId,
             quantity: stock.quantity ? stock.quantity : 0,
             price: stock.price ? stock.price : 9999,
             savings: stock.savings ? stock.savings : 0,
@@ -29,11 +28,13 @@ export default class extends Component {
             tbUrl: stock.tbUrl ? stock.tbUrl : '',
             freight: stock.freight ? stock.freight : 0,
             preorder: stock.preorder ? stock.preorder : 0,
+            title:this.props.params.title,
         })
+
     }
     _save() {
         const {
-            stockId,price,savings,tbUrl,merchant,quantity,freight, preorder
+            price,savings,tbUrl,merchant,quantity,freight, preorder
         } = this.state
         let data = {
             price:parseInt(price),savings:parseInt(savings),tbUrl,merchant,
@@ -48,10 +49,10 @@ export default class extends Component {
             <Form horizontal>
                 <FormGroup>
                   <Col sm={2} className="sm-2-label">
-                    stockId
+                    名称
                   </Col>
                   <Col sm={10}>
-                    <FormControl type="text" defaultValue={this.state.stockId} readOnly/>
+                    <FormControl type="text" defaultValue={this.state.title} readOnly/>
                   </Col>
                 </FormGroup>
                 <FormGroup>
@@ -99,11 +100,7 @@ export default class extends Component {
                     卖家
                   </Col>
                   <Col sm={10}>
-                    <FormControl componentClass="select" value={this.state.merchant} onChange={(e) => this.setState({merchant:e.target.value})}>
-                        <option value="手办同萌会">手办同萌会</option>
-                        <option value="拆盒网">拆盒网</option>
-                        <option value="塑唐玩具">塑唐玩具</option>
-                    </FormControl>
+                    <FormControl type="text" defaultValue={this.state.merchant} readOnly/>
                   </Col>
                 </FormGroup>
                 <FormGroup>

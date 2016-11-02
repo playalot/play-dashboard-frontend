@@ -24,17 +24,17 @@ function _toggleRec(id) {
         type: SKL_TOGGLE_REC,
         id
     }
-}
+} 
 function _toggleBlk(id) {
     return {
         type: SKL_TOGGLE_BLK,
         id
     }
 }
-export function setStock(res) {
+export function setStock(res,index) {
     return {
         type: SKL_SET_STOCK,
-        res
+        res:res.stocks[index]
     }
 }
 export function toggleBlk(id) {

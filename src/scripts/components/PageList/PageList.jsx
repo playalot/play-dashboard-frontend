@@ -77,7 +77,7 @@ export default class PageList extends Component{
 															console.log(page);
 															console.log(toy);
 	                      		 	return (
-															 	<span className="label label-success label-margin">
+															 	<span key={`toy_${index}`} className="label label-success label-margin">
 	                      			 		{ toy.name.substring(0, 25)+'...' }
 	                      			 	</span>)
 															})

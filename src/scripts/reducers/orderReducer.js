@@ -11,7 +11,7 @@ export default (state = Immutable.fromJS({ orders: [], loaded:false }),action)=>
         			orders.findIndex((item) => {
                         return item.get('id') === action.id
                     }), (item) => {
-                        return item.setIn(['tracking','number'],action.trackNo)
+                        return item.setIn(['tracking'],{number:action.trackNo})
                     }
         		)
         	})

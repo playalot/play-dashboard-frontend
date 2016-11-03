@@ -16,6 +16,8 @@ import FeedbackList from './components/FeedbackList/index'
 import SkuList from './components/SkuList/index'
 import OrderList from './components/OrderList/index'
 
+import OrderDetail from './components/OrderDetail'
+
 import EditPage from './components/EditPage/EditPage'
 import EditStickerSet from './components/EditStickerSet/EditStickerSet'
 import EditSticker from './components/EditSticker/EditSticker'
@@ -66,6 +68,8 @@ export default {
         { path:'/report', component:ReportList },
         { path:'/feedback', component:FeedbackList },
 
+        { path:'/order/:index', component:OrderDetail },
+        
         { path:'/user/:id', component:UserDetail },
         { path:'/tag/:id', component:EditTag },
         { path:'/sticker/set/:id/edit', component:EditStickerSet },

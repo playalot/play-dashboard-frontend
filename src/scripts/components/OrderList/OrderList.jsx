@@ -4,7 +4,7 @@ import React, {
 import {Link} from 'react-router'
 import {Row, Button} from 'react-bootstrap'
 import Moment from 'moment'
-export default class extends Component{
+export default class OrderList extends Component{
 	constructor(props) {
 	  	super(props)
 	  	this.state = {}
@@ -28,7 +28,7 @@ export default class extends Component{
 	            <table className="table table-striped">
 	            	<thead><tr><th>用户</th><th>商家</th><th>订单</th><th>地址</th><th>下单时间</th><th>备注</th><th>数量</th><th>总计</th><th></th></tr></thead>
 	              <tbody>
-	                {this.props.orders.map((order) => {
+	                {this.props.orders.map((order,index) => {
 	                  return (
 	                    <tr key={order.id}>
 	                      <td><Link to={'/user/'+order.user.id}><img style={{width:'45px'}} src={order.user.avatar} className="img-circle"/></Link></td>
@@ -46,12 +46,7 @@ export default class extends Component{
 	                      			{order.tracking.number}
 	                      			<i className="fa fa-edit"></i>
 	                      		</span>
-	                      		<span className="btn btn-sm">
-
-	                      			<a className="btn btn-sm" target="_blank" href={`http://wap.guoguo-app.com/wuliuDetail.htm?mailNo=${order.tracking.number}`}>
-	                      				查看
-	                      			</a>
-	                      		</span>
+	                      		<Link to={`/order/${index}`}>查看</Link>
 	                      	</td>
 	                      	:<td>
 	                      		<span className="btn btn-sm" onClick={() => this.addTracking(order.id)}>
@@ -70,4 +65,8 @@ export default class extends Component{
 
 		)
 	}
+}
+
+OrderList.contextTypes = {
+  	router : React.PropTypes.object
 }

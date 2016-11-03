@@ -41,7 +41,7 @@ export default class SkuList extends Component{
 			                    	{
 				                    	sku.stocks.map((stock,i) => {
 				                    		return(
-					                    		<Row>
+					                    		<Row key={i}>
 					                    			
 					                    			<Col xs={3} sm={2} lg={4}>
 					                    				¥{stock.price}

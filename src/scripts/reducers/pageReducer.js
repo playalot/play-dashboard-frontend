@@ -77,7 +77,7 @@ export default (state = Immutable.fromJS({ pages: [], loaded:false, searchResult
                     pages.findIndex((item) => {
                         return item.get('id') === action.id
                     }), (item) => {
-                        return item.set('isShare',!item.get('isShare'))
+                        return item.set('forShare',!item.get('forShare'))
                     }
                 )
             })

@@ -7,8 +7,12 @@ import {
     PAGE_L_DELETE_ARTICLE,
     PAGE_L_SET_COVER_TYPE,
     PAGE_L_ADD_TOY,
+    PAGE_L_TOGGLE_SHARE,
+
+    PAGE_L_CLEAR_SUGGESTION,
+    PAGE_L_RECEIVE_TOY,
 } from '../actions/pageAction'
-export default (state = Immutable.fromJS({ pages: [], loaded:false }),action)=>{
+export default (state = Immutable.fromJS({ pages: [], loaded:false, searchResults:[] }),action)=>{
     switch (action.type) {
         case PAGE_L_RECEIVE_ARTICLE:
         	return state.updateIn(['pages'],(pages) => {
@@ -67,6 +71,22 @@ export default (state = Immutable.fromJS({ pages: [], loaded:false }),action)=>{
                     }
                 )
             })
+        case PAGE_L_TOGGLE_SHARE:
+            return state.updateIn(['pages'], pages => {
+                return pages.update(
+                    pages.findIndex((item) => {
+                        return item.get('id') === action.id
+                    }), (item) => {
+                        return item.set('isShare',!item.get('isShare'))
+                    }
+                )
+            })
+        case PAGE_L_CLEAR_SUGGESTION:
+            return state.updateIn(['searchResults'],(searchResults) => {
+                return searchResults.clear()
+            })
+        case PAGE_L_RECEIVE_TOY:
+            return state.set('searchResults', Immutable.fromJS(action.res) )
         default:
             return state
     }

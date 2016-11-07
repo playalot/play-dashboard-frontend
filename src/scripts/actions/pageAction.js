@@ -7,6 +7,11 @@ export const PAGE_L_TOGGLE_REC = 'PAGE_L_TOGGLE_REC'
 export const PAGE_L_DELETE_ARTICLE = 'PAGE_L_DELETE_ARTICLE'
 export const PAGE_L_SET_COVER_TYPE = 'PAGE_L_SET_COVER_TYPE'
 export const PAGE_L_ADD_TOY = 'PAGE_L_ADD_TOY'
+export const PAGE_L_TOGGLE_SHARE = 'PAGE_L_TOGGLE_SHARE'
+
+//搜索玩具
+export const PAGE_L_RECEIVE_TOY = 'PAGE_L_RECEIVE_TOY'
+export const PAGE_L_CLEAR_SUGGESTION = 'PAGE_L_CLEAR_SUGGESTION'
 
 function receiveArticle(res) {
     return {
@@ -50,6 +55,23 @@ function _addToy(id, toy) {
         type: PAGE_L_ADD_TOY,
         id,
         toy
+    }
+}
+function _toggleShare(id) {
+    return {
+        type: PAGE_L_TOGGLE_SHARE,
+        id
+    }
+}
+function _clearSuggestion() {
+    return {
+        type: PAGE_L_CLEAR_SUGGESTION
+    }
+}
+function receiveToy(res) {
+    return {
+        type: PAGE_L_RECEIVE_TOY,
+        res
     }
 }
 const status = {
@@ -150,5 +172,40 @@ export function addToy(id, sid) {
             .end((err, res) => {
                 dispatch(_addToy(id, res.body))
             })
+    }
+}
+
+export function toggleShare(id) {
+    return (dispatch,getState) => {
+        let value = null
+        let index = getState().page.get('pages').findIndex((item) => {
+            value = item.get('id') === id ? item.get('forShare') : null
+            return item.get('id') === id
+        })
+        return Request
+            .post(`/api/page/${id}/share`)
+            .send({
+                forShare: !value
+            })
+            .end((err,res) => {
+                dispatch(_toggleShare(id))
+            })
+    }
+}
+
+export function fetchToy(query) {
+    return (dispatch) => {
+        return Request
+            .get(`/api/toys`)
+            .query({query})
+            .end((err,res) => {
+                dispatch(receiveToy(res.body.toys))
+            })
+    }
+}
+
+export function clearSuggestion() {
+    return dispatch => {
+        dispatch(_clearSuggestion())
     }
 }

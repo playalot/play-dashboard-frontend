@@ -29,7 +29,7 @@
     "react-cookie": "^0.4.8",
     "react-datepicker": "^0.34.0",
     "react-dom": "^15.3.2",
-    "react-dropzone": "^3.7.0",
+    "react-dropzone": "^3.7.3",
     "react-lazyload": "^2.1.6",
     "react-modal": "^1.5.2",
     "react-qiniu": "^1.5.0",
@@ -42,7 +42,7 @@
     "redux-logger": "^2.7.4",
     "redux-thunk": "^2.1.0",
     "reflux": "^0.4.1",
-    "riek": "^1.0.5",
+    "riek": "^1.0.7",
     "superagent": "^2.3.0"
   },
   "devDependencies": {

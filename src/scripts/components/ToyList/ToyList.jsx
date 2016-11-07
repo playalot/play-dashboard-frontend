@@ -28,7 +28,7 @@ export default class toyList extends Component{
 	        freight:0,
 	        preorder:0,
 
-	        yuding:false,
+	        type:'inStock',
 	        prepay:0,
 	        orderClose:Moment()
 	  	}
@@ -53,7 +53,7 @@ export default class toyList extends Component{
 	  	})
 	  	this.submit = () => {
 	  		const {
-	  			id,price,savings,tbUrl,merchant,quantity,freight,preorder, prepay, orderClose, yuding
+	  			id,price,savings,tbUrl,merchant,quantity,freight,preorder, prepay, orderClose, type
 	  		} = this.state
 	  		let data = {
 	  			price:parseFloat(price),parseFloat:parseInt(savings),tbUrl,merchant,
@@ -63,7 +63,7 @@ export default class toyList extends Component{
 	  			}
 	  		}
 			Object.keys(data).forEach(key => data[key] === '' || data[key] === 0 ? delete data[key] : '')
-			yuding ? null:delete data['preorder']
+			type === 'preOrder' ? null:delete data['preorder']
 	  		Request
 	  			.post(`/api/toy/${id}/sku`)
 	  			.send(data)
@@ -251,18 +251,19 @@ export default class toyList extends Component{
 					    </FormGroup>
 					    <FormGroup>
 					      <Col sm={2} className="sm-2-label">
-					        预定
+					        订购类型
 					      </Col>
 					      <Col sm={10} style={{padding:'6px 15px'}}>
-					      	<Switch onChange={yuding => this.setState({yuding})}
-						        checkedChildren={'是'}
-						        unCheckedChildren={'否'}
-						        checked={this.state.yuding}
-						      />
+					      	<label>
+						      <input type="radio" name="type" defaultChecked value="inStock" onChange={(e) => this.setState({type:e.target.value})}/>现货
+  							</label>&nbsp;&nbsp;
+					      	<label>
+						      <input type="radio" name="type"  value="preOrder" onChange={(e) => this.setState({type:e.target.value})}/>预定
+  							</label>
 					      </Col>
 					    </FormGroup>
 					    {
-					    	this.state.yuding ?
+					    	this.state.type === 'preOrder'?
 					    	<FormGroup>
 						      <Col sm={2} className="sm-2-label">
 						        定金
@@ -274,7 +275,7 @@ export default class toyList extends Component{
 						    :null
 					    }
 					    {
-					    	this.state.yuding ?
+					    	this.state.type === 'preOrder' ?
 					    	<FormGroup>
 						      <Col sm={2} className="sm-2-label">
 						        截止时间

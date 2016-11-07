@@ -89,7 +89,7 @@ export default class PageList extends Component{
 	                {this.props.pages.map((page) => {
 	                	let isPubClass = page.isPub === true ? 'btn btn-sm' : 'btn bg-orange btn-sm'
 	                	let recommendClass = page.isRec === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
-	                	let shareClass = page.isShare ? 'btn bg-orange btn-sm' : 'btn btn-sm'
+	                	let shareClass = page.forShare ? 'btn bg-orange btn-sm' : 'btn btn-sm'
 	                  return (
 	                    <tr key={page.id}>
 	                      <td><img style={{width:'400px'}} src={page.cover} className="img-thumbnail"/></td>

@@ -27,6 +27,7 @@
     "react-autosuggest": "^7.0.1",
     "react-bootstrap": "^0.30.6",
     "react-cookie": "^0.4.8",
+    "react-datepicker": "^0.34.0",
     "react-dom": "^15.3.2",
     "react-dropzone": "^3.7.0",
     "react-lazyload": "^2.1.6",

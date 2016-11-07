@@ -5,6 +5,9 @@ import {
 } from 'react-bootstrap'
 import { Link } from 'react-router'
 import Request from 'superagent'
+import Switch from 'rc-switch'
+import DatePicker from 'react-datepicker'
+import Moment from 'moment'
 export default class toyList extends Component{
 	constructor(props) {
 	  	super(props)
@@ -17,13 +20,17 @@ export default class toyList extends Component{
 	  		year:'',
 	  		showModal:false,
 	  		id:'',
-				quantity:0,
-        price:9999,
-        savings:0,
-        merchant:'手办同萌会',
-        tbUrl:'',
-        freight:0,
-        preorder:0,
+			quantity:0,
+	        price:9999,
+	        savings:0,
+	        merchant:'手办同萌会',
+	        tbUrl:'',
+	        freight:0,
+	        preorder:0,
+
+	        yuding:false,
+	        prepay:0,
+	        orderClose:Moment()
 	  	}
 	  	this.onChangeSort = (e) => this.setState({sort:e.target.value})
 	  	this.onChangeFilter = (e) => this.setState({filter:e.target.value})
@@ -36,23 +43,27 @@ export default class toyList extends Component{
 	  	this.close = () => this.setState({
 	  		showModal: false,
 	  		id:'',
-				quantity:0,
-        price:9999,
-        savings:0,
-        merchant:'手办同萌会',
-        tbUrl:'',
-        freight:0,
-        preorder:0,
+			quantity:0,
+	        price:9999,
+	        savings:0,
+	        merchant:'手办同萌会',
+	        tbUrl:'',
+	        freight:0,
+	        preorder:0,
 	  	})
 	  	this.submit = () => {
 	  		const {
-	  			id,price,savings,tbUrl,merchant,quantity,freight,preorder
+	  			id,price,savings,tbUrl,merchant,quantity,freight,preorder, prepay, orderClose, yuding
 	  		} = this.state
 	  		let data = {
 	  			price:parseFloat(price),parseFloat:parseInt(savings),tbUrl,merchant,
-	  			quantity:parseInt(quantity),freight:parseFloat(freight),preorder:parseFloat(preorder)
+	  			quantity:parseInt(quantity),freight:parseFloat(freight),preorder:{
+	  				prepay:parseFloat(prepay),
+	  				orderClose:`${orderClose.format('YYYY-MM-DD')} 23:59:59`
+	  			}
 	  		}
 			Object.keys(data).forEach(key => data[key] === '' || data[key] === 0 ? delete data[key] : '')
+			yuding ? null:delete data['preorder']
 	  		Request
 	  			.post(`/api/toy/${id}/sku`)
 	  			.send(data)
@@ -71,6 +82,7 @@ export default class toyList extends Component{
 	  	this.toggleRecommend = (id) => this.props.toggleRecommend(id)
 	  	this.deletetoy = this._deletetoy.bind(this)
 	  	this.addtoy = this._addtoy.bind(this)
+	  	this.changeOrderClose = (date) => this.setState({orderClose:date})
 
 	  	this.stop = (e) => {
 	  		if(e.keyCode === 13){
@@ -241,10 +253,44 @@ export default class toyList extends Component{
 					      <Col sm={2} className="sm-2-label">
 					        预定
 					      </Col>
-					      <Col sm={10}>
-					        <FormControl value={this.state.preorder} type="number" onChange={(e) => this.setState({preorder:e.target.value})}/>
+					      <Col sm={10} style={{padding:'6px 15px'}}>
+					      	<Switch onChange={yuding => this.setState({yuding})}
+						        checkedChildren={'是'}
+						        unCheckedChildren={'否'}
+						        checked={this.state.yuding}
+						      />
 					      </Col>
 					    </FormGroup>
+					    {
+					    	this.state.yuding ?
+					    	<FormGroup>
+						      <Col sm={2} className="sm-2-label">
+						        定金
+						      </Col>
+						      <Col sm={10}>
+						        <FormControl value={this.state.prepay} type="number" onChange={(e) => this.setState({prepay:e.target.value})}/>
+						      </Col>
+						    </FormGroup>
+						    :null
+					    }
+					    {
+					    	this.state.yuding ?
+					    	<FormGroup>
+						      <Col sm={2} className="sm-2-label">
+						        截止时间
+						      </Col>
+						      <Col sm={10}  style={{padding:'6px 15px'}}>
+						        	<DatePicker 
+							     		selected={this.state.orderClose} 
+							     		onChange={this.changeOrderClose} 
+							     		minDate={Moment()}
+							     		dateFormat="YYYY/MM/DD"
+						     		/>
+						      </Col>
+						    </FormGroup>
+						    :null
+					    }
+					    
 					    <FormGroup>
 					      <Col sm={2} className="sm-2-label">
 					        原价

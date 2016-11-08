@@ -56,7 +56,7 @@ export default class toyList extends Component{
 					id,price,originPrice,tbUrl,merchant,quantity,freight,preOrder, prepay, orderClose, type, costPrice
 				} = this.state
 				let data = {
-					price:parseFloat(price),parseFloat:parseFloat(originPrice),tbUrl,merchant,costPrice:parseFloat(costPrice),
+					price:parseFloat(price),originPrice:parseFloat(originPrice),tbUrl,merchant,costPrice:parseFloat(costPrice),
 					quantity:parseInt(quantity),freight:parseFloat(freight),preOrder:{
 						prepay:parseFloat(prepay),
 						orderClose:`${orderClose.format('YYYY-MM-DD')} 23:59:59`

@@ -54,6 +54,7 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "babelify": "^7.3.0",
+    "cheerio": "^0.22.0",
     "connect-livereload": "^0.6.0",
     "copy-webpack-plugin": "^4.0.0",
     "css-loader": "^0.25.0",

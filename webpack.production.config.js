@@ -4,6 +4,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const node_modules_dir = path.resolve(__dirname, 'node_modules');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+const cheerio = require('cheerio');
+const fs =  require('fs');
+
 // var ExtractVendor = new ExtractTextPlugin('styles/vendor.css');
 const ExtractMain = new ExtractTextPlugin('styles/main.css');
 
@@ -18,7 +21,7 @@ const config = {
     },
     output: {
         path: path.resolve(__dirname, 'build'),
-        filename: 'scripts/bundle.js'
+        filename: 'scripts/bundle.[hash].js'
     },
     resolve: {
         extensions: ['', '.js', '.jsx', '.scss']
@@ -70,6 +73,17 @@ const config = {
         }]),
         // ExtractVendor,
         ExtractMain,
+        function() {
+            this.plugin('done', stats => {
+                fs.readFile('./build/index.html', (err, data) => {
+                    const $ = cheerio.load(data.toString());
+                    $('#bundle').attr('src', '/scripts/bundle.'+stats.hash+'.js');
+                    fs.writeFile('./build/index.html', $.html(), err => {
+                        !err && console.log('Set has success: '+stats.hash)
+                    })
+                })
+            })
+        }
 
     ]
 };

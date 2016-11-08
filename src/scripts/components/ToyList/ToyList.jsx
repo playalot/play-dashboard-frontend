@@ -293,7 +293,7 @@ export default class toyList extends Component{
 
 							<FormGroup>
 								<Col sm={2} className="sm-2-label">
-									原价
+									价格
 								</Col>
 								<Col sm={10}>
 									<FormControl value={this.state.price} type="number" onChange={(e) => this.setState({price:e.target.value})}/>

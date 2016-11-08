@@ -4,6 +4,7 @@ import {
 } from 'react-bootstrap'
 import { Link } from 'react-router'
 import CDN from '../../widgets/cdn'
+import Moment from 'moment'
 export default class SkuList extends Component{
 	constructor(props) {
 	  	super(props)
@@ -16,60 +17,70 @@ export default class SkuList extends Component{
 	}
 	_editSku(sku,index) {
 		this.props.setStock(sku,index)
-		this.context.router.push(`/sku/${sku.title}/edit`)
+		let path = `/sku/${sku.title.replace('/','%2F')}/edit`
+		this.context.router.push(path)
 	}
 	render() {
 		return(
 			<div className="content">
-		        <Row>
-		        	{
-		        		this.props.skus.map((sku,index) => {
-		        			let recommendClass = sku.isRec === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
-							let invisibleClass = sku.isBlk === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
-		        			return (<Col className="col" xs={6} sm={3} lg={3} key={`sku_${index}`}>
-			                  <div className="box box-solid">
-			                    <div className="box-header toy-item">
-									<div className="toy-item-img">
-				                      <img src={sku.images[0] ? CDN.show(sku.images[0]):null} alt={sku.title} />
-				                    </div>
-				                    <div className="toy-item-info">
-				                      <span className="toy-item-name">{sku.title}</span>
-				                      <span className="toy-item-desc">{ sku.description}</span>
-				                    </div>
-			                    </div>
-			                    <div className="box-body">
-			                    	{
-				                    	sku.stocks.map((stock,i) => {
-				                    		return(
-					                    		<Row key={i}>
-					                    			
-					                    			<Col xs={3} sm={2} lg={4}>
-					                    				¥{stock.price}
-					                    			</Col>
-					                    			<Col xs={4} sm={4} lg={4}>
-					                    				库存:{stock.quantity}
-					                    			</Col>
-					                    			<Col onClick={() => this.editSku(sku,i)} xs={5} sm={6} lg={4} style={{textAlign:'right'}}>
+				<div className="sku-container">
+					<div className="sku-title">
+						<div>
+							<span>价格</span>
+							<span>优惠</span>
+							<span>商家</span>
+							<span>数量</span>
+							<span>运费</span>
+							<span>下单时间</span>
+							<p className="operate">操作</p>
+						</div>
+					</div>
+				{
+					this.props.skus.map((sku,index) => {
+						return (
+							<div className="sku-box" key={`sku_${index}`}>
+								<div className="sku-img">
+									<img className="img-thumbnail" src={sku.images[0] ? CDN.show(sku.images[0]):null} alt={sku.title}/>
+								</div>
+								<div className="sku-info">
+									<h5>{sku.title}</h5>
+									<h5>{sku.description}</h5>
+								</div>
+								<div className="sku-body">
+									{
+										sku.stocks.map((stock,i) => {
+											return(
+												<div className="sku-body-box" key={`stock_${i}`}>
+													<span className="sku-body-item">{stock.price}</span>													
+													<span className="sku-body-item">{stock.savings}</span>													
+													<span className="sku-body-item">{stock.merchant}</span>													
+													<span className="sku-body-item">{stock.quantity}</span>													
+													<span className="sku-body-item">{stock.freight}</span>													
+													<span className="sku-body-item">{Moment(stock.created).format('MM-DD hh:mm')}</span>													
+													<div className="operate">
+														<div className="pull-right btn-toolbar">
+															{
+																stock.tbUrl ?
+																<span className="btn btn-sm">
+																	<a href={`${stock.tbUrl}`} target="_blank"><i className="fa fa-link"></i></a>
+																</span>
+																:null
+															}
+											                <span onClick={() => this.editSku(sku,i)}  className="btn btn-sm"><i className="fa fa-edit"></i></span>
+											                <span onClick={() => alert('delete this')} className="btn btn-sm"><i className="fa fa-trash"></i></span>
+											            </div>
+													</div>													
+												</div>
+											)
+										})
+									}
+								</div>
+							</div>
 
-					                    				{stock.merchant} <i className="fa fa-edit"></i>
-					                    			</Col>
-					                    		</Row>
-				                    		)
-				                    			
-				                    	})
-			                    	}
-			                    </div>
-			                    <div className="box-footer">
-			                      <ButtonToolbar className="pull-right">
-			                      	<span onClick={() => this.toggleRec(sku.id) } className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span>
-			                      	<span onClick={() => this.toggleBlk(sku.id) } className={invisibleClass}><i className="fa fa-eye-slash"></i></span>
-			                      </ButtonToolbar>
-			                    </div>
-			                  </div>
-			              </Col>)
-		        		})
-		        	}
-		        </Row>
+						)
+					})
+				}
+				</div>
 			</div>
 
 		)

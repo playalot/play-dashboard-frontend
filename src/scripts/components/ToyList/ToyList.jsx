@@ -21,9 +21,9 @@ export default class toyList extends Component{
 				year:'',
 				showModal:false,
 				id:'',
-				quantity:0,
+				quantity:100,
 				price:9999,
-				savings:0,
+				originPrice:9999,
 				merchant:'PLAY玩具控',
 				tbUrl:'',
 				freight:0,
@@ -43,9 +43,9 @@ export default class toyList extends Component{
 			this.close = () => this.setState({
 				showModal: false,
 				id:'',
-				quantity:0,
+				quantity:100,
 				price:9999,
-				savings:0,
+				originPrice:9999,
 				merchant:'PLAY玩具控',
 				tbUrl:'',
 				freight:0,
@@ -53,16 +53,17 @@ export default class toyList extends Component{
 			})
 			this.submit = () => {
 				const {
-					id,price,savings,tbUrl,merchant,quantity,freight,preOrder, prepay, orderClose, type, costPrice
+					id,price,originPrice,tbUrl,merchant,quantity,freight,preOrder, prepay, orderClose, type, costPrice
 				} = this.state
 				let data = {
-					price:parseFloat(price),parseFloat:parseInt(savings),tbUrl,merchant,costPrice:parseFloat(costPrice),
+					price:parseFloat(price),originPrice:parseFloat(originPrice),tbUrl,merchant,costPrice:parseFloat(costPrice),
 					quantity:parseInt(quantity),freight:parseFloat(freight),preOrder:{
 						prepay:parseFloat(prepay),
 						orderClose:`${orderClose.format('YYYY-MM-DD')} 23:59:59`
 					}
 				}
-			Object.keys(data).forEach(key => data[key] === '' || data[key] === 0 ? delete data[key] : '')
+			Object.keys(data).forEach(key => data[key] === '' ? delete data[key] : '')
+			data.costPrice === 0 ? null:delete data['costPrice']
 			type ==='preOrder' ? null:delete data['preOrder']
 				Request
 					.post(`/api/toy/${id}/sku`)
@@ -242,7 +243,7 @@ export default class toyList extends Component{
 							</FormGroup>
 							<FormGroup>
 								<Col sm={2} className="sm-2-label">
-									数量
+									库存数量
 								</Col>
 								<Col sm={10}>
 									<FormControl value={this.state.quantity} type="number" onChange={(e) => this.setState({quantity:e.target.value})}/>
@@ -250,7 +251,7 @@ export default class toyList extends Component{
 							</FormGroup>
 							<FormGroup>
 								<Col sm={2} className="sm-2-label">
-									订购类型
+									购买类型
 								</Col>
 								<Col sm={10} style={{padding:'6px 15px'}}>
 									<label>
@@ -290,10 +291,9 @@ export default class toyList extends Component{
 								</FormGroup>
 								:null
 							}
-
 							<FormGroup>
 								<Col sm={2} className="sm-2-label">
-									价格
+									贩售价格
 								</Col>
 								<Col sm={10}>
 									<FormControl value={this.state.price} type="number" onChange={(e) => this.setState({price:e.target.value})}/>
@@ -301,18 +301,18 @@ export default class toyList extends Component{
 							</FormGroup>
 							<FormGroup>
 								<Col sm={2} className="sm-2-label">
-									成本价
+									原价
 								</Col>
 								<Col sm={10}>
-									<FormControl value={this.state.costPrice} type="number" onChange={(e) => this.setState({costPrice:e.target.value})}/>
+									<FormControl value={this.state.originPrice} type="number" onChange={(e) => this.setState({originPrice:e.target.value})}/>
 								</Col>
 							</FormGroup>
 							<FormGroup>
 								<Col sm={2} className="sm-2-label">
-									折扣
+									进货成本价
 								</Col>
 								<Col sm={10}>
-									<FormControl value={this.state.savings} type="number" onChange={(e) => this.setState({savings:e.target.value})}/>
+									<FormControl value={this.state.costPrice} type="number" onChange={(e) => this.setState({costPrice:e.target.value})}/>
 								</Col>
 							</FormGroup>
 							<FormGroup>

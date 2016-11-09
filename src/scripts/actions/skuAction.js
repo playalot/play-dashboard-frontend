@@ -5,7 +5,6 @@ export const SKL_RECEIVE_SKU_NEW = 'SKL_RECEIVE_SKU_NEW'
 
 export const SKL_TOGGLE_REC = 'SKL_TOGGLE_REC'
 export const SKL_TOGGLE_BLK = 'SKL_TOGGLE_BLK'
-export const SKL_SET_STOCK = 'SKL_SET_STOCK'
 
 function receiveSku(res) {
     return {
@@ -29,12 +28,6 @@ function _toggleBlk(id) {
     return {
         type: SKL_TOGGLE_BLK,
         id
-    }
-}
-export function setStock(res,index) {
-    return {
-        type: SKL_SET_STOCK,
-        res:res.stocks[index]
     }
 }
 export function toggleBlk(id) {

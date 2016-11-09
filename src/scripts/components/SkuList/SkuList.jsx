@@ -15,9 +15,8 @@ export default class SkuList extends Component{
 	componentWillMount() {
 		this.props.fetchSku()
 	}
-	_editSku(sku,index) {
-		this.props.setStock(sku,index)
-		let path = `/sku/${sku.title.replace('/','%2F')}/edit`
+	_editSku(id,sid) {
+		let path = `/sku/${id}/edit?sid=${sid}`
 		this.context.router.push(path)
 	}
 	render() {
@@ -39,12 +38,14 @@ export default class SkuList extends Component{
 					this.props.skus.map((sku,index) => {
 						return (
 							<div className="sku-box" key={`sku_${index}`}>
-								<div className="sku-img">
-									<img className="img-thumbnail" src={sku.images[0] ? CDN.show(sku.images[0]):null} alt={sku.title}/>
-								</div>
-								<div className="sku-info">
-									<h5>{sku.title}</h5>
-									<h5>{sku.description}</h5>
+								<div className="sku-header">
+									<div className="sku-img">
+										<img className="img-thumbnail" src={sku.images[0] ? CDN.show(sku.images[0]):null} alt={sku.title}/>
+									</div>
+									<div className="sku-info">
+										<h5>{sku.title}</h5>
+										<h5>{sku.description}</h5>
+									</div>
 								</div>
 								<div className="sku-body">
 									{
@@ -66,7 +67,7 @@ export default class SkuList extends Component{
 																</span>
 																:null
 															}
-											                <span onClick={() => this.editSku(sku,i)}  className="btn btn-sm"><i className="fa fa-edit"></i></span>
+											                <span onClick={() => this.editSku(sku.id,stock.stockId)}  className="btn btn-sm"><i className="fa fa-edit"></i></span>
 											                <span onClick={() => alert('delete this')} className="btn btn-sm"><i className="fa fa-trash"></i></span>
 											            </div>
 													</div>													

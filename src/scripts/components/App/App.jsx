@@ -50,7 +50,7 @@ export default class App extends Component{
 		                  <span>推荐</span>
 		                  <i className="fa fa-angle-left pull-right"></i>
 		                </a>
-		                <ul className="treeview-menu">
+		                <ul className="treeview-menu" style={{top:43}}>
 		                  <li><Link to="/recommendhome" activeClassName="active"><i className="fa fa-circle-o"></i><span>首页推荐管理</span></Link></li>
 		                  <li><Link to="/explorepage" activeClassName="active"><i className="fa fa-circle-o"></i><span>发现页管理</span></Link></li>
 		                </ul>
@@ -65,7 +65,7 @@ export default class App extends Component{
 		                  <span>商家</span>
 		                  <i className="fa fa-angle-left pull-right"></i>
 		                </a>
-		                <ul className="treeview-menu">
+		                <ul className="treeview-menu" style={{top:43}}>
 		                  <li><Link to="/sku" activeClassName="active"><i className="fa fa-circle-o"></i><span>商品</span></Link></li>
 		                  <li><Link to="/order" activeClassName="active"><i className="fa fa-circle-o"></i><span>订单</span></Link></li>
 		                </ul>
@@ -80,7 +80,7 @@ export default class App extends Component{
 		                  <span>投诉</span>
 		                  <i className="fa fa-angle-left pull-right"></i>
 		                </a>
-		                <ul className="treeview-menu">
+		                <ul className="treeview-menu" style={{top:43}}>
 		                  <li><Link to="/report" activeClassName="active"><i className="fa fa-circle-o"></i><span>举报</span></Link></li>
 		                  <li><Link to="/feedback" activeClassName="active"><i className="fa fa-circle-o"></i><span>反馈</span></Link></li>
 		                </ul>

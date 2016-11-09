@@ -5,9 +5,7 @@ const mapActionCreators = {
 }
 
 const mapStateToProps = (state) => {
-    const { stock }  = state.sku.toJS()
     return {
-        stock,
     }
 }
 

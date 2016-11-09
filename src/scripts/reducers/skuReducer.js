@@ -2,10 +2,9 @@ import Immutable from 'immutable'
 import {
 	SKL_RECEIVE_SKU, SKL_RECEIVE_SKU_NEW,
     SKL_TOGGLE_BLK,SKL_TOGGLE_REC,
-    SKL_SET_STOCK
 } from '../actions/skuAction'
 
-export default (state = Immutable.fromJS({ skus: [], loaded:false,stock:{} }),action)=>{
+export default (state = Immutable.fromJS({ skus: [], loaded:false, }),action)=>{
     switch (action.type) {
         case SKL_RECEIVE_SKU:
             return state.updateIn(['skus'], (skus) => skus.concat(Immutable.fromJS(action.res))).set('loaded',true)
@@ -31,8 +30,6 @@ export default (state = Immutable.fromJS({ skus: [], loaded:false,stock:{} }),ac
                     }
                 )
             })
-        case SKL_SET_STOCK:
-            return state.updateIn(['stock'],(stock) => stock.clear().merge(Immutable.fromJS(action.res)))
         default:
             return state
     }

@@ -76,7 +76,7 @@ export default {
         { path:'/sticker/set/:id/add', component:EditSticker },
         { path:'/recommend/:id/edit', component:EditRecommend },
         { path:'/toy/:id/edit', component:EditToy },
-        { path:'/sku/:title/edit', component:EditSku },
+        { path:'/sku/:id/edit', component:EditSku },
         { path:'/video/edit', component:EditShortVideo },
         { path:'/page/edit', component:EditPage },
         { path:'/page/edit/:id', component:EditPage },

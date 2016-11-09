@@ -25,10 +25,9 @@ export default class SkuList extends Component{
 				<div className="sku-container">
 					<div className="sku-title">
 						<div>
-							<span>价格</span>
-							<span>优惠</span>
-							<span>商家</span>
-							<span>数量</span>
+							<span>贩售价格</span>
+							<span>卖家</span>
+							<span>库存数量</span>
 							<span>运费</span>
 							<span>下单时间</span>
 							<p className="operate">操作</p>
@@ -53,7 +52,6 @@ export default class SkuList extends Component{
 											return(
 												<div className="sku-body-box" key={`stock_${i}`}>
 													<span className="sku-body-item">{stock.price}</span>													
-													<span className="sku-body-item">{stock.savings}</span>													
 													<span className="sku-body-item">{stock.merchant}</span>													
 													<span className="sku-body-item">{stock.quantity}</span>													
 													<span className="sku-body-item">{stock.freight}</span>													

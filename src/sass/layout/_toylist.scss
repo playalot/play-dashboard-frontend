@@ -104,6 +104,7 @@
         flex:1;
         align-items:center;
         border-bottom:1px dashed #eee;
+        padding:5px;
         &:last-child{
           border:none;
         }
@@ -137,6 +138,10 @@
           width:30%;
           max-height:100%;
           float: left;
+          text-align:center;
+          img{
+            max-height:150px;
+          }
         }
         .sku-info{
           width:70%;

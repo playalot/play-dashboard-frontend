@@ -11,7 +11,7 @@ export default class extends Component {
         this.state = {
             id:'',
             sid:'',
-            quantity:0,
+            quantity:100,
             price:9999,
             tbUrl:'',
             freight:0,
@@ -73,7 +73,7 @@ export default class extends Component {
             <Form horizontal>
               <FormGroup>
                 <Col sm={2} className="sm-2-label">
-                  数量
+                  库存数量
                 </Col>
                 <Col sm={10}>
                   <FormControl value={this.state.quantity} type="number" onChange={(e) => this.setState({quantity:e.target.value})}/>
@@ -81,7 +81,7 @@ export default class extends Component {
               </FormGroup>
               <FormGroup>
                 <Col sm={2} className="sm-2-label">
-                  订购类型
+                  购买类型
                 </Col>
                 <Col sm={10} style={{padding:'6px 15px'}}>
                   <label>
@@ -123,7 +123,7 @@ export default class extends Component {
               }
               <FormGroup>
                 <Col sm={2} className="sm-2-label">
-                  价格
+                  贩售价格
                 </Col>
                 <Col sm={10}>
                   <FormControl value={this.state.price} type="number" onChange={(e) => this.setState({price:e.target.value})}/>

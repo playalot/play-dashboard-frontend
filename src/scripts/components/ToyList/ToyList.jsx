@@ -66,7 +66,7 @@ export default class toyList extends Component{
 			data.costPrice === 0 ? null:delete data['costPrice']
 			type ==='preOrder' ? null:delete data['preOrder']
 				Request
-					.post(`/api/toy/${id}/sku`)
+					.post(`/api/toy/${id}/stock`)
 					.send(data)
 					.end((err,res) => {
 						if(err) {

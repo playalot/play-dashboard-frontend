@@ -14,11 +14,11 @@ export const POST_DELETE_POST = 'POST_DELETE_POST'
 export const POST_GET_UN_CLS = 'POST_GET_UN_CLS'
 export const POST_CLEAR_POST = 'POST_CLEAR_POST'
 
-function receivePost(res,ts,filter = '',query = '') {
+function receivePost(res,totalPages,filter = '',query = '') {
     return {
         type: POST_RECEIVE_POST,
         res,
-        ts,
+        totalPages,
         filter,
         query
     }
@@ -242,7 +242,7 @@ export const fetchPost = (f, q) => {
             .get(`/api/posts`)
             .query(params)
             .end((err, res) => {
-                res.body.posts.length ? dispatch(receivePost(res.body.posts,res.body.nextTs,filter,query)) : alert('no more posts')
+                res.body.posts.length ? dispatch(receivePost(res.body.posts,res.body.totalPages,filter,query)) : alert('no more posts')
             })
     }
 }
@@ -264,5 +264,16 @@ export const fetchUserPost = (id) => {
 export const clearPost = () => {
     return (dispatch) => {
         dispatch(_clearPost())
+    }
+}
+
+export function getPost (page = 0) {
+    return dispatch => {
+        return Request
+            .get(`/api/posts`)
+            .query({page})
+            .end((err, res) => {
+                dispatch(receivePost(res.body.posts,res.body.totalPages))
+            })
     }
 }

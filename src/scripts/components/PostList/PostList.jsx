@@ -4,20 +4,22 @@ import {
 	Row, Col, Modal, Form, FormGroup, InputGroup, FormControl, Button
 } from 'react-bootstrap'
 const _ = require('lodash')
-
+import ReactPaginate from 'react-paginate'
 import PostPanel from '../PostPanel/index'
 
 export default class Post extends Component{
 	constructor(props) {
 	  	super(props)
 	  	this.state = {
-				filter: '',
-				query: '',
-				showModal: false,
-				showImage: '',
-				selectedPost: null,
-				photos:[],
-				imageIndex:0,
+			filter: '',
+			query: '',
+			showModal: false,
+			showImage: '',
+			selectedPost: null,
+			photos:[],
+			imageIndex:0,
+
+			page:0,
 	  	}
 	  	this.onChangeQuery = (e) => this.setState({ query: e.target.value })
 	  	this.onChangeFilter = (e) => this.setState({ filter: e.target.value })
@@ -39,18 +41,14 @@ export default class Post extends Component{
 
 	  	this.search = this._search.bind(this)
 	  	this.getUnCls = () => this.props.getUnCls()
-
-	  	this.stop = (e) => {
-	  		if(e.keyCode === 13){
-	  			e.preventDefault()
-	  		}
-	  	}
+	  	this.goPage = this._goPage.bind(this)
 	}
 	componentWillMount() {
-		this.search()
+		// this.search()
 		if(!this.props.classLoaded){
 			this.props.fetchTagClass()
 		}
+		this.props.getPost(this.props.location.query.page)
 	}
 	componentWillUnmount() {
         this.props.clearPost()
@@ -66,6 +64,10 @@ export default class Post extends Component{
 	}
 	_search() {
 		this.props.fetchPost(this.state.filter,this.state.query.trim())
+	}
+	_goPage(page) {
+		this.context.router.push(`/post?page=${page}`)
+		this.props.getPost(page)
 	}
 	render() {
 		let modal = (<div></div>)
@@ -106,22 +108,20 @@ export default class Post extends Component{
 		       	</div>
 	     	)
 	    }
+	    const {page,totalPages} = this.props
+	    
+
 		return(
 			<div className="content">
 	          <div className="page-header">
-	            <Form inline>
+	            <Form inline onSubmit={(e) => e.preventDefault()}>
 	              <FormGroup>
-	                <Col smOffset={2}>
-	                  <Link to="/video/edit"><Button bsStyle='success'>发布视频</Button></Link>
-	                </Col>
+	                <div className="btn-group">
+					  <button type="button" className="btn btn-default"><Link to="/video/edit">发布视频</Link></button>
+					  <button onClick={this.getUnCls} type="button" className="btn btn-default">未定义标签</button>
+					</div>
 	              </FormGroup>
-								{' '}
-	              <FormGroup>
-	                <Col smOffset={2}>
-	                  <Button bsStyle='success' onClick={this.getUnCls}>未定义标签</Button>
-	                </Col>
-	              </FormGroup>
-								{' '}
+				  {' '}
 	              <FormGroup>
 	                <FormControl componentClass="select" placeholder="select" value={this.state.filter} onChange={this.onChangeFilter}>
 	                  <option value="">全部</option>
@@ -130,10 +130,10 @@ export default class Post extends Component{
 	                  <option value="isBlk">屏蔽</option>
 	                </FormControl>
 	              </FormGroup>
-								{' '}
+				  {' '}
 	              <FormGroup>
 	                <InputGroup>
-	                  <FormControl type="text" placeholder='Search by Tag' value={this.state.query} onKeyDown={this.stop} onChange={this.onChangeQuery} />
+	                  <FormControl type="text" placeholder="Search by Tag" value={this.state.query} onKeyDown={e => e.keyCode === 13 && this.search()}  onChange={this.onChangeQuery} />
 	                  <InputGroup.Button>
 	                    <Button onClick={this.search}>搜索</Button>
 	                  </InputGroup.Button>
@@ -144,18 +144,31 @@ export default class Post extends Component{
 	          <Row>
 	          	{
 	          		this.props.posts ?
-	            	this.props.posts.map(function (post) {
-		              return (
-		                <PostPanel key={'p_'+post.id} post={post} openImage={this.openImage} openClass={this.openClass}/>
-		              );
-		            }, this):null
-
-
+	            	this.props.posts.map(post => {
+		              	return (
+		                  <PostPanel key={'p_'+post.id} post={post} openImage={this.openImage} openClass={this.openClass}/>
+		              	)
+		            })
+		            :null
 	          	}
-
 	          </Row>
 	          <Row>
 	            <div className="load-more-btn" onClick={this.search}>Load More</div>
+	          </Row>
+	          <Row style={{textAlign:'center'}}>
+	          	<ReactPaginate 
+	          		previousLabel={<span>&laquo;</span>}
+					nextLabel={<span>&raquo;</span>}
+					breakLabel={<span>...</span>}
+					breakClassName={"break-me"}
+					pageNum={totalPages}
+					marginPagesDisplayed={2}
+					pageRangeDisplayed={5}
+					clickCallback={obj => this.goPage(obj.selected)}
+					containerClassName={"pagination"}
+					subContainerClassName={"pages pagination"}
+					forceSelected={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
+					activeClassName={"active"} />
 	          </Row>
 	          <div>
 	            <Modal show={this.state.showModal} onHide={this.closeImage}>
@@ -170,4 +183,8 @@ export default class Post extends Component{
 	        </div>
 		)
 	}
+}
+
+Post.contextTypes = {
+  	router : React.PropTypes.object
 }

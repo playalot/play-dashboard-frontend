@@ -54,7 +54,7 @@ export default class extends Component {
                 orderClose:`${orderClose.format('YYYY-MM-DD')} 23:59:59`
             }
         }
-        Object.keys(data).forEach(key => data[key] === '' || data[key] === 0 ? delete data[key] : '')
+        Object.keys(data).forEach(key => data[key] === '' ? delete data[key] : '')
         type ==='preOrder' ? null:delete data['preOrder']
         Request
         .post(`/api/sku/${id}/stock/${sid}`)

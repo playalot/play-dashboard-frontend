@@ -18,41 +18,38 @@ export default class Post extends Component{
 			selectedPost: null,
 			photos:[],
 			imageIndex:0,
-
-			page:0,
 	  	}
 	  	this.onChangeQuery = (e) => this.setState({ query: e.target.value })
 	  	this.onChangeFilter = (e) => this.setState({ filter: e.target.value })
-	  	this.openImage = (photos,i) => {
-	  		this.setState({ showModal: true, showImage: photos[i]['url'],photos,imageIndex:i })
-	  	}
+	  	this.openClass = (post) => this.setState({ selectedPost: post })
+	  	this.closeClass = () => this.setState({ selectedPost: null })
+	  	this.openImage = (photos,i) => this.setState({ showModal: true, showImage: photos[i]['url'],photos,imageIndex:i })
+	  	this.closeImage = () => this.setState({ showModal: false,photos:[] })
 	  	this.changeImage = (num) => {
 	  		let { photos, imageIndex } = this.state
 	  		imageIndex = imageIndex+num+photos.length
 	  		let showImage = photos[imageIndex%photos.length]['url']
 	  		this.setState({showImage,imageIndex})
 	  	}
-	  	this.openClass = (post) => this.setState({ selectedPost: post })
-	  	this.closeClass = () => this.setState({ selectedPost: null })
-	  	this.closeImage = () => this.setState({ showModal: false,photos:[] })
 
 	  	this.setPostClassification = (pid,cid) => this._setPostClassification(pid,cid)
 	  	this.removePostClassification = (pid,c) => this._removePostClassification(pid,c)
 
 	  	this.search = this._search.bind(this)
-	  	this.getUnCls = () => this.props.getUnCls()
 	  	this.goPage = this._goPage.bind(this)
 	}
 	componentWillMount() {
-		// this.search()
 		if(!this.props.classLoaded){
 			this.props.fetchTagClass()
 		}
-		this.props.getPost(this.props.location.query.page)
+		const { page,filter,query } = this.props
+		if(page) {
+			this.context.router.push(`/post?page=${page}`)
+			this.setState({filter,query})
+		}else{
+			this.props.getPost(this.props.location.query.page)
+		}
 	}
-	componentWillUnmount() {
-        this.props.clearPost()
-    }
 	_setPostClassification(pid,cid) {
 		this.state.selectedPost.cls.push(cid)
 		this.props.setClassification(pid,cid)
@@ -63,7 +60,8 @@ export default class Post extends Component{
 		this.props.removeClassification(pid,c)
 	}
 	_search() {
-		this.props.fetchPost(this.state.filter,this.state.query.trim())
+		this.context.router.push(`/post?page=0`)
+		this.props.getPostBy(this.state.filter,this.state.query.trim())
 	}
 	_goPage(page) {
 		this.context.router.push(`/post?page=${page}`)
@@ -82,12 +80,12 @@ export default class Post extends Component{
 			             	<strong>已选类别</strong>
 			             	<div>
 				               	{
-				               		this.state.selectedPost.cls.map(function(c){
+				               		this.state.selectedPost.cls.map((c) => {
 					                 	return (
 					                 		<span key={'t_c_m_'+c}
 					                 		onClick={ () => this.removePostClassification( this.state.selectedPost.id, c) }
 					                 		className="label label-warning label-margin" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>);
-					               	}, this)
+					               	})
 				               	}
 			             	</div>
 			             	<strong>全部类别</strong>
@@ -97,7 +95,6 @@ export default class Post extends Component{
 					             		return (
 					             			<span key={'c_m_'+key}
 					             			className='label label-info label-margin'
-					             			bsStyle='success'
 					             			onClick={() => this.setPostClassification(this.state.selectedPost.id, c.id) }>{c.name}</span>
 					             		)
 					             	})
@@ -108,9 +105,6 @@ export default class Post extends Component{
 		       	</div>
 	     	)
 	    }
-	    const {page,totalPages} = this.props
-	    
-
 		return(
 			<div className="content">
 	          <div className="page-header">
@@ -118,7 +112,7 @@ export default class Post extends Component{
 	              <FormGroup>
 	                <div className="btn-group">
 					  <button type="button" className="btn btn-default"><Link to="/video/edit">发布视频</Link></button>
-					  <button onClick={this.getUnCls} type="button" className="btn btn-default">未定义标签</button>
+					  <button onClick={() => this.props.getUnCls()} type="button" className="btn btn-default">未定义标签</button>
 					</div>
 	              </FormGroup>
 				  {' '}
@@ -152,16 +146,13 @@ export default class Post extends Component{
 		            :null
 	          	}
 	          </Row>
-	          <Row>
-	            <div className="load-more-btn" onClick={this.search}>Load More</div>
-	          </Row>
 	          <Row style={{textAlign:'center'}}>
 	          	<ReactPaginate 
 	          		previousLabel={<span>&laquo;</span>}
 					nextLabel={<span>&raquo;</span>}
 					breakLabel={<span>...</span>}
 					breakClassName={"break-me"}
-					pageNum={totalPages}
+					pageNum={this.props.totalPages}
 					marginPagesDisplayed={2}
 					pageRangeDisplayed={5}
 					clickCallback={obj => this.goPage(obj.selected)}

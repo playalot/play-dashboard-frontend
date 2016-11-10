@@ -15,7 +15,7 @@ import {
     POST_GET_UN_CLS,
 } from '../actions/postAction'
 
-export default (state = Immutable.fromJS({ posts:[],page:0,totalPages:100,status:{ts:'',filter:'',query:''} }),action)=>{
+export default (state = Immutable.fromJS({ posts:[],totalPages:100,filter:'',query:'',status:{ts:'',filter:'',query:''} }),action)=>{
     switch (action.type) {
         case POST_CLEAR_POST:
             return state
@@ -25,11 +25,9 @@ export default (state = Immutable.fromJS({ posts:[],page:0,totalPages:100,status
             return state
                 .updateIn(['posts'], (posts) => posts.clear().concat(Immutable.fromJS(action.res)))
                 .set('totalPages',action.totalPages)
-                .updateIn(['status'],(status) => {
-                    return status.set('ts',action.ts)
-                        .set('filter',action.filter)
-                        .set('query',action.query)
-                })
+                .set('page',action.page)
+                .set('filter',action.filter)
+                .set('query',action.query)
         case POST_ADD_TOY:
             return state.updateIn(['posts'], (posts) => {
                 return posts.update(

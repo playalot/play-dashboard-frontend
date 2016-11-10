@@ -14,11 +14,12 @@ export const POST_DELETE_POST = 'POST_DELETE_POST'
 export const POST_GET_UN_CLS = 'POST_GET_UN_CLS'
 export const POST_CLEAR_POST = 'POST_CLEAR_POST'
 
-function receivePost(res,totalPages,filter = '',query = '') {
+function receivePost(res,totalPages,page,filter,query) {
     return {
         type: POST_RECEIVE_POST,
         res,
         totalPages,
+        page,
         filter,
         query
     }
@@ -268,12 +269,39 @@ export const clearPost = () => {
 }
 
 export function getPost (page = 0) {
-    return dispatch => {
+    return (dispatch,getState) => {
+        let params = { page }
+        const { filter, query } = getState().postReducer.toJS()
+        if(filter) {
+            params.filter = filter
+        }
+        if(query) {
+            params.query = query
+        }
         return Request
             .get(`/api/posts`)
-            .query({page})
+            .query(params)
             .end((err, res) => {
-                dispatch(receivePost(res.body.posts,res.body.totalPages))
+                dispatch(receivePost(res.body.posts,res.body.totalPages,page,filter,query))
+            })
+    }
+}
+
+export function getPostBy (filter = '',query ='') {
+    return (dispatch,getState) => {
+        let page = 0
+        let params = { page }
+        if(filter) {
+            params.filter = filter
+        }
+        if(query) {
+            params.query = query
+        }
+        return Request
+            .get(`/api/posts`)
+            .query(params)
+            .end((err, res) => {
+                dispatch(receivePost(res.body.posts,res.body.totalPages,page,filter,query))
             })
     }
 }

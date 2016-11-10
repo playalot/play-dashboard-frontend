@@ -1,9 +1,10 @@
 import { connect } from 'react-redux'
 import ToyList from './ToyList'
-import { fetchToys, recommend, toggleR18, toggleRecommend, deleteToy, addToy } from '../../actions/toyAction'
+import { getToy,getToyBy, recommend, toggleR18, toggleRecommend, deleteToy, addToy } from '../../actions/toyAction'
 
 const mapActionCreators = {
-	fetchToys,
+	getToy,
+	getToyBy,
 	recommend,
 	toggleR18,
 	toggleRecommend,
@@ -12,11 +13,16 @@ const mapActionCreators = {
 }
 
 const mapStateToProps = (state) => {
-	const { toys } = state.toyReducer.toJS()
-	const loaded = state.toyReducer.get('loaded')
+	const { toys,totalPages,page,filter,query,sort,month,year } = state.toyReducer.toJS()
 	return {
 		toys,
-		loaded
+		totalPages,
+		page,
+		filter,
+		query,
+		sort,
+		year,
+		month,
 	}
 }
 

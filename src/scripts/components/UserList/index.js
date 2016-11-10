@@ -2,19 +2,24 @@ import { connect } from 'react-redux'
 import UserList from './UserList'
 
 import {
-	fetchUser, recommendUser, approveUser
+	fetchUser, recommendUser, approveUser,getUser,getUserBy
 } from '../../actions/userAction'
 
 const mapActionCreators = {
 	fetchUser,
 	recommendUser,
-	approveUser
+	approveUser,
+	getUser,
+	getUserBy,
 }
 
 const mapStateToProps = (state) => {
-	const { users } = state.user.toJS()
+	const { users,page,filter,totalPages } = state.user.toJS()
 	return {
-		users
+		users,
+		page,
+		filter,
+		totalPages,
 	}
 }
 

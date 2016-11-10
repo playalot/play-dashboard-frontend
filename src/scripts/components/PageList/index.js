@@ -1,12 +1,12 @@
 import { connect } from 'react-redux'
 import PageList from './PageList'
 import { 
-	fetchArticle, fetchArticleMore, togglePub, toggleRec, deleteArticle, setCoverType,addToy, toggleShare,
+	getPage, getPageBy, togglePub, toggleRec, deleteArticle, setCoverType,addToy, toggleShare,
 	fetchToy, clearSuggestion
 } from '../../actions/pageAction'
 const mapActionCreators = {
-	fetchArticle,
-	fetchArticleMore,
+	getPage,
+	getPageBy,
 	togglePub,
 	toggleRec,
 	deleteArticle,
@@ -20,10 +20,12 @@ const mapActionCreators = {
 }
 
 const mapStateToProps = (state) => {
-	const { pages, loaded, searchResults } = state.page.toJS()
+	const { pages, searchResults, totalPages,page,query } = state.page.toJS()
     return {
     	pages,
-    	loaded,
+    	page,
+    	query,
+    	totalPages,
     	searchResults
     }
 }

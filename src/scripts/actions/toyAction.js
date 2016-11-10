@@ -1,23 +1,22 @@
 import Request from 'superagent'
 
 export const TOL_RECEIVE_TOY = 'TOL_RECEIVE_TOY'
-export const TOL_RECEIVE_TOY_NEW = 'TOL_RECEIVE_TOY_NEW'
-
 export const TOL_TOGGLE_R18 = 'TOL_TOGGLE_R18'
 export const TOL_TOGGLE_RECOMMEND = 'TOL_TOGGLE_RECOMMEND'
 export const TOL_DELETE_TOY = 'TOL_DELETE_TOY'
 export const TOL_ADD_TOY = 'TOL_ADD_TOY'
 
-function receiveToy(res) {
+function receiveToy(res,totalPages,page,filter,query,sort,year,month) {
     return {
         type: TOL_RECEIVE_TOY,
-        res
-    }
-}
-function receiveToyNew(res) {
-    return {
-        type: TOL_RECEIVE_TOY_NEW,
-        res
+        res,
+        totalPages,
+        page,
+        filter,
+        query,
+        sort,
+        year,
+        month
     }
 }
 function _toggleR18(id) {
@@ -105,53 +104,59 @@ export function addToy() {
             })
     }
 }
-const status = {
-    filter: '',
-    query: '',
-    sort: 'created',
-    page: 0,
-    overload: false,
-    year:'',
-    month:'',
-}
-export function fetchToys(filter, query, sort, year, month, newPage) {
-    if (status.query !== query || status.filter !== filter || status.sort !== sort || status.year !== year || status.month !== month || newPage) {
-          status.filter = filter
-          status.query = query
-          status.sort = sort
-          status.year = year
-          status.month = month
-          status.page = 0
-          status.overload = true
-    } else {
-        status.overload = false
-    }
-    let params = {}
-    if (status.page !== 0) {
-        params.page = status.page
-    }
-    if (status.filter !== '') {
-        params.filter = status.filter
-    }
-    if (status.query !== '') {
-        params.query = status.query
-    }
-    if (status.year !== '') {
-        params.year = status.year
-    }
-    if (status.year !=='' && status.month !== '') {
-        params.month = status.month
-    }
-    if (status.sort !== '') {
-        params.sort = status.sort
-    }
-    return (dispatch) => {
+
+export function getToy (page = 0) {
+    return (dispatch,getState) => {
+        let params = { page }
+        const { filter, query,sort,year,month } = getState().toyReducer.toJS()
+        if(filter) {
+            params.filter = filter
+        }
+        if(query) {
+            params.query = query
+        }
+        if(sort) {
+            params.sort = sort
+        }
+        if(year) {
+            params.year = year
+        }
+        if(month) {
+            params.month = month
+        }
         return Request
             .get(`/api/toys`)
             .query(params)
-            .end((err,res) => {
-                status.page = res.body.nextPage
-                status.overload ? dispatch(receiveToyNew(res.body.toys)) : dispatch(receiveToy(res.body.toys))
+            .end((err, res) => {
+                dispatch(receiveToy(res.body.toys,res.body.totalPages,page,filter,query,sort,year,month))
+            })
+    }
+}
+
+export function getToyBy (filter = '',query = '',sort = 'created',year,month) {
+    return (dispatch,getState) => {
+        let page = 0
+        let params = { page }
+        if(filter) {
+            params.filter = filter
+        }
+        if(query) {
+            params.query = query
+        }
+        if(sort) {
+            params.sort = sort
+        }
+        if(year) {
+            params.year = year
+        }
+        if(month) {
+            params.month = month
+        }
+        return Request
+            .get(`/api/toys`)
+            .query(params)
+            .end((err, res) => {
+                dispatch(receiveToy(res.body.toys,res.body.totalPages,page,filter,query,sort,year,month))
             })
     }
 }

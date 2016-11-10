@@ -4,28 +4,30 @@ import {
 } from 'react-bootstrap'
 import { Link } from 'react-router'
 import Moment from 'moment'
+import ReactPaginate from 'react-paginate'
 
 export default class UserList extends Component{
 	constructor(props) {
 	  	super(props)
 	
 	  	this.state = {
-	  		query:''
+	  		filter:''
 	  	}
-	  	this.search = () => this.props.fetchUser(this.state.query)
-	  	this.onChangeQuery = (e) => this.setState({query:e.target.value})
+	  	this.onChangeQuery = (e) => this.setState({filter:e.target.value})
 	  	this.recommend = (id) => this.props.recommendUser(id)
 	  	this.approve = this._approve.bind(this)
-	  	this.stop = (e) => {
-	  		if(e.keyCode === 13){
-	  			e.preventDefault()
-	  		}
-	  	}
 
-	  	// this.fetchMoreUsers = () => this.props.fetchUser(this.state.query)
+	  	this.search = this._search.bind(this)
+	  	this.goPage = this._goPage.bind(this)
 	}
 	componentWillMount() {
-		this.search()
+		const { page,filter } = this.props
+		if(typeof page === 'number') {
+			this.context.router.push(`/user?page=${page}`)
+			this.setState({filter})
+		}else{
+			this.props.getUser(this.props.location.query.page)
+		}
 	}
 	_approve(id) {
 		let txt = prompt('输入认证信息')
@@ -52,14 +54,22 @@ export default class UserList extends Component{
 		    </span>
 	    )
 	}
+	_search() {
+		this.context.router.push(`/user?page=0`)
+		this.props.getUserBy(this.state.filter.trim())
+	}
+	_goPage(page) {
+		this.context.router.push(`/user?page=${page}`)
+		this.props.getUser(page)
+	}
 	render() {
 		return(
 			<div className="content">
 	          <div className="page-header">
-	            <Form inline>
+	            <Form inline onSubmit={(e) => e.preventDefault()}>
 	              <FormGroup>
 	                <InputGroup>
-	                  <FormControl type="text" placeholder='搜索用户名或手机号' value={this.state.query} onKeyDown={this.stop} onChange={this.onChangeQuery} />
+	                  <FormControl type="text" placeholder='搜索用户名或手机号' value={this.state.filter} onKeyDown={e => e.keyCode === 13 && this.search()} onChange={this.onChangeQuery} />
 	                  <InputGroup.Button>
 	                    <Button onClick={this.search}>搜索</Button>
 	                  </InputGroup.Button>
@@ -90,11 +100,27 @@ export default class UserList extends Component{
 	              </tbody>
 	            </table>
 	          </div>
-	          <Row>
-            	<div className="load-more-btn" onClick={this.search}>Load More</div>
-          	  </Row>
+	          <Row style={{textAlign:'center'}}>
+	          	<ReactPaginate 
+	          		previousLabel={<span>&laquo;</span>}
+					nextLabel={<span>&raquo;</span>}
+					breakLabel={<span>...</span>}
+					breakClassName={"break-me"}
+					pageNum={this.props.totalPages}
+					marginPagesDisplayed={2}
+					pageRangeDisplayed={5}
+					clickCallback={obj => this.goPage(obj.selected)}
+					containerClassName={"pagination"}
+					subContainerClassName={"pages pagination"}
+					forceSelected={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
+					activeClassName={"active"} />
+	          </Row>
           	</div>
 
 		)
 	}
+}
+
+UserList.contextTypes = {
+  	router : React.PropTypes.object
 }

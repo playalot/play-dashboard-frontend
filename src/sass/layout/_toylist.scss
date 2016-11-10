@@ -63,7 +63,10 @@
         justify-content:center;
         align-items:center;
         padding:0 5px;
-
+        flex-direction:column;
+        &.operate{
+          flex:2;
+        }
       }
       .operate{
         width:130px;
@@ -108,15 +111,31 @@
         &:last-child{
           border:none;
         }
-        .operate{
-          width:130px;
-        }
         .sku-body-item{
           flex:1;
           display:flex;
           padding:0 5px;
           overflow:hidden;
           justify-content:center;
+          align-items:center;
+          small{
+            color:#9c9c9c;
+            // text-decoration:line-through;
+          }
+          &.vertical{
+            flex-direction:column;
+          }
+          &.operate{
+            flex:2;
+            span{
+              padding:3px;
+              cursor:pointer;
+              font-size:12px;
+              &:hover{
+                color:#bbb;
+              }
+            }
+          }
         }
       }
     }
@@ -146,6 +165,11 @@
         .sku-info{
           width:70%;
           float: left;
+        }
+      }
+      .sku-body{
+        .sku-body-box{
+          padding:5px 0;
         }
       }
     }

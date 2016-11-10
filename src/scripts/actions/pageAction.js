@@ -1,7 +1,6 @@
 import Request from 'superagent'
 
-export const PAGE_L_RECEIVE_ARTICLE = 'PAGE_L_RECEIVE_ARTICLE'
-export const PAGE_L_RECEIVE_ARTICLE_MORE = 'PAGE_L_RECEIVE_ARTICLE_MORE'
+export const PAGE_L_RECEIVE_PAGE = 'PAGE_L_RECEIVE_PAGE'
 export const PAGE_L_TOGGLE_PUB = 'PAGE_L_TOGGLE_PUB'
 export const PAGE_L_TOGGLE_REC = 'PAGE_L_TOGGLE_REC'
 export const PAGE_L_DELETE_ARTICLE = 'PAGE_L_DELETE_ARTICLE'
@@ -13,16 +12,14 @@ export const PAGE_L_TOGGLE_SHARE = 'PAGE_L_TOGGLE_SHARE'
 export const PAGE_L_RECEIVE_TOY = 'PAGE_L_RECEIVE_TOY'
 export const PAGE_L_CLEAR_SUGGESTION = 'PAGE_L_CLEAR_SUGGESTION'
 
-function receiveArticle(res) {
+
+function receivePage(res,totalPages,page,query) {
     return {
-        type: PAGE_L_RECEIVE_ARTICLE,
+        type: PAGE_L_RECEIVE_PAGE,
         res,
-    }
-}
-function receiveArticleMore(res) {
-    return {
-        type: PAGE_L_RECEIVE_ARTICLE_MORE,
-        res,
+        totalPages,
+        page,
+        query
     }
 }
 function _togglePub(id) {
@@ -78,33 +75,6 @@ const status = {
     query: '',
     ts: null,
     overload: false,
-}
-export function fetchArticle(query) {
-    if (status.query !== query) {
-          status.query = query
-          status.overload = true
-          status.ts = null
-    } else {
-        status.overload = false
-    }
-    let params = {}
-    if (status.query !== '') {
-        params.query = status.query
-    }
-    if (status.ts !== null) {
-        params.ts = status.ts
-    }
-    return (dispatch) => {
-        return Request
-            .get(`/api/pages`)
-            .query(params)
-            .end((err,res) => {
-                status.ts = res.body.nextTs
-                status.overload ? 
-                dispatch(receiveArticle(res.body.pages)) 
-                : dispatch(receiveArticleMore(res.body.pages))
-            })
-    }
 }
 
 export function togglePub(id) {
@@ -207,5 +177,38 @@ export function fetchToy(query) {
 export function clearSuggestion() {
     return dispatch => {
         dispatch(_clearSuggestion())
+    }
+}
+
+
+export function getPage (page = 0) {
+    return (dispatch,getState) => {
+        let params = { page }
+        const { query } = getState().page.toJS()
+        if(query) {
+            params.query = query
+        }
+        return Request
+            .get(`/api/pages`)
+            .query(params)
+            .end((err, res) => {
+                dispatch(receivePage(res.body.pages,res.body.totalPages,page,query))
+            })
+    }
+}
+
+export function getPageBy (query = '') {
+    return (dispatch,getState) => {
+        let page = 0
+        let params = { page }
+        if(query) {
+            params.query = query
+        }
+        return Request
+            .get(`/api/pages`)
+            .query(params)
+            .end((err, res) => {
+                dispatch(receivePage(res.body.pages,res.body.totalPages,page,query))
+            })
     }
 }

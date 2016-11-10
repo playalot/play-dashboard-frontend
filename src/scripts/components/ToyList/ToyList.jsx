@@ -8,91 +8,90 @@ import Request from 'superagent'
 import Switch from 'rc-switch'
 import DatePicker from 'react-datepicker'
 import Moment from 'moment'
-export default class toyList extends Component{
+import ReactPaginate from 'react-paginate'
+export default class Toy extends Component{
 	constructor(props) {
-			super(props)
-
-
-			this.state = {
-				filter: '',
-				query: '',
-				sort: 'created',
-				month:'',
-				year:'',
-				showModal:false,
-				id:'',
-				quantity:100,
-				price:9999,
-				originPrice:9999,
-				merchant:'PLAY玩具控',
-				tbUrl:'',
-				freight:0,
-				type:'inStock',
-				prepay:0,
-				orderClose:Moment(),
-				costPrice:0,
+		super(props)
+		this.state = {
+			filter: '',
+			query: '',
+			sort: 'created',
+			month:'',
+			year:'',
+			showModal:false,
+			id:'',
+			quantity:100,
+			price:9999,
+			originPrice:9999,
+			merchant:'PLAY玩具控',
+			tbUrl:'',
+			freight:0,
+			type:'inStock',
+			prepay:0,
+			orderClose:Moment(),
+			costPrice:0,
+		}
+		this.onChangeSort = (e) => this.setState({sort:e.target.value})
+		this.onChangeFilter = (e) => this.setState({filter:e.target.value})
+		this.onChangeQuery = (e) => this.setState({query:e.target.value})
+		this.onChangeYear= (e) => this.setState({year:e.target.value})
+		this.onChangeMonth = (e) => this.setState({month:e.target.value})
+		this.searchNew = () => this.props.fetchToys(this.state.filter,this.state.query.trim(),this.state.sort,this.state.year,this.state.month,true)
+		this.open = () => this.setState({ showModal: true })
+		this.close = () => this.setState({
+			showModal: false,
+			id:'',
+			quantity:100,
+			price:9999,
+			originPrice:9999,
+			merchant:'PLAY玩具控',
+			tbUrl:'',
+			freight:0,
+			costPrice:0,
+		})
+		this.submit = () => {
+			const {
+				id,price,originPrice,tbUrl,merchant,quantity,freight,preOrder, prepay, orderClose, type, costPrice
+			} = this.state
+			let data = {
+				price:parseFloat(price),originPrice:parseFloat(originPrice),tbUrl,merchant,costPrice:parseFloat(costPrice),
+				quantity:parseInt(quantity),freight:parseFloat(freight),preOrder:{
+					prepay:parseFloat(prepay),
+					orderClose:`${orderClose.format('YYYY-MM-DD')} 23:59:59`
+				}
 			}
-			this.onChangeSort = (e) => this.setState({sort:e.target.value})
-			this.onChangeFilter = (e) => this.setState({filter:e.target.value})
-			this.onChangeQuery = (e) => this.setState({query:e.target.value})
-			this.onChangeYear= (e) => this.setState({year:e.target.value})
-			this.onChangeMonth = (e) => this.setState({month:e.target.value})
-			this.search = () => this.props.fetchToys(this.state.filter,this.state.query.trim(),this.state.sort,this.state.year,this.state.month)
-			this.searchNew = () => this.props.fetchToys(this.state.filter,this.state.query.trim(),this.state.sort,this.state.year,this.state.month,true)
-			this.open = () => this.setState({ showModal: true })
-			this.close = () => this.setState({
-				showModal: false,
-				id:'',
-				quantity:100,
-				price:9999,
-				originPrice:9999,
-				merchant:'PLAY玩具控',
-				tbUrl:'',
-				freight:0,
-				costPrice:0,
-			})
-			this.submit = () => {
-				const {
-					id,price,originPrice,tbUrl,merchant,quantity,freight,preOrder, prepay, orderClose, type, costPrice
-				} = this.state
-				let data = {
-					price:parseFloat(price),originPrice:parseFloat(originPrice),tbUrl,merchant,costPrice:parseFloat(costPrice),
-					quantity:parseInt(quantity),freight:parseFloat(freight),preOrder:{
-						prepay:parseFloat(prepay),
-						orderClose:`${orderClose.format('YYYY-MM-DD')} 23:59:59`
+		Object.keys(data).forEach(key => data[key] === '' ? delete data[key] : '')
+		data.costPrice === 0 ? null:delete data['costPrice']
+		type ==='preOrder' ? null:delete data['preOrder']
+			Request
+				.post(`/api/toy/${id}/stock`)
+				.send(data)
+				.end((err,res) => {
+					if(err) {
+						console.warn(err)
+					}else{
+						this.close()
+						alert('添加商品成功')
 					}
-				}
-			Object.keys(data).forEach(key => data[key] === '' ? delete data[key] : '')
-			data.costPrice === 0 ? null:delete data['costPrice']
-			type ==='preOrder' ? null:delete data['preOrder']
-				Request
-					.post(`/api/toy/${id}/stock`)
-					.send(data)
-					.end((err,res) => {
-						if(err) {
-							console.warn(err)
-						}else{
-							this.close()
-							alert('添加商品成功')
-						}
-					})
-			}
-			this.recommend = this._recommend.bind(this)
-			this.addGoods = this._addGoods.bind(this)
-			this.toggleR18 = (id) => this.props.toggleR18(id)
-			this.toggleRecommend = (id) => this.props.toggleRecommend(id)
-			this.deletetoy = this._deletetoy.bind(this)
-			this.addtoy = this._addtoy.bind(this)
-			this.changeOrderClose = (date) => this.setState({orderClose:date})
-			this.stop = (e) => {
-				if(e.keyCode === 13){
-					e.preventDefault()
-				}
-			}
+				})
+		}
+		this.recommend = this._recommend.bind(this)
+		this.addGoods = this._addGoods.bind(this)
+		this.toggleR18 = (id) => this.props.toggleR18(id)
+		this.toggleRecommend = (id) => this.props.toggleRecommend(id)
+		this.deletetoy = this._deletetoy.bind(this)
+		this.addtoy = this._addtoy.bind(this)
+		this.changeOrderClose = (date) => this.setState({orderClose:date})
+		this.search = this._search.bind(this)
+	  	this.goPage = this._goPage.bind(this)
 	}
 	componentWillMount() {
-		if(!this.props.loaded){
-			this.props.fetchToys(this.state.filter,this.state.query.trim(),this.state.sort)
+		const { page,filter,query,sort,month,year } = this.props
+		if(typeof page === 'number') {
+			this.context.router.push(`/toy?page=${page}`)
+			this.setState({filter,query,sort,month,year})
+		}else{
+			this.props.getToy(this.props.location.query.page)
 		}
 	}
 	_deletetoy(id) {
@@ -117,11 +116,20 @@ export default class toyList extends Component{
 			this.open()
 		})
 	}
+	_goPage(page) {
+		this.context.router.push(`/toy?page=${page}`)
+		this.props.getToy(page)
+	}
+	_search() {
+		this.context.router.push(`/toy?page=0`)
+		const { filter,query,sort,year,month } = this.state
+		this.props.getToyBy(filter,query.trim(),sort,year,month)
+	}
 	render() {
 		return(
 			<div className="content">
 						<div className="page-header">
-							<Form inline className="form-input-filter">
+							<Form inline className="form-input-filter" onSubmit={(e) => e.preventDefault()}>
 								<FormGroup>
 									<Col smOffset={2} style={{marginRight: '25px'}}>
 										<Button bsStyle='success' onClick={this.addtoy}>创建新玩具</Button>
@@ -176,9 +184,9 @@ export default class toyList extends Component{
 								{' '}
 								<FormGroup>
 										<InputGroup>
-											<FormControl type="text" value={this.state.query} onKeyDown={this.stop} onChange={this.onChangeQuery} />
+											<FormControl type="text" value={this.state.query} onKeyDown={e => e.keyCode === 13 && this.search()} onChange={this.onChangeQuery} />
 											<InputGroup.Button>
-												<Button onClick={this.searchNew}>搜索</Button>
+												<Button onClick={this.search}>搜索</Button>
 											</InputGroup.Button>
 										</InputGroup>
 								</FormGroup>
@@ -224,9 +232,21 @@ export default class toyList extends Component{
 								);
 							})}
 						</Row>
-						<Row>
-							<div className="load-more-btn" onClick={this.search}>Load More</div>
-						</Row>
+						<Row style={{textAlign:'center'}}>
+				          	<ReactPaginate 
+				          		previousLabel={<span>&laquo;</span>}
+								nextLabel={<span>&raquo;</span>}
+								breakLabel={<span>...</span>}
+								breakClassName={"break-me"}
+								pageNum={this.props.totalPages}
+								marginPagesDisplayed={2}
+								pageRangeDisplayed={5}
+								clickCallback={obj => this.goPage(obj.selected)}
+								containerClassName={"pagination"}
+								subContainerClassName={"pages pagination"}
+								forceSelected={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
+								activeClassName={"active"} />
+				        </Row>
 						<Modal show={this.state.showModal} onHide={this.close}>
 							<Modal.Header closeButton>
 								<Modal.Title>添加商品</Modal.Title>
@@ -356,4 +376,9 @@ export default class toyList extends Component{
 
 		)
 	}
+}
+
+
+Toy.contextTypes = {
+  	router : React.PropTypes.object
 }

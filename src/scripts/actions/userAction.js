@@ -3,10 +3,13 @@ import Request from 'superagent'
 export const USER_L_RECEIVE_USER = 'USER_L_RECEIVE_USER'
 export const USER_L_RECEIVE_USER_NEW = 'USER_L_RECEIVE_USER_NEW'
 
-function receiveUser(res) {
+function receiveUser(res,totalPages,page,query) {
     return {
         type: USER_L_RECEIVE_USER,
-        res
+        res,
+        totalPages,
+        page,
+        query
     }
 }
 function receiveUserNew(res) {
@@ -61,6 +64,39 @@ export function approveUser(id,txt) {
                 approval: txt
             })
             .end((err,res) => {
+            })
+    }
+}
+
+export function getUser (page = 0) {
+    return (dispatch,getState) => {
+        let params = { page }
+        const { filter } = getState().user.toJS()
+        if(filter) {
+            params.filter = filter
+        }
+        return Request
+            .get(`/api/users`)
+            .query(params)
+            .end((err, res) => {
+                dispatch(receiveUser(res.body.users,res.body.totalPages,page,filter))
+            })
+    }
+}
+
+
+export function getUserBy (filter ='') {
+    return (dispatch,getState) => {
+        let page = 0
+        let params = { page }
+        if(filter) {
+            params.filter = filter
+        }
+        return Request
+            .get(`/api/users`)
+            .query(params)
+            .end((err, res) => {
+                dispatch(receiveUser(res.body.users,res.body.totalPages,page,filter))
             })
     }
 }

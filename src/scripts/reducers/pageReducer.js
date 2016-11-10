@@ -1,7 +1,6 @@
 import Immutable from 'immutable'
 import {
-    PAGE_L_RECEIVE_ARTICLE,
-    PAGE_L_RECEIVE_ARTICLE_MORE,
+    PAGE_L_RECEIVE_PAGE,
     PAGE_L_TOGGLE_PUB,
     PAGE_L_TOGGLE_REC,
     PAGE_L_DELETE_ARTICLE,
@@ -12,16 +11,14 @@ import {
     PAGE_L_CLEAR_SUGGESTION,
     PAGE_L_RECEIVE_TOY,
 } from '../actions/pageAction'
-export default (state = Immutable.fromJS({ pages: [], loaded:false, searchResults:[] }),action)=>{
+export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'', searchResults:[] }),action)=>{
     switch (action.type) {
-        case PAGE_L_RECEIVE_ARTICLE:
-        	return state.updateIn(['pages'],(pages) => {
-        		return pages.clear().concat(Immutable.fromJS(action.res))
-        	}).set('loaded',true)
-        case PAGE_L_RECEIVE_ARTICLE_MORE:
-        	return state.updateIn(['pages'],(pages) => {
-        		return pages.concat(Immutable.fromJS(action.res))
-        	})
+        case PAGE_L_RECEIVE_PAGE:
+            return state
+                .updateIn(['pages'], (pages) => pages.clear().concat(Immutable.fromJS(action.res)))
+                .set('totalPages',action.totalPages)
+                .set('page',action.page)
+                .set('query',action.query)
         case PAGE_L_TOGGLE_PUB:
             return state.updateIn(['pages'], (pages) => {
                 return pages.update(

@@ -43,7 +43,7 @@ export default class Post extends Component{
 			this.props.fetchTagClass()
 		}
 		const { page,filter,query } = this.props
-		if(page) {
+		if(typeof page === 'number') {
 			this.context.router.push(`/post?page=${page}`)
 			this.setState({filter,query})
 		}else{

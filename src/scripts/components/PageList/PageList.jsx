@@ -88,9 +88,11 @@ export default class PageList extends Component{
 	                <FormControl componentClass="select" placeholder="select" value={this.state.filter} onChange={(e) => this.setState({filter:e.target.value})}>
 	                  <option value="">全部</option>
 	                  <option value="forShare">分享</option>
+										<option value="isRec">推荐</option>
+										<option value="isBlk">屏蔽</option>
 	                </FormControl>
 	              </FormGroup>
-				  {' '}
+				  			{' '}
 	              <FormGroup style={{marginLeft:10}}>
 	                <InputGroup>
 	                  <FormControl type="text" placeholder='输入关键字' value={this.state.query} onKeyDown={e => e.keyCode === 13 && this.search()} onChange={(e) => this.setState({query:e.target.value})} />
@@ -154,7 +156,7 @@ export default class PageList extends Component{
 	            </table>
 	          </div>
 	          <Row style={{textAlign:'center'}}>
-	          	<ReactPaginate 
+	          	<ReactPaginate
 	          		previousLabel={<span>&laquo;</span>}
 					nextLabel={<span>&raquo;</span>}
 					breakLabel={<span>...</span>}

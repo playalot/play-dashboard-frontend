@@ -5,7 +5,7 @@ import {
 import DatePicker from 'react-datepicker'
 import Moment from 'moment'
 import Request from 'superagent'
-export default class extends Component {
+export default class EditSku extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -24,7 +24,7 @@ export default class extends Component {
     }
     componentWillMount() {
         Request
-        .get(`/api/sku/${this.props.params.id}/stock/${this.props.location.query.sid}`)
+        .get(`/api/toy/${this.props.params.id}/stock/${this.props.location.query.sid}`)
         .end((err,res) => {
             let stock = res.body
             this.setState({
@@ -57,7 +57,7 @@ export default class extends Component {
         Object.keys(data).forEach(key => data[key] === '' ? delete data[key] : '')
         type ==='preOrder' ? null:delete data['preOrder']
         Request
-        .post(`/api/sku/${id}/stock/${sid}`)
+        .post(`/api/toy/${id}/stock/${sid}`)
         .send(data)
         .end((err,res) => {
             if(err) {

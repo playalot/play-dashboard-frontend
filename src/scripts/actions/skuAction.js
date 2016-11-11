@@ -23,7 +23,7 @@ function _toggleRec(id) {
         type: SKL_TOGGLE_REC,
         id
     }
-} 
+}
 function _toggleBlk(id) {
     return {
         type: SKL_TOGGLE_BLK,
@@ -83,12 +83,12 @@ export function fetchSku(filter, query, sort, year, month, newPage) {
     }
     return (dispatch) => {
         return Request
-            .get(`/api/skus`)
+            .get(`/api/stocks`)
             // .query(params)
             .end((err,res) => {
                 // status.page = res.body.nextPage
                 // status.overload ? dispatch(receiveToyNew(res.body.toys)) : dispatch(receiveToy(res.body.toys))
-                dispatch(receiveSkuNew(res.body.skus))
+                dispatch(receiveSkuNew(res.body.stocks))
             })
     }
 }

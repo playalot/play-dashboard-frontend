@@ -13,12 +13,13 @@ export const PAGE_L_RECEIVE_TOY = 'PAGE_L_RECEIVE_TOY'
 export const PAGE_L_CLEAR_SUGGESTION = 'PAGE_L_CLEAR_SUGGESTION'
 
 
-function receivePage(res,totalPages,page,query) {
+function receivePage(res,totalPages,page,filter,query) {
     return {
         type: PAGE_L_RECEIVE_PAGE,
         res,
         totalPages,
         page,
+        filter,
         query
     }
 }
@@ -184,31 +185,37 @@ export function clearSuggestion() {
 export function getPage (page = 0) {
     return (dispatch,getState) => {
         let params = { page }
-        const { query } = getState().page.toJS()
+        const { query,filter } = getState().page.toJS()
         if(query) {
             params.query = query
+        }
+        if(filter) {
+            params.filter = filter
         }
         return Request
             .get(`/api/pages`)
             .query(params)
             .end((err, res) => {
-                dispatch(receivePage(res.body.pages,res.body.totalPages,page,query))
+                dispatch(receivePage(res.body.pages,res.body.totalPages,page,filter,query))
             })
     }
 }
 
-export function getPageBy (query = '') {
+export function getPageBy (filter = '',query = '') {
     return (dispatch,getState) => {
         let page = 0
         let params = { page }
         if(query) {
             params.query = query
         }
+        if(filter) {
+            params.filter = filter
+        }
         return Request
             .get(`/api/pages`)
             .query(params)
             .end((err, res) => {
-                dispatch(receivePage(res.body.pages,res.body.totalPages,page,query))
+                dispatch(receivePage(res.body.pages,res.body.totalPages,page,filter,query))
             })
     }
 }

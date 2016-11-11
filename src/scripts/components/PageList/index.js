@@ -20,11 +20,12 @@ const mapActionCreators = {
 }
 
 const mapStateToProps = (state) => {
-	const { pages, searchResults, totalPages,page,query } = state.page.toJS()
+	const { pages, searchResults, totalPages,page,query,filter } = state.page.toJS()
     return {
     	pages,
     	page,
     	query,
+    	filter,
     	totalPages,
     	searchResults
     }

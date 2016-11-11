@@ -11,7 +11,7 @@ import {
     PAGE_L_CLEAR_SUGGESTION,
     PAGE_L_RECEIVE_TOY,
 } from '../actions/pageAction'
-export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'', searchResults:[] }),action)=>{
+export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'',filter:'', searchResults:[] }),action)=>{
     switch (action.type) {
         case PAGE_L_RECEIVE_PAGE:
             return state
@@ -19,6 +19,7 @@ export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'', se
                 .set('totalPages',action.totalPages)
                 .set('page',action.page)
                 .set('query',action.query)
+                .set('filter',action.filter)
         case PAGE_L_TOGGLE_PUB:
             return state.updateIn(['pages'], (pages) => {
                 return pages.update(

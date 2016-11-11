@@ -39,10 +39,10 @@ export default class PageList extends Component{
 	  	this.search = this._search.bind(this)
 	}
 	componentWillMount() {
-		const { page,query } = this.props
+		const { page,query,filter } = this.props
 		if(typeof page === 'number') {
 			this.context.router.push(`/page?page=${page}`)
-			this.setState({query})
+			this.setState({filter,query})
 		}else{
 			this.props.getPage(this.props.location.query.page)
 		}
@@ -70,7 +70,7 @@ export default class PageList extends Component{
 	}
 	_search() {
 		this.context.router.push(`/page?page=0`)
-		this.props.getPageBy(this.state.query.trim())
+		this.props.getPageBy(this.state.filter,this.state.query.trim())
 	}
 	render() {
 		const inputProps = {

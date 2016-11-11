@@ -1,17 +1,22 @@
 import { connect } from 'react-redux'
 import SkuList from './SkuList'
-import { fetchSku, toggleRec, toggleBlk } from '../../actions/skuAction'
+import { getSkuBy, getSku, toggleRec, toggleBlk,deleteSku } from '../../actions/skuAction'
 
 const mapActionCreators = {
-	fetchSku,
 	toggleRec,
 	toggleBlk,
+	getSku,
+	getSkuBy,
+	deleteSku,
 }
 
 const mapStateToProps = (state) => {
-	const { skus } = state.sku.toJS()
+	const { skus,totalPages,page,filter } = state.sku.toJS()
 	return {
 		skus,
+		totalPages,
+		page,
+		filter
 	}
 }
 

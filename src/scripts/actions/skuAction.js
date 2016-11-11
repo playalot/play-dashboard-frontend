@@ -1,23 +1,21 @@
 import Request from 'superagent'
 
 export const SKL_RECEIVE_SKU = 'SKL_RECEIVE_SKU'
-export const SKL_RECEIVE_SKU_NEW = 'SKL_RECEIVE_SKU_NEW'
 
 export const SKL_TOGGLE_REC = 'SKL_TOGGLE_REC'
 export const SKL_TOGGLE_BLK = 'SKL_TOGGLE_BLK'
+export const SKL_DELETE_SKU = 'SKL_DELETE_SKU'
 
-function receiveSku(res) {
+function receiveSku(res,totalPages,page,filter) {
     return {
         type: SKL_RECEIVE_SKU,
-        res
+        res,
+        totalPages,
+        page,
+        filter
     }
 }
-function receiveSkuNew(res) {
-    return {
-        type: SKL_RECEIVE_SKU_NEW,
-        res
-    }
-}
+
 function _toggleRec(id) {
     return {
         type: SKL_TOGGLE_REC,
@@ -28,6 +26,13 @@ function _toggleBlk(id) {
     return {
         type: SKL_TOGGLE_BLK,
         id
+    }
+}
+function _deleteSku(id,sid) {
+    return {
+        type: SKL_DELETE_SKU,
+        id,
+        sid
     }
 }
 export function toggleBlk(id) {
@@ -41,54 +46,40 @@ export function toggleRec(id) {
     }
 }
 
-const status = {
-    filter: '',
-    query: '',
-    sort: 'created',
-    page: 0,
-    overload: false,
-    year:'',
-    month:'',
-}
-export function fetchSku(filter, query, sort, year, month, newPage) {
-    if (status.query !== query || status.filter !== filter || status.sort !== sort || status.year !== year || status.month !== month || newPage) {
-          status.filter = filter
-          status.query = query
-          status.sort = sort
-          status.year = year
-          status.month = month
-          status.page = 0
-          status.overload = true
-    } else {
-        status.overload = false
-    }
-    let params = {}
-    if (status.page !== 0) {
-        params.page = status.page
-    }
-    if (status.filter !== '') {
-        params.filter = status.filter
-    }
-    if (status.query !== '') {
-        params.query = status.query
-    }
-    if (status.year !== '') {
-        params.year = status.year
-    }
-    if (status.year !=='' && status.month !== '') {
-        params.month = status.month
-    }
-    if (status.sort !== '') {
-        params.sort = status.sort
-    }
-    return (dispatch) => {
+export function getSku (page = 0) {
+    return (dispatch,getState) => {
+        let params = { page }
+        const { filter } = getState().sku.toJS()
+        if(filter) {
+            params.filter = filter
+        }
         return Request
             .get(`/api/stocks`)
-            // .query(params)
-            .end((err,res) => {
-                // status.page = res.body.nextPage
-                // status.overload ? dispatch(receiveToyNew(res.body.toys)) : dispatch(receiveToy(res.body.toys))
-                dispatch(receiveSkuNew(res.body.stocks))
+            .query(params)
+            .end((err, res) => {
+                dispatch(receiveSku(res.body.stocks,res.body.totalPages,page,filter))
             })
+    }
+}
+
+export function getSkuBy (filter = '') {
+    return (dispatch,getState) => {
+        let page = 0
+        let params = { page }
+        if(filter) {
+            params.filter = filter
+        }
+        return Request
+            .get(`/api/stocks`)
+            .query(params)
+            .end((err, res) => {
+                dispatch(receiveSku(res.body.stocks,res.body.totalPages,page,filter))
+            })
+    }
+}
+
+export function deleteSku(id,sid) {
+    return dispatch => {
+        dispatch(_deleteSku(id,sid))
     }
 }

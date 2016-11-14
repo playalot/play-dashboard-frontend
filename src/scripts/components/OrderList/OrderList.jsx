@@ -21,12 +21,30 @@ export default class OrderList extends Component{
 			this.props.addTracking(id,trackNo)
 		}
 	}
+	formatStatus(str) {
+		switch(str) {
+			case 'open':
+				return '未支付'
+			case 'paid':
+				return '已支付'
+			case 'prepaid':
+				return '已预订'
+			case 'due':
+				return '等待补款'
+			case 'close':
+				return '关闭'
+			case 'done':
+				return '完成'
+			default :
+				return '未知'
+		}
+	}
 	render() {
 		return(
 			<div className="content">
 	          <div className="table-responsive">
 	            <table className="table table-striped">
-	            	<thead><tr><th>用户</th><th>商家</th><th>订单</th><th>地址</th><th>下单时间</th><th>备注</th><th>数量</th><th>总计</th><th></th></tr></thead>
+	            	<thead><tr><th>用户</th><th>商家</th><th>订单</th><th>下单时间</th><th>订单状态</th><th>总计</th><th></th><th></th></tr></thead>
 	              <tbody>
 	                {this.props.orders.map((order,index) => {
 	                  return (
@@ -34,11 +52,12 @@ export default class OrderList extends Component{
 	                      <td><Link to={'/user/'+order.user.id}><img style={{width:'45px'}} src={order.user.avatar} className="img-circle"/></Link></td>
 	                      <td>{order.items[0]['merchant']}</td>
 	                      <td>{order.title}</td>
-	                      <td style={{maxWidth:150,whiteSpace: 'normal'}}>{order.address}</td>
 	                      <td>{Moment(order.created).format('MM-DD hh:mm')}</td>
-	                      <td style={{maxWidth:100,whiteSpace: 'normal'}}>{order.note}</td>
-	                      <td>{order.items[0]['quantity']}个</td>
-	                      <td>{order.totalPrice}元</td>
+	                      <td>{this.formatStatus(order.status)}</td>
+	                      <td>¥{order.price.totalPrice}</td>
+	                      <td>
+	                      	<Link to={`/order/${order.id}`}>详情</Link>
+	                      </td>
 	                      {
 	                      	order.tracking?
 	                      	<td>
@@ -46,7 +65,6 @@ export default class OrderList extends Component{
 	                      			{order.tracking.number}
 	                      			<i className="fa fa-edit"></i>
 	                      		</span>
-	                      		<Link to={`/order/${index}`}>查看</Link>
 	                      	</td>
 	                      	:<td>
 	                      		<span className="btn btn-sm" onClick={() => this.addTracking(order.id)}>

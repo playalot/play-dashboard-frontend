@@ -3,14 +3,43 @@ import {Form, FormGroup,FormControl,Col} from 'react-bootstrap'
 import Moment from 'moment'
 
 export default class extends Component{
+	constructor(props) {
+		super(props);
+		this.addTracking = this._addTracking.bind(this)
+	}
 	componentWillMount() {
 		if(!this.props.loaded){
 			this.props.fetchOrder()
 		}
+		this.props.fetchOrderDetail(this.props.params.index)
+	}
+	_addTracking(id) {
+		let trackNo = prompt('输入物流号')
+		if (trackNo) {
+			this.props.addTracking(id,trackNo)
+		}
+	}
+	formatStatus(str) {
+		switch(str) {
+			case 'open':
+				return '未支付'
+			case 'paid':
+				return '已支付'
+			case 'prepaid':
+				return '已预订'
+			case 'due':
+				return '等待补款'
+			case 'close':
+				return '关闭'
+			case 'done':
+				return '完成'
+			default :
+				return '未知'
+		}
 	}
 	render() {
-		const order = this.props.orders[this.props.params.index]
-		if(order) {
+		const { order } = this.props
+		if(order.id) {
 			return (
 				<div className="content">
 	                <div className="box box-solid">
@@ -47,9 +76,53 @@ export default class extends Component{
 	                          </Col>
 	                        </FormGroup>
 	                        <FormGroup style={{marginBottom:0}}>
-	                          <Col sm={9} smOffset={2}>
+	                          <Col className="control-label" sm={2}><strong>支付状态</strong></Col>
+	                          <Col sm={9}>
+	                            <FormControl.Static>{this.formatStatus(order.status)}</FormControl.Static>
+	                          </Col>
+	                        </FormGroup>
+	                        {
+	                        	order.status === 'paid' ?
+	                        	<FormGroup style={{marginBottom:0}}>
+		                          <Col className="control-label" sm={2}><strong>支付方式</strong></Col>
+		                          <Col sm={9}>
+		                            <FormControl.Static>{order.payments[0].method}</FormControl.Static>
+		                          </Col>
+		                        </FormGroup>
+		                        :null
+	                        }
+	                        {
+	                        	order.status === 'paid' ?
+	                        	<FormGroup style={{marginBottom:0}}>
+		                          <Col className="control-label" sm={2}><strong>支付时间</strong></Col>
+		                          <Col sm={9}>
+		                            <FormControl.Static>{order.payments[0].timestamp}</FormControl.Static>
+		                          </Col>
+		                        </FormGroup>
+		                        :null
+	                        }
+	                        {
+	                        	order.status === 'paid' ?
+	                        	<FormGroup style={{marginBottom:0}}>
+		                          <Col className="control-label" sm={2}><strong>支付编号</strong></Col>
+		                          <Col sm={9}>
+		                            <FormControl.Static>{order.payments[0].tradeNo}</FormControl.Static>
+		                          </Col>
+		                        </FormGroup>
+		                        :null
+	                        }
+	                        <FormGroup style={{marginBottom:0}}>
+	                          <Col className="control-label" sm={2}><strong>物流</strong></Col>
+	                          <Col sm={9}>
 	                            <FormControl.Static>
-	                            	<a href={`http://wap.guoguo-app.com/wuliuDetail.htm?mailNo=${order.tracking.number}`} target="_blank">快递详情</a>
+	                            	{
+	                            		order.tracking ?
+	                            		<a href={`http://wap.guoguo-app.com/wuliuDetail.htm?mailNo=${order.tracking.number}`} target="_blank">快递详情</a>
+	                            		:
+	                            		<span className="btn btn-sm" style={{padding:0}} onClick={() => this.addTracking(order.id)}>
+			                      			添加<i className="fa fa-plus"></i>
+			                      		</span>
+	                            	}
 	                            </FormControl.Static>
 	                          </Col>
 	                        </FormGroup>
@@ -60,7 +133,7 @@ export default class extends Component{
 	                  	<div className="box-body pad">
 	                  		<div className="table-responsive">
 					            <table className="table table-striped">
-					            	<thead><tr><th>商品</th><th>名称</th><th>商家</th><th>价格</th><th>数量</th><th>描述</th></tr></thead>
+					            	<thead><tr><th>商品</th><th>名称</th><th>商家</th><th>价格</th><th>运费</th><th>数量</th></tr></thead>
 					              	<tbody>
 					              	{
 					              		order.items.map((item,i) => {
@@ -69,18 +142,18 @@ export default class extends Component{
 					              					<td>
 					              						<img style={{width:'45px'}} src={item.image} className="thumbnail"/>
 					              					</td>
-					              					<td>{item.title}</td>
+					              					<td>{item.name}</td>
 					              					<td>{item.merchant}</td>
 					              					<td>{item.price}</td>
-					              					<td>{item.quantity}</td>
-					              					<td>{item.description}</td>
+					              					<td>{item.freight}</td>
+					              					<td>{item.count}</td>
 					              				</tr>
 					              			)
 					              		})
 					              	}
 					              	</tbody>
 					            </table>
-					            <button className="pull-right btn btn-danger">总计:&nbsp;{order.totalPrice}</button>
+					            <button className="pull-right btn btn-danger">总计:&nbsp;¥ {order.price.totalPrice}</button>
 					        </div>
 	                  	</div>
 	                  

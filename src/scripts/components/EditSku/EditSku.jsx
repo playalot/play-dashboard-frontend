@@ -12,8 +12,9 @@ export default class EditSku extends Component {
             id:'',
             sid:'',
             quantity:100,
+            originPrice:0,
+            costPrice:0,
             price:9999,
-            tbUrl:'',
             freight:0,
             type:'inStock',
             prepay:0,
@@ -32,8 +33,9 @@ export default class EditSku extends Component {
                 sid:this.props.location.query.sid,
                 quantity:stock.quantity,
                 price:stock.price,
-                freight:stock.freight,
-                tbUrl:stock.tbUrl ? stock.tbUrl:'',
+                costPrice:stock.costPrice ? stock.costPrice : 0,
+                originPrice:stock.originPrice ? stock.originPrice : 0,
+                freight:stock.freight ? stock.freight : 0,
                 type:stock.preOrder ? 'preOrder' : 'inStock',
                 prepay:stock.preOrder ? stock.preOrder.prepay : 0,
                 orderClose: stock.preOrder ? Moment(stock.preOrder.orderClose) : Moment(),
@@ -42,11 +44,12 @@ export default class EditSku extends Component {
     }
     _save() {
         const {
-            id,sid,price,tbUrl,quantity,freight, prepay, orderClose, type
+            id,sid,price,quantity,freight, prepay, orderClose, type, costPrice, originPrice
         } = this.state
         let data = {
             price:parseFloat(price),
-            tbUrl,
+            originPrice:parseFloat(originPrice),
+            costPrice:parseFloat(costPrice),
             quantity:parseInt(quantity),
             freight:parseFloat(freight),
             preOrder:{
@@ -54,7 +57,7 @@ export default class EditSku extends Component {
                 orderClose:`${orderClose.format('YYYY-MM-DD')} 23:59:59`
             }
         }
-        Object.keys(data).forEach(key => data[key] === '' ? delete data[key] : '')
+        Object.keys(data).forEach(key => !data[key] ? delete data[key] : '')
         type ==='preOrder' ? null:delete data['preOrder']
         Request
         .post(`/api/toy/${id}/stock/${sid}`)
@@ -131,18 +134,26 @@ export default class EditSku extends Component {
               </FormGroup>
               <FormGroup>
                 <Col sm={2} className="sm-2-label">
-                  运费
+                  原价
                 </Col>
                 <Col sm={10}>
-                  <FormControl value={this.state.freight} type="number" onChange={(e) => this.setState({freight:e.target.value})}/>
+                  <FormControl value={this.state.originPrice} type="number" onChange={(e) => this.setState({originPrice:e.target.value})}/>
                 </Col>
               </FormGroup>
               <FormGroup>
                 <Col sm={2} className="sm-2-label">
-                  淘宝链接
+                  进货价
                 </Col>
                 <Col sm={10}>
-                  <FormControl type="text" value={this.state.tbUrl} onChange={(e) => this.setState({tbUrl:e.target.value})}/>
+                  <FormControl value={this.state.costPrice} type="number" onChange={(e) => this.setState({costPrice:e.target.value})}/>
+                </Col>
+              </FormGroup>
+              <FormGroup>
+                <Col sm={2} className="sm-2-label">
+                  运费
+                </Col>
+                <Col sm={10}>
+                  <FormControl value={this.state.freight} type="number" onChange={(e) => this.setState({freight:e.target.value})}/>
                 </Col>
               </FormGroup>
               <Row>

@@ -22,7 +22,7 @@ export default class Toy extends Component{
 			id:'',
 			quantity:100,
 			price:9999,
-			originPrice:9999,
+			originPrice:0,
 			merchant:'PLAY玩具控',
 			tbUrl:'',
 			freight:0,
@@ -43,9 +43,9 @@ export default class Toy extends Component{
 			id:'',
 			quantity:100,
 			price:9999,
-			originPrice:9999,
+			originPrice:0,
+			costPrice:0,
 			merchant:'PLAY玩具控',
-			tbUrl:'',
 			freight:0,
 			costPrice:0,
 		})
@@ -60,8 +60,7 @@ export default class Toy extends Component{
 					orderClose:`${orderClose.format('YYYY-MM-DD')} 23:59:59`
 				}
 			}
-		Object.keys(data).forEach(key => data[key] === '' ? delete data[key] : '')
-		data.costPrice === 0 ? delete data['costPrice']:null
+		Object.keys(data).forEach(key => !data[key] ? delete data[key] : null)
 		type ==='preOrder' ? null:delete data['preOrder']
 			Request
 				.post(`/api/toy/${id}/stock`)
@@ -355,14 +354,6 @@ export default class Toy extends Component{
 										<option value="拆盒网">拆盒网</option>
 										<option value="塑堂玩具">塑堂玩具</option>
 									</FormControl>
-								</Col>
-							</FormGroup>
-							<FormGroup>
-								<Col sm={2} className="sm-2-label">
-									淘宝链接
-								</Col>
-								<Col sm={10}>
-									<FormControl type="text" value={this.state.tbUrl} onChange={(e) => this.setState({tbUrl:e.target.value})}/>
 								</Col>
 							</FormGroup>
 						</Form>

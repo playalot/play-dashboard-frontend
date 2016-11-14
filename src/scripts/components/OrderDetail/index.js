@@ -1,16 +1,17 @@
 import { connect } from 'react-redux'
 import OrderDetail from './OrderDetail'
 
-import { fetchOrder} from '../../actions/orderAction'
+import { fetchOrder, addTracking ,fetchOrderDetail} from '../../actions/orderAction'
 const mapActionCreators = {
-	fetchOrder
+	fetchOrder,addTracking, fetchOrderDetail
 }
 
 const mapStateToProps = (state) => {
-	const { loaded,orders } = state.order.toJS()
+	const { loaded,orders,order } = state.order.toJS()
     return {
     	orders,
-    	loaded
+    	loaded,
+    	order,
     }
 }
 

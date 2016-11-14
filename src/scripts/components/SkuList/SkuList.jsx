@@ -45,6 +45,13 @@ export default class SkuList extends Component{
 	render() {
 		return(
 			<div className="content">
+				<div className="page-header">
+					<Row>
+						<Col sm={3}>
+							<input type="text"/>
+						</Col>
+					</Row>
+	          	</div>
 				<div className="sku-container">
 					<div className="sku-title">
 						<div>

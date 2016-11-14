@@ -61,7 +61,7 @@ export default class Toy extends Component{
 				}
 			}
 		Object.keys(data).forEach(key => data[key] === '' ? delete data[key] : '')
-		data.costPrice === 0 ? null:delete data['costPrice']
+		data.costPrice === 0 ? delete data['costPrice']:null
 		type ==='preOrder' ? null:delete data['preOrder']
 			Request
 				.post(`/api/toy/${id}/stock`)

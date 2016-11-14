@@ -92,7 +92,11 @@ export default class SkuList extends Component{
 															<small>原价:¥&nbsp;{stock.originPrice}</small>
 															:null
 														}
-														<small>进货价:¥&nbsp;{stock.costPrice}</small>
+														{
+															stock.costPrice ? 
+															<small>进货价:¥&nbsp;{stock.costPrice}</small>
+															:null
+														}
 													</div>													
 													<div className="sku-body-item operate">{stock.merchant}</div>													
 													<div className="sku-body-item">{stock.quantity}</div>													

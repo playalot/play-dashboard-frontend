@@ -29,7 +29,7 @@ export default class extends Component{
 				return '已预订'
 			case 'due':
 				return '等待补款'
-			case 'close':
+			case 'closed':
 				return '关闭'
 			case 'done':
 				return '完成'
@@ -119,8 +119,8 @@ export default class extends Component{
 	                            		order.tracking ?
 	                            		<a href={`http://wap.guoguo-app.com/wuliuDetail.htm?mailNo=${order.tracking.number}`} target="_blank">快递详情</a>
 	                            		:
-	                            		<span className="btn btn-sm" style={{padding:0}} onClick={() => this.addTracking(order.id)}>
-			                      			添加<i className="fa fa-plus"></i>
+	                            		<span style={{color:'teal',padding:0}} className="btn btn-sm" onClick={() => this.addTracking(order.id)}>
+			                      			添加物流
 			                      		</span>
 	                            	}
 	                            </FormControl.Static>

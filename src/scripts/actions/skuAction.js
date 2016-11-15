@@ -80,6 +80,10 @@ export function getSkuBy (filter = '') {
 
 export function deleteSku(id,sid) {
     return dispatch => {
-        dispatch(_deleteSku(id,sid))
+        return Request
+            .del(`/api/toy/${id}/stock/${sid}`)
+            .end((err,res) => {
+                dispatch(_deleteSku(id,sid))
+            })
     }
 }

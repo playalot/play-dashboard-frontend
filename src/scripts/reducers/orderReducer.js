@@ -1,10 +1,13 @@
 import Immutable from 'immutable'
-import { ORDER_L_RECEIVE_ORDER, ORDER_L_ADD_TRACKING, ORDER_L_FETCH_BY_ID } from '../actions/orderAction'
+import { ORDER_L_RECEIVE_ORDER, ORDER_L_ADD_TRACKING, ORDER_L_FETCH_BY_ID,ORDER_L_SET_STATUS } from '../actions/orderAction'
 
-export default (state = Immutable.fromJS({ orders: [], loaded:false,order:{} }),action)=>{
+export default (state = Immutable.fromJS({ orders: [], totalPages:100,order:{} }),action)=>{
     switch (action.type) {
         case ORDER_L_RECEIVE_ORDER:
-            return state.updateIn(['orders'],(orders) => orders.clear().concat(Immutable.fromJS(action.res))).set('loaded',true)
+            return state
+                .updateIn(['orders'], (orders) => orders.clear().concat(Immutable.fromJS(action.res)))
+                .set('totalPages',action.totalPages)
+                .set('page',action.page)
         case ORDER_L_ADD_TRACKING:
         	return state.updateIn(['orders'],(orders) => {
         		return orders.update(
@@ -20,6 +23,16 @@ export default (state = Immutable.fromJS({ orders: [], loaded:false,order:{} }),
                 return item.get('id') === action.id
             })
             return state.set('order',state.getIn(['orders',index]))
+        case ORDER_L_SET_STATUS:
+            return state.updateIn(['orders'], orders => {
+                return orders.update(
+                    orders.findIndex((item) => {
+                        return item.get('id') === action.id
+                    }), (item) => {
+                        return item.set('status',action.status)
+                    }
+                )
+            })
         default:
             return state
     }

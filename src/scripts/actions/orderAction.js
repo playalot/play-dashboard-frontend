@@ -3,11 +3,14 @@ import Request from 'superagent'
 export const ORDER_L_RECEIVE_ORDER = 'ORDER_L_RECEIVE_ORDER'
 export const ORDER_L_ADD_TRACKING = 'ORDER_L_ADD_TRACKING'
 export const ORDER_L_FETCH_BY_ID = 'ORDER_L_FETCH_BY_ID'
+export const ORDER_L_SET_STATUS = 'ORDER_L_SET_STATUS'
 
-function receiveOrder(res) {
+function receiveOrder(res,totalPages,page) {
     return {
         type: ORDER_L_RECEIVE_ORDER,
-        res
+        res,
+        totalPages,
+        page
     }
 }
 function _addTracking(id,trackNo) {
@@ -17,13 +20,11 @@ function _addTracking(id,trackNo) {
         trackNo
     }
 }
-export function fetchOrder() {
-    return (dispatch) => {
-        return Request
-            .get(`/api/orders`)
-            .end((err,res) => {
-                dispatch(receiveOrder(res.body.orders))
-            })
+function _setStatus(id,status) {
+    return {
+        type : ORDER_L_SET_STATUS,
+        id,
+        status
     }
 }
 
@@ -46,5 +47,28 @@ export function fetchOrderDetail(id) {
     return {
         type: ORDER_L_FETCH_BY_ID,
         id
+    }
+}
+
+export function setStatus(id,status) {
+    return dispatch => {
+        return Request
+            .post(`/api/order/${id}/status`)
+            .send({status})
+            .end((err,res) => {
+                dispatch(_setStatus(id,status))
+            })
+    }
+}
+
+export function getOrder (page = 0) {
+    return (dispatch,getState) => {
+        let params = { page }
+        return Request
+            .get(`/api/orders`)
+            .query(params)
+            .end((err, res) => {
+                dispatch(receiveOrder(res.body.orders,res.body.totalPages,page))
+            })
     }
 }

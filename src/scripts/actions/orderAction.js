@@ -2,7 +2,6 @@ import Request from 'superagent'
 
 export const ORDER_L_RECEIVE_ORDER = 'ORDER_L_RECEIVE_ORDER'
 export const ORDER_L_ADD_TRACKING = 'ORDER_L_ADD_TRACKING'
-export const ORDER_L_FETCH_BY_ID = 'ORDER_L_FETCH_BY_ID'
 export const ORDER_L_SET_STATUS = 'ORDER_L_SET_STATUS'
 
 function receiveOrder(res,totalPages,page) {
@@ -43,12 +42,6 @@ export function addTracking(id,trackNo) {
     }
 }
 
-export function fetchOrderDetail(id) {
-    return {
-        type: ORDER_L_FETCH_BY_ID,
-        id
-    }
-}
 
 export function setStatus(id,status) {
     return dispatch => {

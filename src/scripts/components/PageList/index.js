@@ -1,9 +1,10 @@
 import { connect } from 'react-redux'
 import PageList from './PageList'
 import { 
-	getPage, getPageBy, togglePub, toggleRec, deleteArticle, setCoverType,addToy, toggleShare,
-	fetchToy, clearSuggestion
+	getPage, getPageBy, togglePub, toggleRec, deleteArticle, setCoverType,addToy, toggleShare
 } from '../../actions/pageAction'
+
+import { fetchToyByQuery, clearSuggestion } from '../../actions/toyAction'
 const mapActionCreators = {
 	getPage,
 	getPageBy,
@@ -14,8 +15,7 @@ const mapActionCreators = {
 	addToy,
 	toggleShare,
 
-	//玩具搜索
-	fetchToy,
+	fetchToyByQuery,
 	clearSuggestion,
 }
 

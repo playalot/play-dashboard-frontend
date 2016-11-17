@@ -5,6 +5,8 @@ export const TOL_TOGGLE_R18 = 'TOL_TOGGLE_R18'
 export const TOL_TOGGLE_RECOMMEND = 'TOL_TOGGLE_RECOMMEND'
 export const TOL_DELETE_TOY = 'TOL_DELETE_TOY'
 export const TOL_ADD_TOY = 'TOL_ADD_TOY'
+export const TOY_RECEIVE_TOY_BY_QUERY = 'TOY_RECEIVE_TOY_BY_QUERY'
+export const TOY_CLEAR_SUGGESTION = 'TOY_CLEAR_SUGGESTION'
 
 function receiveToy(res,totalPages,page,filter,query,sort,year,month) {
     return {
@@ -41,6 +43,17 @@ function _addToy(res) {
     return {
         type: TOL_ADD_TOY,
         res
+    }
+}
+function receiveToyByQuery(res) {
+    return {
+        type: TOY_RECEIVE_TOY_BY_QUERY,
+        res
+    }
+}
+export function clearSuggestion() {
+    return {
+        type: TOY_CLEAR_SUGGESTION
     }
 }
 export function toggleR18(id) {
@@ -157,6 +170,17 @@ export function getToyBy (filter = '',query = '',sort = 'created',year,month) {
             .query(params)
             .end((err, res) => {
                 dispatch(receiveToy(res.body.toys,res.body.totalPages,page,filter,query,sort,year,month))
+            })
+    }
+}
+
+export function fetchToyByQuery(query) {
+    return (dispatch) => {
+        return Request
+            .get(`/api/toys`)
+            .query({query})
+            .end((err,res) => {
+                dispatch(receiveToyByQuery(res.body.toys))
             })
     }
 }

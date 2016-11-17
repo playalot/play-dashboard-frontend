@@ -1,9 +1,10 @@
 import Immutable from 'immutable'
 import {
-	TOL_RECEIVE_TOY, TOL_TOGGLE_R18, TOL_TOGGLE_RECOMMEND, TOL_DELETE_TOY, TOL_ADD_TOY
+	TOL_RECEIVE_TOY, TOL_TOGGLE_R18, TOL_TOGGLE_RECOMMEND, TOL_DELETE_TOY, TOL_ADD_TOY,
+    TOY_RECEIVE_TOY_BY_QUERY,TOY_CLEAR_SUGGESTION
 } from '../actions/toyAction'
 
-export default (state = Immutable.fromJS({ toys: [],totalPages:100,filter:'',query:'',sort:'created',month:'',year:'' }),action)=>{
+export default (state = Immutable.fromJS({ toys: [],totalPages:100,filter:'',query:'',sort:'created',month:'',year:'',toyResults:[] }),action)=>{
     switch (action.type) {
         case TOL_RECEIVE_TOY:
             return state
@@ -45,6 +46,12 @@ export default (state = Immutable.fromJS({ toys: [],totalPages:100,filter:'',que
         	return state.updateIn(['toys'], (toys) => {
         		return toys.unshift(Immutable.fromJS(action.res))
         	})
+        case TOY_RECEIVE_TOY_BY_QUERY:
+            return state.set('toyResults',Immutable.fromJS(action.res))
+        case TOY_CLEAR_SUGGESTION:
+            return state.updateIn(['toyResults'],(toyResults) => {
+                return toyResults.clear()
+            })
         default:
             return state
     }

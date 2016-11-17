@@ -7,11 +7,8 @@ import {
     PAGE_L_SET_COVER_TYPE,
     PAGE_L_ADD_TOY,
     PAGE_L_TOGGLE_SHARE,
-
-    PAGE_L_CLEAR_SUGGESTION,
-    PAGE_L_RECEIVE_TOY,
 } from '../actions/pageAction'
-export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'',filter:'', searchResults:[] }),action)=>{
+export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'',filter:'' }),action)=>{
     switch (action.type) {
         case PAGE_L_RECEIVE_PAGE:
             return state
@@ -79,12 +76,6 @@ export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'',fil
                     }
                 )
             })
-        case PAGE_L_CLEAR_SUGGESTION:
-            return state.updateIn(['searchResults'],(searchResults) => {
-                return searchResults.clear()
-            })
-        case PAGE_L_RECEIVE_TOY:
-            return state.set('searchResults', Immutable.fromJS(action.res) )
         default:
             return state
     }

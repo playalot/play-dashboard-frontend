@@ -4,8 +4,9 @@ import {Row, Button,Form,FormGroup,InputGroup,FormControl, Modal} from 'react-bo
 import Moment from 'moment'
 import Request from 'superagent'
 import Switch from 'rc-switch'
-import Autosuggest from 'react-autosuggest'
 import ReactPaginate from 'react-paginate'
+
+import PlayAutoSuggest from '../Common/PlayAutoSuggest'
 
 export default class PageList extends Component{
 	constructor(props) {
@@ -14,29 +15,18 @@ export default class PageList extends Component{
 	  		filter:'',
 	  		query:'',
 	  		showModal:false,
-	  		toyQuery:'',
 	  		pid:'',
 	  	}
 	  	this.togglePub = (id) => this.props.togglePub(id)
 	  	this.toggleRec = (id) => this.props.toggleRec(id)
 	  	this.toggleShare = (id) => this.props.toggleShare(id)
 	  	this.deleteArticle = this._deleteArticle.bind(this)
-	  	this.addToy = this._addToy.bind(this)
+	  	this.addToy = (pid) => this.setState({showModal:true,pid})
 
-	  	//玩具搜索
-	  	this.close = () => this.setState({showModal:false,toyQuery:'',pid:''})
-	  	this.getSuggestionValue = suggestion => suggestion.id
-	  	this.onChangeToyQuery = (event,{newValue}) => this.setState({toyQuery: newValue})
-	  	this.onSuggestionsFetchRequested = ({value}) => {
-	  		this.props.fetchToy(value)
-	  	}
-	  	this.onSuggestionsClearRequested = () => this.props.clearSuggestion()
-	  	this.selectValue = (event,{ suggestionValue, method }) => {
-	  		this.props.addToy(this.state.pid,suggestionValue)
-	  		this.close()
-	  	}
 	  	this.goPage = this._goPage.bind(this)
 	  	this.search = this._search.bind(this)
+	  	//玩具搜索
+	  	this.close = () => this.setState({showModal:false,pid:''})
 	}
 	componentWillMount() {
 		const { page,query,filter } = this.props
@@ -47,22 +37,10 @@ export default class PageList extends Component{
 			this.props.getPage(this.props.location.query.page)
 		}
 	}
-	_addToy(pid) {
-		this.setState({showModal:true,pid})
-	}
 	_deleteArticle(id) {
 		if (confirm('删除这个文章?')) {
 			this.props.deleteArticle(id)
 		}
-	}
-	renderSuggestion(suggestion) {
-		return (
-			<div className="search-item">
-			  <img className="img-rounded" src={suggestion.cover}/>
-			  <span className="item-name">{suggestion.name}</span>
-			  <span className="item-desc">{suggestion.id}</span>
-			</div>
-		)
 	}
 	_goPage(page) {
 		this.context.router.push(`/page?page=${page}`)
@@ -175,14 +153,17 @@ export default class PageList extends Component{
 		            	<Modal.Title>搜索玩具</Modal.Title>
 		          	</Modal.Header>
 		          	<Modal.Body>
-		            	<Autosuggest
-							suggestions={this.props.searchResults}
-					        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-					        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-							getSuggestionValue={this.getSuggestionValue}
-							renderSuggestion={this.renderSuggestion}
-							onSuggestionSelected={this.selectValue}
-							inputProps={inputProps}
+		            	<PlayAutoSuggest
+							fetch={(o) => this.props.fetchToyByQuery(o.value)}
+							clear={this.props.clearSuggestion}
+							getValue={suggestion => suggestion.name}
+							selectValue={(event,{suggestion, suggestionValue, method }) => {
+								this.props.addToy(this.state.pid,suggestion.id)
+	  							this.close()
+							}}
+							desc="release"
+							placeholder="请输入玩具关键字"
+							results={this.props.toyResults}
 						/>
 	          		</Modal.Body>
 	        	</Modal>

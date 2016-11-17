@@ -6,11 +6,27 @@ import { Link } from 'react-router'
 import CDN from '../../widgets/cdn'
 import Moment from 'moment'
 import ReactPaginate from 'react-paginate'
+import DatePicker from 'react-datepicker'
+import PlayAutoSuggest from '../Common/PlayAutoSuggest'
+
+
 export default class SkuList extends Component{
 	constructor(props) {
 	  	super(props)
 	  	this.state = {
 			filter: '',
+
+			id:'',
+			quantity:100,
+			price:9999,
+			originPrice:0,
+			merchant:'PLAY玩具控',
+			tbUrl:'',
+			freight:0,
+			type:'inStock',
+			prepay:0,
+			orderClose:Moment(),
+			costPrice:0,
 	  	}
 		this.toggleRec = id => this.props.toggleRec(id)
 		this.toggleBlk = id => this.props.toggleBlk(id)
@@ -18,6 +34,45 @@ export default class SkuList extends Component{
 		this.editSku = this._editSku.bind(this)
 		this.goPage = this._goPage.bind(this)
 		this.deleteSku = (id,sid) => confirm('确定下架这个商品?') && this.props.deleteSku(id,sid)
+
+		this.open = () => this.setState({ showModal: true })
+		this.close = () => this.setState({
+			showModal: false,
+			id:'',
+			quantity:100,
+			price:9999,
+			originPrice:0,
+			costPrice:0,
+			merchant:'PLAY玩具控',
+			freight:0,
+			costPrice:0,
+		})
+		this.submit = () => {
+			const {
+				id,price,originPrice,merchant,quantity,freight, prepay, orderClose, type, costPrice
+			} = this.state
+			let data = {
+				price:parseFloat(price),originPrice:parseFloat(originPrice),merchant,costPrice:parseFloat(costPrice),
+				quantity:parseInt(quantity),freight:parseFloat(freight),preOrder:{
+					prepay:parseFloat(prepay),
+					orderClose:`${orderClose.format('YYYY-MM-DD')} 23:59:59`
+				}
+			}
+			Object.keys(data).forEach(key => !data[key] ? delete data[key] : null)
+			type ==='preOrder' ? null:delete data['preOrder']
+			Request
+			.post(`/api/toy/${id}/stock`)
+			.send(data)
+			.end((err,res) => {
+				if(err) {
+					console.warn(err)
+				}else{
+					this.close()
+					alert('添加商品成功')
+				}
+			})
+		}
+		this.changeOrderClose = (date) => this.setState({orderClose:date})
 	}
 	componentWillMount() {
 		const { page,filter } = this.props
@@ -47,10 +102,25 @@ export default class SkuList extends Component{
 			<div className="content">
 				<div className="page-header">
 					<Row>
-						<Col sm={3}>
-							<input type="text"/>
+						<Col sm={4}>
+							<PlayAutoSuggest
+								fetch={(o) => this.props.fetchToyByQuery(o.value)}
+								clear={this.props.clearSuggestion}
+								getValue={suggestion => suggestion.name}
+								selectValue={(event,{suggestion, suggestionValue, method }) => {
+									this.setState({
+										id:suggestion.id
+									},() => {
+										this.open()
+									})
+								}}
+								desc="release"
+								placeholder="请输入玩具关键字"
+								results={this.props.toyResults}
+							/>
 						</Col>
 					</Row>
+					
 	          	</div>
 				<div className="sku-container">
 					<div className="sku-title">
@@ -140,6 +210,123 @@ export default class SkuList extends Component{
 						forceSelected={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
 						activeClassName={"active"} />
 	          	</Row>
+	          	<Modal show={this.state.showModal} onHide={this.close}>
+					<Modal.Header closeButton>
+						<Modal.Title>添加商品</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<Form horizontal>
+							<FormGroup>
+								<Col sm={2} className="sm-2-label">
+									ID
+								</Col>
+								<Col sm={10}>
+									<FormControl type="text" defaultValue={this.state.id} readOnly/>
+								</Col>
+							</FormGroup>
+							<FormGroup>
+								<Col sm={2} className="sm-2-label">
+									库存数量
+								</Col>
+								<Col sm={10}>
+									<FormControl value={this.state.quantity} type="number" onChange={(e) => this.setState({quantity:e.target.value})}/>
+								</Col>
+							</FormGroup>
+							<FormGroup>
+								<Col sm={2} className="sm-2-label">
+									购买类型
+								</Col>
+								<Col sm={10} style={{padding:'6px 15px'}}>
+									<label>
+								    	<input type="radio" name="type" value="inStock" onChange={(e) => this.setState({type:e.target.value})} defaultChecked/>现货
+								  	</label>&nbsp;&nbsp;
+								  	<label>
+								    	<input type="radio" name="type" value="preOrder" onChange={(e) => this.setState({type:e.target.value})}/>预定
+								  	</label>
+								</Col>
+							</FormGroup>
+							{
+								this.state.type === 'preOrder' ?
+								<FormGroup>
+									<Col sm={2} className="sm-2-label">
+										定金
+									</Col>
+									<Col sm={10}>
+										<FormControl value={this.state.prepay} type="number" onChange={(e) => this.setState({prepay:e.target.value})}/>
+									</Col>
+								</FormGroup>
+								:null
+							}
+							{
+								this.state.type === 'preOrder' ?
+								<FormGroup>
+									<Col sm={2} className="sm-2-label">
+										截止时间
+									</Col>
+									<Col sm={10}	style={{padding:'6px 15px'}}>
+											<DatePicker
+											 selected={this.state.orderClose}
+											 onChange={this.changeOrderClose}
+											 minDate={Moment()}
+											 dateFormat="YYYY/MM/DD"
+										 />
+									</Col>
+								</FormGroup>
+								:null
+							}
+							<FormGroup>
+								<Col sm={2} className="sm-2-label">
+									贩售价格
+								</Col>
+								<Col sm={10}>
+									<FormControl value={this.state.price} type="number" onChange={(e) => this.setState({price:e.target.value})}/>
+								</Col>
+							</FormGroup>
+							<FormGroup>
+								<Col sm={2} className="sm-2-label">
+									原价
+								</Col>
+								<Col sm={10}>
+									<FormControl value={this.state.originPrice} type="number" onChange={(e) => this.setState({originPrice:e.target.value})}/>
+								</Col>
+							</FormGroup>
+							<FormGroup>
+								<Col sm={2} className="sm-2-label">
+									进货成本价
+								</Col>
+								<Col sm={10}>
+									<FormControl value={this.state.costPrice} type="number" onChange={(e) => this.setState({costPrice:e.target.value})}/>
+								</Col>
+							</FormGroup>
+							<FormGroup>
+								<Col sm={2} className="sm-2-label">
+									运费
+								</Col>
+								<Col sm={10}>
+									<FormControl value={this.state.freight} type="number" onChange={(e) => this.setState({freight:e.target.value})}/>
+								</Col>
+							</FormGroup>
+							<FormGroup>
+								<Col sm={2} className="sm-2-label">
+									卖家
+								</Col>
+								<Col sm={10}>
+									<FormControl componentClass="select" value={this.state.merchant} onChange={(e) => this.setState({merchant:e.target.value})}>
+										<option value="PLAY玩具控">PLAY玩具控</option>
+										<option value="亿次元商城">亿次元商城</option>
+										<option value="手办同萌会">手办同萌会</option>
+										<option value="拆盒网">拆盒网</option>
+										<option value="塑堂玩具">塑堂玩具</option>
+									</FormControl>
+								</Col>
+							</FormGroup>
+						</Form>
+					</Modal.Body>
+					<Modal.Footer>
+						<Button onClick={this.close}>取消</Button>
+						<Button bsStyle="primary" onClick={this.submit}>提交</Button>
+					</Modal.Footer>
+				</Modal>
 			</div>
 
 		)

@@ -13,6 +13,7 @@ export default class EditTag extends Component{
             id: this.props.params.id,
             text: '',
             image: '',
+            cover: '',
             type: '',
             description: '',
             classifications:[],
@@ -25,6 +26,7 @@ export default class EditTag extends Component{
             openTag:false
         }
         this.onDropImage = this._onDropImage.bind(this)
+        this.onDropCover = this._onDropCover.bind(this)
         this.changeDescription = (e) => this.setState({
             description: e.target.value
         })
@@ -56,6 +58,7 @@ export default class EditTag extends Component{
                 this.setState({
                     text: res.body.text,
                     image: res.body.image,
+                    cover: res.body.cover ? res.body.cover : '',
                     description: res.body.description ? res.body.description : '',
                     type: res.body.type ? res.body.type : '',
                     classifications: res.body.classifications,
@@ -93,7 +96,7 @@ export default class EditTag extends Component{
     }
     _onDropImage(files) {
         let file = files[0];
-        let uploadKey = `tag/cover/${this.props.params.id}.${Math.random().toString().substring(2,12)}`
+        let uploadKey = `tag/image/${this.props.params.id}.${Math.random().toString().substring(2,12)}`
         Request
             .get(`/api/uptoken?key=${uploadKey}`)
             .end((err,res) => {
@@ -111,10 +114,31 @@ export default class EditTag extends Component{
                     });
             })
     }
+    _onDropCover(files) {
+        let file = files[0];
+        let uploadKey = `tag/cover/${this.props.params.id}.${Math.random().toString().substring(2,12)}`
+        Request
+            .get(`/api/uptoken?key=${uploadKey}`)
+            .end((err,res) => {
+                let uploadToken = res.body.uptoken
+                Request
+                    .post(`http://upload.qiniu.com/`)
+                    .field('key', uploadKey)
+                    .field('token', uploadToken)
+                    .field('x:filename', file.name)
+                    .field('x:size', file.size)
+                    .attach('file', file, file.name)
+                    .set('Accept', 'application/json')
+                    .end((err, res) => {
+                        this.setState({cover: uploadKey});
+                    });
+            })
+    }
     _submit(e) {
         e.preventDefault()
         let {
             image,
+            cover,
             description,
             type,
             otherInfo,
@@ -122,6 +146,7 @@ export default class EditTag extends Component{
         } = this.state
         let data = {
             image,
+            cover,
             description,
             type,
             otherInfo,
@@ -246,18 +271,35 @@ export default class EditTag extends Component{
                           </Col>
                         </FormGroup>
                         <FormGroup>
-                          <Col className="control-label" sm={3}><strong>上传标签图片</strong></Col>
-                          <Col sm={9}>
-                            <Dropzone onDrop={this.onDropImage} style={{width:150, height:100, borderWidth: 2, borderColor: '#666', borderStyle: 'dashed'}}>
+                          <Col className="control-label" sm={3}><strong>上传图片</strong></Col>
+                          <Col sm={3}>
+                            <Dropzone onDrop={this.onDropImage} style={{width:'100%',height:100, borderWidth: 2, borderColor: '#666', borderStyle: 'dashed'}}>
                                 <div>将图片拖入该区域</div>
                             </Dropzone>
                           </Col>
+                          <Col sm={3}>
+                            {
+                                this.state.image !== '' ?
+                                <img className="img-responsive cover-img" style={{height:100,width:'auto'}} src={CDN.show(this.state.image)} />
+                                :null
+                            }
+                          </Col>
                         </FormGroup>
-                        {
-                            this.state.image !== '' ?
-                            <img className="img-responsive cover-img col-sm-offset-3" src={CDN.show(this.state.image)} />
-                            :null
-                        }
+                        <FormGroup>
+                          <Col className="control-label" sm={3}><strong>上传封面</strong></Col>
+                          <Col sm={3}>
+                            <Dropzone onDrop={this.onDropCover} style={{width:'100%',height:100, borderWidth: 2, borderColor: '#666', borderStyle: 'dashed'}}>
+                                <div>将图片拖入该区域</div>
+                            </Dropzone>
+                          </Col>
+                          <Col sm={3}>
+                            {
+                                this.state.cover !== '' ?
+                                <img className="img-responsive cover-img" style={{height:100,width:'auto'}} src={CDN.show(this.state.cover)} />
+                                :null
+                            }
+                          </Col>
+                        </FormGroup>
                       <br/>
                       <button className="btn btn-default col-sm-offset-3" onClick={this.submit}>Submit</button>
                     </Form>

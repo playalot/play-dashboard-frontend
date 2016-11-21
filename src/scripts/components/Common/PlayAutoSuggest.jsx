@@ -30,6 +30,7 @@ export default class PlayAutoSuggest extends Component {
 			clear,
 			getValue,
 			selectValue,
+			...other
 		} = this.props
 		const inputProps = {
 			placeholder,
@@ -38,6 +39,7 @@ export default class PlayAutoSuggest extends Component {
 	    }
 		return(
 			<Autosuggest
+				{...other}
 				suggestions={results}
 		        onSuggestionsFetchRequested={fetch}
 		        onSuggestionsClearRequested={clear}

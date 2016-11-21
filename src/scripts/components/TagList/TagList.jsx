@@ -5,9 +5,9 @@ import {
 } from 'react-bootstrap'
 import { Link } from 'react-router'
 import CDN from '../../widgets/cdn'
-import Autosuggest from 'react-autosuggest'
-
-export default class extends Component{
+import PlayAutoSuggest from '../Common/PlayAutoSuggest'
+import ReactPaginate from 'react-paginate'
+export default class TagList extends Component{
 	constructor(props) {
 	  	super(props)
 	  	this.state = {
@@ -16,8 +16,6 @@ export default class extends Component{
 	  		selectedTag: null,
 	  	}
 	  	this.onChangeType = (e) => this.setState({ type:e.target.value })
-	  	this.search = () => this.props.fetchTag(this.state.query, this.state.type)
-	  	this.searchNew = () => this.props.fetchTag(this.state.query, this.state.type,true)
 
 	  	this.setTagClassification = (tid,cid) => this._setTagClassification(tid,cid)
 	  	this.removeTagClassification = (tid,c) => this._removeTagClassification(tid,c)
@@ -26,33 +24,19 @@ export default class extends Component{
 
 	  	this.recommendTag = (tid) => this._recommendTag(tid)
 	  	this.deleteTag = (tid) => this._deleteTag(tid)
-
-	  	this.stop = (e) => {
-	  		if(e.keyCode === 13){
-	  			e.preventDefault()
-	  			this.searchNew()
-	  		}
-	  	}
-	  	this.onChangeQ = (e,{newValue}) => this.setState({query:newValue})
-	    this.onSuggestionsFetchRequested = ({value}) => this.props.fetchSuggestion(value)
-	    this.onSuggestionsClearRequested = () => this.props.clearSuggestion()
-	    this.onSuggestionSelected = () => this.searchNew()
-	}
-  	renderSuggestion(suggestion) {
-	  	return (
-		    <div className="search-item">
-		  		<img src={suggestion.image} alt=""/>
-		    	<span className="item-name">{suggestion.id}</span>
-		    	<span className="item-desc">{suggestion.text}</span>
-		  	</div>
-	  	)
+	    this.goPage = this._goPage.bind(this)
+	    this.search = this._search.bind(this)
 	}
 	componentWillMount() {
-		if(!this.props.tagLoaded){
-			this.props.fetchTag(this.state.query,this.state.type)
-		}
 		if(!this.props.classLoaded){
 			this.props.fetchTagClass()
+		}
+		const { page,query,type } = this.props
+		if(typeof page === 'number') {
+			this.context.router.push(`/tag?page=${page}`)
+			this.setState({type,query})
+		}else{
+			this.props.getTag(this.props.location.query.page)
 		}
 	}
 	_setTagClassification(tid,cid) {
@@ -74,12 +58,15 @@ export default class extends Component{
 			this.props.deleteTag(tid)
     	}
 	}
+	_goPage(page) {
+		this.context.router.push(`/tag?page=${page}`)
+		this.props.getTag(page)
+	}
+	_search() {
+		this.context.router.push(`/tag?page=0`)
+		this.props.getTagBy(this.state.type,this.state.query.trim())
+	}
 	render() {
-		const inputProps = {
-			placeholder: 'Type a keyword',
-			value: this.state.query,
-			onChange: this.onChangeQ
-		}
 		let modal = (<div></div>)
     	if (this.state.selectedTag !== null) {
 	      	let cls = _.filter(this.props.classifications, function(c){
@@ -121,29 +108,37 @@ export default class extends Component{
 		return(
 			<div className="content">
         		<div className="page-header">
-					<FormGroup className="inline-blk">
-						<FormControl componentClass="select" placeholder="select" value={this.state.type} onChange={this.onChangeType}>
+	        		<Form inline onSubmit={(e) => e.preventDefault()}>
+		              <FormGroup>
+		                <FormControl componentClass="select" placeholder="select" value={this.state.type} onChange={this.onChangeType}>
 							<option value="">全部</option>
 							<option value="company">品牌</option>
 							<option value="series">系列</option>
 							<option value="topic">话题</option>
 							<option value="person">人物</option>
 						</FormControl>
-					</FormGroup>
-					{' '}
-          <Autosuggest
-		        suggestions={this.props.suggestions}
-		        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-		        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-		        onSuggestionSelected={this.onSuggestionSelected}
-		        getSuggestionValue={s => s.text}
-		        renderSuggestion={this.renderSuggestion}
-		        focusFirstSuggestion={true}
-		        inputProps={inputProps}
+		              </FormGroup>
+					  {' '}
+					  <FormGroup style={{height:36}}>
+					  	<PlayAutoSuggest
+							fetch={(o) => this.props.fetchSuggestion(o.value)}
+							clear={this.props.clearSuggestion}
+							getValue={suggestion => suggestion.text}
+							selectValue={(event,{suggestion, suggestionValue, method }) => {
+								this.setState({query:suggestion.text},() => {
+									this.search()
+								})
+							}}
+							focusFirstSuggestion={true}
+							cover="image"
+							name="text"
+							desc="id"
+							placeholder="请输入标签关键字"
+							results={this.props.suggestions}
 						/>
-						{' '}
-          <Button onClick={this.searchNew}>搜索</Button>
-		    </div>
+					  </FormGroup>
+		            </Form>  
+		    	</div>
 		        <Row>
 		          	{
 		          		this.props.tags.map( (tag) => {
@@ -176,11 +171,28 @@ export default class extends Component{
 			          	})
 		      		}
 		        </Row>
-		        <Row>
-		          <div className="load-more-btn" onClick={this.search}>Load More</div>
+		        <Row style={{textAlign:'center'}}>
+		          <ReactPaginate
+	          		previousLabel={<span>&laquo;</span>}
+					nextLabel={<span>&raquo;</span>}
+					breakLabel={<span>...</span>}
+					breakClassName={"break-me"}
+					pageNum={this.props.totalPages}
+					marginPagesDisplayed={2}
+					pageRangeDisplayed={5}
+					clickCallback={obj => this.goPage(obj.selected)}
+					containerClassName={"pagination"}
+					subContainerClassName={"pages pagination"}
+					forceSelected={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
+					activeClassName={"active"} />
 		        </Row>
 		        {modal}
 	        </div>
 		)
 	}
+}
+
+
+TagList.contextTypes = {
+  	router : React.PropTypes.object
 }

@@ -1,7 +1,6 @@
 import Request from 'superagent'
 
 export const TL_RECEIVE_TAG = 'TL_RECEIVE_TAG'
-export const TL_RECEIVE_TAG_NEW = 'TL_RECEIVE_TAG_NEW'
 
 export const TL_SET_CLASSIFICATION = 'TL_SET_CLASSIFICATION'
 export const TL_REMOVE_CLASSIFICATION = 'TL_REMOVE_CLASSIFICATION'
@@ -11,16 +10,14 @@ export const TL_DELETE_TAG = 'TL_DELETE_TAG'
 export const TL_RECEIVE_SUGGESTION = 'TL_RECEIVE_SUGGESTION'
 export const TL_CLEAR_SUGGESTION = 'TL_CLEAR_SUGGESTION'
 
-function receiveTag(res) {
+function receiveTag(res,totalPages,page,filter,query) {
     return {
         type: TL_RECEIVE_TAG,
-        res
-    }
-}
-function receiveTagNew(res) {
-    return {
-        type: TL_RECEIVE_TAG_NEW,
-        res
+        res,
+        totalPages,
+        page,
+        filter,
+        query
     }
 }
 function _setClassification(tid, cid) {
@@ -58,39 +55,6 @@ function receiveSuggestion(res) {
 function _clearSuggestion() {
     return {
         type: TL_CLEAR_SUGGESTION
-    }
-}
-const status = {
-    query: '',
-    type: '',
-    page:0,
-    overload: false,
-}
-export const fetchTag = (query, type, newPage) => {
-    if (query !== status.query || type !== status.type || newPage) {
-        status.query = query
-        status.type = type
-        status.page = 0
-        status.overload = true
-    } else {
-        status.overload = false
-    }
-    let params = {}
-    params.page = status.page
-    if (status.query !== '') {
-        params.query = status.query
-    }
-    if (status.type !== '') {
-        params.type = status.type
-    }
-    return function(dispatch) {
-        return Request
-            .get(`/api/tags`)
-            .query(params)
-            .end(function(err, res) {
-                status.page = res.body.nextPage
-                status.overload ? dispatch(receiveTagNew(res.body)) : dispatch(receiveTag(res.body))
-            })
     }
 }
 
@@ -146,5 +110,43 @@ export const fetchSuggestion = (q) => {
 export const clearSuggestion = () => {
     return (dispatch) => {
         dispatch(_clearSuggestion())
+    }
+}
+
+export function getTag(page = 0) {
+    return (dispatch,getState) => {
+        let params = { page }
+        const { type, query } = getState().tagReducer.toJS()
+        if(type) {
+            params.type = type
+        }
+        if(query) {
+            params.query = query
+        }
+        return Request
+            .get(`/api/tags`)
+            .query(params)
+            .end((err, res) => {
+                dispatch(receiveTag(res.body.tags,res.body.totalPages,page,type,query))
+            })
+    }
+}
+
+export function getTagBy (type = '',query ='') {
+    return (dispatch,getState) => {
+        let page = 0
+        let params = { page }
+        if(type) {
+            params.type = type
+        }
+        if(query) {
+            params.query = query
+        }
+        return Request
+            .get(`/api/tags`)
+            .query(params)
+            .end((err, res) => {
+                dispatch(receiveTag(res.body.tags,res.body.totalPages,page,type,query))
+            })
     }
 }

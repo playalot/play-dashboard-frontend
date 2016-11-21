@@ -27,7 +27,6 @@ export default class extends Component{
 		Request
 			.get(`/api/order/${this.props.params.id}`)
 			.end((err,res) => {
-				console.info(res.body)
 				const {
 					id, title, created, address, note, description,
 					status, payments, tracking, items, price,
@@ -135,12 +134,12 @@ export default class extends Component{
 	                        :null
                         }
                         <FormGroup style={{marginBottom:0}}>
-                          <Col className="control-label" sm={2}><strong>物流</strong></Col>
+                          <Col className="control-label" sm={2}><strong>物流号</strong></Col>
                           <Col sm={9}>
                             <FormControl.Static>
                             	{
                             		this.state.tracking ?
-                            		<a href={`http://wap.guoguo-app.com/wuliuDetail.htm?mailNo=${this.state.tracking.number}`} target="_blank">{this.state.tracking.number}</a>
+                            		<span>{this.state.tracking.number}</span>
                             		:
                             		<span style={{color:'teal',padding:0}} className="btn btn-sm" onClick={() => this.addTracking(this.state.id)}>
 		                      			添加物流
@@ -181,6 +180,14 @@ export default class extends Component{
                   	</div>
                   
                 </div>
+                {
+                	this.state.tracking ? 
+                	<div className="box box-solid">
+	                	<iframe height="600px" width="100%" src={`http://wap.guoguo-app.com/wuliuDetail.htm?mailNo=${this.state.tracking.number}`} frameBorder="0"></iframe>
+	                </div>
+	                :null
+                }
+                
             </div>
 		)
 	}

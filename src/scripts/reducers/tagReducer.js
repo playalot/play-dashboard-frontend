@@ -1,7 +1,6 @@
 import Immutable from 'immutable'
 import { 
     TL_RECEIVE_TAG, 
-    TL_RECEIVE_TAG_NEW, 
     TL_SET_CLASSIFICATION,
     TL_REMOVE_CLASSIFICATION,
     TL_RECOMMEND_TAG,
@@ -10,16 +9,15 @@ import {
     TL_CLEAR_SUGGESTION,
 } from '../actions/tagAction'
 
-export default (state = Immutable.fromJS({ tags:[],suggestions:[],tagLoaded:false }),action)=>{
+export default (state = Immutable.fromJS({ tags:[],totalPages:100,type:'',query:'',suggestions:[],tagLoaded:false }),action)=>{
     switch (action.type) {
         case TL_RECEIVE_TAG:
             return state
-                .updateIn(['tags'], (tags) => tags.concat(Immutable.fromJS(action.res.tags)))
-                .set('tagLoaded',true)
-        case TL_RECEIVE_TAG_NEW:
-            return state
-                .updateIn(['tags'], (tags) => tags.clear().concat(Immutable.fromJS(action.res.tags)))
-                .set('tagLoaded',true)
+                .updateIn(['tags'], (tags) => tags.clear().concat(Immutable.fromJS(action.res)))
+                .set('totalPages',action.totalPages)
+                .set('page',action.page)
+                .set('type',action.filter)
+                .set('query',action.query)
         case TL_SET_CLASSIFICATION:
             return state.updateIn(['tags'], (tags) => {
                 return tags.update(

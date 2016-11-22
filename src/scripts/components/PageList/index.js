@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import PageList from './PageList'
 import { 
-	getPage, getPageBy, togglePub, toggleRec, deleteArticle, setCoverType,addToy, toggleShare
+	getPage, getPageBy, togglePub, toggleRec, deleteArticle, setCoverType,addToy, removeToy, toggleShare
 } from '../../actions/pageAction'
 
 import { fetchToyByQuery, clearSuggestion } from '../../actions/toyAction'
@@ -13,6 +13,7 @@ const mapActionCreators = {
 	deleteArticle,
 	setCoverType,
 	addToy,
+	removeToy,
 	toggleShare,
 
 	fetchToyByQuery,

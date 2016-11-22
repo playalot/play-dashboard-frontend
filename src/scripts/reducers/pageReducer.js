@@ -6,6 +6,7 @@ import {
     PAGE_L_DELETE_ARTICLE,
     PAGE_L_SET_COVER_TYPE,
     PAGE_L_ADD_TOY,
+    PAGE_L_REMOVE_TOY,
     PAGE_L_TOGGLE_SHARE,
 } from '../actions/pageAction'
 export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'',filter:'' }),action)=>{
@@ -63,6 +64,16 @@ export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'',fil
                         return item.updateIn(['toys'],toys => {
                             return toys.push(Immutable.fromJS(action.toy))
                         })
+                    }
+                )
+            })
+        case PAGE_L_REMOVE_TOY:
+            return state.updateIn(['pages'],(pages) => {
+                return pages.update(
+                    pages.findIndex((item) => {
+                        return item.get('id') === action.id
+                    }), (item) => {
+                        return item.set('toys',[])
                     }
                 )
             })

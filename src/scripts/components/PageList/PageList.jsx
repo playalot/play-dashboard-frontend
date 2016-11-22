@@ -22,6 +22,7 @@ export default class PageList extends Component{
 	  	this.toggleShare = (id) => this.props.toggleShare(id)
 	  	this.deleteArticle = this._deleteArticle.bind(this)
 	  	this.addToy = (pid) => this.setState({showModal:true,pid})
+	  	this.removeToy = (id) => confirm('删除这个玩具标签?') && this.props.removeToy(id)
 
 	  	this.goPage = this._goPage.bind(this)
 	  	this.search = this._search.bind(this)
@@ -105,6 +106,7 @@ export default class PageList extends Component{
 	                      		 	return (
 										<span key={`toy_${index}`} className="label label-success label-margin">
 	                      			 		{ toy.name.substring(0, 25)+'...' }
+	                      			 		<i className="fa fa-close" onClick={ () => this.removeToy(page.id)}></i>
 	                      			 	</span>
 	                      			 )
 								})

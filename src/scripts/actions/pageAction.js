@@ -6,6 +6,7 @@ export const PAGE_L_TOGGLE_REC = 'PAGE_L_TOGGLE_REC'
 export const PAGE_L_DELETE_ARTICLE = 'PAGE_L_DELETE_ARTICLE'
 export const PAGE_L_SET_COVER_TYPE = 'PAGE_L_SET_COVER_TYPE'
 export const PAGE_L_ADD_TOY = 'PAGE_L_ADD_TOY'
+export const PAGE_L_REMOVE_TOY = 'PAGE_L_REMOVE_TOY'
 export const PAGE_L_TOGGLE_SHARE = 'PAGE_L_TOGGLE_SHARE'
 
 
@@ -49,6 +50,12 @@ function _addToy(id, toy) {
         type: PAGE_L_ADD_TOY,
         id,
         toy
+    }
+}
+function _removeToy(id) {
+    return {
+        type: PAGE_L_REMOVE_TOY,
+        id
     }
 }
 function _toggleShare(id) {
@@ -127,6 +134,15 @@ export function addToy(id, sid) {
             .post(`/api/page/${id}/toy/${sid}`)
             .end((err, res) => {
                 dispatch(_addToy(id, res.body))
+            })
+    }
+}
+export function removeToy(id) {
+    return (dispatch) => {
+        return Request
+            .del(`/api/page/${id}/toy`)
+            .end((err,res) => {
+                dispatch(_removeToy(id))
             })
     }
 }

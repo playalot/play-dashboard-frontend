@@ -20,6 +20,8 @@ export default class extends Component{
 			price:{
 				totalPrice:0,
 			},
+
+			isPrint:false,
 		}
 		this.addTracking = this._addTracking.bind(this)
 	}
@@ -63,7 +65,7 @@ export default class extends Component{
 	}
 	render() {
 		return (
-			<div className="content">
+			<div className="content order-detail">
                 <div className="box box-solid">
                   <div className="box-body pad">
                     <Form className="pl-form" horizontal>
@@ -139,7 +141,9 @@ export default class extends Component{
                             <FormControl.Static>
                             	{
                             		this.state.tracking ?
-                            		<span>{this.state.tracking.number}</span>
+                            		<a href={`http://wap.guoguo-app.com/wuliuDetail.htm?mailNo=${this.state.tracking.number}`} target="_blank">
+		                      			{this.state.tracking.number}
+		                      		</a>
                             		:
                             		<span style={{color:'teal',padding:0}} className="btn btn-sm" onClick={() => this.addTracking(this.state.id)}>
 		                      			添加物流
@@ -176,17 +180,10 @@ export default class extends Component{
 				              	</tbody>
 				            </table>
 				            <button className="pull-right btn btn-danger">总计:&nbsp;¥ {this.state.price.totalPrice}</button>
+			                <button style={{marginRight:10}} onClick={() => window.print()} className="pull-right btn btn-info btn-print">打印</button>
 				        </div>
                   	</div>
-                  
                 </div>
-                {
-                	this.state.tracking ? 
-                	<div className="box box-solid">
-	                	<iframe height="600px" width="100%" src={`http://wap.guoguo-app.com/wuliuDetail.htm?mailNo=${this.state.tracking.number}`} frameBorder="0"></iframe>
-	                </div>
-	                :null
-                }
                 
             </div>
 		)

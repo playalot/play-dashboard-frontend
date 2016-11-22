@@ -24,3 +24,12 @@ $fa-font-path: "~font-awesome/fonts";
 
 //react-datepicker
 @import "~react-datepicker/dist/react-datepicker.css";
+
+@media print {
+	.order-detail{
+		.btn-print{
+			display:none;
+		}
+		font-family: sans-serif;
+	}	
+}

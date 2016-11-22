@@ -5,7 +5,6 @@ import {
 } from 'react-bootstrap'
 import { Link } from 'react-router'
 import CDN from '../../widgets/cdn'
-import PlayAutoSuggest from '../Common/PlayAutoSuggest'
 import ReactPaginate from 'react-paginate'
 export default class TagList extends Component{
 	constructor(props) {
@@ -119,24 +118,14 @@ export default class TagList extends Component{
 						</FormControl>
 		              </FormGroup>
 					  {' '}
-					  <FormGroup style={{height:36}}>
-					  	<PlayAutoSuggest
-							fetch={(o) => this.props.fetchSuggestion(o.value)}
-							clear={this.props.clearSuggestion}
-							getValue={suggestion => suggestion.text}
-							selectValue={(event,{suggestion, suggestionValue, method }) => {
-								this.setState({query:suggestion.text},() => {
-									this.search()
-								})
-							}}
-							focusFirstSuggestion={true}
-							cover="image"
-							name="text"
-							desc="id"
-							placeholder="请输入标签关键字"
-							results={this.props.suggestions}
-						/>
-					  </FormGroup>
+		              <FormGroup style={{marginLeft:10}}>
+		                <InputGroup>
+		                  <FormControl type="text" placeholder='输入标签关键字' onKeyDown={e => e.keyCode === 13 && this.search()} value={this.state.query} onChange={(e) => this.setState({query:e.target.value})} />
+		                  <InputGroup.Button>
+		                    <Button onClick={this.search}>搜索</Button>
+		                  </InputGroup.Button>
+		                </InputGroup>
+		              </FormGroup>
 		            </Form>  
 		    	</div>
 		        <Row>

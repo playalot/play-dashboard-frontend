@@ -6,10 +6,11 @@ import {
 const _ = require('lodash')
 import Moment from 'moment'
 import Switch from 'rc-switch'
-import PostPanel from '../PostPanel/index'
+import PostPanel from '../PostPanel/userIndex'
 import UserPage from './UserPage'
 import CDN from '../../widgets/cdn'
-export default class extends Component{
+import ReactPaginate from 'react-paginate'
+export default class UserDetail extends Component{
     constructor(props) {
         super(props)
         this.state = {
@@ -35,16 +36,14 @@ export default class extends Component{
         this.setClassification = (pid,cid) => this._setClassification(pid,cid)
         this.removeClassification = (pid,c) => this._removeClassification(pid,c)
         this.setActive = this._setActive.bind(this)
+        this.goPage = this._goPage.bind(this)
     }
     componentWillMount() {
         this.props.fetchUserInfo(this.props.params.id)
-        this.props.fetchUserPost(this.props.params.id)
         if(!this.props.classLoaded){
             this.props.fetchTagClass()
         }
-    }
-    componentWillUnmount() {
-        this.props.clearPost()
+        this.props.getUserPost(this.props.params.id,this.props.location.query.page)
     }
     renderAccounts(accounts) {
       return (
@@ -85,6 +84,10 @@ export default class extends Component{
         }
       }
       
+    }
+    _goPage(page) {
+      this.context.router.push(`/user/${this.props.params.id}?page=${page}`)
+      this.props.getUserPost(this.props.params.id,page)
     }
     render() {
         let modal = (<div></div>)
@@ -174,8 +177,20 @@ export default class extends Component{
                                   posts.map( post => <PostPanel key={'p_'+post.id} post={post} openImage={this.openImage} openClass={this.openClass}/>)
                               }
                             </Row>
-                            <Row>
-                              <div className="load-more-btn" onClick={() =>　this.props.fetchUserPost(this.props.params.id)}>Load More</div>
+                            <Row style={{textAlign:'center'}}>
+                              <ReactPaginate 
+                                previousLabel={<span>&laquo;</span>}
+                                nextLabel={<span>&raquo;</span>}
+                                breakLabel={<span>...</span>}
+                                breakClassName={"break-me"}
+                                pageNum={this.props.totalPages}
+                                marginPagesDisplayed={2}
+                                pageRangeDisplayed={5}
+                                clickCallback={obj => this.goPage(obj.selected)}
+                                containerClassName={"pagination"}
+                                subContainerClassName={"pages pagination"}
+                                forceSelected={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
+                                activeClassName={"active"} />
                             </Row>
                           </Tab>
                           <Tab eventKey={2} title="Pages">
@@ -253,3 +268,6 @@ export default class extends Component{
 }
 
 
+UserDetail.contextTypes = {
+    router : React.PropTypes.object
+}

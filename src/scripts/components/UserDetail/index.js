@@ -2,48 +2,48 @@ import { connect } from 'react-redux'
 import UserDetail from './UserDetail'
 
 import { 
+	//info
 	fetchUserInfo, 
-
+	//page
 	fetchUserPage,
 	togglePub,
 	toggleRec,
 	deletePage,
 	setCoverType,
-
+	//user
 	setActive,
+	//post
+	getUserPost,
+	setClassification,
+	removeClassification,
 } from '../../actions/userDetailAction'
-import {
-	fetchUserPost, setClassification, removeClassification, clearPost
-} from '../../actions/postAction'
 import { fetchTagClass } from '../../actions/tagClassAction'
 
 const mapActionCreators = {
-	fetchUserInfo,
-
-	fetchUserPost,
+	getUserPost,
 	setClassification,
 	removeClassification,
-	clearPost,
 
+	fetchUserInfo,
 	fetchUserPage,
 	togglePub,
 	toggleRec,
 	deletePage,
 	setCoverType,
 
-	fetchTagClass,
-
-	//用户操作
 	setActive,
+
+	fetchTagClass,
 }
 
 const mapStateToProps = (state) => {
-	const { user, pages } = state.userDetail.toJS()
-	const { posts } = state.postReducer.toJS()
+	const { user, pages, posts,totalPages,page } = state.userDetail.toJS()
 	const { classifications, loaded } = state.tagClassReducer.toJS()
 	return {
 		user,
 		posts,
+		totalPages,
+		page,
 		pages,
 		classifications,
 		classLoaded:loaded,

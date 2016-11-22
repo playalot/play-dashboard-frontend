@@ -1,6 +1,5 @@
 import Immutable from 'immutable'
 import { 
-    POST_CLEAR_POST,
     POST_RECEIVE_POST, 
     POST_TOGGLE_RECOMMEND, 
     POST_TOGGLE_BLOCK, 
@@ -15,12 +14,8 @@ import {
     POST_GET_UN_CLS,
 } from '../actions/postAction'
 
-export default (state = Immutable.fromJS({ posts:[],totalPages:100,filter:'',query:'',status:{ts:'',filter:'',query:''} }),action)=>{
+export default (state = Immutable.fromJS({ posts:[],totalPages:100,filter:'',query:''}),action)=>{
     switch (action.type) {
-        case POST_CLEAR_POST:
-            return state
-                .updateIn(['posts'],(posts) => posts.clear())
-                .updateIn(['status'],(status) => status.set('ts',''))
         case POST_RECEIVE_POST:
             return state
                 .updateIn(['posts'], (posts) => posts.clear().concat(Immutable.fromJS(action.res)))

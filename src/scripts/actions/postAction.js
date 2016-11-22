@@ -12,7 +12,6 @@ export const POST_ADD_TOY = 'POST_ADD_TOY'
 export const POST_REMOVE_TOY = 'POST_REMOVE_TOY'
 export const POST_DELETE_POST = 'POST_DELETE_POST'
 export const POST_GET_UN_CLS = 'POST_GET_UN_CLS'
-export const POST_CLEAR_POST = 'POST_CLEAR_POST'
 
 function receivePost(res,totalPages,page,filter,query) {
     return {
@@ -221,53 +220,6 @@ export const deletePost = (id) => {
             })
     }
 }
-export const fetchPost = (f, q) => {
-    return (dispatch,getState) => {
-        let { ts,query,filter } = getState().postReducer.get('status').toJS()
-        if(f !== filter || q !== query){
-            query = q
-            filter = f
-            ts = ''
-        }
-        let params = {}
-        if (ts !== '' && ts !== null) {
-            params.ts = ts
-        }
-        if (filter !== '') {
-            params.filter = filter
-        }
-        if (query !== '') {
-            params.query = query
-        }
-        return Request
-            .get(`/api/posts`)
-            .query(params)
-            .end((err, res) => {
-                res.body.posts.length ? dispatch(receivePost(res.body.posts,res.body.totalPages,filter,query)) : alert('no more posts')
-            })
-    }
-}
-export const fetchUserPost = (id) => {
-    return (dispatch,getState) => {
-        let ts = getState().postReducer.getIn(['status','ts'])
-        let params = {}
-        if (ts !== '' && ts !== null) {
-            params.ts = ts
-        }
-        return Request
-            .get(`/api/user/${id}/posts`)
-            .query(params)
-            .end((err,res) => {
-                res.body.posts.length ? dispatch(receivePost(res.body.posts,res.body.nextTs)) : alert('no more posts')
-            })
-    }
-}
-export const clearPost = () => {
-    return (dispatch) => {
-        dispatch(_clearPost())
-    }
-}
-
 export function getPost (page = 0) {
     return (dispatch,getState) => {
         let params = { page }

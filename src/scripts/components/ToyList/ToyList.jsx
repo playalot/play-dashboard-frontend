@@ -50,6 +50,7 @@ export default class Toy extends Component{
 		})
 		this.submit = () => {
 			const {
+				id,price,originPrice,merchant,quantity,freight, prepay, orderClose, type, costPrice
 			} = this.state
 			let data = {
 				price:parseFloat(price),originPrice:parseFloat(originPrice),merchant,costPrice:parseFloat(costPrice),

@@ -16,6 +16,7 @@ export default class PageList extends Component{
 	  		query:'',
 	  		showModal:false,
 	  		pid:'',
+	  		toyId:'',
 	  	}
 	  	this.togglePub = (id) => this.props.togglePub(id)
 	  	this.toggleRec = (id) => this.props.toggleRec(id)
@@ -27,7 +28,7 @@ export default class PageList extends Component{
 	  	this.goPage = this._goPage.bind(this)
 	  	this.search = this._search.bind(this)
 	  	//玩具搜索
-	  	this.close = () => this.setState({showModal:false,pid:''})
+	  	this.close = () => this.setState({showModal:false,pid:'',toyId:''})
 	}
 	componentWillMount() {
 		const { page,query,filter } = this.props
@@ -67,8 +68,8 @@ export default class PageList extends Component{
 	                <FormControl componentClass="select" placeholder="select" value={this.state.filter} onChange={(e) => this.setState({filter:e.target.value})}>
 	                  <option value="">全部</option>
 	                  <option value="forShare">分享</option>
-										<option value="isRec">推荐</option>
-										<option value="isBlk">屏蔽</option>
+					  <option value="isRec">推荐</option>
+					  <option value="isBlk">屏蔽</option>
 	                </FormControl>
 	              </FormGroup>
 				  			{' '}
@@ -155,6 +156,16 @@ export default class PageList extends Component{
 		            	<Modal.Title>搜索玩具</Modal.Title>
 		          	</Modal.Header>
 		          	<Modal.Body>
+		          		<InputGroup>
+		                  <FormControl type="text" placeholder='输入玩具ID' value={this.state.toyId} onChange={(e) => this.setState({toyId:e.target.value})} />
+		                  <InputGroup.Button>
+		                    <Button onClick={() => {
+		                    	this.props.addToy(this.state.pid,this.state.toyId)
+		                    	this.close()
+		                    }}>添加玩具</Button>
+		                  </InputGroup.Button>
+		                </InputGroup>
+		                <br/>
 		            	<PlayAutoSuggest
 							fetch={(o) => this.props.fetchToyByQuery(o.value)}
 							clear={this.props.clearSuggestion}

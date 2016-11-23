@@ -480,6 +480,10 @@ export default class EditPage extends Component {
 					title: title, cover: cover, tags: tags, category: category, gallery: gallery,authorId,
 					editorState: EditorState.push(this.state.editorState, rawData)
 				})
+			}else {
+				this.setState({
+					authorId:this.props.user.id
+				})
 			}
 		}
 		if(this.props.params.id) {

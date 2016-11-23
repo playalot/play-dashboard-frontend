@@ -2,6 +2,7 @@ import { combineReducers, applyMiddleware, compose, createStore } from 'redux'
 import { routerReducer as router, routerMiddleware } from 'react-router-redux'
 import thunk from 'redux-thunk'
 
+import admin from './reducers/adminReducer'
 import postReducer from './reducers/postReducer'
 import tagClassReducer from './reducers/tagClassReducer'
 import userDetail from './reducers/userDetailReducer'
@@ -20,6 +21,7 @@ import order from './reducers/orderReducer'
 export const makeRootReducer = (asyncReducers) => {
 	return combineReducers({
 		// Add sync reducers here
+		admin,
 		postReducer,
 		tagClassReducer,
 		userDetail,

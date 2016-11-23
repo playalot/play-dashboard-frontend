@@ -1,6 +1,11 @@
 import React,{ Component } from 'react'
 import { Link } from 'react-router'
 export default class App extends Component{
+	componentWillMount() {
+		if(!this.props.loaded) {
+			this.props.fetchInfo()
+		}
+	}
 	render() {
 		return(
 			<div className="wrapper">
@@ -34,10 +39,10 @@ export default class App extends Component{
 		          <section className="sidebar">
 		            <div className="user-panel">
 		              <div className="pull-left image">
-		                <img src="https://almsaeedstudio.com/themes/AdminLTE/dist/img/user2-160x160.jpg" className="img-circle" alt="User Image" />
+		                <img src={this.props.user.avatar} className="img-circle" alt="User Image" />
 		              </div>
 		              <div className="pull-left info">
-		                <p>{'nickName'}</p>
+		                <p>{this.props.user.nickName}</p>
 		                <a href="#"><i className="fa fa-circle text-success"></i> Online</a>
 		              </div>
 		            </div>

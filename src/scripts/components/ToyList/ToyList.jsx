@@ -24,7 +24,6 @@ export default class Toy extends Component{
 			price:9999,
 			originPrice:0,
 			merchant:'PLAY玩具控',
-			tbUrl:'',
 			freight:0,
 			type:'inStock',
 			prepay:0,
@@ -51,16 +50,15 @@ export default class Toy extends Component{
 		})
 		this.submit = () => {
 			const {
-				id,price,originPrice,tbUrl,merchant,quantity,freight,preOrder, prepay, orderClose, type, costPrice
 			} = this.state
 			let data = {
-				price:parseFloat(price),originPrice:parseFloat(originPrice),tbUrl,merchant,costPrice:parseFloat(costPrice),
+				price:parseFloat(price),originPrice:parseFloat(originPrice),merchant,costPrice:parseFloat(costPrice),
 				quantity:parseInt(quantity),freight:parseFloat(freight),preOrder:{
 					prepay:parseFloat(prepay),
 					orderClose:`${orderClose.format('YYYY-MM-DD')} 23:59:59`
 				}
 			}
-		Object.keys(data).forEach(key => !data[key] ? delete data[key] : null)
+		// Object.keys(data).forEach(key => !data[key] && data[key] !== 0 ? delete data[key] : null)
 		type ==='preOrder' ? null:delete data['preOrder']
 			Request
 				.post(`/api/toy/${id}/stock`)

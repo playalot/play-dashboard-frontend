@@ -31,8 +31,8 @@ export default class EditSku extends Component {
             this.setState({
                 id:this.props.params.id,
                 sid:this.props.location.query.sid,
-                quantity:stock.quantity,
-                price:stock.price,
+                quantity:stock.quantity ? stock.quantity : 100,
+                price:stock.price ? stock.price : 9999,
                 costPrice:stock.costPrice ? stock.costPrice : 0,
                 originPrice:stock.originPrice ? stock.originPrice : 0,
                 freight:stock.freight ? stock.freight : 0,
@@ -57,7 +57,7 @@ export default class EditSku extends Component {
                 orderClose:`${orderClose.format('YYYY-MM-DD')} 23:59:59`
             }
         }
-        Object.keys(data).forEach(key => !data[key] ? delete data[key] : '')
+        // Object.keys(data).forEach(key => !data[key] ? delete data[key] : '')
         type ==='preOrder' ? null:delete data['preOrder']
         Request
         .post(`/api/toy/${id}/stock/${sid}`)

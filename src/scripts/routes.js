@@ -1,51 +1,33 @@
 import React from 'react'
 //new
-import App from './components/App/App.jsx'
-import Home from './components/Home/index'
-import ExplorePage from './components/ExplorePage/index'
-import RecommendHome from './components/RecommendHome/index'
-import PostList from './components/PostList/index'
-import PageList from './components/PageList/index'
-import UserList from './components/UserList/index'
-import TagList from './components/TagList/index'
-import UserDetail from './components/UserDetail/index'
-import ToyList from './components/ToyList/index'
-import StickerList from './components/StickerList/index'
-import ReportList from './components/ReportList/index'
-import FeedbackList from './components/FeedbackList/index'
-import SkuList from './components/SkuList/index'
-import OrderList from './components/OrderList/index'
+import App from './components/App'
+import Home from './components/Home'
+import ExplorePage from './components/ExplorePage'
+import RecommendHome from './components/RecommendHome'
+import PostList from './components/PostList'
+import PageList from './components/PageList'
+import UserList from './components/UserList'
+import TagList from './components/TagList'
+import UserDetail from './components/UserDetail'
+import ToyList from './components/ToyList'
+import StickerList from './components/StickerList'
+import ReportList from './components/ReportList'
+import FeedbackList from './components/FeedbackList'
+import SkuList from './components/SkuList'
+import OrderList from './components/OrderList'
 
 import OrderDetail from './components/OrderDetail'
 
-import EditPage from './components/EditPage/EditPage'
+import EditPage from './components/EditPage'
 import EditStickerSet from './components/EditStickerSet/EditStickerSet'
 import EditSticker from './components/EditSticker/EditSticker'
-import EditTag from './components/EditTag/index'
+import EditTag from './components/EditTag'
 import EditToy from './components/EditToy/EditToy'
 import EditRecommend from './components/EditRecommend/EditRecommend'
 import EditShortVideo from './components/EditShortVideo/EditShortVideo'
 import EditSku from './components/EditSku'
 
 import Notification from './components/Notification/Notification.jsx'
-//old
-// import UserDetail from './components/userdetail'
-// import Home from './components/home';
-// import RecommendHome from './components/recommendhome';
-// import ExplorePage from './components/explorepage';
-// import TagList from './components/taglist';
-// import UserList from './components/userlist';
-// import ToyList from './components/toylist';
-// import StickerList from './components/stickerlist';
-// import ArticleList from './components/articlelist';
-
-// import EditTag from './components/edittag';
-// import EditShortVideo from './components/editshortvideo';
-// import EditSticker from './components/editsticker';
-// import EditStickerSet from './components/editstickerset';
-// import EditRecommend from './components/editrecommend';
-// import EditToy from './components/edittoy';
-// import EditArticle from './components/editarticle';
 
 import Test from './components/test';
 

@@ -51,7 +51,7 @@ export function getSku (page = 0) {
         let params = { page }
         const { filter } = getState().sku.toJS()
         if(filter) {
-            params.filter = filter
+            params.merchant = filter
         }
         return Request
             .get(`/api/stocks`)
@@ -67,7 +67,7 @@ export function getSkuBy (filter = '') {
         let page = 0
         let params = { page }
         if(filter) {
-            params.filter = filter
+            params.merchant = filter
         }
         return Request
             .get(`/api/stocks`)

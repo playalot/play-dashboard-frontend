@@ -58,11 +58,11 @@ export default class EditTag extends Component{
                 this.setState({
                     text: res.body.text,
                     image: res.body.image,
-                    cover: res.body.cover ? res.body.cover : '',
-                    description: res.body.description ? res.body.description : '',
-                    type: res.body.type ? res.body.type : '',
+                    cover: res.body.cover || '',
+                    description: res.body.description || '',
+                    type: res.body.type || '',
                     classifications: res.body.classifications,
-                    otherInfo:res.body.otherInfo ? res.body.otherInfo : [],
+                    otherInfo:res.body.otherInfo || [],
                     alias: res.body.alias.length ? res.body.alias : [],
                     cls:res.body.cls.length ? res.body.cls : [],
                 })

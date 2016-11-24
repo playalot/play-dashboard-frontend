@@ -28,6 +28,10 @@ export default class SkuList extends Component{
 			prepay:0,
 			orderClose:Moment(),
 			costPrice:0,
+
+			cover:'',
+			company:'',
+			name:'',
 	  	}
 		this.toggleRec = id => this.props.toggleRec(id)
 		this.toggleBlk = id => this.props.toggleBlk(id)
@@ -47,6 +51,10 @@ export default class SkuList extends Component{
 			merchant:'PLAY玩具控',
 			freight:0,
 			costPrice:0,
+
+			cover:'',
+			company:'',
+			name:'',
 		})
 		this.submit = () => {
 			const {
@@ -110,7 +118,10 @@ export default class SkuList extends Component{
 								getValue={suggestion => suggestion.name}
 								selectValue={(event,{suggestion, suggestionValue, method }) => {
 									this.setState({
-										id:suggestion.id
+										id:suggestion.id,
+										cover:suggestion.cover,
+										company:suggestion.company,
+										name:suggestion.name,
 									},() => {
 										this.open()
 									})
@@ -166,9 +177,9 @@ export default class SkuList extends Component{
 													<div className="sku-body-item vertical">
 														<span>¥&nbsp;{stock.price}</span>
 														{
-															stock.price !== stock.originPrice ?
-															<small>原价:¥&nbsp;{stock.originPrice}</small>
-															:null
+															// stock.price !== stock.originPrice ?
+															// <small>原价:¥&nbsp;{stock.originPrice}</small>
+															// :null
 														}
 														{
 															stock.costPrice ? 
@@ -214,15 +225,24 @@ export default class SkuList extends Component{
 	          	<Modal show={this.state.showModal} onHide={this.close}>
 					<Modal.Header closeButton>
 						<Modal.Title>添加商品</Modal.Title>
+						<Row>
+							<Col sm={2} className="sm-2-label">
+								<img style={{width:'45px'}} src={this.state.cover} className="img-thumbnail"/>
+							</Col>
+							<Col sm={10}>
+								<FormControl.Static>{this.state.name}</FormControl.Static>
+							</Col>
+						</Row>
+						
 					</Modal.Header>
 					<Modal.Body>
 						<Form horizontal>
 							<FormGroup>
 								<Col sm={2} className="sm-2-label">
-									ID
+									厂商
 								</Col>
 								<Col sm={10}>
-									<FormControl type="text" defaultValue={this.state.id} readOnly/>
+									<FormControl.Static>{this.state.company}</FormControl.Static>
 								</Col>
 							</FormGroup>
 							<FormGroup>

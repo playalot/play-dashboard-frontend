@@ -20,6 +20,7 @@ export default class Toy extends Component{
 			year:'',
 			showModal:false,
 			id:'',
+			name:'',
 			quantity:100,
 			price:9999,
 			originPrice:0,
@@ -40,6 +41,7 @@ export default class Toy extends Component{
 		this.close = () => this.setState({
 			showModal: false,
 			id:'',
+			name:'',
 			quantity:100,
 			price:9999,
 			originPrice:0,
@@ -107,9 +109,9 @@ export default class Toy extends Component{
 					this.props.addToy()
 			}
 	}
-	_addGoods(id) {
+	_addGoods(id,name) {
 		this.setState({
-			id
+			id,name
 		},() => {
 			this.open()
 		})
@@ -217,7 +219,7 @@ export default class Toy extends Component{
 												</div>
 												<div className="box-footer">
 													<ButtonToolbar className="pull-right">
-														<span onClick={() =>	this.addGoods(toy.id) } className="btn btn-sm"><i className="fa fa-plus"></i></span>
+														<span onClick={() =>	this.addGoods(toy.id,toy.name) } className="btn btn-sm"><i className="fa fa-plus"></i></span>
 														<Link to={'/toy/' + toy.id + '/edit'} ><span className="btn btn-sm"><i className="fa fa-edit"></i></span></Link>
 														<span onClick={() =>	this.recommend(toy.id) } className="btn btn-sm"><i className="fa fa-bookmark-o"></i></span>
 														<span onClick={() =>	this.toggleR18(toy.id) } className={r18Class}><i className="fa fa-venus-mars"></i></span>
@@ -256,7 +258,15 @@ export default class Toy extends Component{
 									ID
 								</Col>
 								<Col sm={10}>
-									<FormControl type="text" defaultValue={this.state.id} readOnly/>
+									<FormControl.Static>{this.state.id}</FormControl.Static>
+								</Col>
+							</FormGroup>
+							<FormGroup>
+								<Col sm={2} className="sm-2-label">
+									名称
+								</Col>
+								<Col sm={10}>
+									<FormControl.Static>{this.state.name}</FormControl.Static>
 								</Col>
 							</FormGroup>
 							<FormGroup>

@@ -190,7 +190,7 @@ export default class SkuList extends Component{
 													<div className="sku-body-item operate">{stock.merchant}</div>													
 													<div className="sku-body-item">{stock.quantity}</div>													
 													<div className="sku-body-item">¥&nbsp;{stock.freight}</div>													
-													<div className="sku-body-item">{Moment(stock.created).format('MM-DD hh:mm')}</div>													
+													<div className="sku-body-item">{Moment(stock.created).format('MM-DD HH:mm')}</div>													
 													<div className="sku-body-item operate">
 										                <span onClick={() => this.editSku(sku.id,stock.stockId)}><i className="fa fa-edit"></i></span>
 														<span >补款</span>

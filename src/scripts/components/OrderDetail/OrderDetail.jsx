@@ -78,7 +78,7 @@ export default class extends Component{
                         <FormGroup style={{marginBottom:0}}>
                           <Col className="control-label" sm={2}><strong>下单时间</strong></Col>
                           <Col sm={9}>
-                            <FormControl.Static>{Moment(this.state.created).format('MM-DD hh:mm')}</FormControl.Static>
+                            <FormControl.Static>{Moment(this.state.created).format('MM-DD HH:mm')}</FormControl.Static>
                           </Col>
                         </FormGroup>
                         <FormGroup style={{marginBottom:0}}>

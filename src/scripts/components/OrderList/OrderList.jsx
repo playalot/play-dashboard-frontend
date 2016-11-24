@@ -61,7 +61,7 @@ export default class OrderList extends Component{
 	                      <td><Link to={'/user/'+order.user.id}><img style={{width:'45px'}} src={order.user.avatar} className="img-circle"/></Link></td>
 	                      <td>{order.items[0]['merchant']}</td>
 	                      <td>{order.title}</td>
-	                      <td>{Moment(order.created).format('MM-DD hh:mm')}</td>
+	                      <td>{Moment(order.created).format('MM-DD HH:mm')}</td>
 	                      <td>{this.formatStatus(order.status)}</td>
 	                      <td>¥{order.price.totalPrice}</td>
 	                      <td>

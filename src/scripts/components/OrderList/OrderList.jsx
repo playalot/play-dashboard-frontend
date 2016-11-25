@@ -76,7 +76,7 @@ export default class OrderList extends Component{
 					  <option value="亿次元商城">亿次元商城</option>
 					  <option value="手办同萌会">手办同萌会</option>
 					  <option value="拆盒网">拆盒网</option>
-					  <option value="塑堂玩具">塑堂玩具</option>
+					  <option value="塑唐玩具">塑唐玩具</option>
 	                </FormControl>
 			  	</Form>
 			  </div>
@@ -129,7 +129,7 @@ export default class OrderList extends Component{
 	            </table>
 	          </div>
 	          <Row style={{textAlign:'center'}}>
-	          	<ReactPaginate 
+	          	<ReactPaginate
 	          		previousLabel={<span>&laquo;</span>}
 					nextLabel={<span>&raquo;</span>}
 					breakLabel={<span>...</span>}

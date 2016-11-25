@@ -2,20 +2,25 @@ import React, {
     Component
 } from 'react'
 import {Link} from 'react-router'
-import {Row, Button, FormControl} from 'react-bootstrap'
+import {Row, Button, FormControl,Form} from 'react-bootstrap'
 import ReactPaginate from 'react-paginate'
 import Moment from 'moment'
 export default class OrderList extends Component{
 	constructor(props) {
 	  	super(props)
-	  	this.state = {}
+	  	this.state = {
+	  		status:'',
+	  		merchant:'',
+	  	}
 	  	this.addTracking = this._addTracking.bind(this)
 	  	this.goPage = this._goPage.bind(this)
+	  	this.search = this._search.bind(this)
 	}
 	componentWillMount() {
-		const { page } = this.props
+		const { page, status, merchant } = this.props
 		if(typeof page === 'number') {
 			this.context.router.push(`/order?page=${page}`)
+			this.setState({status,merchant})
 		}else{
 			this.props.getOrder(this.props.location.query.page)
 		}
@@ -29,6 +34,12 @@ export default class OrderList extends Component{
 	_goPage(page) {
 		this.context.router.push(`/order?page=${page}`)
 		this.props.getOrder(page)
+	}
+	_search() {
+		if(this.props.location.query.page != 0){
+			this.context.router.push(`/order?page=0`)
+		}
+		this.props.getOrderBy(this.state.status,this.state.merchant)
 	}
 	formatStatus(str) {
 		switch(str) {
@@ -50,7 +61,25 @@ export default class OrderList extends Component{
 	}
 	render() {
 		return(
-			<div className="content">
+			<div className="content" style={{backgroundColor:'#fff'}}>
+			  <div className="page-header">
+			  	<Form inline onSubmit={(e) => e.preventDefault()}>
+				  	<div className="btn-group">
+					  <button onClick={()=> this.setState({status:''},() => this.search())} className={`btn btn-default ${this.state.status === '' ? 'active':''}`}>全部</button>
+					  <button onClick={()=> this.setState({status:'prepaid'},() => this.search())} className={`btn btn-default ${this.state.status === 'prepaid' ? 'active':''}`}>已预订</button>
+					  <button onClick={()=> this.setState({status:'paid'},() => this.search())} className={`btn btn-default ${this.state.status === 'paid' ? 'active':''}`}>已付款</button>
+					</div>
+					{' '}
+					<FormControl componentClass="select" placeholder="select" value={this.state.merchant} onChange={(e) => this.setState({merchant:e.target.value},() => this.search())}>
+	                  <option value="">所有商家</option>
+	                  <option value="PLAY玩具控">PLAY玩具控</option>
+					  <option value="亿次元商城">亿次元商城</option>
+					  <option value="手办同萌会">手办同萌会</option>
+					  <option value="拆盒网">拆盒网</option>
+					  <option value="塑堂玩具">塑堂玩具</option>
+	                </FormControl>
+			  	</Form>
+			  </div>
 	          <div className="table-responsive">
 	            <table className="table table-striped">
 	            	<thead><tr><th>用户</th><th>商家</th><th>订单</th><th>下单时间</th><th>订单状态</th><th>总计</th><th></th><th></th><th></th></tr></thead>

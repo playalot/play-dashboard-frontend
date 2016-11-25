@@ -1,13 +1,15 @@
 import Immutable from 'immutable'
 import { ORDER_L_RECEIVE_ORDER, ORDER_L_ADD_TRACKING,ORDER_L_SET_STATUS } from '../actions/orderAction'
 
-export default (state = Immutable.fromJS({ orders: [], totalPages:100,order:{} }),action)=>{
+export default (state = Immutable.fromJS({ orders: [], totalPages:100,order:{},status:'',merchant:'' }),action)=>{
     switch (action.type) {
         case ORDER_L_RECEIVE_ORDER:
             return state
                 .updateIn(['orders'], (orders) => orders.clear().concat(Immutable.fromJS(action.res)))
                 .set('totalPages',action.totalPages)
                 .set('page',action.page)
+                .set('status',action.status)
+                .set('merchant',action.merchant)
         case ORDER_L_ADD_TRACKING:
         	return state.updateIn(['orders'],(orders) => {
         		return orders.update(

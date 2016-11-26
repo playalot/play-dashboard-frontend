@@ -43,7 +43,7 @@
     "redux": "^3.5.2",
     "redux-logger": "^2.7.4",
     "redux-thunk": "^2.1.0",
-    "reflux": "^5.0.2",
+    "reflux": "^5.0.3",
     "riek": "^1.0.7",
     "superagent": "^3.0.0"
   },

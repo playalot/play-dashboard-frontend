@@ -16,6 +16,7 @@ export default class SkuList extends Component{
 	  	super(props)
 	  	this.state = {
 			filter: '',
+			filterType:'',
 
 			id:'',
 			quantity:100,
@@ -36,6 +37,7 @@ export default class SkuList extends Component{
 		this.toggleRec = id => this.props.toggleRec(id)
 		this.toggleBlk = id => this.props.toggleBlk(id)
 		this.onChangeFilter = this._onChangeFilter.bind(this)
+		this.onChangeFilterType = this._onChangeFilterType.bind(this)
 		this.editSku = this._editSku.bind(this)
 		this.goPage = this._goPage.bind(this)
 		this.deleteSku = (id,sid) => confirm('确定下架这个商品?') && this.props.deleteSku(id,sid)
@@ -84,10 +86,10 @@ export default class SkuList extends Component{
 		this.changeOrderClose = (date) => this.setState({orderClose:date})
 	}
 	componentWillMount() {
-		const { page,filter } = this.props
+		const { page,filter,filterType } = this.props
 		if(typeof page === 'number') {
 			this.context.router.push(`/sku?page=${page}`)
-			this.setState({filter})
+			this.setState({filter,filterType})
 		}else{
 			this.props.getSku(this.props.location.query.page)
 		}
@@ -95,7 +97,13 @@ export default class SkuList extends Component{
 	_onChangeFilter(e) {
 		this.setState({ filter: e.target.value },() => {
 			this.context.router.push(`/sku?page=0`)
-			this.props.getSkuBy(this.state.filter)
+			this.props.getSkuBy(this.state.filter,filterType)
+		})
+	}
+	_onChangeFilterType(e) {
+		this.setState({ filterType: e.target.value },() => {
+			this.context.router.push(`/sku?page=0`)
+			this.props.getSkuBy(this.state.filter,this.state.filterType)
 		})
 	}
 	_editSku(id,sid) {
@@ -148,6 +156,13 @@ export default class SkuList extends Component{
 									<option value="塑堂玩具">塑堂玩具</option>
 			                	</FormControl>
 				            </span>
+				            <span className="operate">
+			                	<FormControl componentClass="select" placeholder="select" value={this.state.filterType} onChange={this.onChangeFilterType}>
+			                  		<option value="">类型</option>
+			                  		<option value="inStock">现货</option>
+									<option value="preOrder">预售</option>
+			                	</FormControl>
+				            </span>
 							<span>库存数量</span>
 							<span>运费</span>
 							<span>上架时间</span>
@@ -188,7 +203,15 @@ export default class SkuList extends Component{
 														}
 													</div>													
 													<div className="sku-body-item operate">{stock.merchant}</div>													
-													<div className="sku-body-item">{stock.quantity}</div>													
+													<div className="sku-body-item operate">
+														{
+															stock.type === 'preOrder' ? '预售' : '现货'
+														}
+													</div>													
+													<div className="sku-body-item vertical">
+														<span>{stock.quantity}</span>
+														<small>已售:&nbsp;{stock.sold}</small>
+													</div>															
 													<div className="sku-body-item">¥&nbsp;{stock.freight}</div>													
 													<div className="sku-body-item">{Moment(stock.created).format('MM-DD HH:mm')}</div>													
 													<div className="sku-body-item operate">

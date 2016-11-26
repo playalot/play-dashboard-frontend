@@ -6,13 +6,14 @@ export const SKL_TOGGLE_REC = 'SKL_TOGGLE_REC'
 export const SKL_TOGGLE_BLK = 'SKL_TOGGLE_BLK'
 export const SKL_DELETE_SKU = 'SKL_DELETE_SKU'
 
-function receiveSku(res,totalPages,page,filter) {
+function receiveSku(res,totalPages,page,filter,filterType) {
     return {
         type: SKL_RECEIVE_SKU,
         res,
         totalPages,
         page,
-        filter
+        filter,
+        filterType,
     }
 }
 
@@ -49,31 +50,37 @@ export function toggleRec(id) {
 export function getSku (page = 0) {
     return (dispatch,getState) => {
         let params = { page }
-        const { filter } = getState().sku.toJS()
+        const { filter, filterType } = getState().sku.toJS()
         if(filter) {
             params.merchant = filter
+        }
+        if(filterType) {
+            params.type = filterType
         }
         return Request
             .get(`/api/stocks`)
             .query(params)
             .end((err, res) => {
-                dispatch(receiveSku(res.body.stocks,res.body.totalPages,page,filter))
+                dispatch(receiveSku(res.body.stocks,res.body.totalPages,page,filter,filterType))
             })
     }
 }
 
-export function getSkuBy (filter = '') {
+export function getSkuBy (filter = '',filterType = '') {
     return (dispatch,getState) => {
         let page = 0
         let params = { page }
         if(filter) {
             params.merchant = filter
         }
+        if(filterType) {
+            params.type = filterType
+        }
         return Request
             .get(`/api/stocks`)
             .query(params)
             .end((err, res) => {
-                dispatch(receiveSku(res.body.stocks,res.body.totalPages,page,filter))
+                dispatch(receiveSku(res.body.stocks,res.body.totalPages,page,filter,filterType))
             })
     }
 }

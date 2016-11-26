@@ -4,7 +4,7 @@ import {
     SKL_TOGGLE_BLK,SKL_TOGGLE_REC,
 } from '../actions/skuAction'
 
-export default (state = Immutable.fromJS({ skus: [],totalPages:100,filter:'' }),action)=>{
+export default (state = Immutable.fromJS({ skus: [],totalPages:100,filter:'',filterType:'' }),action)=>{
     switch (action.type) {
         case SKL_RECEIVE_SKU:
             return state
@@ -12,6 +12,7 @@ export default (state = Immutable.fromJS({ skus: [],totalPages:100,filter:'' }),
                 .set('totalPages',action.totalPages)
                 .set('page',action.page)
                 .set('filter',action.filter)
+                .set('filterType',action.filterType)
         case SKL_DELETE_SKU:
            return state.updateIn(['skus'], (skus) => {
                 return skus.update(

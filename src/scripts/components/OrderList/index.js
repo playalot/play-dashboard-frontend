@@ -10,13 +10,14 @@ const mapActionCreators = {
 }
 
 const mapStateToProps = (state) => {
-	const { orders,totalPages,page,status,merchant } = state.order.toJS()
+	const { orders,totalPages,page,status,merchant,init } = state.order.toJS()
     return {
     	orders,
     	totalPages,
     	page,
     	status,
-    	merchant
+    	merchant,
+        init
     }
 }
 

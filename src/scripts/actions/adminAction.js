@@ -2,10 +2,11 @@ import Request from 'superagent'
 
 export const ADMIN_RECEIVE_INFO = 'ADMIN_RECEIVE_INFO'
 
-function receiveInfo(res) {
+function receiveInfo(res,email) {
     return {
         type: ADMIN_RECEIVE_INFO,
-        res
+        res,
+        email
     }
 }
 
@@ -15,7 +16,7 @@ export function fetchInfo() {
             .get(`/api/admin/current`)
             .end((err,res) => {
                 if(!err) {
-                    dispatch(receiveInfo(res.body.user))
+                    dispatch(receiveInfo(res.body.user,res.body.email))
                 } 
             })
     }

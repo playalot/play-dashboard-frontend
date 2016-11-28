@@ -17,13 +17,23 @@ export default class OrderList extends Component{
 	  	this.search = this._search.bind(this)
 	}
 	componentWillMount() {
-		const { page, status, merchant } = this.props
-		if(typeof page === 'number') {
-			this.context.router.push(`/order?page=${page}`)
-			this.setState({status,merchant})
-		}else{
-			this.props.getOrder(this.props.location.query.page)
+		const { init } = this.props
+		let page,status,merchant
+		if(init) {
+			page = this.props.page
+			status = this.props.status
+			merchant = this.props.merchant
+			let path = `/order?page=${page}`
+			path += status ? `&status=${status}` : ``
+			path += merchant ? `&merchant=${merchant}` : ``
+			this.context.router.push(path)
+		}else {
+			page = this.props.location.query.page || 0
+			status = this.props.location.query.status || ''
+			merchant = this.props.location.query.merchant || ''
+			this.props.getOrder(page,status,merchant)
 		}
+		this.setState({status,merchant})
 	}
 	_addTracking(id) {
 		let trackNo = prompt('输入物流号')
@@ -32,14 +42,20 @@ export default class OrderList extends Component{
 		}
 	}
 	_goPage(page) {
-		this.context.router.push(`/order?page=${page}`)
-		this.props.getOrder(page)
+		let { status, merchant } = this.state
+		let path = `/order?page=${page}`
+		path += status ? `&status=${status}` : ``
+		path += merchant ? `&merchant=${merchant}` : ``
+		this.context.router.push(path)
+		this.props.getOrder(page,status,merchant)
 	}
 	_search() {
-		if(this.props.location.query.page != 0){
-			this.context.router.push(`/order?page=0`)
-		}
-		this.props.getOrderBy(this.state.status,this.state.merchant)
+		let { status,merchant } = this.state
+		let path = `/order?page=${0}`
+		path += status ? `&status=${status}` : ``
+		path += merchant ? `&merchant=${merchant}` : ``
+		this.context.router.push(path)
+		this.props.getOrder(0,status,merchant)
 	}
 	formatStatus(str) {
 		switch(str) {

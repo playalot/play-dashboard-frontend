@@ -56,11 +56,15 @@ export function setStatus(id,status) {
     }
 }
 
-export function getOrder (page = 0) {
+export function getOrder (page = 0,status = '',merchant = '') {
     return (dispatch,getState) => {
         let params = { page }
-        const { status, merchant } = getState().order.toJS()
-
+        if(status) {
+            params.status = status
+        }
+        if(merchant) {
+            params.merchant = merchant
+        }
         return Request
             .get(`/api/orders`)
             .query(params)

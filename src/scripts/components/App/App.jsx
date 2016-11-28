@@ -1,12 +1,22 @@
 import React,{ Component } from 'react'
 import { Link } from 'react-router'
 export default class App extends Component{
+	constructor(props) {
+	  	super(props)
+	  	this.state = {}
+	  	this.signOut = () => {
+	  		if(confirm('确定登出吗?')){
+	  			
+	  		}
+	  	}
+	}
 	componentWillMount() {
 		if(!this.props.loaded) {
 			this.props.fetchInfo()
 		}
 	}
 	render() {
+		const { nickName, avatar, email } = this.props.user
 		return(
 			<div className="wrapper">
 		        <div className="main-header">
@@ -27,8 +37,9 @@ export default class App extends Component{
 		                    </li>
 		                  </ul>
 		                </li>
+		                <li><a  style={{borderLeft:'none'}}>{email}</a></li>
 		                <li>
-		                  <a href="#" data-toggle="control-sidebar"><i className="fa fa-gears"></i></a>
+		                  <a onClick={this.signOut}><i className="fa fa-sign-out"></i></a>
 		                </li>
 		              </ul>
 		            </div>
@@ -37,13 +48,21 @@ export default class App extends Component{
 
 		        <div className="main-sidebar">
 		          <section className="sidebar">
-		            <div className="user-panel">
+		            <div className="user-panel" style={avatar ? {}:{minHeight:40}}>
 		              <div className="pull-left image">
-		                <img src={this.props.user.avatar} className="img-circle" alt="User Image" />
+		                {
+		                  avatar ?
+		                  <img src={avatar} className="img-circle" alt="User Image" />
+		                  :null
+		                }
 		              </div>
 		              <div className="pull-left info">
-		                <p>{this.props.user.nickName}</p>
-		                <a href="#"><i className="fa fa-circle text-success"></i> Online</a>
+		                <p>{nickName}</p>
+		                {
+		                  avatar ?
+		                  <a href="#"><i className="fa fa-circle text-success"></i> Online</a>
+		                  :null
+		                }
 		              </div>
 		            </div>
 		            <ul className="sidebar-menu">

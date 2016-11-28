@@ -1,12 +1,11 @@
 import { connect } from 'react-redux'
 import OrderList from './OrderList'
 
-import { addTracking, setStatus, getOrder, getOrderBy } from '../../actions/orderAction'
+import { addTracking, setStatus, getOrder } from '../../actions/orderAction'
 const mapActionCreators = {
 	addTracking,
 	setStatus,
 	getOrder,
-	getOrderBy,
 }
 
 const mapStateToProps = (state) => {

@@ -73,15 +73,3 @@ export function getOrder (page = 0,status = '',merchant = '') {
             })
     }
 }
-export function getOrderBy (status = '',merchant ='') {
-    return (dispatch,getState) => {
-        let page = 0
-        let params = { page }
-        return Request
-            .get(`/api/orders`)
-            .query(params)
-            .end((err, res) => {
-                dispatch(receiveOrder(res.body.orders,res.body.totalPages,page,status,merchant))
-            })
-    }
-}

@@ -118,29 +118,31 @@ export default class SkuList extends Component{
 		return(
 			<div className="content">
 				<div className="page-header">
-					<Row>
-						<Col sm={4}>
-							<PlayAutoSuggest
-								fetch={(o) => this.props.fetchToyByQuery(o.value)}
-								clear={this.props.clearSuggestion}
-								getValue={suggestion => suggestion.name}
-								selectValue={(event,{suggestion, suggestionValue, method }) => {
-									this.setState({
-										id:suggestion.id,
-										cover:suggestion.cover,
-										company:suggestion.company,
-										name:suggestion.name,
-									},() => {
-										this.open()
-									})
-								}}
-								desc="release"
-								placeholder="请输入玩具关键字"
-								results={this.props.toyResults}
-							/>
-						</Col>
-					</Row>
-
+					<Button onClick={() => this.context.router.push(`/toy`)}>添加玩具库存</Button>
+					{
+						// <Row>
+						// 	<Col sm={4}>
+						// 		<PlayAutoSuggest
+						// 			fetch={(o) => this.props.fetchToyByQuery(o.value)}
+						// 			clear={this.props.clearSuggestion}
+						// 			getValue={suggestion => suggestion.name}
+						// 			selectValue={(event,{suggestion, suggestionValue, method }) => {
+						// 				this.setState({
+						// 					id:suggestion.id,
+						// 					cover:suggestion.cover,
+						// 					company:suggestion.company,
+						// 					name:suggestion.name,
+						// 				},() => {
+						// 					this.open()
+						// 				})
+						// 			}}
+						// 			desc="release"
+						// 			placeholder="请输入玩具关键字"
+						// 			results={this.props.toyResults}
+						// 		/>
+						// 	</Col>
+						// </Row>
+					}
 				</div>
 				<div className="sku-container">
 					<div className="sku-title">

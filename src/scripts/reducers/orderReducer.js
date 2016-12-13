@@ -10,6 +10,8 @@ export default (state = Immutable.fromJS({ orders: [], totalPages:100,order:{},s
                 .set('page',action.page)
                 .set('status',action.status)
                 .set('merchant',action.merchant)
+                .set('year',action.year)
+                .set('month',action.month)
                 .set('init',true)
         case ORDER_L_ADD_TRACKING:
         	return state.updateIn(['orders'],(orders) => {

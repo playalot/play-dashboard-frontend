@@ -2,26 +2,32 @@ import React, {
     Component
 } from 'react'
 import {Link} from 'react-router'
-import {Row, Button, FormControl,Form} from 'react-bootstrap'
+import {Row, Button, FormControl,Form, FormGroup } from 'react-bootstrap'
 import ReactPaginate from 'react-paginate'
 import Moment from 'moment'
 export default class OrderList extends Component{
 	constructor(props) {
 	  	super(props)
 	  	this.state = {
-	  		status:'',
+	  		status:'paid',
 	  		merchant:'',
+	  		year:new Date(Date.now()).getFullYear(),
+			month:new Date(Date.now()).getMonth() + 1,
 	  	}
 	  	this.addTracking = this._addTracking.bind(this)
 	  	this.goPage = this._goPage.bind(this)
 	  	this.search = this._search.bind(this)
+	  	this.onChangeYear= (e) => this.setState({year:e.target.value},() => this.search())
+		this.onChangeMonth = (e) => this.setState({month:e.target.value},() => this.search())
 	}
 	componentWillMount() {
 		const { init } = this.props
-		let page,status,merchant
+		let page,status,merchant,year,month
 		if(init) {
 			page = this.props.page
 			status = this.props.status
+			year = this.props.year
+			month = this.props.month
 			merchant = this.props.merchant
 			let path = `/order?page=${page}`
 			path += status ? `&status=${status}` : ``
@@ -29,11 +35,14 @@ export default class OrderList extends Component{
 			this.context.router.push(path)
 		}else {
 			page = this.props.location.query.page || 0
-			status = this.props.location.query.status || ''
+			status = this.props.location.query.status || 'paid'
+			if(!this.props.location.query.status){ page = 0 }
+			year = this.state.year
+			month = this.state.month
 			merchant = this.props.location.query.merchant || ''
-			this.props.getOrder(page,status,merchant)
+			this.props.getOrder(page,status,merchant,year,month)
 		}
-		this.setState({status,merchant})
+		this.setState({status,merchant,year,month})
 	}
 	_addTracking(id) {
 		let trackNo = prompt('输入物流号')
@@ -42,20 +51,20 @@ export default class OrderList extends Component{
 		}
 	}
 	_goPage(page) {
-		let { status, merchant } = this.state
+		let { status, merchant,year,month } = this.state
 		let path = `/order?page=${page}`
 		path += status ? `&status=${status}` : ``
 		path += merchant ? `&merchant=${merchant}` : ``
 		this.context.router.push(path)
-		this.props.getOrder(page,status,merchant)
+		this.props.getOrder(page,status,merchant,year,month)
 	}
 	_search() {
-		let { status,merchant } = this.state
+		let { status,merchant,year,month } = this.state
 		let path = `/order?page=${0}`
 		path += status ? `&status=${status}` : ``
 		path += merchant ? `&merchant=${merchant}` : ``
 		this.context.router.push(path)
-		this.props.getOrder(0,status,merchant)
+		this.props.getOrder(0,status,merchant,year,month)
 	}
 	formatStatus(str) {
 		switch(str) {
@@ -83,17 +92,50 @@ export default class OrderList extends Component{
 				  	<div className="btn-group">
 					  <button onClick={()=> this.setState({status:''},() => this.search())} className={`btn btn-default ${this.state.status === '' ? 'active':''}`}>全部</button>
 					  <button onClick={()=> this.setState({status:'prepaid'},() => this.search())} className={`btn btn-default ${this.state.status === 'prepaid' ? 'active':''}`}>已预订</button>
-					  <button onClick={()=> this.setState({status:'paid'},() => this.search())} className={`btn btn-default ${this.state.status === 'paid' ? 'active':''}`}>已付款</button>
+					  <button onClick={()=> this.setState({status:'paid'},() => this.search())} className={`btn btn-default ${this.state.status === 'paid' ? 'active':''}`}>已支付</button>
+					  <button onClick={()=> this.setState({status:'done'},() => this.search())} className={`btn btn-default ${this.state.status === 'done' ? 'active':''}`}>已完成</button>
 					</div>
 					{' '}
-					<FormControl componentClass="select" placeholder="select" value={this.state.merchant} onChange={(e) => this.setState({merchant:e.target.value},() => this.search())}>
-	                  <option value="">所有商家</option>
-	                  <option value="PLAY玩具控">PLAY玩具控</option>
-					  <option value="亿次元商城">亿次元商城</option>
-					  <option value="手办同萌会">手办同萌会</option>
-					  <option value="拆盒网">拆盒网</option>
-					  <option value="塑唐玩具">塑唐玩具</option>
-	                </FormControl>
+					<FormGroup>
+						<FormControl componentClass="select" placeholder="select" value={this.state.merchant} onChange={(e) => this.setState({merchant:e.target.value},() => this.search())}>
+		                  <option value="">所有商家</option>
+		                  <option value="PLAY玩具控">PLAY玩具控</option>
+						  <option value="亿次元商城">亿次元商城</option>
+						  <option value="手办同萌会">手办同萌会</option>
+						  <option value="拆盒网">拆盒网</option>
+						  <option value="塑唐玩具">塑唐玩具</option>
+		                </FormControl>
+	                </FormGroup>
+	                {' '}
+					<FormGroup>
+						<FormControl componentClass="select" value={this.state.year} onChange={this.onChangeYear}>
+							<option value="">全部年份</option>
+							<option value="2017">2017年</option>
+							<option value="2016">2016年</option>
+							<option value="2015">2015年</option>
+							<option value="2014">2014年</option>
+							<option value="2013">2013年</option>
+							<option value="2012">2012年</option>
+						</FormControl>
+					</FormGroup>
+					{' '}
+					<FormGroup>
+						<FormControl componentClass="select" value={this.state.month} onChange={this.onChangeMonth}>
+							<option value="">全部月份</option>
+							<option value="1">1月</option>
+							<option value="2">2月</option>
+							<option value="3">3月</option>
+							<option value="4">4月</option>
+							<option value="5">5月</option>
+							<option value="6">6月</option>
+							<option value="7">7月</option>
+							<option value="8">8月</option>
+							<option value="9">9月</option>
+							<option value="10">10月</option>
+							<option value="11">11月</option>
+							<option value="12">12月</option>
+						</FormControl>
+					</FormGroup>
 			  	</Form>
 			  </div>
 	          <div className="table-responsive">
@@ -112,32 +154,28 @@ export default class OrderList extends Component{
 	                      <td>
 	                      	<FormControl componentClass="select" placeholder="select" value={`订单操作`} onChange={(e) => this.props.setStatus(order.id,e.target.value)}>
 		                  		<option value="">订单操作</option>
-		                  		<option value="closed">关闭订单</option>
-								<option value="done">订单完成</option>
+		                  		{order.status === 'open' ?  <option value="closed">关闭订单</option> : ''}
+								{order.status === 'paid' ?  <option value="done">订单完成</option> : ''}
 		                	</FormControl>
 	                      </td>
 	                      <td>
-	                      	<Link to={`/order/${order.id}`}>详情</Link>
+	                      	<Link to={`/order/${order.id}`} className="btn">订单详情</Link>
 	                      </td>
 	                      {
-	                      	order.tracking?
-	                      	<td style={{display:'flex',flexDirection:'column'}}>
-	                      		<span style={{flex:1,color:'goldenrod'}} className="btn btn-sm" onClick={() => this.addTracking(order.id)}>
-	                      			{order.tracking.number}&nbsp;修改
-	                      		</span>
-
-	                      		<a style={{flex:1,textAlign:'center'}} href={`http://wap.guoguo-app.com/wuliuDetail.htm?mailNo=${order.tracking.number}`} target="_blank">
-	                      			<span style={{flex:1}} className="btn btn-sm">
-		                      			查看物流
-		                      		</span>
-	                      		</a>
-	                      	</td>
-	                      	:<td style={{textAlign:'center',color:'teal'}}>
-	                      		<span className="btn btn-sm" onClick={() => this.addTracking(order.id)}>
-	                      			添加物流
-	                      		</span>
-	                      	</td>
-	                      }
+							order.tracking ?
+							<td>
+								<a data-toggle="tooltip" data-placement="top" title={`快递号:${order.tracking.number}`}
+									href={`http://wap.guoguo-app.com/wuliuDetail.htm?mailNo=${order.tracking.number}`} target="_blank">
+									追踪快递
+								</a>&nbsp;/&nbsp;
+								<a onClick={() => this.addTracking(order.id)}>修改快递号</a>
+							</td> :
+							(order.status === 'paid' ? <td style={{textAlign:'center',color:'teal'}}>
+								<span className="btn" onClick={() => this.addTracking(order.id)}>
+									添加快递号
+								</span>
+							</td> : '')
+						  }
 	                    </tr>
 	                  )
 	                })}

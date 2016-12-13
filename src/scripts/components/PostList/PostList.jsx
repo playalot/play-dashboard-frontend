@@ -152,13 +152,13 @@ export default class Post extends Component{
 					nextLabel={<span>&raquo;</span>}
 					breakLabel={<span>...</span>}
 					breakClassName={"break-me"}
-					pageNum={this.props.totalPages}
+					pageCount={this.props.totalPages}
 					marginPagesDisplayed={2}
 					pageRangeDisplayed={5}
-					clickCallback={obj => this.goPage(obj.selected)}
+					onPageChange={obj => this.goPage(obj.selected)}
 					containerClassName={"pagination"}
 					subContainerClassName={"pages pagination"}
-					forceSelected={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
+					forcePage={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
 					activeClassName={"active"} />
 	          </Row>
 	          <div>

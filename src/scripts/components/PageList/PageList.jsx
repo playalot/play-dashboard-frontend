@@ -128,7 +128,7 @@ export default class PageList extends Component{
 	                      <td><span style={{color:'#333'}} onClick={() => this.toggleShare(page.id)} className={shareClass}><i className="fa fa-share-square-o"></i></span></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.togglePub(page.id)} className={isPubClass}><i className="fa fa-eye-slash"></i></span></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.deleteArticle(page.id)} className="btn btn-sm"><i className="fa fa-trash"></i></span></td>
-	                      <td><a target="_blank" href={`http://www.playalot.cn/page/${page.id}.html`}>预览</a></td>
+	                      <td><a target="_blank" href={`http://www.playalot.cn/page/${page.id}`}>预览</a></td>
 	                    </tr>
 	                  )
 	                })}

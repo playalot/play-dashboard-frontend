@@ -66,7 +66,7 @@ export default class EditToy extends Component {
 					name:res.body.name || '空',
 					nameRaw:res.body.nameRaw || '空',
 					releaseYear:res.body.release ? res.body.release.split('/')[0] : '空',
-					releaseMonth:res.body.release ? res.body.release.split('/')[1] : '空',
+					releaseMonth:res.body.release ? (res.body.release.split('/')[1] || '空') : '空',
 					currency:res.body.info.currency || 'rmb',
 					money:res.body.info.money || 0,
 					scale:res.body.info.scale || '空',

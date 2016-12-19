@@ -4,7 +4,7 @@ export const ORDER_L_RECEIVE_ORDER = 'ORDER_L_RECEIVE_ORDER'
 export const ORDER_L_ADD_TRACKING = 'ORDER_L_ADD_TRACKING'
 export const ORDER_L_SET_STATUS = 'ORDER_L_SET_STATUS'
 
-function receiveOrder(res,totalPages,page,status,merchant,year,month) {
+function receiveOrder(res,totalPages,page,status,merchant,year,month,summary) {
     return {
         type: ORDER_L_RECEIVE_ORDER,
         res,
@@ -14,6 +14,7 @@ function receiveOrder(res,totalPages,page,status,merchant,year,month) {
         merchant,
         year,
         month,
+        summary,
     }
 }
 function _addTracking(id,trackNo) {
@@ -77,7 +78,7 @@ export function getOrder (page = 0,status = 'paid',merchant = '',year,month) {
             .get(`/api/orders`)
             .query(params)
             .end((err, res) => {
-                dispatch(receiveOrder(res.body.orders,res.body.totalPages,page,status,merchant,year,month))
+                dispatch(receiveOrder(res.body.orders,res.body.totalPages,page,status,merchant,year,month,res.body.summary))
             })
     }
 }

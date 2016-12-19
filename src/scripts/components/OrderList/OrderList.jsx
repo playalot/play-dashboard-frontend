@@ -81,7 +81,7 @@ export default class OrderList extends Component{
 			case 'done':
 				return <span className="label label-info">完成</span>
 			default :
-				return '未知'
+				return ''
 		}
 	}
 	render() {
@@ -138,6 +138,14 @@ export default class OrderList extends Component{
 					</FormGroup>
 			  	</Form>
 			  </div>
+			  <div className="alert alert-dismissible">
+					<button type="button" className="close" data-dismiss="alert" aria-hidden="true">×</button>
+					<h5>
+						{this.state.year}年{this.state.month}月，
+						一共<strong>{this.props.summary.count}</strong>笔{this.formatStatus(this.state.status)}订单，
+						总计<strong>{this.props.summary.totalPrice}</strong>元
+					</h5>
+				</div>
 	          <div className="table-responsive">
 	            <table className="table table-striped">
 	            	<thead><tr><th>用户</th><th>商家</th><th>订单</th><th>下单时间</th><th>订单状态</th><th>总计</th><th></th><th></th><th></th></tr></thead>

@@ -21,6 +21,7 @@ export default class Toy extends Component{
 			showModal:false,
 			id:'',
 			name:'',
+			preview:'',
 			quantity:100,
 			price:9999,
 			originPrice:0,
@@ -76,7 +77,7 @@ export default class Toy extends Component{
 				})
 		}
 		this.recommend = this._recommend.bind(this)
-		this.addGoods = this._addGoods.bind(this)
+		this.addStock = this._addStock.bind(this)
 		this.toggleR18 = (id) => this.props.toggleR18(id)
 		this.toggleRecommend = (id) => this.props.toggleRecommend(id)
 		this.deletetoy = this._deletetoy.bind(this)
@@ -109,9 +110,9 @@ export default class Toy extends Component{
 					this.props.addToy()
 			}
 	}
-	_addGoods(id,name) {
+	_addStock(id,name,preview) {
 		this.setState({
-			id,name
+			id,name,preview
 		},() => {
 			this.open()
 		})
@@ -219,7 +220,6 @@ export default class Toy extends Component{
 												</div>
 												<div className="box-footer">
 													<ButtonToolbar className="pull-right">
-														<span onClick={() =>	this.addGoods(toy.id,toy.name) } className="btn btn-sm"><i className="fa fa-plus"></i></span>
 														<Link to={'/toy/' + toy.id + '/edit'} ><span className="btn btn-sm"><i className="fa fa-edit"></i></span></Link>
 														<span onClick={() =>	this.recommend(toy.id) } className="btn btn-sm"><i className="fa fa-bookmark-o"></i></span>
 														<span onClick={() =>	this.toggleR18(toy.id) } className={r18Class}><i className="fa fa-venus-mars"></i></span>
@@ -227,6 +227,13 @@ export default class Toy extends Component{
 														<span onClick={() =>	this.deletetoy(toy.id) } className="btn btn-sm"><i className="fa fa-trash"></i></span>
 													</ButtonToolbar>
 												</div>
+												<div className="box-footer">
+													<ButtonToolbar className="pull-right">
+														<a target="_blank" href={`http://www.playalot.cn/toy/${toy.id}`} className="btn btn-default btn-sm">查看详情</a>
+														<span onClick={() => this.addStock(toy.id,toy.name,toy.cover) } className="btn btn-default btn-sm"><i className="fa fa-plus"></i>添加该商品库存</span>
+													</ButtonToolbar>
+												</div>
+												
 											</div>
 									</Col>
 								);
@@ -263,7 +270,7 @@ export default class Toy extends Component{
 							</FormGroup>
 							<FormGroup>
 								<Col sm={2} className="sm-2-label">
-									名称
+									<img className="add-stock-preview" src={this.state.preview}/>
 								</Col>
 								<Col sm={10}>
 									<FormControl.Static>{this.state.name}</FormControl.Static>

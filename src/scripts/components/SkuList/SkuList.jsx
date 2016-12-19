@@ -40,6 +40,7 @@ export default class SkuList extends Component{
 		this.onChangeFilterType = this._onChangeFilterType.bind(this)
 		this.editSku = this._editSku.bind(this)
 		this.goPage = this._goPage.bind(this)
+		this.fillMoney = this._fillMoney.bind(this)
 		this.deleteSku = (id,sid) => confirm('确定下架这个商品?') && this.props.deleteSku(id,sid)
 
 		this.open = () => this.setState({ showModal: true })
@@ -106,6 +107,13 @@ export default class SkuList extends Component{
 			this.props.getSkuBy(this.state.filter,this.state.filterType)
 		})
 	}
+	_fillMoney(id,sid) {
+		if(confirm('确认补款吗?')){
+			console.info(`补款id${id},sid${sid}`)
+		}else{
+			console.info('取消操作')
+		}
+	}
 	_editSku(id,sid) {
 		let path = `/sku/${id}/edit?sid=${sid}`
 		this.context.router.push(path)
@@ -119,35 +127,11 @@ export default class SkuList extends Component{
 			<div className="content">
 				<div className="page-header">
 					<Button onClick={() => this.context.router.push(`/toy`)}>添加玩具库存</Button>
-					{
-						// <Row>
-						// 	<Col sm={4}>
-						// 		<PlayAutoSuggest
-						// 			fetch={(o) => this.props.fetchToyByQuery(o.value)}
-						// 			clear={this.props.clearSuggestion}
-						// 			getValue={suggestion => suggestion.name}
-						// 			selectValue={(event,{suggestion, suggestionValue, method }) => {
-						// 				this.setState({
-						// 					id:suggestion.id,
-						// 					cover:suggestion.cover,
-						// 					company:suggestion.company,
-						// 					name:suggestion.name,
-						// 				},() => {
-						// 					this.open()
-						// 				})
-						// 			}}
-						// 			desc="release"
-						// 			placeholder="请输入玩具关键字"
-						// 			results={this.props.toyResults}
-						// 		/>
-						// 	</Col>
-						// </Row>
-					}
 				</div>
 				<div className="sku-container">
 					<div className="sku-title">
 						<div>
-							<span>贩售价格</span>
+							<span>售价</span>
 							<span className="operate">
 								<FormControl componentClass="select" placeholder="select" value={this.state.filter} onChange={this.onChangeFilter}>
 									<option value="">全部</option>
@@ -166,7 +150,6 @@ export default class SkuList extends Component{
 			            		</FormControl>
 				            </span>
 							<span>库存数量</span>
-							<span>运费</span>
 							<span>上架时间</span>
 							<span className="operate">操作</span>
 						</div>
@@ -207,19 +190,18 @@ export default class SkuList extends Component{
 													<div className="sku-body-item operate">{stock.merchant}</div>													
 													<div className="sku-body-item operate">
 														{
-															stock.type === 'preOrder' ? '预售' : '现货'
+															stock.type === 'preOrder' ? <span className="label label-warning">预售</span> : <span className="label label-info">现货</span>
 														}
 													</div>													
 													<div className="sku-body-item vertical">
 														<span>{stock.quantity}</span>
 														<small>已售:&nbsp;{stock.sold}</small>
 													</div>															
-													<div className="sku-body-item">¥&nbsp;{stock.freight}</div>													
 													<div className="sku-body-item">{Moment(stock.created).format('MM-DD HH:mm')}</div>													
 													<div className="sku-body-item operate">
-										                <span onClick={() => this.editSku(sku.id,stock.stockId)}><i className="fa fa-edit"></i></span>
-														<span >补款</span>
-										                <span onClick={() => this.deleteSku(sku.id,stock.stockId)} >下架</span>
+														<a onClick={() => this.editSku(sku.id,stock.stockId)}>修改</a>&nbsp;
+														{stock.type === 'preOrder' ? <a onClick={() => this.fillMoney(sku.id,stock.stockId)}>开使补款</a> : ''}&nbsp;
+										                <a onClick={() => this.deleteSku(sku.id,stock.stockId)}>下架</a>
 													</div>													
 												</div>
 											)

@@ -35,6 +35,11 @@
   padding:7px;
   text-align: right;
 }
+.add-stock-preview {
+  object-fit:contain;
+  width: 60px;
+  height: 60px;
+}
 @media screen and  (max-width: 768px) {
   .sm-2-label{
     text-align: left;
@@ -50,7 +55,7 @@
     height:40px;
     width:100%;
     display:flex;
-    padding-left:230px;
+    padding-left:250px;
     margin-bottom:10px;
     div{
       display:flex;
@@ -79,11 +84,10 @@
     margin-bottom:15px;
     display: flex;
     background-color:white;
-    box-shadow:5px 5px 5px #ddd;
+    border-bottom: 1px solid #EEE;
     .sku-header{
-      flex-basis:230px;
+      flex-basis:250px;
       display:flex;
-      box-shadow:1px 1px 5px #ccc;
       .sku-img{
         flex:1;
         align-self:center;

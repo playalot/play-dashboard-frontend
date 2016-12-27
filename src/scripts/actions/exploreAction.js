@@ -22,12 +22,6 @@ function receiveTheme(res) {
         res
     }
 }
-function receiveThemeMore(res) {
-    return {
-        type: EXPLORE_RECEIVE_THEME_MORE,
-        res
-    }
-}
 function setThemeNoMore(flag) {
     return {
         type: EXPLORE_SET_THEME_NO_MORE,
@@ -46,18 +40,7 @@ function _deleteBanner(id) {
         id
     }
 }
-function _addTheme(res) {
-    return {
-        type: EXPLORE_ADD_THEME,
-        res
-    }
-}
-function _deleteTheme(id) {
-    return {
-        type: EXPLORE_DELETE_THEME,
-        id
-    }
-}
+
 export function fetchBanner() {
     return (dispatch) => {
         return Request
@@ -67,31 +50,6 @@ export function fetchBanner() {
             })
     }
 }
-export function fetchTheme() {
-    return (dispatch) => {
-        return Request
-            .get(`/api/themes`)
-            .query({page:0})
-            .end((err,res) => {
-                dispatch(receiveTheme(res.body.themes))
-            })
-    }
-}
-export function fetchThemeMore() {
-    return (dispatch,getState) => {
-        let page = getState().explore.getIn(['status','page'])
-        return Request
-            .get(`/api/themes`)
-            .query({page})
-            .end((err,res) => {
-                if(!res.body.themes.length){
-                    return dispatch(setThemeNoMore(true))
-                }
-                dispatch(receiveThemeMore(res.body.themes))
-            })
-    }
-}
-
 
 export function addBanner() {
     return (dispatch) => {
@@ -110,27 +68,6 @@ export function deleteBanner(id) {
             .end((err,res) => {
                 dispatch(_deleteBanner(id))
             })
-        
-    }
-}
 
-export function addTheme() {
-    return (dispatch) => {
-        return Request
-            .post(`/api/recommend?place=theme`)
-            .end((err,res) => {
-                dispatch(_addTheme(res.body))
-            })
-    }
-}
-
-export function deleteTheme(id) {
-    return (dispatch) => {
-        return Request
-            .del(`/api/recommend/${id}`)
-            .end((err,res) => {
-                dispatch(_deleteTheme(id))
-            })
-        
     }
 }

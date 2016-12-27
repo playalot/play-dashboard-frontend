@@ -179,7 +179,7 @@ export default class EditTag extends Component{
                 })
             })
         }
-        
+
     }
     _setTagClassification(tid,cid) {
         let tmpCls = this.state.cls
@@ -192,7 +192,7 @@ export default class EditTag extends Component{
             .end((err, res) => {
             })
         })
-        
+
     }
     render() {
         let cls = _.filter(this.props.classifications,c => this.state.cls.indexOf(c.id) === -1 )
@@ -219,6 +219,7 @@ export default class EditTag extends Component{
                               <option value="origin">原著</option>
                               <option value="topic">话题</option>
                               <option value="event">活动</option>
+                              <option value="media">媒体</option>
                             </select>
                           </Col>
                           <Col sm={2}>
@@ -339,6 +340,3 @@ export default class EditTag extends Component{
         )
     }
 }
-
-
-

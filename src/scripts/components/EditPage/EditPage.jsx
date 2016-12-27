@@ -266,7 +266,7 @@ export default class EditPage extends Component {
 	}
   	//媒体操作
   	_addImage(imageKey){
-	  	const src = CDN.show(imageKey) + '?articlestyle';
+	  	const src = CDN.show(imageKey) + '-articlestyle';
 	  	const size = 'auto'
 	  	const type = 'image'
 	    const entityKey = Entity.create('image', 'IMMUTABLE', {src,size,type});
@@ -590,7 +590,7 @@ export default class EditPage extends Component {
 								ref="editor"
 							/>
 				      	</div>
-				        
+
 	                {
 	                	this.state.showVideoDialog ?
 	                	<div className="modal">

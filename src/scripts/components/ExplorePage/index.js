@@ -2,30 +2,25 @@ import { connect } from 'react-redux'
 import ExplorePage from './ExplorePage'
 
 import { 
-	fetchBanner, addBanner, deleteBanner,
-	fetchTheme, addTheme, deleteTheme, fetchThemeMore,
+    fetchExplore,
+    addBanner, deleteBanner,
+    addTopic, deleteTopic,
 } from '../../actions/exploreAction'
 const mapActionCreators = {
-    fetchBanner,
+    fetchExplore,
     addBanner,
     deleteBanner,
-    fetchTheme,
-    fetchThemeMore,
-    addTheme, 
-    deleteTheme, 
+    addTopic, 
+    deleteTopic, 
 }
 
 const mapStateToProps = (state) => {
-    const { bannerList, themeList }  = state.explore.toJS()
-    const themeLoaded = state.explore.getIn(['status','themeLoaded'])
-    const noMore = state.explore.getIn(['status','noMore'])
-    const bannerLoaded = state.explore.getIn(['status','bannerLoaded'])
+    const { banners, topics, toys, loaded }  = state.explore.toJS()
     return {
-        bannerList,
-        bannerLoaded,
-        themeList,
-        themeLoaded,
-        noMore,
+        banners,
+        topics,
+        toys,
+        loaded,
     }
 }
 

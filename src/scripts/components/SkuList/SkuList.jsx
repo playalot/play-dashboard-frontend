@@ -131,6 +131,7 @@ export default class SkuList extends Component{
 				<div className="sku-container">
 					<div className="sku-title">
 						<div>
+							<span>版本</span>
 							<span>售价</span>
 							<span className="operate">
 								<FormControl componentClass="select" placeholder="select" value={this.state.filter} onChange={this.onChangeFilter}>
@@ -174,6 +175,9 @@ export default class SkuList extends Component{
 										sku.stocks.map((stock,i) => {
 											return(
 												<div className="sku-body-box" key={`stock_${i}`}>
+													<div className="sku-body-item">
+														<span className="label label-success">{stock.version||'普通版'}</span>
+													</div>
 													<div className="sku-body-item vertical">
 														<span>¥&nbsp;{stock.price}</span>
 														{

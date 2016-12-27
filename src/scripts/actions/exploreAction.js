@@ -1,52 +1,47 @@
 import Request from 'superagent'
 
-export const EXPLORE_RECEIVE_BANNER = 'EXPLORE_RECEIVE_BANNER'
-export const EXPLORE_RECEIVE_THEME = 'EXPLORE_RECEIVE_THEME'
-export const EXPLORE_RECEIVE_THEME_MORE = 'EXPLORE_RECEIVE_THEME_MORE'
-export const EXPLORE_SET_THEME_NO_MORE = 'EXPLORE_SET_THEME_NO_MORE'
+export const EXPLORE_RECEIVE_DATA = 'EXPLORE_RECEIVE_DATA'
+
 
 export const EXPLORE_ADD_BANNER = 'EXPLORE_ADD_BANNER'
 export const EXPLORE_DELETE_BANNER = 'EXPLORE_DELETE_BANNER'
-export const EXPLORE_ADD_THEME = 'EXPLORE_ADD_THEME'
-export const EXPLORE_DELETE_THEME = 'EXPLORE_DELETE_THEME'
+export const EXPLORE_ADD_TOPIC = 'EXPLORE_ADD_TOPIC'
 
-function receiveBanner(res) {
+function receiveExplore(res) {
     return {
-        type: EXPLORE_RECEIVE_BANNER,
-        res
+        type: EXPLORE_RECEIVE_DATA,
+        banners:res.banners,
+        topics:res.topics,
+        toys:res.toys
     }
 }
-function receiveTheme(res) {
-    return {
-        type: EXPLORE_RECEIVE_THEME,
-        res
-    }
-}
-function setThemeNoMore(flag) {
-    return {
-        type: EXPLORE_SET_THEME_NO_MORE,
-        flag
-    }
-}
+        
 function _addBanner(res) {
     return {
         type: EXPLORE_ADD_BANNER,
         res
     }
 }
-function _deleteBanner(id) {
+function _addTopic(res) {
+    return {
+        type: EXPLORE_ADD_TOPIC,
+        res
+    }
+}
+function _deleteBanner(id,target) {
     return {
         type: EXPLORE_DELETE_BANNER,
-        id
+        id,
+        target,
     }
 }
 
-export function fetchBanner() {
-    return (dispatch) => {
+export function fetchExplore() {
+    return(dispatch) => {
         return Request
             .get(`/api/banners`)
-            .end(function(err,res){
-                dispatch(receiveBanner(res.body.banners))
+            .end((err,res) => {
+                dispatch(receiveExplore(res.body))
             })
     }
 }
@@ -61,13 +56,23 @@ export function addBanner() {
     }
 }
 
-export function deleteBanner(id) {
+export function deleteBanner(id,target) {
     return (dispatch) => {
         return Request
             .del(`/api/recommend/${id}`)
             .end((err,res) => {
-                dispatch(_deleteBanner(id))
+                dispatch(_deleteBanner(id,target))
             })
 
+    }
+}
+
+export function addTopic() {
+    return (dispatch) => {
+        return Request
+            .post(`/api/recommend?place=topic`)
+            .end((err,res) => {
+                dispatch(_addTopic(res.body))
+            })
     }
 }

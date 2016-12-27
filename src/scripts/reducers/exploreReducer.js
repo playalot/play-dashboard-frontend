@@ -1,60 +1,35 @@
 import Immutable from 'immutable'
 import { 
-	EXPLORE_RECEIVE_THEME, EXPLORE_RECEIVE_THEME_MORE, EXPLORE_RECEIVE_BANNER, EXPLORE_SET_THEME_NO_MORE,
+    EXPLORE_RECEIVE_DATA,
 	EXPLORE_ADD_BANNER,
 	EXPLORE_DELETE_BANNER, 
-	EXPLORE_ADD_THEME,
-	EXPLORE_DELETE_THEME
+	EXPLORE_ADD_TOPIC,
 } from '../actions/exploreAction'
 
 export default (state = Immutable.fromJS({ 
-    themeList:[], bannerList:[],
-    status:{
-        noMore:false,
-        page:0,
-        themeLoaded:false,
-        bannerLoaded:false,
-    }
+    banners:[],topics:[],toys:[],loaded:false,
 }),action) => {
     switch (action.type) {
-        case EXPLORE_RECEIVE_BANNER:
-            return state.updateIn(['bannerList'],(bannerList) => {
-            	return bannerList.clear().concat(Immutable.fromJS(action.res))
-            }).setIn(['status','bannerLoaded'],true)
+        case EXPLORE_RECEIVE_DATA:
+            return state.set('topics',Immutable.fromJS(action.topics))
+                        .set('banners',Immutable.fromJS(action.banners))
+                        .set('toys',Immutable.fromJS(action.toys))
+                        .set('loaded',true)
         case EXPLORE_ADD_BANNER:
-        	return state.updateIn(['bannerList'],(bannerList) => {
-        		return bannerList.unshift(Immutable.fromJS(action.res))
+        	return state.updateIn(['banners'],(banners) => {
+        		return banners.unshift(Immutable.fromJS(action.res))
+        	})
+        case EXPLORE_ADD_TOPIC:
+        	return state.updateIn(['topics'],(topics) => {
+        		return topics.unshift(Immutable.fromJS(action.res))
         	})
         case EXPLORE_DELETE_BANNER:
-        	return state.updateIn(['bannerList'],(bannerList) => {
-        		return bannerList.delete(bannerList.findKey((banner) => {
-        			return banner.get('id') === action.id
-        		}))
-        	})
-		case EXPLORE_RECEIVE_THEME:
-            return state.updateIn(['themeList'],(themeList) => {
-            	return themeList.clear().concat(Immutable.fromJS(action.res))
-            }).setIn(['status','themeLoaded'],true).updateIn(['status','page'],(page) =>{
-                return ++page
+            let target = `${action.target}s`
+            return state.updateIn([target],(target) => {
+                return target.delete(target.findKey((banner) => {
+                    return banner.get('id') === action.id
+                }))
             })
-        case EXPLORE_RECEIVE_THEME_MORE:
-        	return state.updateIn(['themeList'],(themeList) => {
-            	return themeList.concat(Immutable.fromJS(action.res))
-            }).updateIn(['status','page'],(page) =>{
-                return ++page
-            })
-        case EXPLORE_SET_THEME_NO_MORE:
-            return state.setIn(['status','noMore'],action.flag)
-        case EXPLORE_ADD_THEME:
-        	return state.updateIn(['themeList'],(themeList) => {
-        		return themeList.unshift(Immutable.fromJS(action.res))
-        	})
-        case EXPLORE_DELETE_THEME:
-        	return state.updateIn(['themeList'],(themeList) => {
-        		return themeList.delete(themeList.findKey((theme) => {
-        			return theme.get('id') === action.id
-        		}))
-        	})
         default:
             return state
     }

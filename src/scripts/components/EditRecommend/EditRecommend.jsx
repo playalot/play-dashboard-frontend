@@ -75,7 +75,7 @@ export default class EditBannerSet extends Component {
         {value: 'banner', label: '发现页面Banner'},
         {value: 'toy', label: '玩具页面Banner'},
         {value: 'home', label: '首页推荐'},
-        {value: 'theme', label: '主题'}
+        {value: 'topic', label: '主题'}
     ];
     let customStyles = {
       content : {

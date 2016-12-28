@@ -31,6 +31,8 @@ export default class Toy extends Component{
 			prepay:0,
 			orderClose:Moment(),
 			costPrice:0,
+			version:'',
+			tbUrl:''
 		}
 		this.onChangeSort = (e) => this.setState({sort:e.target.value})
 		this.onChangeFilter = (e) => this.setState({filter:e.target.value})
@@ -50,20 +52,24 @@ export default class Toy extends Component{
 			merchant:'PLAY玩具控',
 			freight:0,
 			costPrice:0,
+			version:'',
+			tbUrl:'',
 		})
 		this.submit = () => {
 			const {
-				id,price,originPrice,merchant,quantity,freight, prepay, orderClose, type, costPrice
+				id,price,originPrice,merchant,quantity,freight, prepay, orderClose, type, costPrice,version,tbUrl
 			} = this.state
 			let data = {
-				price:parseFloat(price),originPrice:parseFloat(originPrice),merchant,costPrice:parseFloat(costPrice),
+				price:parseFloat(price),merchant,
 				quantity:parseInt(quantity),freight:parseFloat(freight),preOrder:{
 					prepay:parseFloat(prepay),
 					orderClose:`${orderClose.format('YYYY-MM-DD')} 23:59:59`
-				}
+				},version,tbUrl
 			}
 		// Object.keys(data).forEach(key => !data[key] && data[key] !== 0 ? delete data[key] : null)
 		type ==='preOrder' ? null:delete data['preOrder']
+		version ? delete data['version'] : null
+		tbUrl ? delete data['tbUrl'] : null
 			Request
 				.post(`/api/toy/${id}/stock`)
 				.send(data)
@@ -260,14 +266,6 @@ export default class Toy extends Component{
 							</Modal.Header>
 							<Modal.Body>
 								<Form horizontal>
-									<FormGroup>
-								<Col sm={2} className="sm-2-label">
-									ID
-								</Col>
-								<Col sm={10}>
-									<FormControl.Static>{this.state.id}</FormControl.Static>
-								</Col>
-							</FormGroup>
 							<FormGroup>
 								<Col sm={2} className="sm-2-label">
 									<img className="add-stock-preview" src={this.state.preview}/>
@@ -328,26 +326,10 @@ export default class Toy extends Component{
 							}
 							<FormGroup>
 								<Col sm={2} className="sm-2-label">
-									贩售价格
+									售价
 								</Col>
 								<Col sm={10}>
 									<FormControl value={this.state.price} type="number" onChange={(e) => this.setState({price:e.target.value})}/>
-								</Col>
-							</FormGroup>
-							<FormGroup>
-								<Col sm={2} className="sm-2-label">
-									原价
-								</Col>
-								<Col sm={10}>
-									<FormControl value={this.state.originPrice} type="number" onChange={(e) => this.setState({originPrice:e.target.value})}/>
-								</Col>
-							</FormGroup>
-							<FormGroup>
-								<Col sm={2} className="sm-2-label">
-									进货成本价
-								</Col>
-								<Col sm={10}>
-									<FormControl value={this.state.costPrice} type="number" onChange={(e) => this.setState({costPrice:e.target.value})}/>
 								</Col>
 							</FormGroup>
 							<FormGroup>
@@ -370,6 +352,22 @@ export default class Toy extends Component{
 										<option value="拆盒网">拆盒网</option>
 										<option value="塑唐玩具">塑唐玩具</option>
 									</FormControl>
+								</Col>
+							</FormGroup>
+							<FormGroup>
+								<Col sm={2} className="sm-2-label">
+									版本
+								</Col>
+								<Col sm={10}>
+									<FormControl value={this.state.version} type="text" onChange={(e) => this.setState({version:e.target.value})}/>
+								</Col>
+							</FormGroup>
+							<FormGroup>
+								<Col sm={2} className="sm-2-label">
+									淘宝链接
+								</Col>
+								<Col sm={10}>
+									<FormControl value={this.state.tbUrl} type="text" onChange={(e) => this.setState({tbUrl:e.target.value})}/>
 								</Col>
 							</FormGroup>
 						</Form>

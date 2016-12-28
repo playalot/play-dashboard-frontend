@@ -194,7 +194,9 @@ export default class SkuList extends Component{
 													<div className="sku-body-item operate">{stock.merchant}</div>													
 													<div className="sku-body-item operate">
 														{
-															stock.type === 'preOrder' ? <span className="label label-warning">预售</span> : <span className="label label-info">现货</span>
+															stock.type === 'preOrder' ? 
+															<span className="label label-warning">{stock.tbUrl ? `淘宝`:``}预售</span> : 
+															<span className="label label-info">{stock.tbUrl ? `淘宝`:``}现货</span>
 														}
 													</div>													
 													<div className="sku-body-item vertical">

@@ -19,6 +19,8 @@ export default class EditSku extends Component {
             type:'inStock',
             prepay:0,
             orderClose:Moment(),
+            version:'',
+            tbUrl:'',
         }
         this.save = this._save.bind(this)
         this.changeOrderClose = (date) => this.setState({orderClose:date})
@@ -39,26 +41,29 @@ export default class EditSku extends Component {
                 type:stock.preOrder ? 'preOrder' : 'inStock',
                 prepay:stock.preOrder ? stock.preOrder.prepay : 0,
                 orderClose: stock.preOrder ? Moment(stock.preOrder.orderClose) : Moment(),
+                version: stock.version || '',
+                tbUrl: stock.tbUrl || ''
             })
         })
     }
     _save() {
         const {
-            id,sid,price,quantity,freight, prepay, orderClose, type, costPrice, originPrice
+            id,sid,price,quantity,freight, prepay, orderClose, type, costPrice, originPrice,version,tbUrl
         } = this.state
         let data = {
             price:parseFloat(price),
-            originPrice:parseFloat(originPrice),
-            costPrice:parseFloat(costPrice),
             quantity:parseInt(quantity),
             freight:parseFloat(freight),
             preOrder:{
                 prepay:parseFloat(prepay),
                 orderClose:`${orderClose.format('YYYY-MM-DD')} 23:59:59`
-            }
+            },
+            version,tbUrl
         }
         // Object.keys(data).forEach(key => !data[key] ? delete data[key] : '')
         type ==='preOrder' ? null:delete data['preOrder']
+        version ? delete data['version'] : null
+        tbUrl ? delete data['tbUrl'] : null
         Request
         .post(`/api/toy/${id}/stock/${sid}`)
         .send(data)
@@ -126,26 +131,10 @@ export default class EditSku extends Component {
               }
               <FormGroup>
                 <Col sm={2} className="sm-2-label">
-                  贩售价格
+                  售价
                 </Col>
                 <Col sm={10}>
                   <FormControl value={this.state.price} type="number" onChange={(e) => this.setState({price:e.target.value})}/>
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col sm={2} className="sm-2-label">
-                  原价
-                </Col>
-                <Col sm={10}>
-                  <FormControl value={this.state.originPrice} type="number" onChange={(e) => this.setState({originPrice:e.target.value})}/>
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col sm={2} className="sm-2-label">
-                  进货价
-                </Col>
-                <Col sm={10}>
-                  <FormControl value={this.state.costPrice} type="number" onChange={(e) => this.setState({costPrice:e.target.value})}/>
                 </Col>
               </FormGroup>
               <FormGroup>
@@ -154,6 +143,22 @@ export default class EditSku extends Component {
                 </Col>
                 <Col sm={10}>
                   <FormControl value={this.state.freight} type="number" onChange={(e) => this.setState({freight:e.target.value})}/>
+                </Col>
+              </FormGroup>
+              <FormGroup>
+                <Col sm={2} className="sm-2-label">
+                  版本
+                </Col>
+                <Col sm={10}>
+                  <FormControl value={this.state.version} type="text" onChange={(e) => this.setState({version:e.target.value})}/>
+                </Col>
+              </FormGroup>
+              <FormGroup>
+                <Col sm={2} className="sm-2-label">
+                  淘宝链接
+                </Col>
+                <Col sm={10}>
+                  <FormControl value={this.state.tbUrl} type="text" onChange={(e) => this.setState({tbUrl:e.target.value})}/>
                 </Col>
               </FormGroup>
               <Row>

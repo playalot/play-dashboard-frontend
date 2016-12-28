@@ -62,8 +62,8 @@ export default class EditSku extends Component {
         }
         // Object.keys(data).forEach(key => !data[key] ? delete data[key] : '')
         type ==='preOrder' ? null:delete data['preOrder']
-        version ? null : delete data['version']
-        tbUrl ? null : delete data['tbUrl'] 
+        version.trim() ? null : delete data['version']
+        tbUrl.trim() ? null : delete data['tbUrl'] 
         Request
         .post(`/api/toy/${id}/stock/${sid}`)
         .send(data)

@@ -181,13 +181,8 @@ export default class SkuList extends Component{
 													<div className="sku-body-item vertical">
 														<span>¥&nbsp;{stock.price}</span>
 														{
-															// stock.price !== stock.originPrice ?
-															// <small>原价:¥&nbsp;{stock.originPrice}</small>
-															// :null
-														}
-														{
-															stock.costPrice ? 
-															<small>进货价:¥&nbsp;{stock.costPrice}</small>
+															stock.freight ? 
+															<small>运费:¥&nbsp;{stock.freight}</small>
 															:null
 														}
 													</div>													

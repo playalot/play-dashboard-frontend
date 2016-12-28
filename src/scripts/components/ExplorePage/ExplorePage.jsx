@@ -44,7 +44,7 @@ export default class ExplorePage extends Component{
 	}
 	_addToy() {
 		if (confirm('创建一个新玩具页banner？')) {
-			this.props.addBanner()
+			this.props.addToy()
 		}
 	}
 	_deleteToy(id) {

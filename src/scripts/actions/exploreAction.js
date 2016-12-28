@@ -6,6 +6,7 @@ export const EXPLORE_RECEIVE_DATA = 'EXPLORE_RECEIVE_DATA'
 export const EXPLORE_ADD_BANNER = 'EXPLORE_ADD_BANNER'
 export const EXPLORE_DELETE_BANNER = 'EXPLORE_DELETE_BANNER'
 export const EXPLORE_ADD_TOPIC = 'EXPLORE_ADD_TOPIC'
+export const EXPLORE_ADD_TOY = 'EXPLORE_ADD_TOY'
 
 function receiveExplore(res) {
     return {
@@ -25,6 +26,12 @@ function _addBanner(res) {
 function _addTopic(res) {
     return {
         type: EXPLORE_ADD_TOPIC,
+        res
+    }
+}
+function _addToy(res) {
+    return {
+        type: EXPLORE_ADD_TOY,
         res
     }
 }
@@ -70,9 +77,19 @@ export function deleteBanner(id,target) {
 export function addTopic() {
     return (dispatch) => {
         return Request
-            .post(`/api/recommend?place=topic`)
+            .post(`/api/recommend?place=theme`)
             .end((err,res) => {
                 dispatch(_addTopic(res.body))
+            })
+    }
+}
+
+export function addToy() {
+    return (dispatch) => {
+        return Request
+            .post(`/api/recommend?place=toy`)
+            .end((err,res) => {
+                dispatch(_addToy(res.body))
             })
     }
 }

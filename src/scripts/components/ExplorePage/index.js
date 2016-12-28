@@ -4,14 +4,14 @@ import ExplorePage from './ExplorePage'
 import { 
     fetchExplore,
     addBanner, deleteBanner,
-    addTopic, deleteTopic,
+    addTopic, addToy,
 } from '../../actions/exploreAction'
 const mapActionCreators = {
     fetchExplore,
     addBanner,
-    deleteBanner,
     addTopic, 
-    deleteTopic, 
+    addToy,
+    deleteBanner,
 }
 
 const mapStateToProps = (state) => {

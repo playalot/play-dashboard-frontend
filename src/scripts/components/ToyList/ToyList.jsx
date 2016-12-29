@@ -60,7 +60,7 @@ export default class Toy extends Component{
 				id,price,originPrice,merchant,quantity,freight, prepay, orderClose, type, costPrice,version,tbUrl
 			} = this.state
 			let data = {
-				price:parseFloat(price),merchant,
+				price:parseFloat(price),merchant,costPrice:parseFloat(costPrice),
 				quantity:parseInt(quantity),freight:parseFloat(freight),preOrder:{
 					prepay:parseFloat(prepay),
 					orderClose:`${orderClose.format('YYYY-MM-DD')} 23:59:59`
@@ -330,6 +330,14 @@ export default class Toy extends Component{
 								</Col>
 								<Col sm={10}>
 									<FormControl value={this.state.price} type="number" onChange={(e) => this.setState({price:e.target.value})}/>
+								</Col>
+							</FormGroup>
+							<FormGroup>
+								<Col sm={2} className="sm-2-label">
+									进货成本价
+								</Col>
+								<Col sm={10}>
+									<FormControl value={this.state.costPrice} type="number" onChange={(e) => this.setState({costPrice:e.target.value})}/>
 								</Col>
 							</FormGroup>
 							<FormGroup>

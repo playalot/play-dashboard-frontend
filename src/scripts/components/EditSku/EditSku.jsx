@@ -52,6 +52,7 @@ export default class EditSku extends Component {
         } = this.state
         let data = {
             price:parseFloat(price),
+            costPrice:parseFloat(costPrice),
             quantity:parseInt(quantity),
             freight:parseFloat(freight),
             preOrder:{
@@ -135,6 +136,14 @@ export default class EditSku extends Component {
                 </Col>
                 <Col sm={10}>
                   <FormControl value={this.state.price} type="number" onChange={(e) => this.setState({price:e.target.value})}/>
+                </Col>
+              </FormGroup>
+              <FormGroup>
+                <Col sm={2} className="sm-2-label">
+                  进货成本价
+                </Col>
+                <Col sm={10}>
+                  <FormControl value={this.state.costPrice} type="number" onChange={(e) => this.setState({costPrice:e.target.value})}/>
                 </Col>
               </FormGroup>
               <FormGroup>

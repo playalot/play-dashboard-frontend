@@ -141,6 +141,7 @@ export default class SkuList extends Component{
 									<option value="手办同萌会">手办同萌会</option>
 									<option value="拆盒网">拆盒网</option>
 									<option value="塑堂玩具">塑堂玩具</option>
+									<option value="六部口模型">六部口模型</option>
 			            		</FormControl>
 				            </span>
 				            <span className="operate">

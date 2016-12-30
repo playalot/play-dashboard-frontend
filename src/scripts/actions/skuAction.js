@@ -5,8 +5,13 @@ export const SKL_RECEIVE_SKU = 'SKL_RECEIVE_SKU'
 export const SKL_TOGGLE_REC = 'SKL_TOGGLE_REC'
 export const SKL_TOGGLE_BLK = 'SKL_TOGGLE_BLK'
 export const SKL_DELETE_SKU = 'SKL_DELETE_SKU'
+export const SKU_ADD_TOY_CLASS = 'SKU_ADD_TOY_CLASS'
+export const SKU_REMOVE_TOY_CLASS = 'SKU_REMOVE_TOY_CLASS'
 
 function receiveSku(res,totalPages,page,filter,filterType) {
+    res.map((item) => {
+        item.cls = []
+    })
     return {
         type: SKL_RECEIVE_SKU,
         res,
@@ -34,6 +39,21 @@ function _deleteSku(id,sid) {
         type: SKL_DELETE_SKU,
         id,
         sid
+    }
+}
+
+function _addToyClass(tid, c) {
+    return {
+        type: SKU_ADD_TOY_CLASS,
+        tid,
+        c
+    }
+}
+function _removeToyClass(tid, c) {
+    return {
+        type: SKU_REMOVE_TOY_CLASS,
+        tid,
+        c
     }
 }
 export function toggleBlk(id) {
@@ -92,5 +112,24 @@ export function deleteSku(id,sid) {
             .end((err,res) => {
                 dispatch(_deleteSku(id,sid))
             })
+    }
+}
+
+export const addToyClass = (tid, c) => {
+    return (dispatch, getState) => {
+        // return Request
+        //     .post(`/api/post/${pid}/class/${cid}`)
+        //     .end((err, res) =>{
+                dispatch(_addToyClass(tid, c))
+            // })
+    }
+}
+export const removeToyClass = (tid, c) => {
+    return (dispatch, getState) => {
+        // return Request
+        //     .del(`/api/post/${pid}/class/${c}`)
+        //     .end((err, res) => {
+                dispatch(_removeToyClass(tid, c))
+            // })
     }
 }

@@ -9,6 +9,7 @@ import ReactPaginate from 'react-paginate'
 import DatePicker from 'react-datepicker'
 import Request from 'superagent'
 import PlayAutoSuggest from '../Common/PlayAutoSuggest'
+const _ = require('lodash')
 
 
 export default class SkuList extends Component{
@@ -33,6 +34,8 @@ export default class SkuList extends Component{
 			cover:'',
 			company:'',
 			name:'',
+
+			selectedSku:null
 		}
 		this.toggleRec = id => this.props.toggleRec(id)
 		this.toggleBlk = id => this.props.toggleBlk(id)
@@ -58,7 +61,11 @@ export default class SkuList extends Component{
 			cover:'',
 			company:'',
 			name:'',
+
 		})
+		this.closeClass = () => this.setState({ selectedSku: null })
+		this.addToyClass = (tid,c) => this._addToyClass(tid,c)
+	  	this.removeToyClass = (tid,c) => this._removeToyClass(tid,c)
 		this.submit = () => {
 			const {
 				id,price,originPrice,merchant,quantity,freight, prepay, orderClose, type, costPrice
@@ -94,6 +101,9 @@ export default class SkuList extends Component{
 		}else{
 			this.props.getSku(this.props.location.query.page)
 		}
+		if(!this.props.toyLoaded){
+			this.props.fetchToyClass()
+		}
 	}
 	_onChangeFilter(e) {
 		this.setState({ filter: e.target.value },() => {
@@ -122,7 +132,55 @@ export default class SkuList extends Component{
 		this.context.router.push(`/sku?page=${page}`)
 		this.props.getSku(page)
 	}
+	_addToyClass(tid,c) {
+		this.state.selectedSku.cls.push(c)
+		console.log(this.state.selectedSku.cls)
+		this.props.addToyClass(tid,c)
+	}
+	_removeToyClass(tid,c) {
+		let index = this.state.selectedSku.cls.indexOf(c)
+		index !== -1 ? this.state.selectedSku.cls.splice(index,1) : null
+		this.props.removeToyClass(tid,c)
+	}
 	render() {
+		let modal = (<div></div>)
+	    if (this.state.selectedSku !== null) {
+	      	let cls = _.filter(this.props.toyClass,(c) => {
+	        	return this.state.selectedSku.cls.indexOf(c.id) === -1
+	      	})
+	      	modal = (
+		        <div>
+		         	<Modal className='modal-container' animation={false} show={true} onHide={this.closeClass}>
+			           <Modal.Body>
+			             	<strong>已选类别</strong>
+			             	<div>
+				               	{
+				               		this.state.selectedSku.cls.map((c) => {
+					                 	return (
+					                 		<span key={'t_c_m_'+c}
+						                 		onClick={ () => this.removeToyClass( this.state.selectedSku.id, c) }
+						                 		className="label label-warning label-margin" >{this.props.toyClass[c].name}</span>
+					                 	)
+					               	})
+				               	}
+			             	</div>
+			             	<strong>全部类别</strong>
+				            <div>
+					            {
+					             	cls.map((c,key) => {
+					             		return (
+					             			<span key={'c_m_'+key}
+					             			className='label label-info label-margin'
+					             			onClick={() => this.addToyClass(this.state.selectedSku.id, c.id) }>{c.name}</span>
+					             		)
+					             	})
+					            }
+				            </div>
+			           	</Modal.Body>
+		         	</Modal>
+		       	</div>
+	     	)
+	    }
 		return(
 			<div className="content">
 				<div className="page-header">
@@ -169,6 +227,16 @@ export default class SkuList extends Component{
 										</div>
 										<div className="sku-info">
 											<h5>{sku.name}</h5>
+											<h5 style={{textAlign:'left'}}>
+												{
+													sku.cls.map((c,i) => {
+									            		return (
+									            			<span key={`sku_toy_class-${i}`}
+					                 						className="label label-primary label-margin" >{this.props.toyClass[c].name}</span>
+									            		)
+									            	})
+												}
+											</h5>
 										</div>
 									</div>
 								<div className="sku-body">
@@ -201,6 +269,7 @@ export default class SkuList extends Component{
 													</div>															
 													<div className="sku-body-item">{Moment(stock.created).format('MM-DD HH:mm')}</div>													
 													<div className="sku-body-item operate">
+														<span onClick={() => this.setState({selectedSku:sku})} className="btn btn-sm"><i className="fa fa-th-large"></i></span>
 														<a onClick={() => this.editSku(sku.id,stock.stockId)}>修改</a>&nbsp;
 														{stock.type === 'preOrder' ? <a onClick={() => this.fillMoney(sku.id,stock.stockId)}>开使补款</a> : ''}&nbsp;
 										                <a onClick={() => this.deleteSku(sku.id,stock.stockId)}>下架</a>
@@ -357,6 +426,7 @@ export default class SkuList extends Component{
 							<Button bsStyle="primary" onClick={this.submit}>提交</Button>
 						</Modal.Footer>
 					</Modal>
+					{modal}
 				</div>
 
 			)

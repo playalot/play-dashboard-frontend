@@ -2,6 +2,7 @@ import Immutable from 'immutable'
 import {
 	SKL_RECEIVE_SKU, SKL_DELETE_SKU,
     SKL_TOGGLE_BLK,SKL_TOGGLE_REC,
+    SKU_REMOVE_TOY_CLASS,SKU_ADD_TOY_CLASS
 } from '../actions/skuAction'
 
 export default (state = Immutable.fromJS({ skus: [],totalPages:100,filter:'',filterType:'' }),action)=>{
@@ -44,6 +45,32 @@ export default (state = Immutable.fromJS({ skus: [],totalPages:100,filter:'',fil
                         return item.get('id') === action.id
                     }), (item) => {
                         return item.set('isRec', !item.get('isRec'));
+                    }
+                )
+            })
+        case SKU_ADD_TOY_CLASS:
+            return state.updateIn(['skus'], (skus) => {
+                return skus.update(
+                    skus.findIndex((item) => {
+                        return item.get('id') === action.tid
+                    }), (item) => {
+                        return item.updateIn(['cls'], (cls) => {
+                            return cls.push(action.c)
+                        })
+                    }
+                )
+            })
+        case SKU_REMOVE_TOY_CLASS:
+            return state.updateIn(['skus'], (skus) => {
+                return skus.update(
+                    skus.findIndex((item) => {
+                        return item.get('id') === action.tid
+                    }), (item) => {
+                        return item.updateIn(['cls'], (cls) => {
+                            return cls.delete(cls.findKey((cl) => {
+                                return cl === action.c
+                            }))
+                        })
                     }
                 )
             })

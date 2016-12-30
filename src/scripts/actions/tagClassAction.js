@@ -10,12 +10,12 @@ function receiveTagClass(res) {
     }
 }
 
-// function receiveToyClass(res) {
-//     return {
-//         type: RECEIVE_TOY_CLASS,
-//         res
-//     }
-// }
+function receiveToyClass(res) {
+    return {
+        type: RECEIVE_TOY_CLASS,
+        res
+    }
+}
 export function fetchTagClass() {
     return function(dispatch) {
         return Request
@@ -26,12 +26,12 @@ export function fetchTagClass() {
     }
 }
 
-// export function fetchToyClass() {
-//     return function(dispatch) {
-//         return Request
-//             .get(`/api/classifications`)
-//             .end(function(err,res){
-//                 dispatch(receiveToyClass(res.body.toys))
-//             })
-//     }
-// }
+export function fetchToyClass() {
+    return function(dispatch) {
+        return Request
+            .get(`/api/classifications`)
+            .end(function(err,res){
+                dispatch(receiveToyClass(res.body.toys))
+            })
+    }
+}

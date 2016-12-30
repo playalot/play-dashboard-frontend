@@ -9,9 +9,6 @@ export const SKU_ADD_TOY_CLASS = 'SKU_ADD_TOY_CLASS'
 export const SKU_REMOVE_TOY_CLASS = 'SKU_REMOVE_TOY_CLASS'
 
 function receiveSku(res,totalPages,page,filter,filterType) {
-    res.map((item) => {
-        item.cls = []
-    })
     return {
         type: SKL_RECEIVE_SKU,
         res,
@@ -117,19 +114,19 @@ export function deleteSku(id,sid) {
 
 export const addToyClass = (tid, c) => {
     return (dispatch, getState) => {
-        // return Request
-        //     .post(`/api/post/${pid}/class/${cid}`)
-        //     .end((err, res) =>{
+        return Request
+            .post(`/api/toy/${tid}/class/${c}`)
+            .end((err, res) =>{
                 dispatch(_addToyClass(tid, c))
-            // })
+            })
     }
 }
 export const removeToyClass = (tid, c) => {
     return (dispatch, getState) => {
-        // return Request
-        //     .del(`/api/post/${pid}/class/${c}`)
-        //     .end((err, res) => {
+        return Request
+            .del(`/api/toy/${tid}/class/${c}`)
+            .end((err, res) => {
                 dispatch(_removeToyClass(tid, c))
-            // })
+            })
     }
 }

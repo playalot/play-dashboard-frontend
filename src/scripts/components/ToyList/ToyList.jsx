@@ -32,7 +32,9 @@ export default class Toy extends Component{
 			orderClose:Moment(),
 			costPrice:0,
 			version:'',
-			tbUrl:''
+			tbUrl:'',
+
+			selectedToy:null,
 		}
 		this.onChangeSort = (e) => this.setState({sort:e.target.value})
 		this.onChangeFilter = (e) => this.setState({filter:e.target.value})
@@ -91,6 +93,10 @@ export default class Toy extends Component{
 		this.changeOrderClose = (date) => this.setState({orderClose:date})
 		this.search = this._search.bind(this)
 	  	this.goPage = this._goPage.bind(this)
+
+	  	this.closeClass = () => this.setState({ selectedToy: null })
+	  	this.addToyClass = (tid,c) => this._addToyClass(tid,c)
+	  	this.removeToyClass = (tid,c) => this._removeToyClass(tid,c)
 	}
 	componentWillMount() {
 		const { page,filter,query,sort,month,year } = this.props
@@ -99,6 +105,9 @@ export default class Toy extends Component{
 			this.setState({filter,query,sort,month,year})
 		}else{
 			this.props.getToy(this.props.location.query.page)
+		}
+		if(!this.props.toyLoaded){
+			this.props.fetchToyClass()
 		}
 	}
 	_deletetoy(id) {
@@ -132,7 +141,54 @@ export default class Toy extends Component{
 		const { filter,query,sort,year,month } = this.state
 		this.props.getToyBy(filter,query.trim(),sort,year,month)
 	}
+	_addToyClass(tid,c) {
+		this.state.selectedToy.cls.push(c)
+		this.props.addToyClass(tid,c)
+	}
+	_removeToyClass(tid,c) {
+		let index = this.state.selectedToy.cls.indexOf(c)
+		index !== -1 ? this.state.selectedToy.cls.splice(index,1) : null
+		this.props.removeToyClass(tid,c)
+	}
 	render() {
+		let modal = (<div></div>)
+	    if (this.state.selectedToy !== null) {
+	      	let cls = _.filter(this.props.toyClass,(c) => {
+	        	return this.state.selectedToy.cls.indexOf(c.id) === -1
+	      	})
+	      	modal = (
+		        <div>
+		         	<Modal className='modal-container' animation={false} show={true} onHide={this.closeClass}>
+			           <Modal.Body>
+			             	<strong>已选类别</strong>
+			             	<div>
+				               	{
+				               		this.state.selectedToy.cls.map((c,i) => {
+					                 	return (
+					                 		<span key={`sku_toy_class_selected_${i}`}
+						                 		onClick={ () => this.removeToyClass( this.state.selectedToy.id, c) }
+						                 		className="label label-warning label-margin" >{this.props.toyClass[c].name}</span>
+					                 	)
+					               	})
+				               	}
+			             	</div>
+			             	<strong>全部类别</strong>
+				            <div>
+					            {
+					             	cls.map((c,i) => {
+					             		return (
+					             			<span key={`sku_toy_class_no_sel_${i}`}
+					             			className='label label-info label-margin'
+					             			onClick={() => this.addToyClass(this.state.selectedToy.id, c.id) }>{c.name}</span>
+					             		)
+					             	})
+					            }
+				            </div>
+			           	</Modal.Body>
+		         	</Modal>
+		       	</div>
+	     	)
+	    }
 		return(
 			<div className="content">
 						<div className="page-header">
@@ -224,9 +280,13 @@ export default class Toy extends Component{
 														<span className="toy-item-desc">{'本周热度 ' + toy.counts.updates}</span>
 													</div>
 												</div>
+												<div className="box-body no-top-padding">
+									              {toy.cls.map(c => <span key={'t_'+toy.id+'_c_'+c} className="label label-warning label-margin" >{this.props.toyClass[c].name}</span>)}
+									            </div>
 												<div className="box-footer">
 													<ButtonToolbar className="pull-right">
 														<Link to={'/toy/' + toy.id + '/edit'} ><span className="btn btn-sm"><i className="fa fa-edit"></i></span></Link>
+														<span onClick={() => 	this.setState({selectedToy:toy})} className="btn btn-sm"><i className="fa fa-th-large"></i></span>
 														<span onClick={() =>	this.recommend(toy.id) } className="btn btn-sm"><i className="fa fa-bookmark-o"></i></span>
 														<span onClick={() =>	this.toggleR18(toy.id) } className={r18Class}><i className="fa fa-venus-mars"></i></span>
 														<span onClick={() =>	this.toggleRecommend(toy.id) } className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span>
@@ -386,6 +446,7 @@ export default class Toy extends Component{
 							<Button bsStyle="primary" onClick={this.submit}>提交</Button>
 						</Modal.Footer>
 					</Modal>
+					{modal}
 				</div>
 
 		)

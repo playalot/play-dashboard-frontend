@@ -134,7 +134,6 @@ export default class SkuList extends Component{
 	}
 	_addToyClass(tid,c) {
 		this.state.selectedSku.cls.push(c)
-		console.log(this.state.selectedSku.cls)
 		this.props.addToyClass(tid,c)
 	}
 	_removeToyClass(tid,c) {
@@ -155,9 +154,9 @@ export default class SkuList extends Component{
 			             	<strong>已选类别</strong>
 			             	<div>
 				               	{
-				               		this.state.selectedSku.cls.map((c) => {
+				               		this.state.selectedSku.cls.map((c,i) => {
 					                 	return (
-					                 		<span key={'t_c_m_'+c}
+					                 		<span key={`sku_toy_class_selected_${i}`}
 						                 		onClick={ () => this.removeToyClass( this.state.selectedSku.id, c) }
 						                 		className="label label-warning label-margin" >{this.props.toyClass[c].name}</span>
 					                 	)
@@ -167,9 +166,9 @@ export default class SkuList extends Component{
 			             	<strong>全部类别</strong>
 				            <div>
 					            {
-					             	cls.map((c,key) => {
+					             	cls.map((c,i) => {
 					             		return (
-					             			<span key={'c_m_'+key}
+					             			<span key={`sku_toy_class_no_sel_${i}`}
 					             			className='label label-info label-margin'
 					             			onClick={() => this.addToyClass(this.state.selectedSku.id, c.id) }>{c.name}</span>
 					             		)
@@ -231,7 +230,7 @@ export default class SkuList extends Component{
 												{
 													sku.cls.map((c,i) => {
 									            		return (
-									            			<span key={`sku_toy_class-${i}`}
+									            			<span key={`sku_toy_class_${sku.id}_${i}`}
 					                 						className="label label-primary label-margin" >{this.props.toyClass[c].name}</span>
 									            		)
 									            	})
@@ -271,7 +270,7 @@ export default class SkuList extends Component{
 													<div className="sku-body-item operate">
 														<span onClick={() => this.setState({selectedSku:sku})} className="btn btn-sm"><i className="fa fa-th-large"></i></span>
 														<a onClick={() => this.editSku(sku.id,stock.stockId)}>修改</a>&nbsp;
-														{stock.type === 'preOrder' ? <a onClick={() => this.fillMoney(sku.id,stock.stockId)}>开使补款</a> : ''}&nbsp;
+														{stock.type === 'preOrder' ? <a onClick={() => this.fillMoney(sku.id,stock.stockId)}>开始补款</a> : ''}&nbsp;
 										                <a onClick={() => this.deleteSku(sku.id,stock.stockId)}>下架</a>
 													</div>													
 												</div>

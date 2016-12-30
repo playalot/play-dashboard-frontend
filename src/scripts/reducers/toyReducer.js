@@ -1,7 +1,7 @@
 import Immutable from 'immutable'
 import {
 	TOL_RECEIVE_TOY, TOL_TOGGLE_R18, TOL_TOGGLE_RECOMMEND, TOL_DELETE_TOY, TOL_ADD_TOY,
-    TOY_RECEIVE_TOY_BY_QUERY,TOY_CLEAR_SUGGESTION
+    TOY_RECEIVE_TOY_BY_QUERY,TOY_CLEAR_SUGGESTION,TOY_ADD_TOY_CLASS,TOY_REMOVE_TOY_CLASS
 } from '../actions/toyAction'
 
 export default (state = Immutable.fromJS({ toys: [],totalPages:100,filter:'',query:'',sort:'created',month:'',year:'',toyResults:[] }),action)=>{
@@ -51,6 +51,32 @@ export default (state = Immutable.fromJS({ toys: [],totalPages:100,filter:'',que
         case TOY_CLEAR_SUGGESTION:
             return state.updateIn(['toyResults'],(toyResults) => {
                 return toyResults.clear()
+            })
+        case TOY_ADD_TOY_CLASS:
+            return state.updateIn(['toys'], (toys) => {
+                return toys.update(
+                    toys.findIndex((item) => {
+                        return item.get('id') === action.tid
+                    }), (item) => {
+                        return item.updateIn(['cls'], (cls) => {
+                            return cls.push(action.c)
+                        })
+                    }
+                )
+            })
+        case TOY_REMOVE_TOY_CLASS:
+            return state.updateIn(['toys'], (toys) => {
+                return toys.update(
+                    toys.findIndex((item) => {
+                        return item.get('id') === action.tid
+                    }), (item) => {
+                        return item.updateIn(['cls'], (cls) => {
+                            return cls.delete(cls.findKey((cl) => {
+                                return cl === action.c
+                            }))
+                        })
+                    }
+                )
             })
         default:
             return state

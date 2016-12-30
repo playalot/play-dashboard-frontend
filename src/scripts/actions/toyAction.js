@@ -7,6 +7,8 @@ export const TOL_DELETE_TOY = 'TOL_DELETE_TOY'
 export const TOL_ADD_TOY = 'TOL_ADD_TOY'
 export const TOY_RECEIVE_TOY_BY_QUERY = 'TOY_RECEIVE_TOY_BY_QUERY'
 export const TOY_CLEAR_SUGGESTION = 'TOY_CLEAR_SUGGESTION'
+export const TOY_ADD_TOY_CLASS = 'TOY_ADD_TOY_CLASS'
+export const TOY_REMOVE_TOY_CLASS = 'TOY_REMOVE_TOY_CLASS'
 
 function receiveToy(res,totalPages,page,filter,query,sort,year,month) {
     return {
@@ -49,6 +51,20 @@ function receiveToyByQuery(res) {
     return {
         type: TOY_RECEIVE_TOY_BY_QUERY,
         res
+    }
+}
+function _addToyClass(tid, c) {
+    return {
+        type: TOY_ADD_TOY_CLASS,
+        tid,
+        c
+    }
+}
+function _removeToyClass(tid, c) {
+    return {
+        type: TOY_REMOVE_TOY_CLASS,
+        tid,
+        c
     }
 }
 export function clearSuggestion() {
@@ -181,6 +197,25 @@ export function fetchToyByQuery(query) {
             .query({query})
             .end((err,res) => {
                 dispatch(receiveToyByQuery(res.body.toys))
+            })
+    }
+}
+
+export const addToyClass = (tid, c) => {
+    return (dispatch, getState) => {
+        return Request
+            .post(`/api/toy/${tid}/class/${c}`)
+            .end((err, res) =>{
+                dispatch(_addToyClass(tid, c))
+            })
+    }
+}
+export const removeToyClass = (tid, c) => {
+    return (dispatch, getState) => {
+        return Request
+            .del(`/api/toy/${tid}/class/${c}`)
+            .end((err, res) => {
+                dispatch(_removeToyClass(tid, c))
             })
     }
 }

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import ToyList from './ToyList'
-import { getToy,getToyBy, recommend, toggleR18, toggleRecommend, deleteToy, addToy } from '../../actions/toyAction'
-
+import { getToy,getToyBy, recommend, toggleR18, toggleRecommend, deleteToy, addToy,addToyClass,removeToyClass } from '../../actions/toyAction'
+import { fetchToyClass } from '../../actions/tagClassAction'
 const mapActionCreators = {
 	getToy,
 	getToyBy,
@@ -10,10 +10,15 @@ const mapActionCreators = {
 	toggleRecommend,
 	deleteToy,
 	addToy,
+
+	fetchToyClass,
+	addToyClass,
+	removeToyClass,
 }
 
 const mapStateToProps = (state) => {
 	const { toys,totalPages,page,filter,query,sort,month,year } = state.toyReducer.toJS()
+	const { toyClass, toyLoaded } = state.tagClassReducer.toJS()
 	return {
 		toys,
 		totalPages,
@@ -23,6 +28,9 @@ const mapStateToProps = (state) => {
 		sort,
 		year,
 		month,
+
+		toyClass,
+		toyLoaded,
 	}
 }
 

@@ -53,13 +53,13 @@ export default class EditPage extends Component {
 			uploadKey:null,
 			videoUrl:null,
 		}
-		this.handleTitleChange = (e) => this.setState({ title: e.target.value })
-		this.handleAuthorIdChange = (e) => this.setState({ authorId: e.target.value })
+		this.handleTitleChange = (e) => this.setState({ title: e.target.value },() => this.saveStorage())
+		this.handleAuthorIdChange = (e) => this.setState({ authorId: e.target.value },() => this.saveStorage())
 		this.focus = () => this.refs.editor.focus()
 		this.blur = () => this.refs.editor.blur()
-		this.onChange = (editorState) => this.setState({ editorState })
+		this.onChange = (editorState) => this.setState({ editorState },() => this.saveStorage())
 		this.onDrop = (files) => this._onDrop( files )
-		this.handleTagsChange = (tags) => { this.setState({ tags }) }
+		this.handleTagsChange = (tags) => this.setState({ tags },() => this.saveStorage())
 		this.onDropCover = (files) => this._onDropCover( files )
 		//行内,块儿样式
 		this.toggleBlockType = (type) => this._toggleBlockType(type)
@@ -93,9 +93,12 @@ export default class EditPage extends Component {
 		this.closeLinkDialog = () => this.setState({ showLinkDialog:false })
 
 		//下拉菜单
-		this.onChangeSelect = (newValue) => this.setState({category:newValue.value})
+		this.onChangeSelect = (newValue) => this.setState({category:newValue.value},() => this.saveStorage())
 
 		this.handleKeyCommand = this._handleKeyCommand.bind(this)
+
+		//保存至storage方法
+		this.saveStorage = this._saveStorage.bind(this)
 	}
 	_handleKeyCommand(command) {
 		const {
@@ -149,7 +152,7 @@ export default class EditPage extends Component {
 						.end((err, res) =>{
 							this.setState({
 								cover: uploadKey
-							});
+							},() => this.saveStorage())
 						});
 				};
 				img.src = file.preview;
@@ -499,26 +502,23 @@ export default class EditPage extends Component {
 					})
 				})
 		}
-		this.intervalId = setInterval(() => {
-			let {
-				title, cover, tags, category, gallery,authorId
-			} = this.state
-			let raw = convertToRaw(this.state.editorState.getCurrentContent())
-			let saveData = {
-				title,
-				authorId,
-				cover,
-				tags,
-				category,
-				gallery,
-				raw
-			}
-      window.localStorage.setItem('editor-draft', JSON.stringify(saveData))
-			console.log('saved!')
-    }, 5000);
 	}
-	componentWillUnmount() {
-   	clearInterval(this.intervalId)
+	_saveStorage() {
+		let {
+			title, cover, tags, category, gallery,authorId
+		} = this.state
+		let raw = convertToRaw(this.state.editorState.getCurrentContent())
+		let saveData = {
+			title,
+			authorId,
+			cover,
+			tags,
+			category,
+			gallery,
+			raw
+		}
+  		window.localStorage.setItem('editor-draft', JSON.stringify(saveData))
+		console.log('saved!')
 	}
 	render() {
 		const {editorState} = this.state;

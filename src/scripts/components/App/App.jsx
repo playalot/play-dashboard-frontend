@@ -94,6 +94,7 @@ export default class App extends Component{
 		                  <li><Link to="/order" activeClassName="active"><i className="fa fa-circle-o"></i><span>订单</span></Link></li>
 		                </ul>
 		              </li>
+		              <li><Link to="/trade" activeClassName="active"><i className="fa fa-handshake-o"></i><span>二手交易</span></Link></li>
 					  
 					  <li><Link to="/tag" activeClassName="active"><i className="fa fa-tags"></i><span>标签</span></Link></li>
 		              <li><Link to="/sticker" activeClassName="active"><i className="fa fa-paw"></i><span>贴纸</span></Link></li>

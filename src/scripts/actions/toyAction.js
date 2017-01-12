@@ -42,6 +42,7 @@ function _deleteToy(id) {
     }
 }
 function _addToy(res) {
+    res.cls = []
     return {
         type: TOL_ADD_TOY,
         res

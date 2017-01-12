@@ -9,6 +9,7 @@ import Switch from 'rc-switch'
 import DatePicker from 'react-datepicker'
 import Moment from 'moment'
 import ReactPaginate from 'react-paginate'
+import CopyToClipboard from 'react-copy-to-clipboard'
 export default class Toy extends Component{
 	constructor(props) {
 		super(props)
@@ -295,6 +296,10 @@ export default class Toy extends Component{
 												</div>
 												<div className="box-footer">
 													<ButtonToolbar className="pull-right">
+														<CopyToClipboard text={toy.id}
+												          	onCopy={() => null}>
+												          	<span className="btn btn-default btn-sm">复制ID</span>
+												        </CopyToClipboard>
 														<a target="_blank" href={`http://www.playalot.cn/toy/${toy.id}`} className="btn btn-default btn-sm">查看详情</a>
 														<span onClick={() => this.addStock(toy.id,toy.name,toy.cover) } className="btn btn-default btn-sm"><i className="fa fa-plus"></i>添加该商品库存</span>
 													</ButtonToolbar>

@@ -18,6 +18,7 @@ import report from './reducers/reportReducer'
 import feedback from './reducers/feedbackReducer'
 import sku from './reducers/skuReducer'
 import order from './reducers/orderReducer'
+import trade from './reducers/tradeReducer'
 export const makeRootReducer = (asyncReducers) => {
 	return combineReducers({
 		// Add sync reducers here
@@ -37,6 +38,7 @@ export const makeRootReducer = (asyncReducers) => {
 		feedback,
 		sku,
 		order,
+		trade,
 		router,
 		...asyncReducers
 	})

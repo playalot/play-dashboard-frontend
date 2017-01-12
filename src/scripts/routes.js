@@ -15,6 +15,7 @@ import ReportList from './components/ReportList'
 import FeedbackList from './components/FeedbackList'
 import SkuList from './components/SkuList'
 import OrderList from './components/OrderList'
+import TradeList from './components/TradeList'
 
 import OrderDetail from './components/OrderDetail'
 
@@ -44,6 +45,7 @@ export default {
         { path:'/user', component:UserList },
         { path:'/tag', component:TagList },
         { path:'/toy', component:ToyList },
+        { path:'/trade', component:TradeList },
         { path:'/sku', component:SkuList },
         { path:'/order', component:OrderList },
         { path:'/sticker', component:StickerList },

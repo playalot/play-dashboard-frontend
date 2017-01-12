@@ -28,6 +28,7 @@
     "react-autosuggest": "^7.0.2",
     "react-bootstrap": "^0.30.7",
     "react-cookie": "^1.0.4",
+    "react-copy-to-clipboard": "^4.2.3",
     "react-datepicker": "^0.39.0",
     "react-dom": "^15.4.1",
     "react-dropzone": "^3.8.0",

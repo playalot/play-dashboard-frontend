@@ -5,6 +5,7 @@ import {
 	Row, Col, FromControl, Modal,
 } from 'react-bootstrap'
 import CDN from '../../widgets/cdn'
+import Switch from 'rc-switch'
 import {RIEInput, RIEToggle, RIETextArea, RIENumber, RIETags} from 'riek'
 export default class EditToy extends Component {
 	constructor(props) {
@@ -14,8 +15,7 @@ export default class EditToy extends Component {
 			cover: '',
 			name: '',
 			nameRaw: '',
-			releaseYear: '空',
-			releaseMonth: '空',
+			release:'',
 			money: 0,
 			currency: '',
 			scale: '',
@@ -33,8 +33,6 @@ export default class EditToy extends Component {
 			showModal: false,
 			showImage:null,
 		}
-	  	this.changeCurrency = (e) => this.setState({currency:e.target.value})
-	  	this.virtualServerCallback = this._virtualServerCallback.bind(this)
 	  	this.removeOtherInfo = this._removeOtherInfo.bind(this)
 	  	this.addOtherInfo = this._addOtherInfo.bind(this)
 	  	this.changeNewKey = (e) => this.setState({newKey:e.target.value})
@@ -63,35 +61,23 @@ export default class EditToy extends Component {
 			.end((err,res) => {
 				this.setState({
 					cover:res.body.cover,
-					name:res.body.name || '空',
-					nameRaw:res.body.nameRaw || '空',
-					releaseYear:res.body.release ? res.body.release.split('/')[0] : '空',
-					releaseMonth:res.body.release ? (res.body.release.split('/')[1] || '空') : '空',
+					name:res.body.name || '',
+					nameRaw:res.body.nameRaw || '',
+					release:res.body.release || '',
 					currency:res.body.info.currency || 'rmb',
 					money:res.body.info.money || 0,
-					scale:res.body.info.scale || '空',
-					company:res.body.info.company || '空',
-					character:res.body.info.character || '空',
-					artist:res.body.info.artist || '空',
-					series:res.body.info.series || '空',
-					origin:res.body.info.origin || '空',
-					detail: res.body.info.detail || '空',
+					scale:res.body.info.scale || '',
+					company:res.body.info.company || '',
+					character:res.body.info.character || '',
+					artist:res.body.info.artist || '',
+					series:res.body.info.series || '',
+					origin:res.body.info.origin || '',
+					detail: res.body.info.detail || '',
 					isR18:res.body.isR18,
 					otherInfo: res.body.otherInfo,
 					images: res.body.images
 				})
 			})
-	}
-	_virtualServerCallback(newState) {
-		this.setState(newState)
-  	}
-	isNumber(num) {
-		let re = /^[0-9]+(\.[0-9]+)?$/
-		console.info(re.test(num))
-		return re.test(num)
-	}
-	isEmpty(text) {
-		return text.trim()
 	}
 	_removeOtherInfo(i) {
 		let tmpArr = this.state.otherInfo
@@ -198,8 +184,7 @@ export default class EditToy extends Component {
 			cover,
 			name,
 			nameRaw,
-			releaseYear,
-			releaseMonth,
+			release,
 			money,
 			currency,
 			scale,
@@ -213,7 +198,6 @@ export default class EditToy extends Component {
 			otherInfo,
 			images
 	    } = this.state
-	    let release = ( releaseYear === '空' || releaseMonth === '空' ) ? '空' : `${releaseYear}/${releaseMonth}`
 		const data = {
 			cover,
 			name,
@@ -233,7 +217,7 @@ export default class EditToy extends Component {
 			images
 		}
 		data.money = parseInt(data.money)
-		Object.keys(data).forEach(key => data[key] === '空' || data[key] === 0 ? delete data[key] : '')
+		Object.keys(data).forEach(key => data[key]=== '' ? delete data[key] : '')
   		Request
 	  		.post(`/api/toy/${this.props.params.id}`)
 	  		.send(data)
@@ -259,53 +243,21 @@ export default class EditToy extends Component {
 		                	</div>
 		              	</Dropzone>
 	      				<Col sm={9}>
-							<Col sm={12}>
-								<RIEInput
-									value={this.state.name}
-									change={this.virtualServerCallback}
-									classInvalid="edit-toy-invalid"
-									validate={this.isEmpty}
-									propName="name"
-									className="edit-toy-title"
-								/>
+							<Col sm={12} className="edit-toy-item no-border">
+								<input type="text" className="text-input title" onChange={(e) => this.setState({name:e.target.value})} value={this.state.name}/>
 							</Col>
 							<Col sm={12} className="edit-toy-item">
-			          			<span>原名:&nbsp;&nbsp;</span>
-			          			<RIEInput
-									value={this.state.nameRaw}
-									change={this.virtualServerCallback}
-									validate={this.isEmpty}
-									classInvalid="edit-toy-invalid"
-									propName="nameRaw"
-								/>
+								<span className="toy-label">原名:</span>
+								<input type="text" className="text-input" onChange={(e) => this.setState({nameRaw:e.target.value})} value={this.state.nameRaw}/>
 							</Col>
 							<Col sm={6} className="edit-toy-item">
-								<span >发售日:&nbsp;&nbsp;</span>
-								<RIEInput
-									value={this.state.releaseYear}
-									change={this.virtualServerCallback}
-									validate={this.isEmpty}
-									classInvalid="edit-toy-invalid"
-									propName="releaseYear"
-								/>
-								&nbsp;/&nbsp;
-								<RIEInput
-									value={this.state.releaseMonth}
-									change={this.virtualServerCallback}
-									validate={this.isEmpty}
-									classInvalid="edit-toy-invalid"
-									propName="releaseMonth"
-								/>
+								<span className="toy-label">发售日:</span>
+								<input type="text" className="text-input" onChange={(e) => this.setState({release:e.target.value})} value={this.state.release}/>
 							</Col>
 							<Col sm={6} className="edit-toy-item">
-								<span>价格:&nbsp;&nbsp;</span>
-			 					<RIENumber
-										value={this.state.money}
-										change={this.virtualServerCallback}
-										propName="money"
-								/>&nbsp;
-								<select value={this.state.currency} onChange={this.changeCurrency}>
-									<option value=""></option>
+								<span className="toy-label">价格:</span>
+								<input type="number" className="text-input" onChange={(e) => this.setState({money:e.target.value})} value={this.state.money}/>
+								<select className="text-select" value={this.state.currency} onChange={(e) => this.setState({currency:e.target.value})}>
 									<option value="rmb">人民币</option>
 									<option value="yen">日元</option>
 									<option value="dollar">美元</option>
@@ -313,84 +265,43 @@ export default class EditToy extends Component {
 								</select>
 							</Col>
 							<Col sm={6} className="edit-toy-item">
-								<span>公司:&nbsp;&nbsp;</span>
-								<RIEInput
-									value={this.state.company}
-									change={this.virtualServerCallback}
-									validate={this.isEmpty}
-									classInvalid="edit-toy-invalid"
-									propName="company"
-								/>
+								<span className="toy-label">公司:</span>
+								<input type="text" className="text-input" onChange={(e) => this.setState({company:e.target.value})} value={this.state.company}/>
 							</Col>
 							<Col sm={6} className="edit-toy-item">
-								<span>比例:&nbsp;&nbsp;</span>
-								<RIEInput
-									value={this.state.scale}
-									change={this.virtualServerCallback}
-									validate={this.isEmpty}
-									classInvalid="edit-toy-invalid"
-									propName="scale"
-								/>
+								<span className="toy-label">比例:</span>
+								<input type="text" className="text-input" onChange={(e) => this.setState({scale:e.target.value})} value={this.state.scale}/>
 							</Col>
 							<Col sm={6} className="edit-toy-item">
-			          			<span>系列:&nbsp;&nbsp;</span>
-			          			<RIEInput
-									value={this.state.series}
-									change={this.virtualServerCallback}
-									validate={this.isEmpty}
-									classInvalid="edit-toy-invalid"
-									propName="series"
-								/>
+								<span className="toy-label">系列:</span>
+								<input type="text" className="text-input" onChange={(e) => this.setState({series:e.target.value})} value={this.state.series}/>
 			          		</Col>
 							<Col sm={6} className="edit-toy-item">
-		          		  		<span>角色:&nbsp;&nbsp;</span>
-		          		  		<RIEInput
-									value={this.state.character}
-									change={this.virtualServerCallback}
-									validate={this.isEmpty}
-									classInvalid="edit-toy-invalid"
-									propName="character"
-								/>
+								<span className="toy-label">角色:</span>
+								<input type="text" className="text-input" onChange={(e) => this.setState({character:e.target.value})} value={this.state.character}/>
 			          		</Col>
 							<Col sm={6} className="edit-toy-item">
-								<span>原著:&nbsp;&nbsp;</span>
-								<RIEInput
-									value={this.state.origin}
-									change={this.virtualServerCallback}
-									validate={this.isEmpty}
-									classInvalid="edit-toy-invalid"
-									propName="origin"
-								/>
+								<span className="toy-label">原著:</span>
+								<input type="text" className="text-input" onChange={(e) => this.setState({origin:e.target.value})} value={this.state.origin}/>
 							</Col>
 			          		<Col sm={6} className="edit-toy-item">
-	        		  			<span>原型师:&nbsp;&nbsp;</span>
-	        		  			<RIEInput
-									value={this.state.artist}
-									change={this.virtualServerCallback}
-									validate={this.isEmpty}
-									classInvalid="edit-toy-invalid"
-									propName="artist"
-								/>
+								<span className="toy-label">原型师:</span>
+								<input type="text" className="text-input" onChange={(e) => this.setState({artist:e.target.value})} value={this.state.artist}/>
 			          		</Col>
 			          		<Col sm={6} className="edit-toy-item">
-	        		  			<span>R18:&nbsp;&nbsp;</span>
-	        		  			<RIEToggle
-								  value={this.state.isR18}
-								  change={this.virtualServerCallback}
-								  propName="isR18"
-								/>
+								<span className="toy-label">R18:</span>
+	        		  			<Switch onChange={value => this.setState({isR18:value})}
+						        	checked={this.state.isR18}
+						        	style={{margin:5}}
+						      	/>
 			          		</Col>
-			          		<Col sm={12} className="edit-toy-item">
-	        		  			<span>详细描述:&nbsp;&nbsp;</span>
-	        		  			<RIETextArea
-									rows={30}
-									cols={60}
-								  	value={this.state.detail}
-								  	change={this.virtualServerCallback}
-								  	validate={this.isEmpty}
-								  	classInvalid="edit-toy-invalid"
-								  	propName="detail"
-								/>
+			          		<Col sm={12} className="edit-toy-item no-border">
+	        		  			<span className="toy-direction">详细描述:</span>
+	        		  			<textarea 
+		        		  			className="text-area" 
+		        		  			onChange={(e) => this.setState({detail:e.target.value})} 
+		        		  			value={this.state.detail}>
+		        		  		</textarea>
 			          		</Col>
 						</Col>
 	      			</Row>

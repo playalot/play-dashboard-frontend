@@ -5,10 +5,54 @@
 }
 .edit-toy-item {
 	border-bottom: 1px dashed #e3e3e3;
-	padding:5px;
-}
-.edit-toy-invalid {
-	outline-color: orangered !important;
+	padding:0 5px;
+    display:flex;
+    .no-border{
+        border:none;
+    }
+    .toy-label{
+        display:inline-flex;
+        align-items:center;
+        flex-basis:50px;
+    }
+    .toy-direction{
+        display:inline-flex;
+        flex-basis:80px;
+        padding-top:5px;
+    }
+    .text-input{
+        outline:none;
+        border:none;
+        padding:6px 2px;
+        flex:1;
+        &.title{
+            width:100%;
+            font-size:20px;
+            font-weight:bold;
+        }
+        &:focus{
+            outline:#24adda solid 1px;
+        }
+    }
+    .text-area{
+        resize: vertical;
+        width: 100%;
+        padding: 5px;
+        border:none;
+        outline:none;
+        &:focus{
+            outline:#24adda solid 1px;
+        }
+    }
+    .text-select{
+        outline:none;
+        border:none;
+        padding:6px 2px;
+        flex-basis:50px;
+        &:focus{
+            outline:#24adda solid 1px;
+        }
+    }
 }
 .edit-toy-cover {
 	position:relative;
@@ -81,3 +125,5 @@
         }
     }
 }
+
+

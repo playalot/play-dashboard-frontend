@@ -105,6 +105,7 @@ export default class OrderList extends Component{
 						  <option value="拆盒网">拆盒网</option>
 						  <option value="塑唐玩具">塑唐玩具</option>
 						  <option value="六部口模型">六部口模型</option>
+						  <option value="HobbyMax官方店">HobbyMax官方店</option>
 		                </FormControl>
 	                </FormGroup>
 	                {' '}

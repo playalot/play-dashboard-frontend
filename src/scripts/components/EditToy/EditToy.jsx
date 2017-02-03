@@ -299,6 +299,7 @@ export default class EditToy extends Component {
 	        		  			<span className="toy-direction">详细描述:</span>
 	        		  			<textarea 
 		        		  			className="text-area" 
+		        		  			rows="3"
 		        		  			onChange={(e) => this.setState({detail:e.target.value})} 
 		        		  			value={this.state.detail}>
 		        		  		</textarea>

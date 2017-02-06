@@ -13,11 +13,11 @@ function receiveInfo(res,email) {
 export function fetchInfo() {
     return (dispatch) => {
         return Request
-            .get(`/api/admin/current`)
+            .get(`/api/my/info`)
             .end((err,res) => {
                 if(!err) {
                     dispatch(receiveInfo(res.body.user,res.body.email))
-                } 
+                }
             })
     }
 }

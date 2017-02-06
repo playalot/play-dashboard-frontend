@@ -6,7 +6,6 @@ import {
 } from 'react-bootstrap'
 import CDN from '../../widgets/cdn'
 import Switch from 'rc-switch'
-import {RIEInput, RIEToggle, RIETextArea, RIENumber, RIETags} from 'riek'
 export default class EditToy extends Component {
 	constructor(props) {
 	  	super(props)

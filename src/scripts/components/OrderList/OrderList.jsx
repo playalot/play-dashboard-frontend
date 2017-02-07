@@ -150,26 +150,29 @@ export default class OrderList extends Component{
 				</div>
 	          <div className="table-responsive">
 	            <table className="table table-striped">
-	            	<thead><tr><th>用户</th><th>商家</th><th>订单</th><th>下单时间</th><th>订单状态</th><th>总计</th><th></th><th></th><th></th></tr></thead>
+	            	<thead><tr><th>用户</th><th>商家</th><th></th><th>订单</th><th>总金额</th><th>下单时间</th><th>订单状态</th><th></th><th></th></tr></thead>
 	              <tbody>
 	                {this.props.orders.map((order,index) => {
 	                  return (
 	                    <tr key={order.id}>
-	                      <td><Link to={'/user/'+order.user.id}><img style={{width:'45px'}} src={order.user.avatar} className="img-circle"/></Link></td>
+	                      <td><Link to={'/user/'+order.user.id}><img style={{width:'30px'}} src={order.user.avatar} className="img-circle"/></Link></td>
 	                      <td>{order.items[0]['merchant']}</td>
-	                      <td>{order.title}</td>
+	                      <td><img style={{width:'40px'}} src={order.items[0].image} /></td>
+	                      <td style={{width:'30%'}}>{order.title}</td>
+	                      <td><span><strong>¥{order.price.totalPrice}</strong></span><br/>{order.price.totalFreight > 0 ? <small style={{color:'#6c6c6c',fontSize:'10px'}}>含运费:¥&nbsp;{order.price.totalFreight}</small> : <small style={{color:'#6c6c6c',fontSize:'10px'}}>包邮</small>}</td>
 	                      <td>{Moment(order.created).format('MM-DD HH:mm')}</td>
 	                      <td>{this.formatStatus(order.status)}</td>
-	                      <td>¥{order.price.totalPrice}</td>
 	                      <td>
-	                      	<FormControl componentClass="select" placeholder="select" value={`订单操作`} onChange={(e) => this.props.setStatus(order.id,e.target.value)}>
-		                  		<option value="">订单操作</option>
-		                  		{order.status === 'open' ?  <option value="closed">关闭订单</option> : ''}
-								{order.status === 'paid' ?  <option value="done">订单完成</option> : ''}
-		                	</FormControl>
-	                      </td>
-	                      <td>
-	                      	<Link to={`/order/${order.id}`} className="btn">订单详情</Link>
+	                      	<div className="btn-group">
+							  <button type="button" className="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+							    订单操作&nbsp;<span className="caret"></span>
+							  </button>
+							  	<ul className="dropdown-menu">
+							  		<li><Link to={`/order/${order.id}`}>订单详情</Link></li>
+								  	{order.status === 'open' ? <li><a onClick={() => this.props.setStatus(order.id,'closed')}>关闭订单</a></li> : null}
+								  	{order.status === 'paid' ? <li><a onClick={() => this.props.setStatus(order.id,'done')}>订单完成</a></li> : null}
+								</ul>
+							</div>
 	                      </td>
 	                      {
 							order.tracking ?
@@ -181,10 +184,11 @@ export default class OrderList extends Component{
 								<a onClick={() => this.addTracking(order.id)}>修改快递号</a>
 							</td> :
 							(order.status === 'paid' ? <td style={{textAlign:'center',color:'teal'}}>
+								<span className="label label-warning">等待发货</span>
 								<span className="btn" onClick={() => this.addTracking(order.id)}>
 									添加快递号
 								</span>
-							</td> : '')
+							</td> : <td></td>)
 						  }
 	                    </tr>
 	                  )

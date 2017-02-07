@@ -31,6 +31,7 @@ import EditSku from './components/EditSku'
 import Notification from './components/Notification/Notification.jsx'
 
 import Test from './components/test';
+import ToyOrderList from './components/ToyOrderList'
 
 export default {
     path: '/',
@@ -67,6 +68,7 @@ export default {
         { path:'/test', component:Test },
         
         { path:'/notification', component:Notification },
+        { path:'/toy/:id/orders', component:ToyOrderList },
 
     ]
 }

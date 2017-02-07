@@ -211,7 +211,7 @@ export default class SkuList extends Component{
 				            <div className="operate sku-title-name">
 			            		<div className="btn-group">
 								  <button type="button" className="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
-								    {this.state.filterType ? this.state.filterType : '全部类型'}&nbsp;<span className="caret"></span>
+								    {this.state.filterType ? (this.state.filterType === 'inStock' ? '现货':'预售') : '全部类型'}&nbsp;<span className="caret"></span>
 								  </button>
 								  <ul className="dropdown-menu">
 								    <li><a onClick={() => this.onChangeFilterType('')}>全部类型</a></li>

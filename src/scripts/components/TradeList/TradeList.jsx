@@ -18,6 +18,9 @@ export default class TradeList extends Component {
 	  		let showImage = photos[imageIndex%photos.length]['url']
 	  		this.setState({showImage,imageIndex})
 	  	}
+
+	  	//功能
+	  	this.changeStatus = this._changeStatus.bind(this)
 	}
 	componentWillMount() {
 		if(!this.props.toyLoaded){
@@ -34,6 +37,9 @@ export default class TradeList extends Component {
 		this.context.router.push(`/trade?page=${page}`)
 		this.props.getTrade(page)
 	}
+	_changeStatus(id,status) {
+		this.props.changeStatus(id,status)
+	}
 	render() {
 		return (
 			<div className="content">
@@ -46,7 +52,6 @@ export default class TradeList extends Component {
 						this.props.trades.map((trade,i) => {
 							let isRecClass = trade.isRec === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
 							let isBlkClass = trade.isBlk === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
-							let isR18Class = trade.isR18 === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
 							return(
 								<Col xs={12} sm={3} lg={3} key={`trade_${i}`}>
 									<div className="box box-solid">
@@ -112,10 +117,19 @@ export default class TradeList extends Component {
 							                <span onClick={ this.addToy } className="btn btn-sm"><i className="fa fa-plus"></i></span>
 							                <span onClick={ this.addTag } className="btn btn-sm"><i className="fa fa-tag"></i></span>
 							                <span onClick={ this.openClass } className="btn btn-sm"><i className="fa fa-th-large"></i></span>
-							                <span onClick={ this.toggleR18 } className={isR18Class}><i className="fa fa-venus-mars"></i></span>
 							                <span onClick={ this.toggleBlock } className={isBlkClass}><i className="fa fa-eye-slash"></i></span>
 							                <span onClick={ this.toggleRecommend } className={isRecClass}><i className="fa fa-thumbs-o-up"></i></span>
 							                <span onClick={ this.deletePost } className="post-caption-btn btn btn-sm"><i className="fa fa-trash"></i></span>
+											<div className="btn-group">
+											  <button type="button" className="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+											    {trade.status}&nbsp;<span className="caret"></span>
+											  </button>
+											  <ul className="dropdown-menu">
+											    <li><a onClick={() => this.changeStatus(trade.id,'open')}>Open</a></li>
+											    <li><a onClick={() => this.changeStatus(trade.id,'sold')}>sold</a></li>
+											    <li><a onClick={() => this.changeStatus(trade.id,'closed')}>closed</a></li>
+											  </ul>
+											</div>
 							              </ButtonToolbar>
 							            </div>
 									</div>

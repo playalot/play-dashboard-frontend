@@ -1,11 +1,13 @@
 import { connect } from 'react-redux'
 import TradeList from './TradeList'
 
-import {getTrade} from '../../actions/tradeAction'
+import {getTrade,changeStatus} from '../../actions/tradeAction'
 import { fetchToyClass } from '../../actions/tagClassAction'
 const mapActionCreators = {
 	getTrade,
-	fetchToyClass
+	changeStatus,
+
+	fetchToyClass,
 }
 
 const mapStateToProps = (state) => {

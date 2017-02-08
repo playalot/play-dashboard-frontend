@@ -30,7 +30,7 @@ export default class EditBannerSet extends Component {
     let formData = new FormData()
     formData.append('file', images[0])
     $.ajax({
-      url: `/api/upload?key=recommend_${this.props.params.id}.jpg&temp=false`,
+      url: `/api/upload?key=recommend_${this.props.params.id+Date.now()}.jpg&temp=false`,
       type: 'POST',
       data: formData,
       processData: false, // tell jQuery not to process the data

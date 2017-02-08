@@ -8,7 +8,6 @@ import Moment from 'moment'
 import ReactPaginate from 'react-paginate'
 import DatePicker from 'react-datepicker'
 import Request from 'superagent'
-import PlayAutoSuggest from '../Common/PlayAutoSuggest'
 const _ = require('lodash')
 
 
@@ -251,7 +250,7 @@ export default class SkuList extends Component{
 												<span onClick={() => this.setState({selectedSku:sku})} className="btn btn-sm"><i className="fa fa-th-large"></i></span>
 												<div className="btn-group">
 												  <button type="button" className="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
-												    详情&nbsp;<span className="caret"></span>
+												    其他&nbsp;<span className="caret"></span>
 												  </button>
 												  <ul className="dropdown-menu">
 												    <li><Link to={`/toy/${sku.id}/orders`}>全部订单</Link></li>

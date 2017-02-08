@@ -9,10 +9,10 @@ export default class OrderList extends Component{
 	constructor(props) {
 	  	super(props)
 	  	this.state = {
-	  		status:'paid',
+	  		status:'',
 	  		merchant:'',
-	  		year:new Date(Date.now()).getFullYear(),
-			month:new Date(Date.now()).getMonth() + 1,
+	  		year:'',
+			month:'',
 	  	}
 	  	this.addTracking = this._addTracking.bind(this)
 	  	this.goPage = this._goPage.bind(this)
@@ -35,7 +35,7 @@ export default class OrderList extends Component{
 			this.context.router.push(path)
 		}else {
 			page = this.props.location.query.page || 0
-			status = this.props.location.query.status || 'paid'
+			status = this.props.location.query.status || ''
 			if(!this.props.location.query.status){ page = 0 }
 			year = this.state.year
 			month = this.state.month

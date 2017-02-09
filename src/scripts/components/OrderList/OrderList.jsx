@@ -5,6 +5,8 @@ import {Link} from 'react-router'
 import {Row, Button, FormControl,Form, FormGroup } from 'react-bootstrap'
 import ReactPaginate from 'react-paginate'
 import Moment from 'moment'
+
+import PlayAliBaichuan from '../Common/PlayAliBaichuan'
 export default class OrderList extends Component{
 	constructor(props) {
 	  	super(props)
@@ -155,7 +157,14 @@ export default class OrderList extends Component{
 	                {this.props.orders.map((order,index) => {
 	                  return (
 	                    <tr key={order.id}>
-	                      <td><Link to={'/user/'+order.user.id}><img style={{width:'30px'}} src={order.user.avatar} className="img-circle"/></Link></td>
+	                      <td>
+	                      	<div className="btn-group">
+							  <img style={{width:'30px'}} src={order.user.avatar}  data-toggle="dropdown" className="img-circle"/>
+							  <ul className="dropdown-menu">
+							    <li><a onClick={() => this.context.router.push(`/user/${order.user.id}`)}>查看</a></li>
+							  </ul>
+							</div>
+	                      </td>
 	                      <td>{order.items[0]['merchant']}</td>
 	                      <td><img style={{width:'40px'}} src={order.items[0].image} /></td>
 	                      <td style={{width:'30%'}}>{order.title}</td>
@@ -211,6 +220,7 @@ export default class OrderList extends Component{
 					forcePage={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
 					activeClassName={"active"} />
 	          </Row>
+	          <PlayAliBaichuan/>
 	        </div>
 
 		)

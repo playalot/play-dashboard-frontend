@@ -201,7 +201,7 @@ export default class SkuList extends Component{
 								    <li><a onClick={() => this.onChangeFilter('亿次元商城')}>亿次元商城</a></li>
 								    <li><a onClick={() => this.onChangeFilter('手办同萌会')}>手办同萌会</a></li>
 								    <li><a onClick={() => this.onChangeFilter('拆盒网')}>拆盒网</a></li>
-								    <li><a onClick={() => this.onChangeFilter('塑堂玩具')}>塑堂玩具</a></li>
+								    <li><a onClick={() => this.onChangeFilter('塑唐玩具')}>塑唐玩具</a></li>
 								    <li><a onClick={() => this.onChangeFilter('六部口模型')}>六部口模型</a></li>
 								    <li><a onClick={() => this.onChangeFilter('HobbyMax官方店')}>HobbyMax官方店</a></li>
 								  </ul>

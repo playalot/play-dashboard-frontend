@@ -1,17 +1,18 @@
 import { connect } from 'react-redux'
 import FeedbackList from './FeedbackList'
 
-import { fetchFeedback, deleteFeedback } from '../../actions/feedbackAction'
+import { getFeedback, deleteFeedback } from '../../actions/feedbackAction'
 const mapActionCreators = {
-	fetchFeedback,
+	getFeedback,
 	deleteFeedback
 }
 
 const mapStateToProps = (state) => {
-	const { feedbacks,loaded }  = state.feedback.toJS()
+	const { feedbacks,page,totalPages }  = state.feedback.toJS()
     return {
     	feedbacks,
-    	loaded,
+    	page,
+    	totalPages,
     }
 }
 

@@ -1,14 +1,24 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import Moment from 'moment'
-
-export default class ReportList extends Component{
+import ReactPaginate from 'react-paginate'
+export default class FeedbackList extends Component{
 	constructor(props) {
 	  	super(props)
 	  	this.deleteFeedback = (id) => confirm('Delete this Feedback?') && this.props.deleteFeedback(id)
+	  	this.goPage = this._goPage.bind(this)
 	}
 	componentWillMount() {
-		!this.props.loaded && this.props.fetchFeedback()
+		const { page } = this.props
+		if(typeof page === 'number') {
+			this.context.router.push(`/feedback?page=${page}`)
+		}else{
+			this.props.getFeedback(this.props.location.query.page)
+		}
+	}
+	_goPage(page) {
+		this.context.router.push(`/feedback?page=${page}`)
+		this.props.getFeedback(page)
 	}
 	render() {
 		return(
@@ -35,7 +45,27 @@ export default class ReportList extends Component{
 		              	</tbody>
 		            </table>
 		        </div>
+		        <div style={{textAlign:'center'}}>
+		          <ReactPaginate
+	          		previousLabel={<span>&laquo;</span>}
+					nextLabel={<span>&raquo;</span>}
+					breakLabel={<span>...</span>}
+					breakClassName={"break-me"}
+					pageCount={this.props.totalPages}
+					marginPagesDisplayed={2}
+					pageRangeDisplayed={5}
+					onPageChange={obj => this.goPage(obj.selected)}
+					containerClassName={"pagination"}
+					subContainerClassName={"pages pagination"}
+					forcePage={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
+					activeClassName={"active"} />
+		        </div>
           	</div>
 		)
 	}
+}
+
+
+FeedbackList.contextTypes = {
+  	router : React.PropTypes.object
 }

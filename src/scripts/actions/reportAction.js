@@ -4,10 +4,12 @@ export const REL_RECEIVE_REPORT = 'REL_RECEIVE_REPORT'
 export const REL_DELETE_REPORT = 'REL_DELETE_REPORT'
 export const REL_TOGGLE_BLK = 'REL_TOGGLE_BLK'
 
-function receiveReport(res) {
+function receiveReport(res,totalPages,page) {
     return {
         type: REL_RECEIVE_REPORT,
-        res
+        res,
+        totalPages,
+        page
     }
 }
 function _deleteReport(id) {
@@ -22,15 +24,18 @@ function _toggleBlk(id) {
         id
     }
 }
-export function fetchReport() {
-    return (dispatch) => {
+export function getReport (page = 0) {
+    return (dispatch,getState) => {
+        let params = { page }
         return Request
             .get(`/api/reports`)
-            .end((err,res) => {
-                dispatch(receiveReport(res.body.reports))
+            .query(params)
+            .end((err, res) => {
+                dispatch(receiveReport(res.body.reports,res.body.totalPages,page))
             })
     }
 }
+
 export function deleteReport(id) {
     return (dispatch) => {
         return Request

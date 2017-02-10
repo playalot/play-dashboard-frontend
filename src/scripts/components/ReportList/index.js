@@ -1,18 +1,19 @@
 import { connect } from 'react-redux'
 import ReportList from './ReportList'
 
-import { fetchReport, deleteReport, toggleBlk } from '../../actions/reportAction'
+import { getReport, deleteReport, toggleBlk } from '../../actions/reportAction'
 const mapActionCreators = {
-	fetchReport,
+	getReport,
 	deleteReport,
 	toggleBlk
 }
 
 const mapStateToProps = (state) => {
-	const { reports,loaded }  = state.report.toJS()
+	const { reports,totalPages,page }  = state.report.toJS()
     return {
     	reports,
-    	loaded,
+    	totalPages,
+    	page
     }
 }
 

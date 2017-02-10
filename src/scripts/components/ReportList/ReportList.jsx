@@ -4,7 +4,7 @@ import {
 } from 'react-bootstrap'
 import { Link } from 'react-router'
 import Moment from 'moment'
-
+import ReactPaginate from 'react-paginate'
 export default class ReportList extends Component{
 	constructor(props) {
 	  	super(props)
@@ -21,11 +21,20 @@ export default class ReportList extends Component{
 	  	this.openModal = this._openModal.bind(this)
 	  	this.prePhoto = this._prePhoto.bind(this)
 	  	this.nextPhoto = this._nextPhoto.bind(this)
+
+	  	this.goPage = this._goPage.bind(this)
 	}
 	componentWillMount() {
-		if(!this.props.loaded){
-			this.props.fetchReport()
+		const { page } = this.props
+		if(typeof page === 'number') {
+			this.context.router.push(`/report?page=${page}`)
+		}else{
+			this.props.getReport(this.props.location.query.page)
 		}
+	}
+	_goPage(page) {
+		this.context.router.push(`/report?page=${page}`)
+		this.props.getReport(page)
 	}
 	_openModal(photos) {
 		this.setState({
@@ -81,14 +90,14 @@ export default class ReportList extends Component{
 															<td>
 																<Link to={`/user/${report.target.user.id}`}><img style={{width:'45px'}} src={report.target.user.avatar} className="img-circle"/></Link>
 															</td>
-															: '<td></td>'
+															: <td></td>
 														}
 			                      <td>{report.reason}</td>
 			                      <td>{Moment.unix(report.created / 1000).fromNow()}</td>
 														{
 															report.target ?
 			                      	<td><img onClick={() => this.openModal(report.target.photos)} src={report.target.preview} style={{width:'45px'}} className="img-thumbnail"/></td>
-															: '<td></td>'
+															: <td></td>
 														}
 														<td>
 			                      	<ButtonToolbar>
@@ -103,6 +112,21 @@ export default class ReportList extends Component{
 	              </tbody>
 	            </table>
 	          </div>
+	          <div style={{textAlign:'center'}}>
+		          <ReactPaginate
+	          		previousLabel={<span>&laquo;</span>}
+					nextLabel={<span>&raquo;</span>}
+					breakLabel={<span>...</span>}
+					breakClassName={"break-me"}
+					pageCount={this.props.totalPages}
+					marginPagesDisplayed={2}
+					pageRangeDisplayed={5}
+					onPageChange={obj => this.goPage(obj.selected)}
+					containerClassName={"pagination"}
+					subContainerClassName={"pages pagination"}
+					forcePage={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
+					activeClassName={"active"} />
+		        </div>
 	          <Modal show={!!(this.state.showModal && this.state.photos.length)} onHide={this.closeModal}>
                 <Modal.Body>
                 	{
@@ -122,4 +146,9 @@ export default class ReportList extends Component{
           	</div>
 		)
 	}
+}
+
+
+ReportList.contextTypes = {
+  	router : React.PropTypes.object
 }

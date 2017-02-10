@@ -1,10 +1,12 @@
 import Immutable from 'immutable'
 import { REL_RECEIVE_REPORT, REL_DELETE_REPORT, REL_TOGGLE_BLK } from '../actions/reportAction'
 
-export default (state = Immutable.fromJS({ reports: [], loaded:false }),action)=>{
+export default (state = Immutable.fromJS({ reports: [], totalPages:10 }),action)=>{
     switch (action.type) {
         case REL_RECEIVE_REPORT:
-            return state.updateIn(['reports'],(reports) => reports.concat(Immutable.fromJS(action.res))).set('loaded',true)
+            return state.updateIn(['reports'],(reports) => reports.clear().concat(Immutable.fromJS(action.res)))
+                .set('totalPages',action.totalPages)
+                .set('page',action.page)
         case REL_DELETE_REPORT:
         	return state.updateIn(['reports'],(reports) => {
         		return reports.delete(reports.findKey((report) => {

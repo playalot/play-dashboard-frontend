@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 import Moment from 'moment'
 import ReactPaginate from 'react-paginate'
+import PlayAliBaichuan from '../Common/PlayAliBaichuan'
 export default class FeedbackList extends Component{
 	constructor(props) {
 	  	super(props)
@@ -25,16 +26,24 @@ export default class FeedbackList extends Component{
 			<div className="content">
 		        <div className="table-responsive">
 		            <table className="table table-striped">
-		              	<thead><tr><th>ID</th><th>User</th><th>Content</th><th style={{'minWidth': '150px'}}>Created</th></tr></thead>
+		              	<thead><tr><th>User</th><th>Content</th><th style={{'minWidth': '150px'}}>Created</th><th>userAgent</th></tr></thead>
 		              	<tbody>
 			              	{
 			              		this.props.feedbacks.map((feedback) => {
 			              			return(
 					                    <tr key={`feedback_${feedback.id}`}>
-					                      	<td>{feedback.id}</td>
-					                      	<td><Link to={'/user/'+feedback.user.id}><img src={feedback.user.avatar} style={{width:'50px',height:'50px'}} className="img-circle"/></Link></td>
+					                    	<td>
+					                    		<div className="btn-group">
+												  <img style={{width:'30px'}} src={feedback.user.avatar}  data-toggle="dropdown" className="img-circle"/>
+												  <ul className="dropdown-menu">
+												    <li><a onClick={() => this.context.router.push(`/user/${feedback.user.id}`)}>查看<small>({feedback.user.nickname})</small></a></li>
+												    <li><a onClick={() => this.props.setTouid(feedback.user.id,feedback.user.avatar)}>私信</a></li>
+												  </ul>
+												</div>
+					                    	</td>
 					                      	<td>{feedback.content}</td>
 					                      	<td>{Moment.unix(feedback.created / 1000).fromNow()}</td>
+					                      	<td>{feedback.userAgent||''}</td>
 					                      	<td>
 					                      		<span onClick={() => this.deleteFeedback(feedback.id)} className="btn btn-sm"><i className="fa fa-trash"></i></span>
 					                      	</td>
@@ -60,6 +69,7 @@ export default class FeedbackList extends Component{
 					forcePage={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
 					activeClassName={"active"} />
 		        </div>
+		        <PlayAliBaichuan/>
           	</div>
 		)
 	}

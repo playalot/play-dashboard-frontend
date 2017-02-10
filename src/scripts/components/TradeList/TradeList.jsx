@@ -90,7 +90,7 @@ export default class TradeList extends Component {
 							            <div className="box-body no-top-padding">
 							            	<Row>
 							            		<Col xs={6}>
-							            			<i className="fa fa-map-marker"></i>&nbsp;{'北京'}
+							            			<i className="fa fa-map-marker"></i>&nbsp;{trade.city.name || ''}
 							            		</Col>
 							            		<Col xs={6}>
 							            			¥&nbsp;{trade.price.price}

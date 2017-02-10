@@ -161,7 +161,7 @@ export default class OrderList extends Component{
 	                      	<div className="btn-group">
 							  <img style={{width:'30px'}} src={order.user.avatar}  data-toggle="dropdown" className="img-circle"/>
 							  <ul className="dropdown-menu">
-							    <li><a onClick={() => this.context.router.push(`/user/${order.user.id}`)}>查看</a></li>
+							    <li><a onClick={() => this.context.router.push(`/user/${order.user.id}`)}>查看<small>({order.user.nickname})</small></a></li>
 							    <li><a onClick={() => this.props.setTouid(order.user.id,order.user.avatar)}>私信</a></li>
 							  </ul>
 							</div>

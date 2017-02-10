@@ -123,7 +123,7 @@ export default class EditSku extends Component {
                       <DatePicker
                         selected={this.state.orderClose}
                         onChange={this.changeOrderClose}
-                        minDate={Moment()}
+                        // minDate={Moment()}
                         dateFormat="YYYY/MM/DD"
                      />
                   </Col>

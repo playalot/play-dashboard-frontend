@@ -19,7 +19,7 @@ import {
 	SelectionState,
 } from 'draft-js'
 import CDN from '../../widgets/cdn'
-import stateToHTML from '../../utils/stateToHTML'
+import {stateToHTML} from 'draft-js-export-html'
 
 export default class EditPage extends Component {
 	constructor(props) {

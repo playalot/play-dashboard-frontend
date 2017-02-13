@@ -21,7 +21,6 @@ import {
 import CDN from '../../widgets/cdn'
 import stateToHTML from '../../utils/stateToHTML'
 
-
 export default class EditPage extends Component {
 	constructor(props) {
 		super(props)
@@ -52,6 +51,9 @@ export default class EditPage extends Component {
 			progress:null,
 			uploadKey:null,
 			videoUrl:null,
+
+			pageList:[],
+			pageName:''
 		}
 		this.handleTitleChange = (e) => this.setState({ title: e.target.value },() => this.saveStorage())
 		this.handleAuthorIdChange = (e) => this.setState({ authorId: e.target.value },() => this.saveStorage())
@@ -99,6 +101,12 @@ export default class EditPage extends Component {
 
 		//保存至storage方法
 		this.saveStorage = this._saveStorage.bind(this)
+		//保存至storage,有名字,可多次保存
+		this.saveLsPage = this._saveLsPage.bind(this)
+		//删除选中的文章
+		this.deletePageName = this._deletePageName.bind(this)
+		//读取选中的文章
+		this.selectPageName = this._selectPageName.bind(this)
 	}
 	_handleKeyCommand(command) {
 		const {
@@ -503,6 +511,11 @@ export default class EditPage extends Component {
 				})
 		}
 	}
+	componentWillMount() {
+		let lsList = window.localStorage.getItem('editor-draft-list') 
+		let pageList = lsList && JSON.parse(lsList) || []
+		this.setState({ pageList })
+	}
 	_saveStorage() {
 		let {
 			title, cover, tags, category, gallery,authorId
@@ -518,7 +531,67 @@ export default class EditPage extends Component {
 			raw
 		}
   		window.localStorage.setItem('editor-draft', JSON.stringify(saveData))
-		console.log('saved!')
+		console.info('saved!')
+	}
+	_saveLsPage() {
+		let pageName = prompt('请输入名称')
+		if (pageName) {
+			let {
+				title, cover, tags, category, gallery,authorId
+			} = this.state
+			let raw = convertToRaw(this.state.editorState.getCurrentContent())
+			let saveData = {
+				title,
+				authorId,
+				cover,
+				tags,
+				category,
+				gallery,
+				raw
+			}
+			let list = window.localStorage.getItem('editor-draft-list') 
+			let jsonList = list && JSON.parse(list) || []
+			jsonList.push({saveData,pageName}) 
+	  		window.localStorage.setItem('editor-draft-list', JSON.stringify(jsonList))
+			console.info(`saved as ${pageName}`)
+		}
+	}
+	_deletePageName() {
+		let {pageName} = this.state
+		if(!pageName) {
+			return
+		}
+		let list = window.localStorage.getItem('editor-draft-list') 
+		let jsonList = list && JSON.parse(list)
+		jsonList.map((li,i) => {
+			if(li.pageName === pageName) {
+				jsonList.splice(i,1)
+			}
+		})
+		window.localStorage.setItem('editor-draft-list', JSON.stringify(jsonList))
+
+	}
+	_selectPageName() {
+		if (confirm('请问是否覆盖当前文章')) {
+			let {pageName} = this.state
+			if(!pageName) {
+				return
+			}
+			let list = window.localStorage.getItem('editor-draft-list') 
+			let jsonList = list && JSON.parse(list)
+			let draftData = null
+			jsonList.map((li,i) => {
+				if(li.pageName === pageName) {
+					draftData = li.saveData
+				}
+			})
+			let { title, cover, tags, category, gallery, raw, authorId } = draftData
+			let rawData = convertFromRaw(raw)
+			this.setState({
+				title, cover, tags, category, gallery,authorId,
+				editorState: EditorState.push(this.state.editorState, rawData)
+			})
+		}
 	}
 	render() {
 		const {editorState} = this.state;
@@ -666,6 +739,40 @@ export default class EditPage extends Component {
 				</div>
 		      	<div className="edit-section">
 					<button className="btn btn-primary" onClick={this.publish}>发布文章</button>
+					<div className="pull-right">
+						
+					</div>
+					<div className="btn-group pull-right dropup">
+					  <button onClick={this.saveLsPage} type="button" className="btn btn-sm btn-primary">保存</button>
+					  <button type="button" className="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+					    {'操作'}&nbsp;<span className="caret"></span>
+					  </button>
+					  {
+					  	this.state.pageName ?
+					  	<ul className="dropdown-menu">
+						    <li><a onClick={this.selectPageName}>读取</a></li>
+						    <li><a onClick={this.deletePageName}>删除</a></li>
+						  </ul>
+						:null
+					  }
+					  
+					</div>
+					<div className="btn-group dropup pull-right" style={{marginRight:10}}>
+					  <button type="button" className="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+					    {this.state.pageName || '选择'}&nbsp;<span className="caret"></span>
+					  </button>
+					  {
+					  	this.state.pageList.length ?
+					  	<ul className="dropdown-menu">
+					  		{
+					  			this.state.pageList.map((li,index) => {
+					  				return <li key={`page-name_${index}`}><a onClick={() => this.setState({pageName:li.pageName})}>{li.pageName}</a></li>
+					  			})
+					  		}
+					  	</ul>
+					  	:null
+					  }
+					</div>
 				</div>
 				{
 					this.state.showUploadDialog ?

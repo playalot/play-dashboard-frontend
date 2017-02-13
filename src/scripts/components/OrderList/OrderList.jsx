@@ -71,17 +71,17 @@ export default class OrderList extends Component{
 	formatStatus(str) {
 		switch(str) {
 			case 'open':
-				return <span className="label label-warning">未支付</span>
+				return <span className="label label-default">等待买家付款</span>
 			case 'paid':
-				return <span className="label label-success">已支付</span>
+				return <span className="label label-success">已支付全款</span>
 			case 'prepaid':
-				return <span className="label label-primary">已预订</span>
+				return <span className="label label-primary">已支付定金</span>
 			case 'due':
-				return <span className="label label-danger">等待补款</span>
+				return <span className="label label-danger">等待买家补款</span>
 			case 'closed':
-				return <span className="label label-default">关闭</span>
+				return <span className="label label-default">已关闭</span>
 			case 'done':
-				return <span className="label label-info">完成</span>
+				return <span className="label label-info">已完成</span>
 			default :
 				return ''
 		}

@@ -33,8 +33,18 @@ export default class extends Component{
 					id, title, created, address, note, description,
 					status, payments, tracking, items, price,
 				} = res.body
+				let tmpAddress = address
+				let num = /1\d{10}/.exec(address)
+				if(num) {
+					let arr = num[0].split('')
+					arr.splice(3,0,'-')
+					arr.splice(8,0,'-')
+					let arrStr = arr.join('')
+					tmpAddress = address.replace(num,arrStr)
+				}
+				
 				this.setState({
-					id, title, created, address, note, description,
+					id, title, created, address:tmpAddress, note, description,
 					status, payments, tracking, items, price,
 				})
 			})

@@ -4,13 +4,15 @@ import UserList from './UserList'
 import {
 	fetchUser, recommendUser, approveUser,getUser,getUserBy
 } from '../../actions/userAction'
-
+import { setTouid } from '../../actions/adminAction'
 const mapActionCreators = {
 	fetchUser,
 	recommendUser,
 	approveUser,
 	getUser,
 	getUserBy,
+
+	setTouid,
 }
 
 const mapStateToProps = (state) => {

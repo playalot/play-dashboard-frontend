@@ -5,6 +5,7 @@ import {
 import { Link } from 'react-router'
 import Moment from 'moment'
 import ReactPaginate from 'react-paginate'
+import PlayAliBaichuan from '../Common/PlayAliBaichuan'
 
 export default class UserList extends Component{
 	constructor(props) {
@@ -81,11 +82,19 @@ export default class UserList extends Component{
 	            <table className="table table-striped">
 	              <thead><tr><th></th><th>用户名</th><th>照片数</th><th>绑定账号</th><th>最近登陆</th><th></th></tr></thead>
 	              <tbody>
-	                {this.props.users.map((user) => {
+	                {this.props.users.map((user,index) => {
 	                  return (
-	                    <tr key={user.id}>
-	                      <td><Link to={'/user/'+user.id}><img style={{width:'45px'}} src={user.avatar} className="img-circle"/></Link></td>
-	                      <td>{user.nickname}</td>
+	                    <tr key={`user-list_${user.id }`}>
+	                      <td>
+	                    	<div className="btn-group">
+							  <img style={{width:'45px'}} src={user.avatar}  data-toggle="dropdown" className="img-circle"/>
+							  <ul className="dropdown-menu">
+							    <li><a onClick={() => this.context.router.push(`/user/${user.id}`)}>查看<small>({user.nickname})</small></a></li>
+							    <li><a onClick={() => this.props.setTouid(user.id,user.avatar)}>私信</a></li>
+							  </ul>
+							</div>
+	                      </td>
+	                      <td>{user.nickname} {user.approval ? <span style={{color:'gold'}} className="fa fa-vimeo"></span> :null} </td>
 	                      <td>{user.counts.posts}</td>
 	                      <td>{this.renderAccounts(user.accounts)}</td>
 	                      <td>{Moment.unix(user.lastSeen / 1000).fromNow()}</td>
@@ -115,6 +124,7 @@ export default class UserList extends Component{
 					forcePage={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
 					activeClassName={"active"} />
 	          </Row>
+	          <PlayAliBaichuan/>
           	</div>
 
 		)

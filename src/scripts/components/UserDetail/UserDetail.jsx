@@ -37,6 +37,8 @@ export default class UserDetail extends Component{
         this.removeClassification = (pid,c) => this._removeClassification(pid,c)
         this.setActive = this._setActive.bind(this)
         this.goPage = this._goPage.bind(this)
+
+        this.approve = this._approve.bind(this)
     }
     componentWillMount() {
         this.props.fetchUserInfo(this.props.params.id)
@@ -44,6 +46,12 @@ export default class UserDetail extends Component{
             this.props.fetchTagClass()
         }
         this.props.getUserPost(this.props.params.id,this.props.location.query.page)
+    }
+    _approve(id) {
+      let txt = prompt('输入认证信息')
+      if (txt) {
+        this.props.approveUser(id,txt)
+      }
     }
     renderAccounts(accounts) {
       return (
@@ -207,9 +215,18 @@ export default class UserDetail extends Component{
                             </div>
                             <div className="row">
                               <div className="col-sm-2 sm-2-label">
+                                <b>Approval</b>
+                              </div>
+                              <div className="col-sm-10" style={{padding:7,fontSize:12}}>
+                                <span className="label label-info">{user.approval}</span>
+                                <span className="btn btn-sm"  style={{marginLeft:'5px'}} onClick={() => this.approve(this.props.params.id)}><i className="fa fa-edit"></i></span>
+                              </div>
+                            </div>
+                            <div className="row">
+                              <div className="col-sm-2 sm-2-label">
                                 <b>Level</b>
                               </div>
-                              <div className="col-sm-10" style={{padding:7}}>
+                              <div className="col-sm-10" style={{padding:7,fontSize:12}}>
                                 <span className="label label-warning">lv{user.level}</span>
                               </div>
                             </div>

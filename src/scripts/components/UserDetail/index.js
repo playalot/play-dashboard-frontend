@@ -18,7 +18,9 @@ import {
 	removeClassification,
 } from '../../actions/userDetailAction'
 import { fetchTagClass } from '../../actions/tagClassAction'
-
+import {
+	approveUser
+} from '../../actions/userAction'
 const mapActionCreators = {
 	getUserPost,
 	setClassification,
@@ -34,6 +36,8 @@ const mapActionCreators = {
 	setActive,
 
 	fetchTagClass,
+
+	approveUser
 }
 
 const mapStateToProps = (state) => {

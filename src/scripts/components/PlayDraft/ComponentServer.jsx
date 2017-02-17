@@ -1,9 +1,11 @@
 import React,{ Component } from 'react'
 
+export const INLINE_STYLES = [
     {label: 'Bold', style: 'BOLD',class:'fa fa-bold'},
     {label: 'Italic', style: 'ITALIC',class:'fa fa-italic'},
     {label: 'Underline', style: 'UNDERLINE',class:'fa fa-underline'},
 ]
+export const BLOCK_TYPES = [
     {label: 'H1', style: 'header-one'},
     {label: 'H2', style: 'header-two'},
     {label: 'Ul', style: 'unordered-list-item',class:'fa fa-list'},

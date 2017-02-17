@@ -315,6 +315,7 @@ export default class SkuList extends Component{
 						forcePage={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
 						activeClassName={"active"} />
 					</Row>
+					{modal}
 				</div>
 
 			)

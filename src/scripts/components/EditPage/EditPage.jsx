@@ -25,7 +25,7 @@ export default class EditPage extends Component {
             tags:[],
             category:'news',
             authorId:'',
-
+            gallery:[],
             dialogSubmit:false
         }
         //editor的回调方法
@@ -182,7 +182,7 @@ export default class EditPage extends Component {
             { value: 'essay', label: '随笔' },
             { value: 'knowledge', label: '干货' }
         ]
-        const { cover,title,raw,tags,category,authorId,dialogSubmit } = this.state
+        const { cover,title,raw,tags,category,authorId,dialogSubmit,gallery } = this.state
         return (
             <div className="editarticle">
                 <div className="edit-section">
@@ -208,7 +208,7 @@ export default class EditPage extends Component {
                 <PlayDraftEditor
                     onChangeEditor={this.onChangeEditor}
                     preRaw={raw}
-                    category={category}
+                    gallery={gallery}
                 />
                 <div className="edit-section">
                     <p className="title">添加标签</p>

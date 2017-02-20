@@ -345,17 +345,20 @@ export default class  extends Component {
             })
     }
     componentDidMount() {
-        this.props.onChangeEditor(this.state.editorState.getCurrentContent())
+        this.props.onChangeEditor(this.state.editorState.getCurrentContent(),this.state.gallery)
     }
     componentWillReceiveProps(nextProps) {
-        const { preRaw, category} = nextProps
+        const { preRaw, gallery} = nextProps
         const { receiveRaw,editorState } = this.state
         if(!!preRaw && !receiveRaw) {
+            console.info(Date.now())
             let rawData = convertFromRaw(preRaw)
             this.setState({
                 editorState: EditorState.push(editorState, rawData),
-                category,
+                gallery,
                 receiveRaw:true
+            },() => {
+                this.props.onChangeEditor(this.state.editorState.getCurrentContent(),this.state.gallery)
             })
         }
     }

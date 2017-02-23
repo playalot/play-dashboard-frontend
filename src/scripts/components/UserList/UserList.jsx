@@ -78,7 +78,7 @@ export default class UserList extends Component{
 	              </FormGroup>
 	            </Form>
 	          </div>
-	          <div className="table-responsive">
+	          <div className="table-responsive" style={{paddingBottom:50}}>
 	            <table className="table table-striped">
 	              <thead><tr><th></th><th>用户名</th><th>照片数</th><th>绑定账号</th><th>最近登陆</th><th></th></tr></thead>
 	              <tbody>

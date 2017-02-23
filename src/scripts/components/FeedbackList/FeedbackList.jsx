@@ -24,7 +24,7 @@ export default class FeedbackList extends Component{
 	render() {
 		return(
 			<div className="content">
-		        <div className="table-responsive">
+		        <div className="table-responsive" style={{paddingBottom:50}}>
 		            <table className="table table-striped">
 		              	<thead><tr><th>User</th><th>Content</th><th style={{'minWidth': '150px'}}>Created</th><th>userAgent</th></tr></thead>
 		              	<tbody>

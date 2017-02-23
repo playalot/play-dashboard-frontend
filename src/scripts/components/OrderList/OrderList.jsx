@@ -150,7 +150,7 @@ export default class OrderList extends Component{
 						总计<strong>{this.props.summary.totalPrice}</strong>元
 					</h5>
 				</div>
-	          <div className="table-responsive">
+	          <div className="table-responsive" style={{paddingBottom:50}}>
 	            <table className="table table-striped">
 	            	<thead><tr><th>用户</th><th>商家</th><th></th><th>订单</th><th>总金额</th><th>下单时间</th><th>订单状态</th><th></th><th></th></tr></thead>
 	              <tbody>

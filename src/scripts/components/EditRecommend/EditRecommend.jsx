@@ -1,30 +1,50 @@
 import React, { Component } from 'react'
 import Dropzone from 'react-dropzone'
 import CDN from '../../widgets/cdn'
-import { Modal, Button } from 'react-bootstrap'
-import Formsy from 'formsy-react'
+import { Modal, Button,Form, FormGroup, Col, FormControl, Row,Radio } from 'react-bootstrap'
 import Request from 'superagent'
-import FRC from 'formsy-react-components'
-const _ = require('lodash')
 
 export default class EditBannerSet extends Component {
   constructor(props) {
     super(props)
     this.state = {
       image:'',
-      alert:false
+      id:'',
+      title:'',
+      type:'',
+      targetId:'',
+      targetType:'',
+      targetUrl:'',
+      titleError:null
     }
     this.submit = this._submit.bind(this)
     this.onDropImage = this._onDropImage.bind(this)
-    this.onClose = () => this.setState({alert: false})
-    this.onConfirm = () => this.context.router.push('/explorepage')
+    this.onChangeTitle = (e) => {
+      const title = e.target.value
+      this.setState({
+        title,
+        titleError:title.trim() ? null : 'error'
+      })
+    }
 
   }
   componentDidMount() {
-    $.get('/api/recommend/'+this.props.params.id, function(data) {
-      this.refs.form.resetModel(data);
-      this.setState({image: data.image});
-    }.bind(this))
+    Request
+    .get(`/api/recommend/${this.props.params.id}`)
+    .end((err,res) => {
+      if(!err) {
+        const { id,image,targetId,targetType,targetUrl,title,type } = res.body
+        this.setState({
+          id:id||'',
+          image:image||'',
+          targetId:targetId||'',
+          targetType:targetType||'page',
+          targetUrl:targetUrl||'',
+          title:title||'No title',
+          type:type||'banner'
+        })
+      }
+    })
   }
   _onDropImage(images) {
     let formData = new FormData()
@@ -35,33 +55,33 @@ export default class EditBannerSet extends Component {
       data: formData,
       processData: false, // tell jQuery not to process the data
       contentType: false, // tell jQuery not to set contentType
-      success: function(data) {
-        console.log(data);
-        this.refs.image.setValue(data)
+      success: (data) => {
         this.setState({
           image: data
-        });
-      }.bind(this)
+        })
+      }
     })
   }
-  _submit(model) {
-    console.log(model);
-    var filteredModel = _.pickBy(model, function(value){
-      return value !== '' && value !== null;
-    });
-    $.ajax({
-      url: '/api/recommend/'+this.props.params.id,  //Server script to process data
-      type: 'POST',
-      data: JSON.stringify(filteredModel),
-      contentType: 'application/json; charset=utf-8',
-      dataType: 'json',
-      success: function (res) {
-        this.setState({alert: true});
-      }.bind(this)
-    });
+  _submit() {
+
+    const { id,image,targetId,targetType,targetUrl,title,type } = this.state
+    const data = {
+      id,image,targetId,targetType,targetUrl,title,type
+    }
+    Object.keys(data).forEach(key => !data[key] ? delete data[key] : null)
+    Request
+    .post(`/api/recommend/${this.props.params.id}`)
+    .send(data)
+    .end((err,res) =>{
+      if(!err){
+        if(confirm('保存成功')){
+          this.context.router.push('/explorepage')
+        }
+      }
+    })
   }
   render() {
-    let radioOptions = [
+    const radioOptions = [
         {value: 'post', label: '图片'},
         {value: 'tag', label: '标签'},
         {value: 'user', label: '用户'},
@@ -70,74 +90,112 @@ export default class EditBannerSet extends Component {
         {value: 'toy', label: '玩具'},
         {value: 'promotion', label: '商品集'},
         {value: 'toyindex', label: '玩具集'},
-    ];
-    let typeOptions = [
+    ]
+    const typeOptions = [
         {value: 'banner', label: '发现页面Banner'},
         {value: 'toy', label: '玩具页面Banner'},
         {value: 'home', label: '首页推荐'},
-        {value: 'topic', label: '主题'}
+        {value: 'theme', label: '主题'}
     ];
-    let customStyles = {
-      content : {
-        zIndex                : 3,
-        width                 : '300px',
-        top                   : '50%',
-        left                  : '50%',
-        right                 : 'auto',
-        bottom                : 'auto',
-        marginRight           : '-50%',
-        transform             : 'translate(-50%, -50%)'
-      }
-    };
     return (
       <div className="content">
         <div className="box box-solid">
           <div className="box-body">
-            <Formsy.Form ref="form" className="pl-form form-horizontal" onSubmit={this.submit} >
-              <fieldset>
-                <FRC.Input ref="id" name="id" id="id" value={this.props.params.id} label="ID" type="text" disabled />
-                <FRC.Input ref="title" name="title" id="title" value="" label="标题" type="text" placeholder="Input the banner title" required/>
-                <FRC.RadioGroup name="type" type="inline" value="banner" label="位置" options={typeOptions} />
-                <FRC.RadioGroup name="targetType" type="inline" value="post" label="目标类型" options={radioOptions} />
-                <FRC.Input ref="targetId" name="targetId" id="targetId" value="" label="目标ID" type="text" placeholder="target id" />
-                <FRC.Input ref="targetUrl" name="targetUrl" id="targetUrl" value="" label="目标Url" type="text" placeholder="target url" />
-                <FRC.Input ref="image" name="image" id="image" value="" label="图片" type="text" disabled />
-                <div className="row">
-                  <img className="img-responsive col-sm-offset-3" style={{maxWidth:'150px'}} src={this.state.image?CDN.show(this.state.image):''}/>
-                </div>
-                <div className="row">
-                  <div className="col-sm-offset-3">
-                    <Dropzone onDrop={this.onDropImage} width={150} height={50}>
-                      <div>更改图片</div>
-                    </Dropzone>
-                  </div>
-                </div>
-                <br></br>
-              </fieldset>
-              <FRC.Row layout={'horizontal'}>
-                <input name="cancel" className="btn btn-default" type="button" defaultValue="Cancel" />
-                {' '}
-                <input name="submit" className="btn btn-primary" formNoValidate={true} type="submit" defaultValue="Submit" />
-              </FRC.Row>
-            </Formsy.Form>
+            <Form horizontal>
+              <FormGroup>
+                <Col sm={3} className="sm-2-label" style={{fontWeight:'bold'}}>
+                  ID
+                </Col>
+                <Col sm={8}>
+                  <FormControl.Static>{this.state.id}</FormControl.Static>
+                </Col>
+              </FormGroup>
+              <FormGroup validationState={this.state.titleError}>
+                <Col sm={3} className="sm-2-label" style={{fontWeight:'bold'}}>
+                  标题*
+                </Col>
+                <Col sm={8}>
+                  <FormControl value={this.state.title} type="text" onChange={this.onChangeTitle}/>
+                </Col>
+              </FormGroup>
+              <FormGroup>
+                <Col sm={3} className="sm-2-label" style={{fontWeight:'bold'}}>
+                  位置
+                </Col>
+                <Col sm={8}>
+                  {
+                    typeOptions.map((type,i) => {
+                      return(
+                        <Radio key={`type_${i}`} inline name="type" value={type.value} onChange={(e) => this.setState({type:e.target.value})}  checked={type.value == this.state.type}>{type.label}</Radio>
+                      )
+                    })
+                  }
+                </Col>
+              </FormGroup>
+              <FormGroup>
+                <Col sm={3} className="sm-2-label" style={{fontWeight:'bold'}}>
+                  目标类型
+                </Col>
+                <Col sm={8}>
+                  {
+                    radioOptions.map((targetType,i) => {
+                      return(
+                        <Radio key={`target_type_${i}`} inline name="targetType" value={targetType.value} onChange={(e) => this.setState({targetType:e.target.value})} checked={targetType.value == this.state.targetType}>{targetType.label}</Radio>
+                      )
+                    })
+                  }
+                </Col>
+              </FormGroup>
+              <FormGroup>
+                <Col sm={3} className="sm-2-label" style={{fontWeight:'bold'}}>
+                  目标ID
+                </Col>
+                <Col sm={8}>
+                  <FormControl value={this.state.targetId} type="text" onChange={(e) => this.setState({targetId:e.target.value})}/>
+                </Col>
+              </FormGroup>
+              <FormGroup>
+                <Col sm={3} className="sm-2-label" style={{fontWeight:'bold'}}>
+                  目标Url
+                </Col>
+                <Col sm={8}>
+                  <FormControl value={this.state.targetUrl} type="text" onChange={(e) => this.setState({targetUrl:e.target.value})}/>
+                </Col>
+              </FormGroup>
+              <FormGroup>
+                <Col sm={3} className="sm-2-label" style={{fontWeight:'bold'}}>
+                  图片
+                </Col>
+                <Col sm={8}>
+                  <FormControl.Static>{this.state.image}</FormControl.Static>
+                </Col>
+              </FormGroup>
+              <FormGroup>
+                <Col className="control-label" sm={3}><strong>上传封面</strong></Col>
+                <Col sm={3}>
+                  <Dropzone onDrop={this.onDropImage} style={{width:'100%',height:100, borderWidth: 2, borderColor: '#666', borderStyle: 'dashed'}}>
+                      <div>将图片拖入此区域</div>
+                  </Dropzone>
+                </Col>
+                <Col sm={3}>
+                  {
+                      this.state.image !== '' ?
+                      <img className="img-responsive cover-img" style={{height:100,width:'auto'}} src={CDN.show(this.state.image)} />
+                      :null
+                  }
+                </Col>
+              </FormGroup>
+            </Form>
+            <Row>
+              <Col sm={10} smOffset={3}>
+                <Button bsStyle="primary" onClick={this.submit}>Submit</Button>
+              </Col>
+            </Row>
           </div>
-          <Modal
-            show={this.state.alert}
-            onHide={this.onClose} >
-            <div className="static-modal">
-              <Modal.Body>
-                保存成功
-              </Modal.Body>
-              <Modal.Footer>
-                <Button bsStyle="primary"　onClick={this.onConfirm}>确定</Button>
-              </Modal.Footer>
-            </div>
-          </Modal>
         </div>
       </div>
-    );
+    )
   }
-
 }
 
 EditBannerSet.contextTypes = {

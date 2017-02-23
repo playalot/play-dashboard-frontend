@@ -1,11 +1,9 @@
-import $ from 'jquery';
-
 class CDN {
   constructor() {
     this.isDev = true;
-    $.get('/api/mode', function(data){
+    $.get('/api/mode', (data) => {
       this.isDev = data.isDev;
-    }.bind(this));
+    })
   }
 
   show(img) {
@@ -21,6 +19,5 @@ class CDN {
   }
 }
 
-let _cdn = new CDN();
 
-export default _cdn;
+export default new CDN()

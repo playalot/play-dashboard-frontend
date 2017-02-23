@@ -94,7 +94,7 @@ export default class UserList extends Component{
 							  </ul>
 							</div>
 	                      </td>
-	                      <td>{user.nickname} {user.approval ? <span style={{color:'gold'}} className="fa fa-vimeo"></span> :null} </td>
+	                      <td> <Link to={`/user/${user.id}`}>{user.nickname} {user.approval ? <span style={{color:'gold'}} className="fa fa-vimeo"></span> :null} </Link></td>
 	                      <td>{user.counts.posts}</td>
 	                      <td>{this.renderAccounts(user.accounts)}</td>
 	                      <td>{Moment.unix(user.lastSeen / 1000).fromNow()}</td>

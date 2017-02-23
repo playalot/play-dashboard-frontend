@@ -116,7 +116,7 @@ export default class extends Component{
                           </Col>
                         </FormGroup>
                         {
-                        	this.state.status === 'paid' ?
+                        	this.state.status === 'paid'|| this.state.status === 'prepaid' ?
                         	<FormGroup style={{marginBottom:0}}>
 	                          <Col className="control-label" sm={2}><strong>支付方式</strong></Col>
 	                          <Col sm={9}>
@@ -126,7 +126,7 @@ export default class extends Component{
 	                        :null
                         }
                         {
-                        	this.state.status === 'paid' ?
+                        	this.state.status === 'paid'|| this.state.status === 'prepaid'  ?
                         	<FormGroup style={{marginBottom:0}}>
 	                          <Col className="control-label" sm={2}><strong>支付时间</strong></Col>
 	                          <Col sm={9}>
@@ -136,7 +136,7 @@ export default class extends Component{
 	                        :null
                         }
                         {
-                        	this.state.status === 'paid' ?
+                        	this.state.status === 'paid'|| this.state.status === 'prepaid' ?
                         	<FormGroup style={{marginBottom:0}}>
 	                          <Col className="control-label" sm={2}><strong>支付编号</strong></Col>
 	                          <Col sm={9}>

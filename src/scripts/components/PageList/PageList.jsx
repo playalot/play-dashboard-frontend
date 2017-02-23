@@ -92,11 +92,13 @@ export default class PageList extends Component{
 	                	let shareClass = page.forShare ? 'btn bg-orange btn-sm' : 'btn btn-sm'
 	                  return (
 	                    <tr key={page.id}>
-	                      <td><img style={{width:'400px'}} src={page.cover} className="img-thumbnail"/></td>
-	                      <td>{page.title}</td>
+	                      <td style={{display:'flex',flexDirection:'column',width:200}}>
+	                      	<img src={page.cover} className="img-thumbnail"/>
+	                      	{page.title}
+	                      </td>
 	                      <td><Link to={'/user/'+page.user.id}><img style={{width:'45px'}} src={page.user.avatar} className="img-circle"/></Link></td>
 	                      <td>{page.category}</td>
-	                      <td>
+	                      <td style={{whiteSpace:'inherit'}}>
 	                      	{
 	                      		page.tags.map((tag,index) => {
 	                      			return (<span className="label label-info label-margin" key={`tag_${index}`}>{tag}</span>)

@@ -5,7 +5,7 @@ import {
 	Row, Col, FromControl, Modal,
 } from 'react-bootstrap'
 import CDN from '../../widgets/cdn'
-import Switch from 'rc-switch'
+import PlaySwitch from '../Common/playSwitch'
 export default class EditToy extends Component {
 	constructor(props) {
 	  	super(props)
@@ -76,6 +76,7 @@ export default class EditToy extends Component {
 					otherInfo: res.body.otherInfo,
 					images: res.body.images
 				})
+
 			})
 	}
 	_removeOtherInfo(i) {
@@ -243,19 +244,19 @@ export default class EditToy extends Component {
 		              	</Dropzone>
 	      				<Col sm={9}>
 							<Col sm={12} className="edit-toy-item no-border">
-								<input type="text" className="text-input title" onChange={(e) => this.setState({name:e.target.value})} value={this.state.name}/>
+								<input type="text" className="text-input title" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({name:e.target.value})} value={this.state.name}/>
 							</Col>
 							<Col sm={12} className="edit-toy-item">
 								<span className="toy-label">原名:</span>
-								<input type="text" className="text-input" onChange={(e) => this.setState({nameRaw:e.target.value})} value={this.state.nameRaw}/>
+								<input type="text" className="text-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({nameRaw:e.target.value})} value={this.state.nameRaw}/>
 							</Col>
 							<Col sm={6} className="edit-toy-item">
 								<span className="toy-label">发售日:</span>
-								<input type="text" className="text-input" onChange={(e) => this.setState({release:e.target.value})} value={this.state.release}/>
+								<input type="text" className="text-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({release:e.target.value})} value={this.state.release}/>
 							</Col>
 							<Col sm={6} className="edit-toy-item">
 								<span className="toy-label">价格:</span>
-								<input type="number" className="text-input" onChange={(e) => this.setState({money:e.target.value})} value={this.state.money}/>
+								<input type="number" className="text-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({money:e.target.value})} value={this.state.money}/>
 								<select className="text-select" value={this.state.currency} onChange={(e) => this.setState({currency:e.target.value})}>
 									<option value="rmb">人民币</option>
 									<option value="yen">日元</option>
@@ -265,34 +266,31 @@ export default class EditToy extends Component {
 							</Col>
 							<Col sm={6} className="edit-toy-item">
 								<span className="toy-label">公司:</span>
-								<input type="text" className="text-input" onChange={(e) => this.setState({company:e.target.value})} value={this.state.company}/>
+								<input type="text" className="text-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({company:e.target.value})} value={this.state.company}/>
 							</Col>
 							<Col sm={6} className="edit-toy-item">
 								<span className="toy-label">比例:</span>
-								<input type="text" className="text-input" onChange={(e) => this.setState({scale:e.target.value})} value={this.state.scale}/>
+								<input type="text" className="text-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({scale:e.target.value})} value={this.state.scale}/>
 							</Col>
 							<Col sm={6} className="edit-toy-item">
 								<span className="toy-label">系列:</span>
-								<input type="text" className="text-input" onChange={(e) => this.setState({series:e.target.value})} value={this.state.series}/>
+								<input type="text" className="text-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({series:e.target.value})} value={this.state.series}/>
 			          		</Col>
 							<Col sm={6} className="edit-toy-item">
 								<span className="toy-label">角色:</span>
-								<input type="text" className="text-input" onChange={(e) => this.setState({character:e.target.value})} value={this.state.character}/>
+								<input type="text" className="text-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({character:e.target.value})} value={this.state.character}/>
 			          		</Col>
 							<Col sm={6} className="edit-toy-item">
 								<span className="toy-label">原著:</span>
-								<input type="text" className="text-input" onChange={(e) => this.setState({origin:e.target.value})} value={this.state.origin}/>
+								<input type="text" className="text-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({origin:e.target.value})} value={this.state.origin}/>
 							</Col>
 			          		<Col sm={6} className="edit-toy-item">
 								<span className="toy-label">原型师:</span>
-								<input type="text" className="text-input" onChange={(e) => this.setState({artist:e.target.value})} value={this.state.artist}/>
+								<input type="text" className="text-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({artist:e.target.value})} value={this.state.artist}/>
 			          		</Col>
 			          		<Col sm={6} className="edit-toy-item">
 								<span className="toy-label">R18:</span>
-	        		  			<Switch onChange={value => this.setState({isR18:value})}
-						        	checked={this.state.isR18}
-						        	style={{margin:5}}
-						      	/>
+								<PlaySwitch active={this.state.isR18} onChange={isR18 => this.setState({isR18})}/>
 			          		</Col>
 			          		<Col sm={12} className="edit-toy-item no-border">
 	        		  			<span className="toy-direction">详细描述:</span>

@@ -9,7 +9,7 @@
 $fa-font-path: "~font-awesome/fonts";
 @import "~font-awesome/scss/font-awesome";
 //rc-switch
-@import "~rc-switch/assets/index.css";
+// @import "~rc-switch/assets/index.css";
 
 //editor style
 @import '~draft-js/dist/Draft.css';
@@ -22,6 +22,8 @@ $fa-font-path: "~font-awesome/fonts";
 @import "layout/_edittoy";
 @import "layout/_autosuggest.scss";
 
+@import "layout/_common";
+
 //react-datepicker
 @import "~react-datepicker/dist/react-datepicker.css";
 
@@ -33,3 +35,4 @@ $fa-font-path: "~font-awesome/fonts";
 		font-family: sans-serif;
 	}	
 }
+

@@ -2,7 +2,7 @@ import React,{ Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import Moment from 'moment'
-import Switch from 'rc-switch'
+import PlaySwitch from '../Common/playSwitch'
 import { 
 	fetchUserPage,
 	togglePub,
@@ -45,11 +45,12 @@ class UserPage extends Component{
 	                      <td>{page.counts.views} views</td>
 	                      <td>{Moment.unix(page.created / 1000).fromNow()}</td>
 	                      <td>
-	                        <Switch onChange={value => this.props.setCoverType(value,page.id)}
-	                          checkedChildren={'L'}
-	                          unCheckedChildren={'S'}
-	                          checked={page.coverType === 'l'}
-	                        />
+	                      	<PlaySwitch 
+	                      		on="L"
+	                      		off="S"
+	                      		active={page.coverType === 'l'} 
+	                      		onChange={value => this.props.setCoverType(value,page.id)}
+	                      	/>
 	                      </td>
 	                      <td><Link to={`/page/edit/${page.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link></td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.toggleRec(page.id)} className={isRecClass}><i className="fa fa-thumbs-o-up"></i></span></td>

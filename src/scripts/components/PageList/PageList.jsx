@@ -3,11 +3,10 @@ import {Link} from 'react-router'
 import {Row, Button,Form,FormGroup,InputGroup,FormControl, Modal} from 'react-bootstrap'
 import Moment from 'moment'
 import Request from 'superagent'
-import Switch from 'rc-switch'
 import ReactPaginate from 'react-paginate'
 
 import PlayAutoSuggest from '../Common/PlayAutoSuggest'
-
+import PlaySwitch from '../Common/playSwitch'
 export default class PageList extends Component{
 	constructor(props) {
 	  	super(props)
@@ -118,11 +117,12 @@ export default class PageList extends Component{
 	                      <td>{page.counts.views} views</td>
 	                      <td>{Moment.unix(page.created / 1000).fromNow()}</td>
 	                      <td>
-	                      	<Switch onChange={value => this.props.setCoverType(value,page.id)}
-						        checkedChildren={'L'}
-						        unCheckedChildren={'S'}
-						        checked={page.coverType === 'l'}
-						      />
+	                      	<PlaySwitch 
+	                      		on="L"
+	                      		off="S"
+	                      		active={page.coverType === 'l'} 
+	                      		onChange={value => this.props.setCoverType(value,page.id)}
+	                      	/>
 	                      </td>
 	                      <td><span style={{color:'#333'}} onClick={() => this.addToy(page.id)} className="btn btn-sm"><i className="fa fa-plus"></i></span></td>
 	                      <td><Link to={`/page/edit/${page.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link></td>

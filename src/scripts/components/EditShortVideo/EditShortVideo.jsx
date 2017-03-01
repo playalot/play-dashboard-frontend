@@ -4,9 +4,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Dropzone from 'react-dropzone';
 import Request from 'superagent';
-import $ from 'jquery';
-import Modal from 'react-modal';
-var RB = require('react-bootstrap');
+import { Modal,Button } from 'react-bootstrap'
 
 function isFunction(fn) {
   let getType = {};
@@ -191,18 +189,13 @@ export default class extends Component {
         <div className="row">
           <div className="btn btn-primary" onClick={this.onSubmit}>提交</div>
         </div>
-        <Modal
-          isOpen={this.state.alert}
-          style={customStyles}
-          onRequestClose={this.onClose} >
-          <div className="static-modal">
-            <RB.Modal.Body>
-              提交成功
-            </RB.Modal.Body>
-            <RB.Modal.Footer>
-              <RB.Button bsStyle="primary"　onClick={this.onConfirm}>确定</RB.Button>
-            </RB.Modal.Footer>
-          </div>
+        <Modal show={this.state.alert} onHide={this.onClose}>
+          <Modal.Body>
+            提交成功
+          </Modal.Body>
+          <Modal.Footer>
+            <Button bsStyle="primary"　onClick={this.onConfirm}>确定</Button>
+          </Modal.Footer>
         </Modal>
       </div>
     );

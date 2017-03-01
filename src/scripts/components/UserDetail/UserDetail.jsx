@@ -5,7 +5,6 @@ import {
 } from 'react-bootstrap'
 const _ = require('lodash')
 import Moment from 'moment'
-import Switch from 'rc-switch'
 import PostPanel from '../PostPanel/userIndex'
 import UserPage from './UserPage'
 import CDN from '../../widgets/cdn'

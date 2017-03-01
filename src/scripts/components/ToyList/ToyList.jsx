@@ -5,7 +5,6 @@ import {
 } from 'react-bootstrap'
 import { Link } from 'react-router'
 import Request from 'superagent'
-import Switch from 'rc-switch'
 import DatePicker from 'react-datepicker'
 import Moment from 'moment'
 import ReactPaginate from 'react-paginate'

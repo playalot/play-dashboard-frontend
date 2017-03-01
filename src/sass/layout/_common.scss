@@ -1,0 +1,38 @@
+//switch样式
+.play-switch{
+    display:inline-flex;
+    align-items: center;
+    justify-content: space-around;
+    width:50px;
+    height:25px;
+    border-top-left-radius: 25% 50%;
+    border-bottom-left-radius: 25% 50%;
+    border-top-right-radius: 25% 50%;
+    border-bottom-right-radius: 25% 50%;
+    background-color: rgb(217,217,217);
+    position:relative;
+    cursor: pointer;
+    transition:background-color .3s;
+    user-select: none;
+    color:white;
+    &.play-switch-readonly{
+        cursor:no-drop;
+    }
+    .play-switch-round{
+        position:absolute;
+        top:2px;
+        left:2px;
+        border-radius: 50%;
+        width:21px;
+        height:21px;
+        background-color:white;
+        box-shadow:0 2px 5px #888;
+        transition:transform .3s cubic-bezier(1,1.87,.75,.67);
+    }
+    &.play-switch-active{
+        background-color: rgb(33,133,208);
+        .play-switch-round{
+            transform:translateX(26px);
+        }
+    }
+}

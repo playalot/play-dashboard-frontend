@@ -169,7 +169,12 @@ export default class OrderList extends Component{
 	                      <td>{order.items[0]['merchant']}</td>
 	                      <td><img style={{width:'40px'}} src={order.items[0].image} /></td>
 	                      <td style={{width:'30%'}}>{order.title}</td>
-	                      <td><span><strong>¥{order.price.totalPrice}</strong></span><br/>{order.price.totalFreight > 0 ? <small style={{color:'#6c6c6c',fontSize:'10px'}}>含运费:¥&nbsp;{order.price.totalFreight}</small> : <small style={{color:'#6c6c6c',fontSize:'10px'}}>包邮</small>}</td>
+	                      <td>
+	                      	<span><strong>¥{order.price.totalPrice}</strong></span><br/>
+	                      	{order.price.totalFreight > 0 ? <small style={{color:'#6c6c6c',fontSize:'10px'}}>含运费:¥&nbsp;{order.price.totalFreight}</small> : <small style={{color:'#6c6c6c',fontSize:'10px'}}>包邮</small>}
+	                      	<br/>
+	                      	{order.price.prePay ? <small style={{color:'#6c6c6c',fontSize:'10px'}}>订金:¥&nbsp;{order.price.prePay}</small>:null}
+	                      </td>
 	                      <td>{Moment(order.created).format('MM-DD HH:mm')}</td>
 	                      <td>{this.formatStatus(order.status)}</td>
 	                      <td>

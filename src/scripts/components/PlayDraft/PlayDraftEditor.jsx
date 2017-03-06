@@ -191,7 +191,7 @@ export default class  extends Component {
     _addImage(imageKey){
         const { editorState } = this.state
         const contentState = editorState.getCurrentContent()
-        const src = CDN.show(imageKey) + '-articlestyle';
+        const src = CDN.show(imageKey) + '?articlestyle';
         const size = 'auto'
         const type = 'image'
         const contentStateWithEntity = contentState.createEntity('image', 'IMMUTABLE', {src,size,type})

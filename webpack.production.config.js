@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const node_modules_dir = path.resolve(__dirname, 'node_modules');
 // const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const autoprefixer = require('autoprefixer');
 const cheerio = require('cheerio');
 const fs =  require('fs');
 
@@ -75,7 +74,6 @@ const config = {
             from: path.resolve(__dirname, "src/index.html"),
             to: path.resolve(__dirname, "build/index.html")
         }]),
-        autoprefixer,
         // ExtractVendor,
         // ExtractMain,
         function() {

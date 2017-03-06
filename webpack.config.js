@@ -1,8 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-// const OpenBrowserPlugin = require('open-browser-webpack-plugin');
-const autoprefixer = require('autoprefixer');
 // const proxyIp = `http://121.41.51.24:4400`;
 module.exports = {
 	entry: {
@@ -61,16 +59,10 @@ module.exports = {
 			jQuery: "jquery",
 			"window.jQuery": "jquery"
 		}),
-		// new OpenBrowserPlugin({
-		// 	url: 'http://localhost:8081'
-		// }),
-		autoprefixer
 	],
 	// devServer: {
 	// 	contentBase: path.join(__dirname, "src"),
 	// 	hot: true,
-	// 	progress: true,
-	// 	inline: true,
 	// 	port: 8081,
 	// 	proxy: {
 	// 		'/query/*': {
@@ -93,13 +85,6 @@ module.exports = {
 	// 			target: proxyIp,
 	// 			secure: false
 	// 		},
-	// 		'/toyAward2016/*':{
-	// 			target: proxyIp,
-	// 			secure: false
-	// 		}
-	// 	},
-	// 	stats: {
-	// 		colors: true
 	// 	},
 	// },
 }

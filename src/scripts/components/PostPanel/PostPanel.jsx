@@ -77,7 +77,6 @@ export default class PostPanel extends Component{
 	      	)
 	    }
 		return(
-			<Col className="col" xs={12} sm={3} lg={3} id={post.id}>
 	          <div className="box box-solid">
 	            <div className="box-header with-border">
 	              <div className="user-block">

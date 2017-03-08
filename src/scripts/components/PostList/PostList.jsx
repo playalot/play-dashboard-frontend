@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import {
 	Row, Col, Modal, Form, FormGroup, InputGroup, FormControl, Button
 } from 'react-bootstrap'
+import Masonry from 'react-masonry-component'
 const _ = require('lodash')
 import ReactPaginate from 'react-paginate'
 import PostPanel from '../PostPanel/index'
@@ -136,6 +137,10 @@ export default class Post extends Component{
 	            </Form>
 	          </div>
 	          <Row>
+	          	<Masonry
+
+	          	>
+	          		
 	          	{
 	          		this.props.posts ?
 	            	this.props.posts.map(post => {
@@ -145,6 +150,7 @@ export default class Post extends Component{
 		            })
 		            :null
 	          	}
+	          	</Masonry>
 	          </Row>
 	          <Row style={{textAlign:'center'}}>
 	          	<ReactPaginate 

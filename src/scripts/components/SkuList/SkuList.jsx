@@ -157,7 +157,7 @@ export default class SkuList extends Component{
 					                 	return (
 					                 		<span key={`sku_toy_class_selected_${i}`}
 						                 		onClick={ () => this.removeToyClass( this.state.selectedSku.id, c) }
-						                 		className="label label-warning label-margin" >{this.props.toyClass[c].name}</span>
+						                 		className="label label-warning label-margin" >{this.props.toyClass[c].name || ''}</span>
 					                 	)
 					               	})
 				               	}

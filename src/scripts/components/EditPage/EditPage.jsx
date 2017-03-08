@@ -57,6 +57,11 @@ export default class EditPage extends Component {
 			})
 		}
     }
+    componentWillReceiveProps(nextProps) {
+        if(!this.props.params.id){
+            this.setState({authorId:nextProps.user.id})
+        }
+    }
     _onDropCover(files) {
         Request.get('/api/uptoken')
         .end((err, res) => {
@@ -159,7 +164,7 @@ export default class EditPage extends Component {
                 .post(`/api/page/publish`)
                 .send(data)
                 .end((err, res) => {
-                    if (err || !res.ok) {
+                    if (err || !res.ok || res.text.length !== 24) {
                         alert('保存失败!');
                     } else {
                         alert('保存成功.');

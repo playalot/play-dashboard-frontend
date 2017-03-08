@@ -92,6 +92,9 @@ export function getSkuBy (filter = '',filterType = '') {
         }
         if(filterType) {
             params.type = filterType
+            if(filterType === 'preOrder') {
+                params.orderBy = 'orderClose'
+            }
         }
         return Request
             .get(`/api/stocks`)

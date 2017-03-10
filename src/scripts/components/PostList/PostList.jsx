@@ -138,7 +138,7 @@ export default class Post extends Component{
 	          </div>
 	          <Row>
 	          	<Masonry
-
+	          		options={{transitionDuration: 0}}
 	          	>
 	          		
 	          	{

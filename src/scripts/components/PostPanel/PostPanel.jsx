@@ -59,25 +59,28 @@ export default class PostPanel extends Component{
 	      	contentDiv = (
 	      		<div className="box-body no-padding" style={{paddingBottom:'2px !important'}}>
 			        <div>
-			          	<img className="img-responsive" src={post.photos[0].url640} alt="Photo" onClick={() => this.props.openImage(post.photos,0) } />
+			          	<ImgLoad src={post.photos[0].url640} onClick={() => this.props.openImage(post.photos,0) } />
 			        </div>
-			        <div className="panel-photos">
-			          	{
-			          		post.photos.slice(1, post.photos.length).map((photo, i) => {
-			            		return (
-			            			<div key={'p_'+post.id+'_'+i}  className="pull-left">
-			            				<img className="img-responsive panel-photos-small"
+			        {
+			        	post.photos.length === 1 ? null :
+			        	<PanelPosts>
+				        	{
+				        		post.photos.slice(1, post.photos.length).map((photo, i) => {
+				            		return (
+			            				<img key={'p_'+post.id+'_'+i} className="img-responsive panel-photos-small"
 			            					src={photo.url320} alt="Photo"
 			            					onClick={() => this.props.openImage(post.photos,i+1) } />
-			            			</div>)
-			          		})
-			          	}
-			        </div>
+			            			)
+				          		})
+				        	}
+				        </PanelPosts>
+			        }
+			        
 		      	</div>
 	      	)
 	    }
 		return(
-			<Col className="col" style={{padding:10}} xs={12} sm={3} lg={3}>
+			<Col className="col" style={{padding:10}} xs={12} sm={4} lg={3}>
 	          <div className="box box-solid">
 	            <div className="box-header with-border">
 	              <div className="user-block">
@@ -113,5 +116,87 @@ export default class PostPanel extends Component{
 	          </div>
 	        </Col>
 		)
+	}
+}
+
+class PanelPosts extends Component {
+	constructor(props) {
+	  	super(props)
+	  	this.state = {}
+	}
+	componentDidMount() {
+		this.setState({
+			height:this.pp.offsetWidth / 8
+		})
+	}
+	render() {
+		return(
+			<div className="play-panel-photos" ref={pp => this.pp = pp} style={{height:this.state.height}}>
+				{this.props.children}
+			</div>
+
+		)
+	}
+}
+
+class ImgLoad extends Component{
+	constructor(props) {
+	  	super(props)
+	  	this.state = {
+	  		// height:0,
+	  		loaded:false
+	  	}
+	}
+	componentWillMount() {
+		const {src} = this.props
+		let w,h
+		try{
+			w = /_w_\d{1,}/.exec(src)[0].replace('_w_','')
+			h = /_h_\d{1,}/.exec(src)[0].replace('_h_','')
+			
+		}catch(e){
+			console.error(e)
+			w = 0
+			h = 0
+		}
+		this.setState({
+			scale:`${h/w*100}%`
+		})
+		const img = new Image()
+		img.src = src
+		img.onload = () => {
+			this.setState({
+				loaded:true
+			})
+		}
+	}
+	componentDidMount(){
+		// this.setState({
+		// 	height:this.m.offsetWidth
+		// })
+	}
+	render() {
+		return (
+			<div style={{width:'100%',height:0,paddingBottom:`${this.state.scale}`,background:'rgb(238,237,235)',position:'relative'}}>
+				{
+					this.state.loaded ?
+					<img src={this.props.src} onClick={this.props.onClick} alt="photo" style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',objectFit:'contain'}} />
+					:null
+				}
+
+			</div>
+
+		)
+
+		// if(this.state.loaded){
+		// 	return(
+		// 		<img className="img-responsive" src={this.props.src} alt="Photo" onClick={this.props.onClick} />
+		// 	)
+		// }else{
+		// 	return(
+		// 		<div ref={(m) => this.m = m} style={{width:'100%',height:this.state.height,background:'rgb(238,237,235)'}}></div>
+		// 	)
+		// }
+		
 	}
 }

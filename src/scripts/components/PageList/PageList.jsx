@@ -79,7 +79,7 @@ export default class PageList extends Component{
 			onChange: this.onChangeToyQuery,
 	    }
 		return(
-			<div className="content">
+			<div className="content pagelist">
 	          <div className="page-header">
 	            <Form inline onSubmit={(e) => e.preventDefault()}>
             	  <Link to="/page/edit"><Button bsStyle='success'>发布文章</Button></Link>
@@ -113,10 +113,12 @@ export default class PageList extends Component{
 	                  return (
 	                    <tr key={page.id}>
 	                      <td>
-	                      	<img style={{maxWidth:150}} src={page.cover} className="img-thumbnail"/>
+	                      	<img src={page.cover} className="page-cover"/>
 	                      </td>
 	                      <td>
-	                      	{page.title}
+	                      	
+	                      	  {page.title}<a target="_blank" href={`http://www.playalot.cn/page/${page.id}`}>[预览]</a>
+	                      	
 	                      </td>
 	                      <td><Link to={'/user/'+page.user.id}><img style={{width:'45px'}} src={page.user.avatar} className="img-circle"/></Link></td>
 	                      <td>{page.category}</td>
@@ -137,8 +139,14 @@ export default class PageList extends Component{
 								})
 	                      	}
 	                      </td>
-	                      <td>{page.counts.views} views</td>
-	                      <td onClick={() => this.setState({curPageId:page.id})}>{Moment.unix(page.created / 1000).fromNow()}</td>
+	                      <td>
+	                      	<div className="page-flex-column">
+		                      	<span style={{marginBottom:10}}>{page.counts.views} views</span>
+		                      	<span onClick={() => this.setState({curPageId:page.id})}>
+		                      		{Moment.unix(page.created / 1000).fromNow()}
+		                      	</span>
+	                      	</div>
+	                      </td>
 	                      <td>
 	                      	<PlaySwitch 
 	                      		on="L"
@@ -147,13 +155,18 @@ export default class PageList extends Component{
 	                      		onChange={value => this.props.setCoverType(value,page.id)}
 	                      	/>
 	                      </td>
-	                      <td><span style={{color:'#333'}} onClick={() => this.addToy(page.id)} className="btn btn-sm"><i className="fa fa-plus"></i></span></td>
-	                      <td><Link to={`/page/edit/${page.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link></td>
-	                      <td><span style={{color:'#333'}} onClick={() => this.toggleRec(page.id)} className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span></td>
-	                      <td><span style={{color:'#333'}} onClick={() => this.toggleShare(page.id)} className={shareClass}><i className="fa fa-share-square-o"></i></span></td>
-	                      <td><span style={{color:'#333'}} onClick={() => this.togglePub(page.id)} className={isPubClass}><i className="fa fa-eye-slash"></i></span></td>
-	                      <td><span style={{color:'#333'}} onClick={() => this.deleteArticle(page.id)} className="btn btn-sm"><i className="fa fa-trash"></i></span></td>
-	                      <td><a target="_blank" href={`http://www.playalot.cn/page/${page.id}`}>预览</a></td>
+	                      <td className="page-flex-column" style={{width:150}}> 
+	                      	<div>
+	                      		<Link to={`/page/edit/${page.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link>
+	                      		<span style={{color:'#333'}} onClick={() => this.togglePub(page.id)} className={isPubClass}><i className="fa fa-eye-slash"></i></span>
+	                      		<span style={{color:'#333'}} onClick={() => this.deleteArticle(page.id)} className="btn btn-sm"><i className="fa fa-trash"></i></span>
+	                      	</div>
+	                      	<div>
+	                      		<span style={{color:'#333'}} onClick={() => this.addToy(page.id)} className="btn btn-sm"><i className="fa fa-plus"></i></span>
+	                      		<span style={{color:'#333'}} onClick={() => this.toggleRec(page.id)} className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span>
+	                      		<span style={{color:'#333'}} onClick={() => this.toggleShare(page.id)} className={shareClass}><i className="fa fa-share-square-o"></i></span>
+	                      	</div>
+	                      </td>
 	                    </tr>
 	                  )
 	                })}

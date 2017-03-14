@@ -216,6 +216,12 @@ export default class EditToy extends Component {
 			otherInfo,
 			images
 		}
+		if(name.trim() === ''){
+			return alert('名字不能为空')
+		}
+		if(!release.match(/\d{4}\/\d{1,2}/)){
+			return alert('发售日期格式不对')
+		}
 		data.money = parseInt(data.money)
 		Object.keys(data).forEach(key => data[key]=== '' ? delete data[key] : '')
   		Request
@@ -244,7 +250,7 @@ export default class EditToy extends Component {
 		              	</Dropzone>
 	      				<Col sm={9}>
 							<Col sm={12} className="edit-toy-item no-border">
-								<input type="text" className="text-input title" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({name:e.target.value})} value={this.state.name}/>
+								<input type="text" className="text-input title" placeholder="玩具名称" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({name:e.target.value})} value={this.state.name}/>
 							</Col>
 							<Col sm={12} className="edit-toy-item">
 								<span className="toy-label">原名:</span>
@@ -252,7 +258,7 @@ export default class EditToy extends Component {
 							</Col>
 							<Col sm={6} className="edit-toy-item">
 								<span className="toy-label">发售日:</span>
-								<input type="text" className="text-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({release:e.target.value})} value={this.state.release}/>
+								<input type="text" className="text-input" placeholder="例:2017/5" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({release:e.target.value})} value={this.state.release}/>
 							</Col>
 							<Col sm={6} className="edit-toy-item">
 								<span className="toy-label">价格:</span>

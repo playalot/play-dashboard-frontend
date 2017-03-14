@@ -15,12 +15,15 @@ import {
 } from 'draft-js'
 import Dropzone from 'react-dropzone'
 import Request from 'superagent'
+import { connect } from 'react-redux'
 
 import CDN from '../../widgets/cdn'
 import decorator from './DecoratorServer'
 import { InlineStyleControls, BlockStyleControls, MediaImage, makeId} from './ComponentServer'
 
-export default class  extends Component {
+import { clearPageRaw } from '../../actions/pageAction'
+
+class PlayDraftEditor extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -40,7 +43,7 @@ export default class  extends Component {
             videoUrl:null,
             uploadKey:'',
 
-            receiveRaw:false
+            lastTs:null,
         }
         //本身方法
         this.onChange = editorState => this.setState({ editorState },() => {
@@ -348,18 +351,23 @@ export default class  extends Component {
         this.props.onChangeEditor(this.state.editorState.getCurrentContent(),this.state.gallery)
     }
     componentWillReceiveProps(nextProps) {
-        const { preRaw, gallery} = nextProps
-        const { receiveRaw,editorState } = this.state
-        if(!!preRaw && !receiveRaw) {
-            let rawData = convertFromRaw(preRaw)
-            this.setState({
-                editorState: EditorState.push(editorState, rawData),
-                gallery,
-                receiveRaw:true
-            },() => {
-                this.props.onChangeEditor(this.state.editorState.getCurrentContent(),this.state.gallery)
-            })
+        const { nextRaw } = nextProps
+        const { lastTs } = this.state
+        if(nextRaw.created === lastTs || !nextRaw.raw){
+            return
+        }else{
+            this.setState({lastTs:nextRaw.created})
         }
+        const rawData = convertFromRaw(nextRaw.raw)
+        this.setState({
+            editorState: EditorState.createWithContent(rawData, decorator),
+            gallery:nextRaw.gallery,
+        },() => {
+            this.props.onChangeEditor(this.state.editorState.getCurrentContent(),this.state.gallery)
+        })
+    }
+    componentWillUnmount() {
+        this.props.clearPageRaw()
     }
     render() {
         const { editorState, dialogLink, urlValue, urlText } = this.state
@@ -462,3 +470,16 @@ export default class  extends Component {
 
 
 
+
+const mapActionCreators = {
+    clearPageRaw
+}
+
+const mapStateToProps = (state) => {
+    const { nextRaw }  = state.page.toJS()
+    return {
+        nextRaw
+    }
+}
+
+export default connect(mapStateToProps, mapActionCreators)(PlayDraftEditor)

@@ -8,6 +8,8 @@ export const PAGE_L_SET_COVER_TYPE = 'PAGE_L_SET_COVER_TYPE'
 export const PAGE_L_ADD_TOY = 'PAGE_L_ADD_TOY'
 export const PAGE_L_REMOVE_TOY = 'PAGE_L_REMOVE_TOY'
 export const PAGE_L_TOGGLE_SHARE = 'PAGE_L_TOGGLE_SHARE'
+export const PAGE_EDIT_SET_RAW = 'PAGE_EDIT_SET_RAW'
+export const PAGE_EDIT_CLEAR_RAW = 'PAGE_EDIT_CLEAR_RAW'
 
 
 function receivePage(res,totalPages,page,filter,query) {
@@ -202,5 +204,20 @@ export function getPageBy (filter = '',query = '') {
             .end((err, res) => {
                 dispatch(receivePage(res.body.pages,res.body.totalPages,page,filter,query))
             })
+    }
+}
+
+export function setPageRaw(raw,gallery,created = Date.now()) {
+    return {
+        type:PAGE_EDIT_SET_RAW,
+        raw,
+        gallery,
+        created
+    }
+}
+
+export function clearPageRaw() {
+    return {
+        type: PAGE_EDIT_CLEAR_RAW
     }
 }

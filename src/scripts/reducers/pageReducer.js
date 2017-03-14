@@ -8,8 +8,11 @@ import {
     PAGE_L_ADD_TOY,
     PAGE_L_REMOVE_TOY,
     PAGE_L_TOGGLE_SHARE,
+    PAGE_EDIT_SET_RAW,
+    PAGE_EDIT_CLEAR_RAW
 } from '../actions/pageAction'
-export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'',filter:'' }),action)=>{
+
+export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'',filter:'',nextRaw:{} }),action)=>{
     switch (action.type) {
         case PAGE_L_RECEIVE_PAGE:
             return state
@@ -87,6 +90,19 @@ export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'',fil
                     }
                 )
             })
+        case PAGE_EDIT_SET_RAW:
+            return state
+                .updateIn(['nextRaw'],(nextRaw) => {
+                    return nextRaw
+                        .set('raw',action.raw)
+                        .set('gallery',action.gallery)
+                        .set('created',action.created)
+                })
+        case PAGE_EDIT_CLEAR_RAW:
+            return state
+                .updateIn(['nextRaw'],nextRaw => {
+                    return nextRaw.clear()
+                })
         default:
             return state
     }

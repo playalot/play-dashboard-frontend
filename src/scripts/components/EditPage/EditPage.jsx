@@ -42,8 +42,9 @@ export default class EditPage extends Component {
                 const draftData = JSON.parse(data)
                 let { title, cover, tags, category, gallery, raw, authorId } = draftData
                 this.setState({
-                    title, cover, tags, category, gallery,authorId, raw
+                    title, cover, tags, category, gallery,authorId
                 })
+                this.props.setPageRaw(raw,gallery)
             }
         }
         if(this.props.params.id) {
@@ -52,8 +53,9 @@ export default class EditPage extends Component {
 			.end((err,res) => {
 				const { title, cover, tags, category, gallery, raw, authorId } = res.body
 				this.setState({
-					title, cover, tags, category, gallery, authorId:authorId.$oid,raw
+					title, cover, tags, category, gallery, authorId:authorId.$oid
 				})
+                this.props.setPageRaw(raw,gallery)
 			})
 		}
     }
@@ -187,7 +189,7 @@ export default class EditPage extends Component {
             { value: 'essay', label: '随笔' },
             { value: 'knowledge', label: '干货' }
         ]
-        const { cover,title,raw,tags,category,authorId,dialogSubmit,gallery } = this.state
+        const { cover,title,tags,category,authorId,dialogSubmit,gallery } = this.state
         return (
             <div className="editarticle">
                 <div className="edit-section">
@@ -212,8 +214,6 @@ export default class EditPage extends Component {
                 </div>
                 <PlayDraftEditor
                     onChangeEditor={this.onChangeEditor}
-                    preRaw={raw}
-                    gallery={gallery}
                 />
                 <div className="edit-section">
                     <p className="title">添加标签</p>

@@ -9,6 +9,11 @@ export default class Home extends Component {
         }
     }
     render() {
+        const { stats } = this.props
+        let max = 0
+        stats.last && stats.last.map((day,i) => {
+            max = day.n >= max ? day.n : max
+        })
         return (
             <div className="content">
                 <div className="box">
@@ -27,30 +32,53 @@ export default class Home extends Component {
                     <div className="row">
                       <div className="col-sm-3 col-xs-6">
                         <div className="description-block border-right">
-                          <h5 className="description-header">{this.props.stats.posts}</h5>
+                          <h5 className="description-header">{stats.posts}</h5>
                           <span className="description-text">照片数</span>
                         </div>
                       </div>
                       <div className="col-sm-3 col-xs-6">
                         <div className="description-block border-right">
-                          <h5 className="description-header">{this.props.stats.users}</h5>
+                          <h5 className="description-header">{stats.users}</h5>
                           <span className="description-text">用户数</span>
                         </div>
                       </div>
                       <div className="col-sm-3 col-xs-6">
                         <div className="description-block border-right">
-                          <h5 className="description-header">{this.props.stats.toys}</h5>
+                          <h5 className="description-header">{stats.toys}</h5>
                           <span className="description-text">玩具数</span>
                         </div>
                       </div>
                       <div className="col-sm-3 col-xs-6">
                         <div className="description-block">
-                          <h5 className="description-header">{this.props.stats.tags}</h5>
+                          <h5 className="description-header">{stats.tags}</h5>
                           <span className="description-text">标签数</span>
                         </div>
                       </div>
                     </div>
                   </div>
+                </div>
+                <div>
+                    <div className="play-home">
+                        {
+                            stats.last && stats.last.map((day,i) => {
+                                return(
+                                    <div 
+                                        key={`home-column_${i}`}
+                                        title={`${day.n}`}
+                                        className="home-column">
+                                        <span>{day.n}</span>
+                                        <div style={{height:`${day.n/max*150}px`}} className="zhu"></div>
+                                        <div className="txt">{day.d}</div>
+
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
+                    <div>
+                        
+                    </div>
+
                 </div>
             </div>
         )

@@ -36,3 +36,22 @@
         }
     }
 }
+
+.play-home{
+    display:flex;
+    align-items:stretch;
+    justify-content: center;
+    height:200px;
+    .home-column{
+        flex:1;
+        max-width:50px;
+        display:flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        .zhu{
+            background-color: #8f929d;
+            width:10px;
+        }
+    }
+}

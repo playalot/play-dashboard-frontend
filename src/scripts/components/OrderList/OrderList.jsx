@@ -102,6 +102,7 @@ export default class OrderList extends Component{
 						<FormControl componentClass="select" placeholder="select" value={this.state.merchant} onChange={(e) => this.setState({merchant:e.target.value},() => this.search())}>
 		                  <option value="">所有商家</option>
 		                  <option value="PLAY玩具控">PLAY玩具控</option>
+		                  <option value="PLAY玩具控(上海)">PLAY玩具控(上海)</option>
 						  <option value="亿次元商城">亿次元商城</option>
 						  <option value="手办同萌会">手办同萌会</option>
 						  <option value="拆盒网">拆盒网</option>

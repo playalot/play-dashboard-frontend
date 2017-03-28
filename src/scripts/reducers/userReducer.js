@@ -5,7 +5,7 @@ export default (state = Immutable.fromJS({ users: [],filter:'',totalPages:100 })
     switch (action.type) {
         case USER_L_RECEIVE_USER:
             return state
-                .updateIn(['users'], (posts) => posts.clear().concat(Immutable.fromJS(action.res)))
+                .updateIn(['users'], (users) => users.clear().concat(Immutable.fromJS(action.res)))
                 .set('totalPages',action.totalPages)
                 .set('page',action.page)
                 .set('filter',action.query)

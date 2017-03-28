@@ -8,6 +8,7 @@ import Moment from 'moment'
 import ReactPaginate from 'react-paginate'
 import DatePicker from 'react-datepicker'
 import Request from 'superagent'
+import CopyToClipboard from 'react-copy-to-clipboard'
 const _ = require('lodash')
 
 
@@ -198,6 +199,7 @@ export default class SkuList extends Component{
 								  <ul className="dropdown-menu">
 								    <li><a onClick={() => this.onChangeFilter('')}>所有商家</a></li>
 								    <li><a onClick={() => this.onChangeFilter('PLAY玩具控')}>PLAY玩具控</a></li>
+								    <li><a onClick={() => this.onChangeFilter('PLAY玩具控(上海)')}>PLAY玩具控(上海)</a></li>
 								    <li><a onClick={() => this.onChangeFilter('亿次元商城')}>亿次元商城</a></li>
 								    <li><a onClick={() => this.onChangeFilter('手办同萌会')}>手办同萌会</a></li>
 								    <li><a onClick={() => this.onChangeFilter('拆盒网')}>拆盒网</a></li>
@@ -254,6 +256,12 @@ export default class SkuList extends Component{
 												  </button>
 												  <ul className="dropdown-menu">
 												    <li><Link to={`/toy/${sku.id}/orders`}>全部订单</Link></li>
+												    <li>
+												    	<CopyToClipboard text={`http://www.playalot.cn/toy/${sku.id}`}
+												          	onCopy={() => null}>
+												          	<a>复制链接</a>
+												        </CopyToClipboard>
+												    </li>
 												  </ul>
 												</div>
 											</div>

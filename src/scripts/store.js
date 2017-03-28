@@ -1,7 +1,7 @@
 import { combineReducers, applyMiddleware, compose, createStore } from 'redux'
 import { routerReducer as router, routerMiddleware } from 'react-router-redux'
 import thunk from 'redux-thunk'
-
+import { createLogger } from 'redux-logger'
 import admin from './reducers/adminReducer'
 import postReducer from './reducers/postReducer'
 import tagClassReducer from './reducers/tagClassReducer'
@@ -54,7 +54,7 @@ export default ( history, initialState ) => {
 	const middleware = [thunk, routerMiddleware(history)];
 
 	if (process.env.NODE_ENV === `development`) {
-		const createLogger = require(`redux-logger`);
+		
 		const logger = createLogger();
 		middleware.push(logger);
 	}

@@ -1,15 +1,16 @@
 import { connect } from 'react-redux'
 import Home from './Home'
 
-import { fetchStats } from '../../actions/statsAction'
+import { fetchStats,getActivities } from '../../actions/statsAction'
 const mapActionCreators = {
-    fetchStats
+    fetchStats,
+    getActivities,
 }
 
 const mapStateToProps = (state) => {
-    const { stats, loaded }  = state.stats.toJS()
+    const { stats, loaded,activities,page }  = state.stats.toJS()
     return {
-        stats, loaded
+        stats, loaded,activities,page
     }
 }
 

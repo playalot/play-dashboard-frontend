@@ -70,28 +70,40 @@ export default class Home extends Component {
                 <div className="col-sm-2" >
                   <div className="box">
                     <div className="box-body">
-                        <div className="col-sm-12 col-xs-3">
-                          <div className="description-block">
-                            <h5 className="description-header">{stats.posts}</h5>
-                            <span className="description-text">照片数</span>
-                          </div>
-                        </div>
-                        <div className="col-sm-12 col-xs-3">
+                        <div className="col-sm-12 col-xs-4">
                           <div className="description-block">
                             <h5 className="description-header">{stats.users}</h5>
                             <span className="description-text">用户数</span>
                           </div>
                         </div>
-                        <div className="col-sm-12 col-xs-3">
+                        <div className="col-sm-12 col-xs-4">
                           <div className="description-block">
                             <h5 className="description-header">{stats.toys}</h5>
                             <span className="description-text">玩具数</span>
                           </div>
                         </div>
-                        <div className="col-sm-12 col-xs-3">
+                        <div className="col-sm-12 col-xs-4">
                           <div className="description-block">
                             <h5 className="description-header">{stats.tags}</h5>
                             <span className="description-text">标签数</span>
+                          </div>
+                        </div>
+                        <div className="col-sm-12 col-xs-4">
+                          <div className="description-block">
+                            <h5 className="description-header">{stats.posts}</h5>
+                            <span className="description-text">照片总数</span>
+                          </div>
+                        </div>
+                        <div className="col-sm-12 col-xs-4">
+                          <div className="description-block">
+                            <h5 className="description-header">{stats.postYesterday}</h5>
+                            <span className="description-text">昨日发图</span>
+                          </div>
+                        </div>
+                        <div className="col-sm-12 col-xs-4">
+                          <div className="description-block">
+                            <h5 className="description-header">{stats.postToday}</h5>
+                            <span className="description-text">今日发图</span>
                           </div>
                         </div>
                     </div>
@@ -142,58 +154,13 @@ export default class Home extends Component {
                 {
                   this.props.activities.map((activity,i) => {
                     return (
-                      <div className="media">
+                      <div className="media" style={{borderBottom:'1px solid #eee'}} key={`act_${activity.id}`}>
                         <div className="media-left">
                           <Link to={`/user/${activity.user.id}`} className="thumbnail" style={{borderRadius:'50%',width:60}}>
                             <img style={{borderRadius:'50%'}} src={activity.user.avatar} alt="avatar"/>
                           </Link>
                         </div>
-                        <div className="media-body">
-                          <h4 className="media-heading">{activity.user.nickname}</h4>
-                          {
-                            activity.type === 'ut' ?
-                            <h5>
-                              更新了玩具
-                              <a href={`http://www.playalot.cn/toy/${activity.target.id}`}>{`${activity.title}`}</a>
-                            </h5>
-                            :null
-                          }
-                          {
-                            activity.type === 'cmt' ?
-                            <h5>
-                              评论了图片
-                            </h5>
-                            :null
-                          }
-                          {
-                            activity.type === 'pp' ?
-                            <h5>
-                              发布了图片
-                            </h5>
-                            :null
-                          }
-                          <p>{activity.content}</p>
-                        </div>
-                        <div className="media-right" style={{minWidth:100}}>
-                          {Moment.unix(activity.created /1000).fromNow()}
-                        </div>
-                      </div>
-
-                    )
-                    return(
-                      <div key={`act_${activity.id}`} className="row">
-                        <div className="col-xs-2" >
-                          <a className="thumbnail" style={{borderRadius:'50%',maxWidth:80}}>
-                            <img style={{borderRadius:'50%'}} src={activity.user.avatar} alt="avatar"/>
-                          </a>
-                        </div>
-                        <div className="col-xs-8">
-                          <a>{activity.user.nickname}</a>
-                          <p>{activity.content}</p>
-                        </div>
-                        <div className="col-xs-2">
-                          {Moment.unix(activity.created /1000).fromNow()}
-                        </div>
+                        <ActivityContent activity={activity} />
                       </div>
                     )
                   })
@@ -206,4 +173,86 @@ export default class Home extends Component {
 
 Home.contextTypes = {
     router : React.PropTypes.object
+}
+
+class ActivityContent extends Component {
+
+  render() {
+    const { activity } = this.props
+    const type = activity.type
+    if(type === 'ut') {
+      return (
+        <div className="media-body">
+          <h5 className="media-heading">{activity.user.nickname}&nbsp;&nbsp;<strong>更新了玩具</strong></h5>
+          <h5><small>{Moment.unix(activity.created /1000).fromNow()}</small></h5>
+          <h5>
+            <a href={`http://www.playalot.cn/toy/${activity.target.id}`}>{`${activity.title}`}</a>
+          </h5>
+        </div>
+      )
+    } else if (type === 'st') {
+      return (
+        <div className="media-body">
+          <h5 className="media-heading">{activity.user.nickname}&nbsp;&nbsp;<strong>评分了玩具</strong></h5>
+          <h5><small>{Moment.unix(activity.created /1000).fromNow()}</small></h5>
+          <h5>
+            <a href={`http://www.playalot.cn/toy/${activity.target.id}`}>{`${activity.title}`}</a>
+          </h5>
+        </div>
+      )
+    } else if (type === 'pt') {
+      return (
+        <div className="media-body">
+          <h5 className="media-heading">{activity.user.nickname}&nbsp;&nbsp;<strong>发布了玩具</strong></h5>
+          <h5><small>{Moment.unix(activity.created /1000).fromNow()}</small></h5>
+          <div className="activity_content_image">
+            {
+              activity.images.map((img,i) => {
+                return (
+                  <img key={`activity_${activity.id}_${i}`} src={img} style={{width:100,height:100}} alt=""/>
+                )
+              })
+            }
+          </div>
+          <p>{activity.content}</p>
+        </div>
+      )
+    } else if (type === 'cmt') {
+      return (
+        <div className="media-body">
+          <h5 className="media-heading">{activity.user.nickname}&nbsp;&nbsp;<strong>评论了图片</strong></h5>
+          <h5><small>{Moment.unix(activity.created /1000).fromNow()}</small></h5>
+          <div className="activity_content_image">
+            {
+              activity.images.map((img,i) => {
+                return (
+                  <img key={`activity_${activity.id}_${i}`} src={img} style={{width:100,height:100}} alt=""/>
+                )
+              })
+            }
+          </div>
+          <p>{activity.content}</p>
+        </div>
+      )
+    }else if (type === 'pp') {
+      return (
+        <div className="media-body">
+          <h5 className="media-heading">{activity.user.nickname}&nbsp;&nbsp;<strong>发布了图片</strong></h5>
+          <h5><small>{Moment.unix(activity.created /1000).fromNow()}</small></h5>
+          <div className="activity_content_image">
+            {
+              activity.images.map((img,i) => {
+                return (
+                  <img key={`activity_${activity.id}_${i}`} src={img} style={{width:100,height:100}} alt=""/>
+                )
+              })
+            }
+          </div>
+          <p>{activity.content}</p>
+        </div>
+      )
+    }else{
+      return (<div className="media-body"></div>)
+    }
+  }
 }

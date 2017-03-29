@@ -39,3 +39,14 @@ $fa-font-path: "~font-awesome/fonts";
 	}	
 }
 
+.activity_content_image{
+	display:flex;
+	padding:5px;
+	flex-wrap:wrap;
+	img{
+		margin:0 10px 10px 0;
+		object-fit: cover;
+		width:80px;
+		height:80px;
+	}
+}

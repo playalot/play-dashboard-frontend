@@ -133,7 +133,7 @@ export default class EditPage extends Component {
             }
         }
         const raw = convertToRaw(contentState)
-        const html = stateToHTML(contentState,options)
+        const html = stateToHTML(contentState,options).replace(/<p><br><\/p>\s?<figure>/g,'<figure>')
         const data = {
             title,
             authorId,

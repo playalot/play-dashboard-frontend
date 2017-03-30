@@ -154,7 +154,7 @@ export default class Home extends Component {
                 {
                   this.props.activities.map((activity,i) => {
                     return (
-                      <div className="media" style={{borderBottom:'1px solid #eee'}} key={`act_${activity.id}`}>
+                      <div className="media activity_content" key={`act_${activity.id}`}>
                         <div className="media-left">
                           <Link to={`/user/${activity.user.id}`} className="thumbnail" style={{borderRadius:'50%',width:60}}>
                             <img style={{borderRadius:'50%'}} src={activity.user.avatar} alt="avatar"/>
@@ -205,16 +205,16 @@ class ActivityContent extends Component {
         <div className="media-body">
           <h5 className="media-heading">{activity.user.nickname}&nbsp;&nbsp;<strong>发布了玩具</strong></h5>
           <h5><small>{Moment.unix(activity.created /1000).fromNow()}</small></h5>
+          <p>{activity.content}</p>
           <div className="activity_content_image">
             {
               activity.images.map((img,i) => {
                 return (
-                  <img key={`activity_${activity.id}_${i}`} src={img} style={{width:100,height:100}} alt=""/>
+                  <img key={`activity_${activity.id}_${i}`} src={img} alt=""/>
                 )
               })
             }
           </div>
-          <p>{activity.content}</p>
         </div>
       )
     } else if (type === 'cmt') {
@@ -222,16 +222,16 @@ class ActivityContent extends Component {
         <div className="media-body">
           <h5 className="media-heading">{activity.user.nickname}&nbsp;&nbsp;<strong>评论了图片</strong></h5>
           <h5><small>{Moment.unix(activity.created /1000).fromNow()}</small></h5>
+          <p>{activity.content}</p>
           <div className="activity_content_image">
             {
               activity.images.map((img,i) => {
                 return (
-                  <img key={`activity_${activity.id}_${i}`} src={img} style={{width:100,height:100}} alt=""/>
+                  <img key={`activity_${activity.id}_${i}`} src={img} alt=""/>
                 )
               })
             }
           </div>
-          <p>{activity.content}</p>
         </div>
       )
     }else if (type === 'pp') {
@@ -239,16 +239,16 @@ class ActivityContent extends Component {
         <div className="media-body">
           <h5 className="media-heading">{activity.user.nickname}&nbsp;&nbsp;<strong>发布了图片</strong></h5>
           <h5><small>{Moment.unix(activity.created /1000).fromNow()}</small></h5>
+          <p>{activity.content}</p>
           <div className="activity_content_image">
             {
               activity.images.map((img,i) => {
                 return (
-                  <img key={`activity_${activity.id}_${i}`} src={img} style={{width:100,height:100}} alt=""/>
+                  <img key={`activity_${activity.id}_${i}`} src={img} alt=""/>
                 )
               })
             }
           </div>
-          <p>{activity.content}</p>
         </div>
       )
     }else{

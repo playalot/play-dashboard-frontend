@@ -38,15 +38,18 @@ $fa-font-path: "~font-awesome/fonts";
 		font-family: sans-serif;
 	}	
 }
-
-.activity_content_image{
-	display:flex;
-	padding:5px;
-	flex-wrap:wrap;
-	img{
-		margin:0 10px 10px 0;
-		object-fit: cover;
-		width:80px;
-		height:80px;
+.activity_content{
+	padding:15px 10px;
+	margin:0;
+	border-bottom:1px solid #eee ;
+	.activity_content_image{
+		display:flex;
+		flex-wrap:wrap;
+		img{
+			margin:0 10px 10px 0;
+			object-fit: cover;
+			width:65px;
+			height:65px;
+		}
 	}
 }

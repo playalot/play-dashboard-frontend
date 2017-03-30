@@ -41,7 +41,7 @@ export default class Home extends Component {
     _formatCrosshairTitle(values){
       return {
         title: '日期',
-        value: values[0].x 
+        value: values[0].x
       };
     }
     _formatCrosshairItems (values) {
@@ -136,7 +136,7 @@ export default class Home extends Component {
                 </div>
               </div>
               <div style={{textAlign:'center'}}>
-                <ReactPaginate 
+                <ReactPaginate
                   previousLabel={<span>&laquo;</span>}
                   nextLabel={<span>&raquo;</span>}
                   breakLabel={<span>...</span>}
@@ -150,7 +150,7 @@ export default class Home extends Component {
                   forcePage={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
                   activeClassName={"active"} />
               </div>
-              <div>
+              <div className="box box-widget">
                 {
                   this.props.activities.map((activity,i) => {
                     return (

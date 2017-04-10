@@ -5,6 +5,7 @@ import {Link} from 'react-router'
 import {Row, Button, FormControl,Form, FormGroup } from 'react-bootstrap'
 import ReactPaginate from 'react-paginate'
 import Moment from 'moment'
+import Request from 'superagent'
 
 import PlayAliBaichuan from '../Common/PlayAliBaichuan'
 export default class OrderList extends Component{
@@ -21,6 +22,7 @@ export default class OrderList extends Component{
 	  	this.search = this._search.bind(this)
 	  	this.onChangeYear= (e) => this.setState({year:e.target.value},() => this.search())
 		this.onChangeMonth = (e) => this.setState({month:e.target.value},() => this.search())
+		this.startPay = this._startPay.bind(this)
 	}
 	componentWillMount() {
 		const { init } = this.props
@@ -51,6 +53,16 @@ export default class OrderList extends Component{
 		if (trackNo) {
 			this.props.addTracking(id,trackNo)
 		}
+	}
+	_startPay(id) {
+		Request.post(`/api/order/${id}/startPay`)
+		.end((err,res) => {
+			if(err){
+				console.log(err)
+			}else{
+				console.log(res.body)
+			}
+		})
 	}
 	_goPage(page) {
 		let { status, merchant,year,month } = this.state
@@ -187,6 +199,7 @@ export default class OrderList extends Component{
 							  		<li><Link to={`/order/${order.id}`}>订单详情</Link></li>
 								  	{order.status === 'open' ? <li><a onClick={() => this.props.setStatus(order.id,'closed')}>关闭订单</a></li> : null}
 								  	{order.status === 'paid' ? <li><a onClick={() => this.props.setStatus(order.id,'done')}>订单完成</a></li> : null}
+								  	<li><a onClick={() => this.startPay(order.id)}>通知补款</a></li>
 								</ul>
 							</div>
 	                      </td>

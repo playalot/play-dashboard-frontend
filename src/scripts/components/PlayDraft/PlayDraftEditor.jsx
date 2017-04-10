@@ -160,7 +160,7 @@ class PlayDraftEditor extends Component {
             showURLInput: false,
             urlValue: '',
         }, () => {
-            setTimeout(() => this.refs.editor.focus(), 0);
+            setTimeout(() => this.focus(), 0);
         });
     }
     _addLink() {

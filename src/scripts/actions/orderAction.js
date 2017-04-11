@@ -3,6 +3,7 @@ import Request from 'superagent'
 export const ORDER_L_RECEIVE_ORDER = 'ORDER_L_RECEIVE_ORDER'
 export const ORDER_L_ADD_TRACKING = 'ORDER_L_ADD_TRACKING'
 export const ORDER_L_SET_STATUS = 'ORDER_L_SET_STATUS'
+export const ORDER_L_START_PAY = 'ORDER_L_START_PAY'
 
 function receiveOrder(res,totalPages,page,status,merchant,year,month,summary) {
     return {
@@ -31,7 +32,12 @@ function _setStatus(id,status) {
         status
     }
 }
-
+function _startPay(id) {
+    return {
+        type : ORDER_L_START_PAY,
+        id
+    }
+}
 export function addTracking(id,trackNo) {
     return (dispatch) => {
         return Request
@@ -55,6 +61,20 @@ export function setStatus(id,status) {
             .send({status})
             .end((err,res) => {
                 dispatch(_setStatus(id,status))
+            })
+    }
+}
+export function startPay(id) {
+    return dispatch => {
+        return Request
+            .post(`/api/order/${id}/startPay`)
+            .end((err,res) => {
+                if(err){
+                    alert('通知补款失败')
+                }else{
+                    alert('通知补款成功')
+                    dispatch(_startPay(id))
+                }
             })
     }
 }
@@ -82,3 +102,4 @@ export function getOrder (page = 0,status = 'paid',merchant = '',year,month) {
             })
     }
 }
+

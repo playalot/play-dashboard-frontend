@@ -22,7 +22,6 @@ export default class OrderList extends Component{
 	  	this.search = this._search.bind(this)
 	  	this.onChangeYear= (e) => this.setState({year:e.target.value},() => this.search())
 		this.onChangeMonth = (e) => this.setState({month:e.target.value},() => this.search())
-		this.startPay = this._startPay.bind(this)
 	}
 	componentWillMount() {
 		const { init } = this.props
@@ -54,16 +53,6 @@ export default class OrderList extends Component{
 			this.props.addTracking(id,trackNo)
 		}
 	}
-	_startPay(id) {
-		Request.post(`/api/order/${id}/startPay`)
-		.end((err,res) => {
-			if(err){
-				console.log(err)
-			}else{
-				console.log(res.body)
-			}
-		})
-	}
 	_goPage(page) {
 		let { status, merchant,year,month } = this.state
 		let path = `/order?page=${page}`
@@ -80,7 +69,7 @@ export default class OrderList extends Component{
 		this.context.router.push(path)
 		this.props.getOrder(0,status,merchant,year,month)
 	}
-	formatStatus(str) {
+	formatStatus(str,startPay) {
 		switch(str) {
 			case 'open':
 				return <span className="label label-default">等待买家付款</span>
@@ -89,6 +78,14 @@ export default class OrderList extends Component{
 			case 'prepaid':
 				return <span className="label label-primary">已支付定金</span>
 			case 'due':
+				if(startPay){
+					return (
+						<div>
+							<span className="label label-danger">等待买家补款</span><br/>
+							<span className="label" style={{display:'inline-block',marginTop:10,color:'gray'}}>{Moment(startPay).format('MM-DD HH:mm')}</span>
+						</div>
+					)
+				}
 				return <span className="label label-danger">等待买家补款</span>
 			case 'closed':
 				return <span className="label label-default">已关闭</span>
@@ -106,6 +103,7 @@ export default class OrderList extends Component{
 				  	<div className="btn-group">
 					  <button onClick={()=> this.setState({status:''},() => this.search())} className={`btn btn-default ${this.state.status === '' ? 'active':''}`}>全部</button>
 					  <button onClick={()=> this.setState({status:'prepaid'},() => this.search())} className={`btn btn-default ${this.state.status === 'prepaid' ? 'active':''}`}>已预订</button>
+					  <button onClick={()=> this.setState({status:'due'},() => this.search())} className={`btn btn-default ${this.state.status === 'due' ? 'active':''}`}>待补款</button>
 					  <button onClick={()=> this.setState({status:'paid'},() => this.search())} className={`btn btn-default ${this.state.status === 'paid' ? 'active':''}`}>已支付</button>
 					  <button onClick={()=> this.setState({status:'done'},() => this.search())} className={`btn btn-default ${this.state.status === 'done' ? 'active':''}`}>已完成</button>
 					</div>
@@ -189,7 +187,7 @@ export default class OrderList extends Component{
 	                      	{order.price.prePay ? <small style={{color:'#6c6c6c',fontSize:'10px'}}>订金:¥&nbsp;{order.price.prePay}</small>:null}
 	                      </td>
 	                      <td>{Moment(order.created).format('MM-DD HH:mm')}</td>
-	                      <td>{this.formatStatus(order.status)}</td>
+	                      <td>{this.formatStatus(order.status,order.startPay)}</td>
 	                      <td>
 	                      	<div className="btn-group">
 							  <button type="button" className="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
@@ -199,7 +197,7 @@ export default class OrderList extends Component{
 							  		<li><Link to={`/order/${order.id}`}>订单详情</Link></li>
 								  	{order.status === 'open' ? <li><a onClick={() => this.props.setStatus(order.id,'closed')}>关闭订单</a></li> : null}
 								  	{order.status === 'paid' ? <li><a onClick={() => this.props.setStatus(order.id,'done')}>订单完成</a></li> : null}
-								  	<li><a onClick={() => this.startPay(order.id)}>通知补款</a></li>
+								  	{order.status === 'prepaid' ? <li><a onClick={() => this.props.startPay(order.id)}>通知补款</a></li> : null}
 								</ul>
 							</div>
 	                      </td>

@@ -14,6 +14,7 @@ export default class extends Component {
 	  		orders:[]
 	  	}
 	  	this.addTracking = this._addTracking.bind(this)
+	  	this.startPay = this._startPay.bind(this)
 	}
 	componentWillMount() {
 		Request
@@ -40,7 +41,20 @@ export default class extends Component {
             })
 		}
 	}
-	formatStatus(str) {
+	_startPay(id,index) {
+		Request.post(`/api/order/${id}/startPay`)
+		.end((err,res) => {
+			if(err){
+				alert('通知补款失败')
+			}else{
+				alert('通知补款成功')
+				let orders = this.state.orders
+            	orders[index]['status'] = 'due'
+            	this.setState({orders})
+			}
+		})
+	}
+	formatStatus(str,startPay) {
 		switch(str) {
 			case 'open':
 			return <span className="label label-default">等待买家付款</span>
@@ -49,7 +63,15 @@ export default class extends Component {
 			case 'prepaid':
 			return <span className="label label-primary">已支付定金</span>
 			case 'due':
-			return <span className="label label-danger">等待买家补款</span>
+				if(startPay){
+					return (
+						<div>
+							<span className="label label-danger">等待买家补款</span><br/>
+							<span className="label" style={{display:'inline-block',marginTop:10,color:'gray'}}>{Moment(startPay).format('MM-DD HH:mm')}</span>
+						</div>
+					)
+				}
+				return <span className="label label-danger">等待买家补款</span>
 			case 'closed':
 			return <span className="label label-default">已关闭</span>
 			case 'done':
@@ -106,9 +128,17 @@ export default class extends Component {
 										<td style={{width:'30%'}}>{order.title}</td>
 										<td><span><strong>¥{order.price.totalPrice}</strong></span><br/>{order.price.totalFreight > 0 ? <small style={{color:'#6c6c6c',fontSize:'10px'}}>含运费:¥&nbsp;{order.price.totalFreight}</small> : <small style={{color:'#6c6c6c',fontSize:'10px'}}>包邮</small>}</td>
 										<td>{Moment(order.created).format('MM-DD HH:mm')}</td>
-										<td>{this.formatStatus(order.status)}</td>
+										<td>{this.formatStatus(order.status,order.startPay)}</td>
 										<td>
-											<Link to={`/order/${order.id}`}>订单详情</Link>
+											<div className="btn-group">
+											  <button type="button" className="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+											    订单操作&nbsp;<span className="caret"></span>
+											  </button>
+											  	<ul className="dropdown-menu">
+											  		<li><Link to={`/order/${order.id}`}>订单详情</Link></li>
+												  	{order.status === 'prepaid' ? <li><a onClick={() => this.startPay(order.id,index)}>通知补款</a></li> : null}
+												</ul>
+											</div>
 										</td>
 										{
 											order.tracking ?

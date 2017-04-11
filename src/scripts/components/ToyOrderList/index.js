@@ -54,7 +54,7 @@ export default class extends Component {
 			}
 		})
 	}
-	formatStatus(str) {
+	formatStatus(str,startPay) {
 		switch(str) {
 			case 'open':
 			return <span className="label label-default">等待买家付款</span>

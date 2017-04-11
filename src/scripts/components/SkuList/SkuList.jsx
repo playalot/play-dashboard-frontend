@@ -255,7 +255,7 @@ export default class SkuList extends Component{
 												    其他&nbsp;<span className="caret"></span>
 												  </button>
 												  <ul className="dropdown-menu">
-												    <li><Link to={`/toy/${sku.id}/orders`}>全部订单</Link></li>
+												    <li><Link to={`/order/toy/${sku.id}`}>全部订单</Link></li>
 												    <li>
 												    	<CopyToClipboard text={`http://www.playalot.cn/toy/${sku.id}`}
 												          	onCopy={() => null}>

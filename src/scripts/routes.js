@@ -31,7 +31,7 @@ import EditSku from './components/EditSku'
 import Notification from './components/Notification/Notification.jsx'
 
 import Test from './components/test';
-import ToyOrderList from './components/ToyOrderList'
+import OrderToyList from './components/OrderToyList'
 
 export default {
     path: '/',
@@ -54,6 +54,7 @@ export default {
         { path:'/feedback', component:FeedbackList },
 
         { path:'/order/:id', component:OrderDetail },
+        { path:'/order/toy/:id', component:OrderToyList },
         
         { path:'/user/:id', component:UserDetail },
         { path:'/tag/:id', component:EditTag },
@@ -68,7 +69,6 @@ export default {
         { path:'/test', component:Test },
         
         { path:'/notification', component:Notification },
-        { path:'/toy/:id/orders', component:ToyOrderList },
 
     ]
 }

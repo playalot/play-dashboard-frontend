@@ -5,9 +5,8 @@ import {Link} from 'react-router'
 import {Row, Button, FormControl,Form, FormGroup } from 'react-bootstrap'
 import ReactPaginate from 'react-paginate'
 import Moment from 'moment'
-import Request from 'superagent'
 
-import PlayAliBaichuan from '../Common/PlayAliBaichuan'
+import OrderPanel from '../OrderPanel'
 export default class OrderList extends Component{
 	constructor(props) {
 	  	super(props)
@@ -17,41 +16,17 @@ export default class OrderList extends Component{
 	  		year:'',
 			month:'',
 	  	}
-	  	this.addTracking = this._addTracking.bind(this)
 	  	this.goPage = this._goPage.bind(this)
 	  	this.search = this._search.bind(this)
 	  	this.onChangeYear= (e) => this.setState({year:e.target.value},() => this.search())
 		this.onChangeMonth = (e) => this.setState({month:e.target.value},() => this.search())
 	}
 	componentWillMount() {
-		const { init } = this.props
-		let page,status,merchant,year,month
-		if(init) {
-			page = this.props.page
-			status = this.props.status
-			year = this.props.year
-			month = this.props.month
-			merchant = this.props.merchant
-			let path = `/order?page=${page}`
-			path += status ? `&status=${status}` : ``
-			path += merchant ? `&merchant=${merchant}` : ``
-			this.context.router.push(path)
-		}else {
-			page = this.props.location.query.page || 0
-			status = this.props.location.query.status || ''
-			if(!this.props.location.query.status){ page = 0 }
-			year = this.state.year
-			month = this.state.month
-			merchant = this.props.location.query.merchant || ''
-			this.props.getOrder(page,status,merchant,year,month)
-		}
-		this.setState({status,merchant,year,month})
-	}
-	_addTracking(id) {
-		let trackNo = prompt('输入物流号')
-		if (trackNo) {
-			this.props.addTracking(id,trackNo)
-		}
+		const { page, status, merchant } = this.props.location.query
+		this.setState({
+			status: status || '',
+			merchant: merchant || ''
+		},() => this.goPage(page || 0))
 	}
 	_goPage(page) {
 		let { status, merchant,year,month } = this.state
@@ -68,32 +43,6 @@ export default class OrderList extends Component{
 		path += merchant ? `&merchant=${merchant}` : ``
 		this.context.router.push(path)
 		this.props.getOrder(0,status,merchant,year,month)
-	}
-	formatStatus(str,startPay) {
-		switch(str) {
-			case 'open':
-				return <span className="label label-default">等待买家付款</span>
-			case 'paid':
-				return <span className="label label-success">已支付全款</span>
-			case 'prepaid':
-				return <span className="label label-primary">已支付定金</span>
-			case 'due':
-				if(startPay){
-					return (
-						<div>
-							<span className="label label-danger">等待买家补款</span><br/>
-							<span className="label" style={{display:'inline-block',marginTop:10,color:'gray'}}>{Moment(startPay).format('MM-DD HH:mm')}</span>
-						</div>
-					)
-				}
-				return <span className="label label-danger">等待买家补款</span>
-			case 'closed':
-				return <span className="label label-default">已关闭</span>
-			case 'done':
-				return <span className="label label-info">已完成</span>
-			default :
-				return ''
-		}
 	}
 	render() {
 		return(
@@ -157,72 +106,11 @@ export default class OrderList extends Component{
 					<button type="button" className="close" data-dismiss="alert" aria-hidden="true">×</button>
 					<h5>
 						{this.state.year}年{this.state.month}月，
-						一共<strong>{this.props.summary.count}</strong>笔{this.formatStatus(this.state.status)}订单，
+						一共<strong>{this.props.summary.count}</strong>笔{this.state.status}订单，
 						总计<strong>{this.props.summary.totalPrice}</strong>元
 					</h5>
 				</div>
-	          <div className="table-responsive" style={{paddingBottom:50}}>
-	            <table className="table table-striped">
-	            	<thead><tr><th>用户</th><th>商家</th><th></th><th>订单</th><th>总金额</th><th>下单时间</th><th>订单状态</th><th></th><th></th></tr></thead>
-	              <tbody>
-	                {this.props.orders.map((order,index) => {
-	                  return (
-	                    <tr key={order.id}>
-	                      <td>
-	                      	<div className="btn-group">
-							  <img style={{width:'30px'}} src={order.user.avatar}  data-toggle="dropdown" className="img-circle"/>
-							  <ul className="dropdown-menu">
-							    <li><a onClick={() => this.context.router.push(`/user/${order.user.id}`)}>查看<small>({order.user.nickname})</small></a></li>
-							    <li><a onClick={() => this.props.setTouid(order.user.id,order.user.avatar)}>私信</a></li>
-							  </ul>
-							</div>
-	                      </td>
-	                      <td>{order.items[0]['merchant']}</td>
-	                      <td><img style={{width:'40px'}} src={order.items[0].image} /></td>
-	                      <td style={{width:'30%'}}>{order.title}</td>
-	                      <td>
-	                      	<span><strong>¥{order.price.totalPrice}</strong></span><br/>
-	                      	{order.price.totalFreight > 0 ? <small style={{color:'#6c6c6c',fontSize:'10px'}}>含运费:¥&nbsp;{order.price.totalFreight}</small> : <small style={{color:'#6c6c6c',fontSize:'10px'}}>包邮</small>}
-	                      	<br/>
-	                      	{order.price.prePay ? <small style={{color:'#6c6c6c',fontSize:'10px'}}>订金:¥&nbsp;{order.price.prePay}</small>:null}
-	                      </td>
-	                      <td>{Moment(order.created).format('MM-DD HH:mm')}</td>
-	                      <td>{this.formatStatus(order.status,order.startPay)}</td>
-	                      <td>
-	                      	<div className="btn-group">
-							  <button type="button" className="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
-							    订单操作&nbsp;<span className="caret"></span>
-							  </button>
-							  	<ul className="dropdown-menu">
-							  		<li><Link to={`/order/${order.id}`}>订单详情</Link></li>
-								  	{order.status === 'open' ? <li><a onClick={() => this.props.setStatus(order.id,'closed')}>关闭订单</a></li> : null}
-								  	{order.status === 'paid' ? <li><a onClick={() => this.props.setStatus(order.id,'done')}>订单完成</a></li> : null}
-								  	{order.status === 'prepaid' ? <li><a onClick={() => this.props.startPay(order.id)}>通知补款</a></li> : null}
-								</ul>
-							</div>
-	                      </td>
-	                      {
-							order.tracking ?
-							<td>
-								<a data-toggle="tooltip" data-placement="top" title={`快递号:${order.tracking.number}`}
-									href={`http://wap.guoguo-app.com/wuliuDetail.htm?mailNo=${order.tracking.number}`} target="_blank">
-									追踪快递
-								</a>&nbsp;/&nbsp;
-								<a onClick={() => this.addTracking(order.id)}>修改快递号</a>
-							</td> :
-							(order.status === 'paid' ? <td style={{textAlign:'center',color:'teal'}}>
-								<span className="label label-warning">等待发货</span>
-								<span className="btn" onClick={() => this.addTracking(order.id)}>
-									添加快递号
-								</span>
-							</td> : <td></td>)
-						  }
-	                    </tr>
-	                  )
-	                })}
-	              </tbody>
-	            </table>
-	          </div>
+	          <OrderPanel/>
 	          <Row style={{textAlign:'center'}}>
 	          	<ReactPaginate
 	          		previousLabel={<span>&laquo;</span>}
@@ -238,7 +126,6 @@ export default class OrderList extends Component{
 					forcePage={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
 					activeClassName={"active"} />
 	          </Row>
-	          <PlayAliBaichuan/>
 	        </div>
 
 		)

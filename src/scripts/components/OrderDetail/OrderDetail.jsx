@@ -115,36 +115,22 @@ export default class extends Component{
                             <FormControl.Static>{this.formatStatus(this.state.status)}</FormControl.Static>
                           </Col>
                         </FormGroup>
-                        {
-                        	this.state.status === 'paid'|| this.state.status === 'prepaid' ?
-                        	<FormGroup style={{marginBottom:0}}>
-	                          <Col className="control-label" sm={2}><strong>支付方式</strong></Col>
-	                          <Col sm={9}>
-	                            <FormControl.Static>{this.state.payments[0].method}</FormControl.Static>
-	                          </Col>
-	                        </FormGroup>
-	                        :null
-                        }
-                        {
-                        	this.state.status === 'paid'|| this.state.status === 'prepaid'  ?
-                        	<FormGroup style={{marginBottom:0}}>
-	                          <Col className="control-label" sm={2}><strong>支付时间</strong></Col>
-	                          <Col sm={9}>
-	                            <FormControl.Static>{this.state.payments[0].timestamp}</FormControl.Static>
-	                          </Col>
-	                        </FormGroup>
-	                        :null
-                        }
-                        {
-                        	this.state.status === 'paid'|| this.state.status === 'prepaid' ?
-                        	<FormGroup style={{marginBottom:0}}>
-	                          <Col className="control-label" sm={2}><strong>支付编号</strong></Col>
-	                          <Col sm={9}>
-	                            <FormControl.Static>{this.state.payments[0].tradeNo}</FormControl.Static>
-	                          </Col>
-	                        </FormGroup>
-	                        :null
-                        }
+                        <FormGroup style={{marginBottom:0}}>
+                          <Col className="control-label" sm={2}><strong>支付流水</strong></Col>
+                          <Col sm={9}>
+	                        {
+	                        	this.state.payments.map((payment,index) => {
+	                        		return(
+			                            <FormControl.Static style={{borderBottom:'1px solid #eee'}}  key={`payment_${index}`}>
+			                            {payment.method}<br/>
+			                            {payment.timestamp}<br/> 
+			                            {payment.tradeNo}
+			                            </FormControl.Static>
+	                        		)
+	                        	})
+	                        }
+                          </Col>
+                        </FormGroup>
                         <FormGroup style={{marginBottom:0}}>
                           <Col className="control-label" sm={2}><strong>物流号</strong></Col>
                           <Col sm={9}>

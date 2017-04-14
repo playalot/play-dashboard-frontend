@@ -3,13 +3,14 @@ import Request from 'superagent'
 export const USER_L_RECEIVE_USER = 'USER_L_RECEIVE_USER'
 export const USER_L_RECEIVE_USER_NEW = 'USER_L_RECEIVE_USER_NEW'
 
-function receiveUser(res,totalPages,page,query) {
+function receiveUser(res,totalPages,page,query,filterType) {
     return {
         type: USER_L_RECEIVE_USER,
         res,
         totalPages,
         page,
-        query
+        query,
+        filterType
     }
 }
 function receiveUserNew(res) {
@@ -56,14 +57,15 @@ export function recommendUser(id) {
     }
 }
 
-export function approveUser(id,txt) {
+export function approveUser(id,type,note) {
     return (dispatch) => {
         return Request
             .post(`/api/user/${id}/approve`)
-            .send({
-                approval: txt
-            })
+            .send({ type,note })
             .end((err,res) => {
+                if(!err){
+                    alert('认证成功')
+                }
             })
     }
 }
@@ -71,32 +73,38 @@ export function approveUser(id,txt) {
 export function getUser (page = 0) {
     return (dispatch,getState) => {
         let params = { page }
-        const { filter } = getState().user.toJS()
+        const { filter,filterType } = getState().user.toJS()
         if(filter) {
             params.filter = filter
+        }
+        if(filterType) {
+            params.type = filterType
         }
         return Request
             .get(`/api/users`)
             .query(params)
             .end((err, res) => {
-                dispatch(receiveUser(res.body.users,res.body.totalPages,page,filter))
+                dispatch(receiveUser(res.body.users,res.body.totalPages,page,filter,filterType))
             })
     }
 }
 
 
-export function getUserBy (filter ='') {
+export function getUserBy (filter,filterType) {
     return (dispatch,getState) => {
         let page = 0
         let params = { page }
         if(filter) {
             params.filter = filter
         }
+        if(filterType) {
+            params.type = filterType
+        }
         return Request
             .get(`/api/users`)
             .query(params)
             .end((err, res) => {
-                dispatch(receiveUser(res.body.users,res.body.totalPages,page,filter))
+                dispatch(receiveUser(res.body.users,res.body.totalPages,page,filter,filterType))
             })
     }
 }

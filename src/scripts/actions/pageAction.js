@@ -12,7 +12,7 @@ export const PAGE_EDIT_SET_RAW = 'PAGE_EDIT_SET_RAW'
 export const PAGE_EDIT_CLEAR_RAW = 'PAGE_EDIT_CLEAR_RAW'
 
 
-function receivePage(res,totalPages,page,filter,query) {
+function receivePage(res,totalPages = 10,page,filter = '',query = '') {
     return {
         type: PAGE_L_RECEIVE_PAGE,
         res,
@@ -184,6 +184,16 @@ export function getPage (page = 0) {
             .query(params)
             .end((err, res) => {
                 dispatch(receivePage(res.body.pages,res.body.totalPages,page,filter,query))
+            })
+    }
+}
+
+export function getUserPage(id) {
+    return dispatch => {
+        return Request
+            .get(`/api/user/${id}/pages`)
+            .end((err,res) => {
+                dispatch(receivePage(res.body.pages))
             })
     }
 }

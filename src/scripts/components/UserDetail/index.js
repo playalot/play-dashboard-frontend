@@ -21,11 +21,13 @@ import { fetchTagClass } from '../../actions/tagClassAction'
 import {
 	approveUser
 } from '../../actions/userAction'
+import { getUserPage } from '../../actions/pageAction'
 const mapActionCreators = {
 	getUserPost,
 	setClassification,
 	removeClassification,
 
+	getUserPage,
 	fetchUserInfo,
 	fetchUserPage,
 	togglePub,

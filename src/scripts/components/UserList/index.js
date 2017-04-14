@@ -16,11 +16,12 @@ const mapActionCreators = {
 }
 
 const mapStateToProps = (state) => {
-	const { users,page,filter,totalPages } = state.user.toJS()
+	const { users,page,filter,filterType,totalPages } = state.user.toJS()
 	return {
 		users,
 		page,
 		filter,
+		filterType,
 		totalPages,
 	}
 }

@@ -9,6 +9,9 @@ import PostPanel from '../PostPanel/userIndex'
 import UserPage from './UserPage'
 import CDN from '../../widgets/cdn'
 import ReactPaginate from 'react-paginate'
+import Select from 'react-select'
+
+import PagePanel from '../PagePanel'
 export default class UserDetail extends Component{
     constructor(props) {
         super(props)
@@ -16,7 +19,10 @@ export default class UserDetail extends Component{
             filter: '',
             showModal: false, 
             showImage: '',
-            selectedPost: null
+            selectedPost: null,
+            dialogApprove:false,
+            type:'master',
+            note:'',
         }
         this.openImage = (photos,i) => {
             this.setState({ showModal: true, showImage: photos[i]['url'],photos,imageIndex:i })
@@ -45,12 +51,15 @@ export default class UserDetail extends Component{
             this.props.fetchTagClass()
         }
         this.props.getUserPost(this.props.params.id,this.props.location.query.page)
+        this.props.getUserPage(this.props.params.id)
     }
-    _approve(id) {
-      let txt = prompt('输入认证信息')
-      if (txt) {
-        this.props.approveUser(id,txt)
-      }
+    _approve() {
+      const { id } = this.props.user
+      const { type,note } = this.state
+      this.props.approveUser(id,type,note)
+      this.setState({
+        note:'',dialogApprove:false
+      })
     }
     renderAccounts(accounts) {
       return (
@@ -136,6 +145,13 @@ export default class UserDetail extends Component{
           )
         }
         const { user, posts, pages } = this.props
+        const { dialogApprove,note,type } = this.state
+        const options = [
+          { value: 'master', label: '达人玩家' },
+          { value: 'custom', label: '代工定制' },
+          { value: 'designer', label: '设计师' },
+          { value: 'brand', label: '品牌' }
+        ]
         if (user.id) {
           let gender = user.gender === 'm' ? 
           <i style={{color:'deepskyblue'}} className="fa fa-mars"></i>
@@ -201,7 +217,7 @@ export default class UserDetail extends Component{
                             </Row>
                           </Tab>
                           <Tab eventKey={2} title="Pages">
-                              <UserPage id={this.props.params.id}/>
+                            <PagePanel></PagePanel>
                           </Tab>
                           <Tab eventKey={3} title="Info">
                             <div className="row">
@@ -218,7 +234,7 @@ export default class UserDetail extends Component{
                               </div>
                               <div className="col-sm-10" style={{padding:7,fontSize:12}}>
                                 <span className="label label-info">{user.approval}</span>
-                                <span className="btn btn-sm"  style={{marginLeft:'5px'}} onClick={() => this.approve(this.props.params.id)}><i className="fa fa-edit"></i></span>
+                                <span className="btn btn-sm"  style={{marginLeft:'5px'}} onClick={() => this.setState({dialogApprove:true})}><i className="fa fa-edit"></i></span>
                               </div>
                             </div>
                             <div className="row">
@@ -275,6 +291,30 @@ export default class UserDetail extends Component{
                     </Modal>
                   </div>
                   {modal}
+                  {
+                    dialogApprove ?
+                    <div className="play-modal">
+                      <div className="play-dialog">
+                        <p className="dialog-title">添加认证</p>
+                        <span onClick={() => this.setState({dialogApprove:false})} className="dialog-close">×</span>
+                        <div>
+                          <Select
+                            name="form-field-name"
+                            value={type}
+                            options={options}
+                            clearable={false}
+                            onChange={(newValue) => this.setState({type:newValue.value})}
+                          />
+                          <h5 style={{marginTop:20}}>认证信息</h5>
+                          <input onChange={(e) => this.setState({note:e.target.value})} type="text" className="form-control" />
+                        </div>
+                        <div className="dialog-footer">
+                          <button className="btn btn-primary pull-right" onClick={this.approve}>添加</button>
+                        </div>
+                      </div>
+                    </div>
+                    : null
+                  }
               </div>
           )
         }else{

@@ -220,6 +220,7 @@ export default class Toy extends Component{
 								<FormGroup>
 									<FormControl componentClass="select" value={this.state.year} onChange={this.onChangeYear}>
 										<option value="">全部年份</option>
+										<option value="2018">2018年</option>
 										<option value="2017">2017年</option>
 										<option value="2016">2016年</option>
 										<option value="2015">2015年</option>

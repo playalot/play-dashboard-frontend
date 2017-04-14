@@ -45,16 +45,17 @@ export default class OrderList extends Component{
 		this.props.getOrder(0,status,merchant,year,month)
 	}
 	render() {
+		const { year,month,status } = this.state
 		return(
 			<div className="content" style={{backgroundColor:'#fff'}}>
 			  <div className="page-header">
 			  	<Form inline onSubmit={(e) => e.preventDefault()}>
 				  	<div className="btn-group">
-					  <button onClick={()=> this.setState({status:''},() => this.search())} className={`btn btn-default ${this.state.status === '' ? 'active':''}`}>全部</button>
-					  <button onClick={()=> this.setState({status:'prepaid'},() => this.search())} className={`btn btn-default ${this.state.status === 'prepaid' ? 'active':''}`}>已预订</button>
-					  <button onClick={()=> this.setState({status:'due'},() => this.search())} className={`btn btn-default ${this.state.status === 'due' ? 'active':''}`}>待补款</button>
-					  <button onClick={()=> this.setState({status:'paid'},() => this.search())} className={`btn btn-default ${this.state.status === 'paid' ? 'active':''}`}>已支付</button>
-					  <button onClick={()=> this.setState({status:'done'},() => this.search())} className={`btn btn-default ${this.state.status === 'done' ? 'active':''}`}>已完成</button>
+					  <button onClick={()=> this.setState({status:''},() => this.search())} className={`btn btn-default ${status === '' ? 'active':''}`}>全部</button>
+					  <button onClick={()=> this.setState({status:'prepaid'},() => this.search())} className={`btn btn-default ${status === 'prepaid' ? 'active':''}`}>已预订</button>
+					  <button onClick={()=> this.setState({status:'due'},() => this.search())} className={`btn btn-default ${status === 'due' ? 'active':''}`}>待补款</button>
+					  <button onClick={()=> this.setState({status:'paid'},() => this.search())} className={`btn btn-default ${status === 'paid' ? 'active':''}`}>已支付</button>
+					  <button onClick={()=> this.setState({status:'done'},() => this.search())} className={`btn btn-default ${status === 'done' ? 'active':''}`}>已完成</button>
 					</div>
 					{' '}
 					<FormGroup>
@@ -72,7 +73,7 @@ export default class OrderList extends Component{
 	                </FormGroup>
 	                {' '}
 					<FormGroup>
-						<FormControl componentClass="select" value={this.state.year} onChange={this.onChangeYear}>
+						<FormControl componentClass="select" value={year} onChange={this.onChangeYear}>
 							<option value="">全部年份</option>
 							<option value="2017">2017年</option>
 							<option value="2016">2016年</option>
@@ -84,7 +85,7 @@ export default class OrderList extends Component{
 					</FormGroup>
 					{' '}
 					<FormGroup>
-						<FormControl componentClass="select" value={this.state.month} onChange={this.onChangeMonth}>
+						<FormControl componentClass="select" value={month} onChange={this.onChangeMonth}>
 							<option value="">全部月份</option>
 							<option value="1">1月</option>
 							<option value="2">2月</option>
@@ -105,8 +106,28 @@ export default class OrderList extends Component{
 			  <div className="alert alert-dismissible">
 					<button type="button" className="close" data-dismiss="alert" aria-hidden="true">×</button>
 					<h5>
-						{this.state.year}年{this.state.month}月，
-						一共<strong>{this.props.summary.count}</strong>笔{this.state.status}订单，
+						{year ? `${year}年`:''}
+						{month ? `${month}月`:''}&nbsp;
+						一共<strong>{this.props.summary.count}</strong>笔&nbsp;
+						{(() => {
+							switch(status) {
+								case 'open' :
+									return (<small><span className="label label-default">等待买家付款</span></small>)
+								case 'paid' :
+									return (<small><span className="label label-success">已支付全款</span></small>)
+								case 'prepaid' :
+									return (<small><span className="label label-primary">已支付定金</span></small>)
+								case 'due' :
+									return (<small><span className="label label-danger">等待买家补款</span></small>)
+								case 'closed' :
+									return (<small><span className="label label-default">已关闭</span></small>)
+								case 'done' :
+									return (<small><span className="label label-info">已完成</span></small>)
+								default :
+									return (<small><span className="label label-default">全部</span></small>)
+							}
+						})()}
+						&nbsp;订单，
 						总计<strong>{this.props.summary.totalPrice}</strong>元
 					</h5>
 				</div>

@@ -380,24 +380,26 @@ class PlayDraftEditor extends Component {
         }
         return (
             <div className="edit-root">
-                <InlineStyleControls
-                    editorState={editorState}
-                    onToggle={this.toggleInlineStyle}
-                />
-                <BlockStyleControls
-                    editorState={editorState}
-                    onToggle={this.toggleBlockType}
-                />
-                <div className="edit-controls">
-                    <span className="edit-styleButton" onClick={this.promptForLink}>
-                        <i className="fa fa-link"></i>
-                    </span>
-                    <Dropzone className="edit-styleButton" accept="image/*" onDrop={this.uploadImg}>
-                        <i className="fa fa-camera-retro"></i>
-                    </Dropzone>
-                    <span className="edit-styleButton" onClick={() => this.setState({dialogVideo:true})}>
-                        <i className="fa fa-video-camera"></i>
-                    </span>
+                <div style={{top:0,zIndex:2,backgroundColor:'white'}} data-spy="affix"  data-offset-top="400">
+                    <InlineStyleControls
+                        editorState={editorState}
+                        onToggle={this.toggleInlineStyle}
+                    />
+                    <BlockStyleControls
+                        editorState={editorState}
+                        onToggle={this.toggleBlockType}
+                    />
+                    <div className="edit-controls">
+                        <span className="edit-styleButton" onClick={this.promptForLink}>
+                            <i className="fa fa-link"></i>
+                        </span>
+                        <Dropzone className="edit-styleButton" accept="image/*" onDrop={this.uploadImg}>
+                            <i className="fa fa-camera-retro"></i>
+                        </Dropzone>
+                        <span className="edit-styleButton" onClick={() => this.setState({dialogVideo:true})}>
+                            <i className="fa fa-video-camera"></i>
+                        </span>
+                    </div>
                 </div>
                 <div className={className} onClick={this.focus}>
                     <Editor

@@ -1,4 +1,5 @@
 import React,{ Component } from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 import {
     Row, Col, Modal, Tab, Tabs, ButtonToolbar
@@ -325,5 +326,5 @@ export default class UserDetail extends Component{
 
 
 UserDetail.contextTypes = {
-    router : React.PropTypes.object
+    router : PropTypes.object
 }

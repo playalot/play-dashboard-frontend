@@ -1,4 +1,5 @@
 import React,{ Component } from 'react'
+import PropTypes from 'prop-types'
 const _ = require('lodash')
 import {
 	Col, Row, Modal, Form, FormGroup, InputGroup, FormControl, Button, ButtonToolbar, DropdownButton, Checkbox
@@ -461,5 +462,5 @@ export default class Toy extends Component{
 
 
 Toy.contextTypes = {
-  	router : React.PropTypes.object
+  	router : PropTypes.object
 }

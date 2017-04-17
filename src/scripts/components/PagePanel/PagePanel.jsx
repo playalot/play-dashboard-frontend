@@ -1,4 +1,5 @@
 import React,{Component} from 'react'
+import PropTypes from 'prop-types'
 import {Link} from 'react-router'
 import {Row, Button,Form,FormGroup,InputGroup,FormControl, Modal} from 'react-bootstrap'
 import Moment from 'moment'
@@ -187,5 +188,5 @@ export default class PagePanel extends Component {
 }
 
 PagePanel.contextTypes = {
-  router : React.PropTypes.object
+  router : PropTypes.object
 }

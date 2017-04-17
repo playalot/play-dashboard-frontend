@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Dropzone from 'react-dropzone'
 import CDN from '../../widgets/cdn'
 import { Modal, Button,Form, FormGroup, Col, FormControl, Row,Radio } from 'react-bootstrap'
@@ -199,5 +200,5 @@ export default class EditBannerSet extends Component {
 }
 
 EditBannerSet.contextTypes = {
-    router : React.PropTypes.object
+    router : PropTypes.object
 }

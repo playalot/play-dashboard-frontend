@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { 
 	Row, Form, FormGroup, FormControl, Button, InputGroup, 
 } from 'react-bootstrap'
@@ -181,5 +182,5 @@ export default class UserList extends Component{
 }
 
 UserList.contextTypes = {
-  	router : React.PropTypes.object
+  	router : PropTypes.object
 }

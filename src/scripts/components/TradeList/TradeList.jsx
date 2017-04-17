@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 import {
 	Row, Col, Modal, Form, FormGroup, InputGroup, FormControl, Button, ButtonToolbar
@@ -170,5 +171,5 @@ export default class TradeList extends Component {
 }
 
 TradeList.contextTypes = {
-  	router : React.PropTypes.object
+  	router : PropTypes.object
 }

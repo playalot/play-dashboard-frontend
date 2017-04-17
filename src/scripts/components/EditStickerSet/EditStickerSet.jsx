@@ -1,4 +1,5 @@
 import React,{ Component } from 'react'
+import PropTypes from 'prop-types'
 import { Form, FormGroup, Row, Col, Checkbox, FormControl, Alert } from 'react-bootstrap'
 import { Router } from 'react-router'
 import Dropzone from 'react-dropzone'
@@ -136,5 +137,5 @@ export default class EditStickerSet extends Component{
 }
 
 EditStickerSet.contextTypes = {
-	router : React.PropTypes.object
+	router : PropTypes.object
 }

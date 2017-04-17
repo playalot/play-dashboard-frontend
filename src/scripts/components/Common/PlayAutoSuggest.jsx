@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Autosuggest from 'react-autosuggest'
 
 export default class PlayAutoSuggest extends Component {
@@ -53,11 +54,11 @@ export default class PlayAutoSuggest extends Component {
 }
 
 PlayAutoSuggest.propTypes = {
-	fetch:React.PropTypes.func.isRequired,
-	clear:React.PropTypes.func.isRequired,
-	getValue:React.PropTypes.func.isRequired,
-	selectValue:React.PropTypes.func.isRequired,
-	results:React.PropTypes.array.isRequired,
+	fetch:PropTypes.func.isRequired,
+	clear:PropTypes.func.isRequired,
+	getValue:PropTypes.func.isRequired,
+	selectValue:PropTypes.func.isRequired,
+	results:PropTypes.array.isRequired,
 }
 PlayAutoSuggest.defaultProps = {
 	placeholder:`请输入关键字`,

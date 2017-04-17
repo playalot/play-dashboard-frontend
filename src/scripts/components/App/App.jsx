@@ -1,4 +1,5 @@
 import React,{ Component } from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 export default class App extends Component{
 	constructor(props) {
@@ -155,5 +156,5 @@ export default class App extends Component{
 	}
 }
 App.propTypes = {
-  	children: React.PropTypes.element.isRequired
+  	children: PropTypes.element.isRequired
 }

@@ -1,6 +1,7 @@
 import React, {
     Component
 } from 'react'
+import PropTypes from 'prop-types'
 import {Link} from 'react-router'
 import {Row, Button, FormControl,Form, FormGroup } from 'react-bootstrap'
 import ReactPaginate from 'react-paginate'
@@ -154,5 +155,5 @@ export default class OrderList extends Component{
 }
 
 OrderList.contextTypes = {
-  	router : React.PropTypes.object
+  	router : PropTypes.object
 }

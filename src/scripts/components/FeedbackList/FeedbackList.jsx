@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 import Moment from 'moment'
 import ReactPaginate from 'react-paginate'
@@ -77,5 +78,5 @@ export default class FeedbackList extends Component{
 
 
 FeedbackList.contextTypes = {
-  	router : React.PropTypes.object
+  	router : PropTypes.object
 }

@@ -1,6 +1,7 @@
 import React, {
     Component
 } from 'react'
+import PropTypes from 'prop-types'
 import {makeWidthFlexible,XYPlot, XAxis, YAxis,VerticalGridLines, HorizontalGridLines, VerticalBarSeries,Crosshair} from 'react-vis';
 import { Link } from 'react-router'
 import Moment from 'moment'
@@ -207,5 +208,5 @@ export default class Home extends Component {
 }
 
 Home.contextTypes = {
-    router : React.PropTypes.object
+    router : PropTypes.object
 }

@@ -1,6 +1,7 @@
 import React, {
     Component
 } from 'react'
+import PropTypes from 'prop-types'
 import { convertToRaw } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
 import Request from 'superagent'
@@ -252,5 +253,5 @@ export default class EditPage extends Component {
 }
 
 EditPage.contextTypes = {
-    router : React.PropTypes.object
+    router : PropTypes.object
 }

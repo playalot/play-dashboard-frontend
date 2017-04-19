@@ -349,6 +349,11 @@ class PlayDraftEditor extends Component {
     }
     componentDidMount() {
         this.props.onChangeEditor(this.state.editorState.getCurrentContent(),this.state.gallery)
+        $('#page-affix').affix({
+          offset: {
+            top: $('#page-affix').offset().top
+          }
+        })
     }
     componentWillReceiveProps(nextProps) {
         const { nextRaw } = nextProps
@@ -380,7 +385,7 @@ class PlayDraftEditor extends Component {
         }
         return (
             <div className="edit-root">
-                <div style={{top:0,zIndex:2,backgroundColor:'rgba(255,255,255,.9)'}} data-spy="affix"  data-offset-top="400">
+                <div style={{top:0,zIndex:2,backgroundColor:'rgba(255,255,255,.9)'}} id="page-affix">
                     <InlineStyleControls
                         editorState={editorState}
                         onToggle={this.toggleInlineStyle}

@@ -380,7 +380,7 @@ class PlayDraftEditor extends Component {
         }
         return (
             <div className="edit-root">
-                <div style={{top:0,zIndex:2,backgroundColor:'white'}} data-spy="affix"  data-offset-top="400">
+                <div style={{top:0,zIndex:2,backgroundColor:'rgba(255,255,255,.9)'}} data-spy="affix"  data-offset-top="400">
                     <InlineStyleControls
                         editorState={editorState}
                         onToggle={this.toggleInlineStyle}

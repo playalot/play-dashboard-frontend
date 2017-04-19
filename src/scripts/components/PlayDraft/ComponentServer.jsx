@@ -6,8 +6,7 @@ export const INLINE_STYLES = [
     {label: 'Underline', style: 'UNDERLINE',class:'fa fa-underline'},
 ]
 export const BLOCK_TYPES = [
-    {label: 'H1', style: 'header-one'},
-    {label: 'H2', style: 'header-two'},
+    {label: 'H', style: 'header-one'},
     {label: 'Ul', style: 'unordered-list-item',class:'fa fa-list'},
     {label: 'Ol', style: 'ordered-list-item',class:'fa fa-list-ol'},
     {label: 'Quote', style: 'blockquote',class:'fa fa-quote-left'},
@@ -72,7 +71,7 @@ class StyleButton extends Component {
         return (
             <div className={className} onMouseDown={this.onToggle}>
                 {
-                    this.props.class ? (<i className={this.props.class}></i>) : (<span>{this.props.label}</span>)
+                    this.props.class ? (<i className={this.props.class}></i>) : (<strong>{this.props.label}</strong>)
                 }
             </div>
         )

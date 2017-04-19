@@ -6,7 +6,7 @@ export const INLINE_STYLES = [
     {label: 'Underline', style: 'UNDERLINE',class:'fa fa-underline'},
 ]
 export const BLOCK_TYPES = [
-    {label: 'H', style: 'header-one'},
+    {label: 'H1', style: 'header-one',class:'fa fa-header'},
     {label: 'Ul', style: 'unordered-list-item',class:'fa fa-list'},
     {label: 'Ol', style: 'ordered-list-item',class:'fa fa-list-ol'},
     {label: 'Quote', style: 'blockquote',class:'fa fa-quote-left'},

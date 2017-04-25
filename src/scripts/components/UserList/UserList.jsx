@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { 
-	Row, Form, FormGroup, FormControl, Button, InputGroup, 
+import {
+	Row, Form, FormGroup, FormControl, Button, InputGroup,
 } from 'react-bootstrap'
 import { Link } from 'react-router'
 import Moment from 'moment'
@@ -79,7 +79,8 @@ export default class UserList extends Component{
       { value: 'master', label: '达人玩家' },
       { value: 'custom', label: '代工定制' },
       { value: 'designer', label: '设计师' },
-      { value: 'brand', label: '品牌' }
+      { value: 'brand', label: '品牌商家' },
+			{ value: 'media', label: 'KOL自媒体' }
     ]
 		return(
 			<div className="content">
@@ -137,7 +138,7 @@ export default class UserList extends Component{
           </table>
         </div>
         <Row style={{textAlign:'center'}}>
-        	<ReactPaginate 
+        	<ReactPaginate
         		previousLabel={<span>&laquo;</span>}
 						nextLabel={<span>&raquo;</span>}
 						breakLabel={<span>...</span>}

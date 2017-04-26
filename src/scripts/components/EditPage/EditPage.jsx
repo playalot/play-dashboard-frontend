@@ -390,14 +390,6 @@ export default class EditPage extends Component {
         }, 500);
     }
     render() {
-        const options = [
-            { value: 'review', label: '评测' },
-            { value: 'news', label: '新闻' },
-            { value: 'info', label: '情报' },
-            { value: 'interview', label: '访谈' },
-            { value: 'essay', label: '随笔' },
-            { value: 'knowledge', label: '干货' }
-        ]
         const { cover,title,tags,category,authorId,dialogSubmit,gallery,editorState } = this.state
         const contentState = editorState.getCurrentContent()
         let className = 'edit-editor'
@@ -453,22 +445,45 @@ export default class EditPage extends Component {
                     <p className="title">添加标签</p>
                     <TagsInput value={tags} onChange={(tags) => this.setState({tags},() => this.saveStorage())} />
                 </div>
-                <div className="edit-section">
-                    <p className="title">文章分类</p>
-                    <Select
-                    name="form-field-name"
-                    value={category}
-                    options={options}
-                    clearable={false}
-                    onChange={(newValue) => this.setState({category:newValue.value},() => this.saveStorage())}
-                    />
-                </div>
-                <div className="edit-section">
-                    <p className="title">作者ID</p>
-                    <input type="text" value={authorId} className="form-control" onChange={(e) => this.setState({authorId:e.target.value},() => this.saveStorage())}/>
-                </div>
-                <div className="edit-section">
-                    <button className="btn btn-primary" onClick={this.publish.bind(this)}>发布文章</button>
+                <div className="row">
+                    <div className="col-sm-8">
+                        <input type="text" placeholder="作者ID" value={authorId} className="form-control" onChange={(e) => this.setState({authorId:e.target.value},() => this.saveStorage())}/>
+                    </div>
+                    
+                    <div className="col-sm-4">
+                        <button className="btn btn-primary pull-right" onClick={this.publish.bind(this)}>发布文章</button>
+                        <div style={{marginRight:15}} className="btn-group dropup pull-right">
+                          <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            {(() => {
+                                switch(category){
+                                    case 'review':
+                                        return '评测'
+                                    case 'news':
+                                        return '新闻'
+                                    case 'info':
+                                        return '情报'
+                                    case 'interview':
+                                        return '访谈'
+                                    case 'essay':
+                                        return '随笔'
+                                    case 'knowledge':
+                                        return '干货'
+                                    default :
+                                        return ''
+                                }
+                            })()}
+                            &nbsp;&nbsp;<span className="caret"></span>
+                          </button>
+                            <ul className="dropdown-menu">
+                                <li><a onClick={() => this.setState({category:'review'},() => this.saveStorage())}>评测</a></li>
+                                <li><a onClick={() => this.setState({category:'news'},() => this.saveStorage())}>新闻</a></li>
+                                <li><a onClick={() => this.setState({category:'info'},() => this.saveStorage())}>情报</a></li>
+                                <li><a onClick={() => this.setState({category:'interview'},() => this.saveStorage())}>访谈</a></li>
+                                <li><a onClick={() => this.setState({category:'essay'},() => this.saveStorage())}>随笔</a></li>
+                                <li><a onClick={() => this.setState({category:'knowledge'},() => this.saveStorage())}>干货</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 {
                     dialogSubmit ?

@@ -198,11 +198,7 @@
       }
     }
     .DraftEditor-root{
-      height:400px;
-      overflow-y:scroll;
-      overflow-x:hidden;
-      resize:vertical;
-      box-sizing:border-box;
+      min-height:100px;
       .public-DraftEditorPlaceholder-root {
         line-height:1.7;
       }

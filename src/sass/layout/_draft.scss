@@ -249,7 +249,8 @@
 
 .draft-image{
   position:relative;
-  margin:5px auto;
+  margin:5px 0;
+  text-align:center;
   &:hover{
     .del{
       display:inline-flex;

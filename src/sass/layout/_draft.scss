@@ -218,52 +218,62 @@
       padding: 10px 0;
   }
   
+
   .edit-controls {
-      font-family: 'Helvetica', sans-serif;
-      font-size: 14px;
-      margin-bottom: 5px;
-      user-select: none;
-      display: inline-flex;
-      margin-top: 5px;
-      justify-content:center;
-      align-items:center;
-  }
-  .edit-styleButton {
-      color: #999;
-      cursor: pointer;
-      margin-right: 16px;
-      padding: 2px 0;
-      display: inline-block;
-  }
-  .edit-activeButton {
-      color: #5890ff;
-  }
-  .edit-imgFocus{
-    border:1px solid red;
-  }
-  .media-image-wrap{
-    position:relative;
-    width:100%;
-    height:auto;
-    cursor:default;
-    margin: 5px auto;
-    text-align:center;
-    .toolbar{
-      position:absolute;
-      top:0;
-      right:0;
+    padding:0 15px 0 10px;
+    border-right:1px solid #eee;
+    display: inline-flex;
+    align-items:center;
+    color:rgb(165,165,165);
+    &:last-child{
+      border:none;
+    }
+    span,.fa{
+      margin:0 10px;
       cursor:pointer;
-      background-color:rgba(0,0,0,.6);
-      padding:4px 6px;
-      color:white;
-      i:hover{
-        transition:color .3s;
-        color:#0ff;
+      &:hover{
+        color:rgb(82,83,84);
+      }
+      &.active{
+        color:rgb(255,229,65);
       }
     }
-    img{
-      max-width:100%;
-      height:auto;
+  }
+}
+#page-affix{
+  padding: 10px 0;
+  top: 0;
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 0.9)
+}
+
+.draft-image{
+  position:relative;
+  margin:5px 0;
+  text-align:center;
+  &:hover{
+    .del{
+      display:inline-flex;
     }
+  }
+  .del{
+    position:absolute;
+    top:0;
+    right:0;
+    background-color:rgba(0,0,0,.5);
+    width:40px;
+    height:40px;
+    font-size:18px;
+    color:#ddd;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    &:hover{
+      color:#fff;
+    }
+  }
+  img{
+    max-width:100%;
   }
 }

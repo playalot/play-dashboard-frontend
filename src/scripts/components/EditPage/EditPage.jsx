@@ -1,24 +1,36 @@
-import React, {
-    Component
-} from 'react'
+import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
-import { convertToRaw } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
 import Request from 'superagent'
 import Dropzone from 'react-dropzone'
 import TagsInput from 'react-tagsinput'
 import Select from 'react-select'
 
+import {
+  Editor,
+  EditorState,
+  RichUtils,
+  Entity,
+  ContentState,
+  AtomicBlockUtils,
+  convertToRaw,
+  convertFromRaw,
+  Modifier,
+  SelectionState
+} from 'draft-js'
+
+import decorator from '../PlayDraft/DecoratorServer'
+import { getBlockStyle,makeId, DraftImage } from '../PlayDraft/draftServer'
+import { createLinkEntity,createImageEntity,createVideoEntityWithHtml,createVideoEntityWithSrc,removeEntity } from '../PlayDraft/entityServer'
+import DraftToolbar from '../PlayDraft/DraftToolbar'
+
 import CDN from '../../widgets/cdn'
-import PlayDraftEditor from '../PlayDraft/PlayDraftEditor'
-import { makeId } from '../PlayDraft/ComponentServer'
 export default class EditPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            //editor相关
-            contentState:null,
-            raw:false,
+            editorState:EditorState.createEmpty(decorator),
             //表单相关
             uploadUrl: 'http://upload.qiniu.com/',
             cover:'',
@@ -27,14 +39,40 @@ export default class EditPage extends Component {
             category:'news',
             authorId:'',
             gallery:[],
-            dialogSubmit:false
+            dialogSubmit:false,
+
+            dialogVideo:false,
+            videoMode: true,
+            videoCode:'',
+            progress:null,
+            videoUrl:null,
+            uploadKey:'',
         }
-        //editor的回调方法
-        this.onChangeEditor = (contentState,gallery) => this.setState({contentState,gallery},() => this.saveStorage() )
         //封面
         this.onDropCover = this._onDropCover.bind(this)
         //自动保存至storage
         this.saveStorage = this._saveStorage.bind(this)
+        //editor的回调方法
+        this.onChange = (editorState) => this.setState({ editorState },() => this.saveStorage())
+        this.focus = () => this.refs.editor.focus()
+        this.blur = () => this.refs.editor.blur()
+
+        this.blockRendererFn = this._blockRendererFn.bind(this)
+        //媒体(图片,视频..)
+        this.addImage = this._addImage.bind(this)
+        this.addVideo = () => this._addVideo()
+        this.onChangeVideoCode = (e) => this.setState({videoCode: e.target.value})
+        this.uploadImg = this._uploadImg.bind(this)
+        this.onDropVideo = this._onDropVideo.bind(this)
+        this.uploadQiniu = this._uploadQiniu.bind(this)
+        //dialog controller
+        this.showVideoDialog = () => this.setState({ dialogVideo:true })
+        this.closeVideoDialog = () => this.setState({
+            dialogVideo:false,
+            progress:null,
+            uploadKey:null,
+            videoUrl:null,
+        })
     }
     componentDidMount() {
         const data = window.localStorage.getItem('editor-draft')
@@ -42,10 +80,11 @@ export default class EditPage extends Component {
             if (confirm('请问是否要载入保存的草稿')) {
                 const draftData = JSON.parse(data)
                 let { title, cover, tags, category, gallery, raw, authorId } = draftData
+                let rawData = convertFromRaw(raw)
                 this.setState({
-                    title, cover, tags, category, gallery,authorId
+                    title, cover, tags, category, gallery,authorId,
+                    editorState: EditorState.push(this.state.editorState, rawData)
                 })
-                this.props.setPageRaw(raw,gallery)
             }
         }
         if(this.props.params.id) {
@@ -53,10 +92,11 @@ export default class EditPage extends Component {
 			.get(`/api/page/${this.props.params.id}/raw`)
 			.end((err,res) => {
 				const { title, cover, tags, category, gallery, raw, authorId } = res.body
+                let rawData = convertFromRaw(raw)
 				this.setState({
-					title, cover, tags, category, gallery, authorId:authorId.$oid
+					title, cover, tags, category, gallery, authorId:authorId.$oid,
+                    editorState:EditorState.push(this.state.editorState, rawData)
 				})
-                this.props.setPageRaw(raw,gallery)
 			})
 		}
     }
@@ -95,8 +135,9 @@ export default class EditPage extends Component {
     }
     _saveStorage() {
         const {
-            title, cover, tags, category, gallery,authorId, contentState
+            title, cover, tags, category, gallery,authorId,editorState
         } = this.state
+        const contentState = editorState.getCurrentContent()
         const raw = convertToRaw(contentState)
         const saveData = {
             title,
@@ -112,15 +153,16 @@ export default class EditPage extends Component {
     }
     publish() {
         const {
-            contentState, title, cover, tags, category, gallery,authorId
+            title, cover, tags, category, gallery,authorId,editorState
         } = this.state
+        const contentState = editorState.getCurrentContent()
         const options = {
             blockRenderers: {
                 atomic: (block) => {
                     const entity = contentState.getEntity(block.getEntityAt(0))
                     const data = entity.getData()
                     if (data.type === 'image') {
-                        return `<figure><img src="${data.src}" style="width:${data.size}" /></figure>`
+                        return `<figure><img src="${data.src}" style="max-width:'100%'" /></figure>`
                     } else if (data.type === 'video') {
                     	if(data.src) {
                         	return `<figure><video width="100%" src="${data.src}" poster="${data.poster}" controls /></figure>`
@@ -181,6 +223,172 @@ export default class EditPage extends Component {
                 })
         })
     }
+    _blockRendererFn(block) {
+        const { editorState } = this.state
+        const contentState = editorState.getCurrentContent()
+        if (block.getType() === 'atomic') {
+            return {
+                component: (props) => {
+                    const entityKey = props.block.getEntityAt(0)
+                    const entity = contentState.getEntity(entityKey)
+                    const { html, src } = entity.getData()
+                    const type = entity.getType()
+
+                    let media = null
+                    if (type === 'image') {
+                        media = (
+                            <DraftImage
+                                src={src.split('!')[0]}
+                                delete={() => this.onChange(removeEntity(editorState,props.block.getKey()))}
+                            />
+                        )
+                    }else if (type === 'video') {
+                        media = <div dangerouslySetInnerHTML={{__html: html}}></div>
+                    }
+                    return media
+                },
+                editable: false,
+            };
+        }
+      return null;
+    }
+    _uploadImg(files) {
+        let _this = this
+        Request.get(`/api/uptoken`)
+        .withCredentials()
+        .end(function(err, res) {
+            let uploadToken = res.body.uptoken
+            files.forEach((file) => {
+                let d = new Date()
+                let id = makeId()
+                let uploadKey = 'article/photo/' + Math.round(d.getTime() / 1000) + '_' + id + '.' + file.name.split('.').pop()
+                file.request = _this.uploadToQiniu(file, uploadKey, uploadToken)
+            })
+        })
+    }
+    uploadToQiniu(file, uploadKey, uploadToken) {
+        if (!file || file.size === 0) {
+            return null;
+        }
+        let _this = this;
+        const req = Request
+        .post(this.state.uploadUrl)
+        .field('key', uploadKey)
+        .field('token', uploadToken)
+        .field('x:filename', file.name)
+        .field('x:size', file.size)
+        .attach('file', file, file.name)
+        .set('Accept', 'application/json');
+
+        req.end(function(err, res) {
+            let value = _this.state.gallery.slice();
+            value.push(uploadKey);
+            _this.setState({
+                gallery: value
+            });
+            _this.addImage(uploadKey)
+        });
+        return req;
+    }
+    _uploadQiniu(file, uploadKey, uploadToken) {
+        if (!file || file.size === 0) {
+            return null;
+        }
+        const req = Request
+        .post(this.state.uploadUrl)
+        .field('key', uploadKey)
+        .field('token', uploadToken)
+        .field('x:filename', file.name)
+        .field('x:size', file.size)
+        .attach('file', file, file.name)
+        .set('Accept', 'application/json');
+
+        req.on('progress', file.onprogress);
+        req.end(function(err, res) {
+            console.log('done!')
+        });
+        return req
+    }
+    //媒体操作
+    _addImage(imageKey) {
+        const { editorState } = this.state
+        const src = CDN.show(imageKey) + '!articlestyle';
+        this.setState({
+            editorState:createImageEntity(editorState,src)
+        })
+    }
+    _addVideo() {
+        const { videoMode,videoCode,editorState } = this.state
+        if(videoMode){
+            if (videoCode.trim().length === 0) {
+                return false
+            }
+            const html = videoCode.trim().replace("width=510", "width=640");
+            this.setState({
+                editorState:createVideoEntityWithHtml(editorState,html),
+                videoCode: '',
+                dialogVideo: false
+            })
+        }else{
+            if (parseInt(this.state.progress) !== 100) {
+                return alert('正在上傳請稍等..')
+            }
+            const src = CDN.show(this.state.uploadKey)
+            this.setState({
+                editorState:createVideoEntityWithSrc(editorState,src),
+                uploadKey: '',
+                dialogVideo: false
+            })
+        }
+
+    }
+    _onDropVideo(files) {
+        let video = files[0];
+
+        // 初始化progress
+        let _this = this;
+        video.onprogress = function(e) {
+            // console.log(e.percent);
+            _this.setState({
+                progress: e.percent.toFixed(2)
+            });
+        };
+
+        // 获取视频meta
+        let URL = window.URL || window.webkitURL;
+        video.preview = URL.createObjectURL(video);
+
+        let vdom = ReactDOM.findDOMNode(this.refs.vtag);
+
+        this.setState({
+            videoUrl: video.preview
+        });
+
+        let timer = setInterval(function() {
+            // console.warn(Date.now())
+            if (vdom.readyState === 4) {
+                let d = new Date();
+                let id = makeId();
+                let uploadKey = 'user/video/file/' + id + '_' + Math.round(d.getTime() / 1000) + '_w_' + vdom.videoWidth +
+                '_h_' + vdom.videoHeight + '_d_' + Math.floor(vdom.duration) + '_' + _this.state.userId + '.mp4';
+                // console.log(uploadKey);
+                Request
+                .get(`/api/uptoken`)
+                .query({
+                    key:uploadKey
+                })
+                .end((err,res) => {
+                    // console.info(res.body.uptoken)
+                    let uploadToken = res.body.uptoken
+                    _this.setState({
+                        uploadKey: uploadKey
+                    });
+                    video.request = _this._uploadQiniu(video, uploadKey, uploadToken);
+                })
+                clearInterval(timer);
+            }
+        }, 500);
+    }
     render() {
         const options = [
             { value: 'review', label: '评测' },
@@ -190,7 +398,14 @@ export default class EditPage extends Component {
             { value: 'essay', label: '随笔' },
             { value: 'knowledge', label: '干货' }
         ]
-        const { cover,title,tags,category,authorId,dialogSubmit,gallery } = this.state
+        const { cover,title,tags,category,authorId,dialogSubmit,gallery,editorState } = this.state
+        const contentState = editorState.getCurrentContent()
+        let className = 'edit-editor'
+        if (!contentState.hasText()) {
+            if (contentState.getBlockMap().first().getType() !== 'unstyled') {
+                className = ' edit-hidePlaceholder'
+            }
+        }
         return (
             <div className="editarticle">
                 <div className="edit-section">
@@ -213,9 +428,27 @@ export default class EditPage extends Component {
                 <div className="edit-section">
                     <input type="text" value={title} className="input" onChange={(e) => this.setState({title:e.target.value},() => this.saveStorage())} placeholder="输入文章标题"/>
                 </div>
-                <PlayDraftEditor
-                    onChangeEditor={this.onChangeEditor}
-                />
+                <DraftToolbar editorState={editorState} onChange={this.onChange}>
+                    <Dropzone data-toggle="tooltip" data-placement="top" title="图片" className="fa fa-camera-retro"  accept="image/*" onDrop={this.uploadImg}>
+                    </Dropzone>
+                    <span data-toggle="tooltip" data-placement="top" title="视频" className="fa fa-video-camera" onClick={this.showVideoDialog}>
+                    </span>
+                </DraftToolbar>
+                <div className="edit-section">
+                    <div className="edit-root">
+                        <div className={className} onClick={this.focus}>
+                            <Editor
+                                blockRendererFn={this.blockRendererFn}
+                                blockStyleFn={getBlockStyle}
+                                editorState={editorState}
+                                onChange={this.onChange}
+                                placeholder="编辑文章内容"
+                                ref="editor"
+                                handleKeyCommand={this.handleKeyCommand}
+                            />
+                        </div>
+                    </div>
+                </div>
                 <div className="edit-section">
                     <p className="title">添加标签</p>
                     <TagsInput value={tags} onChange={(tags) => this.setState({tags},() => this.saveStorage())} />
@@ -246,6 +479,42 @@ export default class EditPage extends Component {
                         </div>
                     </div>
                     :null
+                }
+                {
+                    this.state.dialogVideo ?
+                    <div className="modal">
+                        <div className="dialog">
+                            <span onClick={() => this.setState({dialogVideo:false})} className="dialog-close">×</span>
+                            <ul className="nav nav-tabs">
+                              <li className={this.state.videoMode ? 'active':''}><a onClick={() => this.setState({videoMode:true})}>粘贴视频通用代码</a></li>
+                              <li className={this.state.videoMode ? '':'active'}><a onClick={() => this.setState({videoMode:false})}>上傳視頻</a></li>
+                            </ul>
+                            <br/>
+                            {
+                                this.state.videoMode ?
+                                <div>
+                                    <textarea className="video-code" value={this.state.videoCode} onChange={(e) => this.setState({videoCode:e.target.value})}/>
+                                </div>
+                                :<div>
+                                    <Dropzone onDrop={this.onDropVideo} multiple={false} style={{width:'100%',height:'100px',border: '2px dashed rgb(204, 204, 204)', 'borderRadius': '5px'}}>
+                                        <div>将视频文件拖入该区域</div>
+                                    </Dropzone>
+                                    <br/>
+                                    <div className="progress">
+                                      <div className="progress-bar" style={{width:`${this.state.progress}%`}}>
+                                        {(this.state.progress || 0)}%
+                                      </div>
+                                    </div>
+                                    <video style={{display:'none'}} ref="vtag" className="" src={this.state.videoUrl} controls></video>
+                                </div>
+                            }
+                            <div className="dialog-footer">
+                                <button className="btn btn-primary" onClick={this.addVideo}>插入</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    : null
                 }
             </div>
         )

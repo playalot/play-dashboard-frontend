@@ -100,6 +100,7 @@ export default class App extends Component{
 					  <li><Link to="/tag" activeClassName="active"><i className="fa fa-tags"></i><span>标签</span></Link></li>
 		              <li><Link to="/sticker" activeClassName="active"><i className="fa fa-paw"></i><span>贴纸</span></Link></li>
 		              <li><Link to="/notification" activeClassName="active"><i className="fa fa-volume-up"></i><span>推送</span></Link></li>
+		              <li><Link to="/tools" activeClassName="active"><i className="fa fa-wrench"></i><span>工具</span></Link></li>
 		              <li>
 		                <a href="#">
 		                  <i className="fa fa-info-circle"></i>

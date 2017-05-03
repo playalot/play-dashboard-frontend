@@ -29,6 +29,7 @@ import EditShortVideo from './components/EditShortVideo/EditShortVideo'
 import EditSku from './components/EditSku'
 
 import Notification from './components/Notification/Notification.jsx'
+import Tools from './components/Tools'
 
 import Test from './components/test';
 import OrderToyList from './components/OrderToyList'
@@ -69,6 +70,7 @@ export default {
         { path:'/test', component:Test },
         
         { path:'/notification', component:Notification },
+        { path:'/tools', component:Tools },
 
     ]
 }

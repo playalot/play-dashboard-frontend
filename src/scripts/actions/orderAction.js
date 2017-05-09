@@ -2,6 +2,7 @@ import Request from 'superagent'
 
 export const ORDER_L_RECEIVE_ORDER = 'ORDER_L_RECEIVE_ORDER'
 export const ORDER_L_RECEIVE_ORDER_BY_TOY = 'ORDER_L_RECEIVE_ORDER_BY_TOY'
+export const ORDER_L_RECEIVE_ORDER_BY_USER = 'ORDER_L_RECEIVE_ORDER_BY_USER'
 export const ORDER_L_ADD_TRACKING = 'ORDER_L_ADD_TRACKING'
 export const ORDER_L_SET_STATUS = 'ORDER_L_SET_STATUS'
 export const ORDER_L_START_PAY = 'ORDER_L_START_PAY'
@@ -24,6 +25,12 @@ function receiveOrderByToy(orders,toy) {
         type: ORDER_L_RECEIVE_ORDER_BY_TOY,
         orders,
         toy
+    }
+}
+function receiveOrderByUser(orders) {
+    return {
+        type: ORDER_L_RECEIVE_ORDER_BY_USER,
+        orders,
     }
 }
 function _addTracking(id,trackNo) {
@@ -95,8 +102,16 @@ export function getOrderByToy(id) {
                 dispatch(receiveOrderByToy(res.body.orders,res.body.toy))
             })
     }
+}
 
-    
+export function getOrderByUser(id) {
+    return dispatch => {
+        return Request
+            .get(`/api/user/${id}/orders`)
+            .end((err,res) => {
+                dispatch(receiveOrderByUser(res.body.orders))
+            })
+    }
 }
 
 export function getOrder (page = 0,status = 'paid',merchant = '',year,month) {

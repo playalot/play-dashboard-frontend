@@ -1,5 +1,5 @@
 import Immutable from 'immutable'
-import { ORDER_L_RECEIVE_ORDER, ORDER_L_RECEIVE_ORDER_BY_TOY, ORDER_L_ADD_TRACKING,ORDER_L_SET_STATUS,ORDER_L_START_PAY } from '../actions/orderAction'
+import { ORDER_L_RECEIVE_ORDER, ORDER_L_RECEIVE_ORDER_BY_TOY,ORDER_L_RECEIVE_ORDER_BY_USER, ORDER_L_ADD_TRACKING,ORDER_L_SET_STATUS,ORDER_L_START_PAY } from '../actions/orderAction'
 
 export default (state = Immutable.fromJS({ orders: [],toy:{}, totalPages:100,order:{},status:'',merchant:'',summary:{} }),action)=>{
     switch (action.type) {
@@ -18,6 +18,9 @@ export default (state = Immutable.fromJS({ orders: [],toy:{}, totalPages:100,ord
             return state
                 .updateIn(['orders'], orders => orders.clear().concat(Immutable.fromJS(action.orders)))
                 .set('toy',action.toy)
+        case ORDER_L_RECEIVE_ORDER_BY_USER:
+            return state
+                .updateIn(['orders'], orders => orders.clear().concat(Immutable.fromJS(action.orders)))
         case ORDER_L_ADD_TRACKING:
         	return state.updateIn(['orders'],(orders) => {
         		return orders.update(

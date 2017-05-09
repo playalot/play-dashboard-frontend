@@ -33,6 +33,7 @@ import Tools from './components/Tools'
 
 import Test from './components/test';
 import OrderToyList from './components/OrderToyList'
+import OrderUserList from './components/OrderUserList'
 
 export default {
     path: '/',
@@ -56,6 +57,7 @@ export default {
 
         { path:'/order/:id', component:OrderDetail },
         { path:'/order/toy/:id', component:OrderToyList },
+        { path:'/order/user/:id', component:OrderUserList },
         
         { path:'/user/:id', component:UserDetail },
         { path:'/tag/:id', component:EditTag },

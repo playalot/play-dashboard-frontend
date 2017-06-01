@@ -58,7 +58,7 @@ export default class extends Component {
       req.on('progress', file.onprogress);
     }
     req.end(function(err, res){
-      console.log('done!');
+      console.log(res);
     });
     return req;
   }
@@ -84,7 +84,7 @@ export default class extends Component {
       if (vdom.readyState === 4){
         let d = new Date();
         let id = makeid();
-        let uploadKey = 'user/video/file/' + id + '_' + Math.round(d.getTime()/1000) + '_w_' + vdom.videoWidth +
+        let uploadKey = 'user/video/raw/' + id + '_' + Math.round(d.getTime()/1000) + '_w_' + vdom.videoWidth +
           '_h_' + vdom.videoHeight + '_d_' + Math.floor(vdom.duration) + '_' + _this.state.userId + '.mp4';
           console.log(uploadKey);
         $.ajax({

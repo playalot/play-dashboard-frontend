@@ -1,15 +1,8 @@
-/*global window, alert */
-
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Dropzone from 'react-dropzone';
 import Request from 'superagent';
-import { Modal,Button } from 'react-bootstrap'
-
-function isFunction(fn) {
-  let getType = {};
-  return fn && getType.toString.call(fn) === '[object Function]';
-}
+import { Modal,Button,FormGroup,FormControl,Col,Row,Form } from 'react-bootstrap'
 
 function makeid() {
     let text = '';
@@ -30,37 +23,30 @@ export default class extends Component {
       progress: 0,
       uploadKey: '',
       caption: '',
-      alert: false
+      alert: false,
+      offset:1,
+      modalPoster:false
     };
     this.onDrop = this.onDrop.bind(this);
-    this.changeCaption = this.changeCaption.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.onConfirm = this.onConfirm.bind(this);
-    this.onClose = this.onClose.bind(this);
-  }
-  changeCaption(e) {
-    this.setState({caption:e.target.value});
   }
   uploadQiniu(file, uploadKey, uploadToken) {
     if (!file || file.size === 0) {
       return null;
     }
-    const req = Request
+    return Request
       .post(this.state.uploadUrl)
       .field('key', uploadKey)
       .field('token', uploadToken)
       .field('x:filename', file.name)
       .field('x:size', file.size)
       .attach('file', file, file.name)
-      .set('Accept', 'application/json');
-
-    if (isFunction(file.onprogress)) {
-      req.on('progress', file.onprogress);
-    }
-    req.end(function(err, res){
-      console.log('done!');
-    });
-    return req;
+      .set('Accept', 'application/json')
+      .on('progress',file.onprogress)
+      .end((err, res) => {
+        let vdom = ReactDOM.findDOMNode(this.refs.vtag)
+        this.setState({showPoster:true,duration:vdom.duration})
+      })
   }
   onDrop(files) {
     let video = files[0];
@@ -68,7 +54,6 @@ export default class extends Component {
     // 初始化progress
     let _this = this;
     video.onprogress = function(e) {
-      console.log(e.percent);
       _this.setState({progress: e.percent.toFixed(2)});
     };
 
@@ -108,95 +93,117 @@ export default class extends Component {
     }
     let data = {
       userId: this.state.userId,
-      uploadKey: this.state.uploadKey
+      uploadKey: this.state.uploadKey,
+      offset:this.state.offset
     };
     if (this.state.caption.trim() !== '') {
-      data.caption = this.state.caption;
+      data.caption = this.state.caption
     }
-    let _this = this;
     Request
       .post('/api/uploadvideo')
       .send(data)
       .set('ContentType', 'application/json')
-      .end(function(err, res){
-        console.log(err);
-        console.log(res);
-        _this.setState({alert: true});
-        // Calling the end function will send the request
-      });
-    // $.ajax({
-    //    url : '/api/uploadvideo',
-    //    type : 'POST',
-    //    data: JSON.stringify(data),
-    //    contentType: 'application/json; charset=utf-8',
-    //    dataType: 'json',
-    //    success : function() {
-    //      this.setState({alert: true});
-    //    }.bind(this)
-    // });
-  }
-  onConfirm() {
-    this.setState({
-      videoUrl: '',
-      progress: 0,
-      uploadKey: '',
-      caption: '',
-      alert: false
-    });
-  }
-  onClose() {
-     this.setState({alert: false});
+      .end((err, res) => {
+        this.setState({
+          videoUrl: '',
+          progress: 0,
+          uploadKey: '',
+          caption: '',
+          showPoster:false,
+        },() => {
+          alert('提交成功')
+        })
+      })
   }
   render() {
-    var customStyles = {
-      content : {
-        zIndex                : 3,
-        width                 : '300px',
-        top                   : '50%',
-        left                  : '50%',
-        right                 : 'auto',
-        bottom                : 'auto',
-        marginRight           : '-50%',
-        transform             : 'translate(-50%, -50%)'
-      }
-    };
     let dropZoneStyles = {
-        margin: '20px auto',
-        border: '2px dashed #ccc',
-        borderRadius: '5px',
-        width: '300px',
-        height: '200px',
-        color: '#aaa'
+      width:'100%',
+      height:200,
+      border:'2px dashed rgb(102, 102, 102)',
+      borderRadius:5
     };
     return (
       <div className="content">
         <div className="row">
-          <Dropzone onDrop={this.onDrop} multiple={false} className="col-sm-3" style={dropZoneStyles}>
-            <div>将视频文件拖入该区域</div>
-          </Dropzone>
-          <div className="col-sm-3">
-            <p>{'USERID: ' + this.state.userId}</p>
-            <p>{this.state.uploadKey}</p>
-            <p>{(this.state.progress || 0) + '% uploaded'}</p>
+          <div className="col-sm-3" >
+            <Dropzone onDrop={this.onDrop} multiple={false} style={dropZoneStyles}>
+              <div>将视频文件拖入该区域</div>
+            </Dropzone>
+            <video ref="vtag" style={{marginTop:15}} src={this.state.videoUrl} controls></video>
           </div>
-          <div className="col-sm-3">
-            <video ref="vtag" className="" src={this.state.videoUrl} controls></video>
+          <div className="col-sm-9">
+            <Form horizontal onSubmit={(e) => e.preventDefault()}>
+              <FormGroup>
+                <Col className="control-label sm-2-label" sm={3}>USERID</Col>
+                <Col sm={9}>
+                  <FormControl type="text" defaultValue={this.state.userId} readOnly/>
+                </Col>
+              </FormGroup>
+              <FormGroup>
+                <Col className="control-label sm-2-label" sm={3}>UPLOADKEY</Col>
+                <Col sm={9}>
+                  <FormControl type="text" value={this.state.uploadKey} readOnly/>
+                </Col>
+              </FormGroup>
+              <FormGroup>
+                <Col className="control-label sm-2-label" sm={3}>CAPTION</Col>
+                <Col sm={9}>
+                  <textarea style={{width:'100%'}} onChange={(e) => this.setState({caption:e.target.value})} value={this.state.caption} />
+                </Col>
+              </FormGroup>
+              <FormGroup>
+                <Col className="control-label sm-2-label" sm={3}>PROGRESS</Col>
+                <Col sm={9}>
+                  <div className="progress">
+                    <div className="progress-bar" style={{width:`${this.state.progress}%`}}>
+                      {this.state.progress}
+                    </div>
+                  </div>
+                </Col>
+              </FormGroup>
+              {
+                this.state.showPoster ?
+                <FormGroup>
+                  <Col className="control-label sm-2-label" sm={3}>POSTER</Col>
+                  <Col sm={3}>
+                    <img style={{width:'100%'}} src={`http://img.playalot.cn/${this.state.uploadKey}?vframe/jpg/offset/${this.state.offset}`}/>
+                  </Col>
+                  <Col sm={6}>
+                    <button onClick={() => this.setState({modalPoster:true})} className="btn btn-success">更换封面</button>
+                  </Col>
+                </FormGroup>
+                :null
+              }
+              <Col sm={9} smOffset={3}>
+                <button className="btn btn-primary" onClick={this.onSubmit}>提交</button>
+              </Col>
+            </Form>
           </div>
         </div>
-        <div className="row">
-          <textarea onChange={this.changeCaption} value={this.state.caption} />
-        </div>
-        <div className="row">
-          <div className="btn btn-primary" onClick={this.onSubmit}>提交</div>
-        </div>
-        <Modal show={this.state.alert} onHide={this.onClose}>
-          <Modal.Body>
-            提交成功
-          </Modal.Body>
-          <Modal.Footer>
-            <Button bsStyle="primary"　onClick={this.onConfirm}>确定</Button>
-          </Modal.Footer>
-        </Modal>
+        {
+          this.state.modalPoster ?
+          <div className="modal" style={{display:'block'}} tabIndex="-1" onClick={() => this.setState({modalPoster:false})}>
+            <div className="modal-dialog" onClick={e => e.stopPropagation()}>
+              <div className="modal-content">
+                <div className="modal-body row">
+                  {
+                    [1,2,3,5,10,15,20,25,30].map((item,i) => {
+                      if(item >= this.state.duration){
+                        return null
+                      }
+                      return(
+                        <Col key={`poster_${i}`} sm={2} style={{padding:10}}>
+                          <img onClick={() => this.setState({modalPoster:false,offset:item})} style={{width:'100%'}} src={`http://img.playalot.cn/${this.state.uploadKey}?vframe/jpg/offset/${item}`}/>
+                        </Col>
+                      )              
+                    })
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+          :null
+        }
       </div>
     );
   }

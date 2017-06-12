@@ -115,7 +115,7 @@ export default class EditPage extends Component {
                 if(img.width <320){
                     return alert('图片太小')
                 }
-                const uploadKey = `article/cover/${makeId()}/_w_${img.width}_h_${img.height}.${file.name.split('.').pop()}`
+                const uploadKey = `article/cover/${makeId()}_w_${img.width}_h_${img.height}.${file.name.split('.').pop()}`
                 Request
                 .post(this.state.uploadUrl)
                 .field('key', uploadKey)
@@ -449,7 +449,7 @@ export default class EditPage extends Component {
                     <div className="col-sm-8">
                         <input type="text" placeholder="作者ID" value={authorId} className="form-control" onChange={(e) => this.setState({authorId:e.target.value},() => this.saveStorage())}/>
                     </div>
-                    
+
                     <div className="col-sm-4">
                         <button className="btn btn-primary pull-right" onClick={this.publish.bind(this)}>发布文章</button>
                         <div style={{marginRight:15}} className="btn-group dropup pull-right">

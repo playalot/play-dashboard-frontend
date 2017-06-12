@@ -136,7 +136,7 @@ export default class extends Component {
               <FormGroup>
                 <Col className="control-label sm-2-label" sm={3}>USERID</Col>
                 <Col sm={9}>
-                  <FormControl type="text" defaultValue={this.state.userId} readOnly/>
+                  <FormControl type="text" value={this.state.userId} onChange={(e) => this.setState({userId:e.target.value})} />
                 </Col>
               </FormGroup>
               <FormGroup>
@@ -153,8 +153,8 @@ export default class extends Component {
               </FormGroup>
               <FormGroup>
                 <Col className="control-label sm-2-label" sm={3}>PROGRESS</Col>
-                <Col sm={9}>
-                  <div className="progress">
+                <Col sm={9} style={{padding:7}}>
+                  <div className="progress" >
                     <div className="progress-bar" style={{width:`${this.state.progress}%`}}>
                       {this.state.progress}
                     </div>

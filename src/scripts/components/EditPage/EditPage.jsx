@@ -115,7 +115,7 @@ export default class EditPage extends Component {
                 if(img.width <320){
                     return alert('图片太小')
                 }
-                const uploadKey = `article/cover/${makeId()}_w_${img.width}_h_${img.height}.${file.name.split('.').pop()}`
+                const uploadKey = `article/cover/${Math.round(Date.now() / 1000)}_w_${img.width}_h_${img.height}_${makeId()}.${file.name.split('.').pop()}`
                 Request
                 .post(this.state.uploadUrl)
                 .field('key', uploadKey)

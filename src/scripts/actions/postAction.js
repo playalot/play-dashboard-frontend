@@ -8,6 +8,7 @@ export const POST_ADD_TAG = 'POST_ADD_TAG'
 export const POST_REMOVE_TAG = 'POST_REMOVE_TAG'
 export const POST_SET_CLASSIFICATION = 'POST_SET_CLASSIFICATION'
 export const POST_REMOVE_CLASSIFICATION = 'POST_REMOVE_CLASSIFICATION'
+export const POST_REMOVE_ALL_CLASSIFICATION = 'POST_REMOVE_ALL_CLASSIFICATION'
 export const POST_ADD_TOY = 'POST_ADD_TOY'
 export const POST_REMOVE_TOY = 'POST_REMOVE_TOY'
 export const POST_DELETE_POST = 'POST_DELETE_POST'
@@ -67,6 +68,12 @@ function _removeClassification(pid, c) {
         type: POST_REMOVE_CLASSIFICATION,
         pid,
         c
+    }
+}
+function _removeAllClassification(pid) {
+    return {
+        type: POST_REMOVE_ALL_CLASSIFICATION,
+        pid
     }
 }
 function _addToy(id, toy) {
@@ -191,6 +198,21 @@ export const removeClassification = (pid, c) => {
             .end((err, res) => {
                 dispatch(_removeClassification(pid, c))
             })
+    }
+}
+export const removeAllClassification = (pid) => {
+    return (dispatch,getState) => {
+        let cls = null
+        getState().postReducer.get('posts').findIndex((item) => {
+            cls = item.get('id') === pid ? item.get('cls') : null
+            return item.get('id') === pid
+        })
+        Promise.all(cls.map((c) => {
+            return Request.del(`/api/post/${pid}/class/${c}`)
+        }))
+        .then(() => {
+            dispatch(_removeAllClassification(pid)) 
+        })
     }
 }
 export const addToy = (id, sid) => {

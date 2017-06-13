@@ -107,6 +107,7 @@ export default class PostPanel extends Component{
 	                <span onClick={ this.addToy } className="btn btn-sm"><i className="fa fa-plus"></i></span>
 	                <span onClick={ this.addTag } className="btn btn-sm"><i className="fa fa-tag"></i></span>
 	                <span onClick={ this.props.openClass.bind(null, post) } className="btn btn-sm"><i className="fa fa-th-large"></i></span>
+	                <span onClick={ () => this.props.removeAllClassification(post.id) } className="btn btn-sm"><i className="fa fa-chain-broken"></i></span>
 	                <span onClick={ this.toggleR18 } className={isR18Class}><i className="fa fa-venus-mars"></i></span>
 	                <span onClick={ this.toggleBlock } className={isBlkClass}><i className="fa fa-eye-slash"></i></span>
 	                <span onClick={ this.toggleRecommend } className={isRecClass}><i className="fa fa-thumbs-o-up"></i></span>

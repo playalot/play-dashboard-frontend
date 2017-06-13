@@ -8,6 +8,7 @@ import {
     POST_REMOVE_TAG,
     POST_SET_CLASSIFICATION,
     POST_REMOVE_CLASSIFICATION,
+    POST_REMOVE_ALL_CLASSIFICATION,
     POST_ADD_TOY,
     POST_REMOVE_TOY,
     POST_DELETE_POST,
@@ -121,6 +122,18 @@ export default (state = Immutable.fromJS({ posts:[],totalPages:100,filter:'',que
                             return cls.delete(cls.findKey((cl) => {
                                 return cl === action.c
                             }))
+                        })
+                    }
+                )
+            })
+        case POST_REMOVE_ALL_CLASSIFICATION:
+            return state.updateIn(['posts'], posts => {
+                return posts.update(
+                    posts.findIndex((item) => {
+                        return item.get('id') === action.pid
+                    }), (item) => {
+                        return item.updateIn(['cls'], (cls) => {
+                            return cls.clear()
                         })
                     }
                 )

@@ -10,6 +10,7 @@ import {
 	addToy, 
 	deletePost,
 	removeToy,
+	removeAllClassification,
 } from '../../actions/postAction'
 
 const mapActionCreators ={
@@ -21,6 +22,7 @@ const mapActionCreators ={
 	addToy,
 	deletePost,
 	removeToy,
+	removeAllClassification,
 }
 
 const mapStateToProps = (state) => {

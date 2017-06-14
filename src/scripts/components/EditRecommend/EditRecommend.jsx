@@ -91,6 +91,8 @@ export default class EditBannerSet extends Component {
         {value: 'toy', label: '玩具'},
         {value: 'promotion', label: '商品集'},
         {value: 'toyindex', label: '玩具集'},
+        {value: 'question', label: '问题'},
+        {value: 'answer', label: '回答'},
     ]
     const typeOptions = [
         {value: 'banner', label: '发现页面Banner'},

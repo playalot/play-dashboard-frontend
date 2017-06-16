@@ -21,7 +21,8 @@ import {
     UD_POST_REMOVE_TAG,
     UD_POST_ADD_TOY,
     UD_POST_REMOVE_TOY,
-    UD_POST_DELETE_POST
+    UD_POST_DELETE_POST,
+    UD_POST_REMOVE_ALL_CLASSIFICATION
 } from '../actions/userDetailAction'
 
 export default ( state = Immutable.fromJS({user:{},posts:[],pages:[],totalPages:10}),action ) => {
@@ -54,6 +55,18 @@ export default ( state = Immutable.fromJS({user:{},posts:[],pages:[],totalPages:
                             return cls.delete(cls.findKey((cl) => {
                                 return cl === action.c
                             }))
+                        })
+                    }
+                )
+            })
+        case UD_POST_REMOVE_ALL_CLASSIFICATION:
+            return state.updateIn(['posts'], posts => {
+                return posts.update(
+                    posts.findIndex((item) => {
+                        return item.get('id') === action.pid
+                    }), (item) => {
+                        return item.updateIn(['cls'], (cls) => {
+                            return cls.clear()
                         })
                     }
                 )

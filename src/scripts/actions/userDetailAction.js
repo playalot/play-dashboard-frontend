@@ -14,6 +14,7 @@ export const UD_USER_SET_ACTIVE = 'UD_USER_SET_ACTIVE'
 //post
 export const UD_SET_CLASSIFICATION = 'UD_SET_CLASSIFICATION'
 export const UD_REMOVE_CLASSIFICATION = 'UD_REMOVE_CLASSIFICATION'
+export const UD_POST_REMOVE_ALL_CLASSIFICATION = 'UD_POST_REMOVE_ALL_CLASSIFICATION'
 export const UD_POST_TOGGLE_RECOMMEND = 'UD_POST_TOGGLE_RECOMMEND'
 export const UD_POST_TOGGLE_BLOCK = 'UD_POST_TOGGLE_BLOCK'
 export const UD_POST_TOGGLE_R18 = 'UD_POST_TOGGLE_R18'
@@ -157,6 +158,12 @@ function receiveUserPage(res) {
         res
     }
 }
+function _removeAllClassification(pid) {
+    return {
+        type: UD_POST_REMOVE_ALL_CLASSIFICATION,
+        pid
+    }
+}
 
 //post
 export function getUserPost(id,page = 0) {
@@ -186,6 +193,21 @@ export const removeClassification = (pid, c) => {
             .end((err, res) => {
                 dispatch(_removeClassification(pid, c))
             })
+    }
+}
+export const removeAllClassification = (pid) => {
+    return (dispatch,getState) => {
+        let cls = null
+        getState().userDetail.get('posts').findIndex((item) => {
+            cls = item.get('id') === pid ? item.get('cls') : null
+            return item.get('id') === pid
+        })
+        Promise.all(cls.map((c) => {
+            return Request.del(`/api/post/${pid}/class/${c}`)
+        }))
+        .then(() => {
+            dispatch(_removeAllClassification(pid)) 
+        })
     }
 }
 export const deletePost = (id) => {

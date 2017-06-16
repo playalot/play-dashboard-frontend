@@ -155,7 +155,7 @@ export default class extends Component{
                   	<div className="box-body pad">
                   		<div className="table-responsive">
 				            <table className="table table-striped">
-				            	<thead><tr><th>商品</th><th>名称</th><th>商家</th><th>价格</th><th>运费</th><th>数量</th></tr></thead>
+				            	<thead><tr><th>商品</th><th>名称</th><th>版本</th><th>商家</th><th>价格</th><th>运费</th><th>数量</th></tr></thead>
 				              	<tbody>
 				              	{
 				              		this.state.items.map((item,i) => {
@@ -165,6 +165,7 @@ export default class extends Component{
 				              						<img style={{width:'45px'}} src={item.image} className="thumbnail"/>
 				              					</td>
 				              					<td>{item.name}</td>
+				              					<td>{item.version ? item.version : null}</td>
 				              					<td>{item.merchant}</td>
 				              					<td>{item.price}</td>
 				              					<td>{item.freight}</td>

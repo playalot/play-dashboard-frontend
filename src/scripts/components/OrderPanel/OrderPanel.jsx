@@ -11,12 +11,19 @@ export default class extends Component{
 	
 	  this.state = {};
 	  this.addTracking = this._addTracking.bind(this)
+	  this.setStatus = this._setStatus.bind(this)
 	}
 	_addTracking(id) {
 		let trackNo = prompt('输入物流号')
 		if (trackNo) {
 			this.props.addTracking(id,trackNo)
 		}
+	}
+	_setStatus(id,state) {
+		if (confirm(`确定${state === 'closed' ? '关闭':'完成'}这个订单吗?`)) {
+			this.props.setStatus(id,state)
+		}
+		
 	}
 	formatStatus(str,startPay) {
 		switch(str) {
@@ -83,8 +90,8 @@ export default class extends Component{
 										  	<ul className="dropdown-menu">
 										  		<li><Link to={`/order/${order.id}`}>订单详情</Link></li>
 										  		<li><Link to={`/order/toy/${order.items[0].toyId}`}>显示全部订单</Link></li>
-											  	{order.status === 'open' ? <li><a onClick={() => this.props.setStatus(order.id,'closed')}>关闭订单</a></li> : null}
-											  	{order.status === 'paid' ? <li><a onClick={() => this.props.setStatus(order.id,'done')}>订单完成</a></li> : null}
+											  	{order.status === 'open' ? <li><a onClick={() => this.setStatus(order.id,'closed')}>关闭订单</a></li> : null}
+											  	{order.status === 'paid' ? <li><a onClick={() => this.setStatus(order.id,'done')}>订单完成</a></li> : null}
 											  	{order.status === 'prepaid' ? <li><a onClick={() => this.props.startPay(order.id)}>通知补款</a></li> : null}
 											</ul>
 										</div>

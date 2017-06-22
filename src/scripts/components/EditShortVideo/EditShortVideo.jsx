@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Dropzone from 'react-dropzone';
 import Request from 'superagent';
 import { Modal,Button,FormGroup,FormControl,Col,Row,Form } from 'react-bootstrap'
-
+import CDN from '../../widgets/cdn'
 function makeid() {
     let text = '';
     const possible = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -20,15 +20,19 @@ export default class extends Component {
       videoUrl: '',
       uploadUrl: 'http://upload.qiniu.com/',
       userId: '56f2b9811400000e0077d8f8',
+      title:'',
       progress: 0,
       uploadKey: '',
       caption: '',
       alert: false,
       offset:1,
-      modalPoster:false
+      modalPoster:false,
+      posters:[],
+      thumbnail:''
     };
-    this.onDrop = this.onDrop.bind(this);
+    this.onDrop = this._onDrop.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.uploadCover = this._uploadCover.bind(this)
   }
   uploadQiniu(file, uploadKey, uploadToken) {
     if (!file || file.size === 0) {
@@ -48,7 +52,7 @@ export default class extends Component {
         this.setState({showPoster:true,duration:vdom.duration})
       })
   }
-  onDrop(files) {
+  _onDrop(files) {
     let video = files[0];
 
     // 初始化progress
@@ -71,13 +75,12 @@ export default class extends Component {
         let id = makeid();
         let uploadKey = 'user/video/raw/' + id + '_' + Math.round(d.getTime()/1000) + '_w_' + vdom.videoWidth +
           '_h_' + vdom.videoHeight + '_d_' + Math.floor(vdom.duration) + '_' + _this.state.userId + '.mp4';
-          console.log(uploadKey);
         $.ajax({
            url : '/api/uptoken?key=' + uploadKey,
            type : 'GET',
            success : function(data) {
              let uploadToken = data.uptoken;
-             _this.setState({uploadKey: uploadKey});
+             _this.setState({uploadKey: uploadKey,thumbnail:`http://img.playalot.cn/${uploadKey}?vframe/jpg/offset/1`});
              video.request = _this.uploadQiniu(video, uploadKey, uploadToken);
             //  video.uploadPromise = video.request.promise();
            }
@@ -85,6 +88,34 @@ export default class extends Component {
         clearInterval(timer);
       }
     }, 500);
+  }
+  _uploadCover(files) {
+    Request.get('/api/uptoken')
+      .end((err, res) => {
+          let uploadToken = res.body.uptoken
+          const file = files[0]
+          const img = new Image()
+          img.onload = () => {
+              if(img.width <320){
+                  return alert('图片太小')
+              }
+              const uploadKey = `user/video/thumbnail/${Math.round(Date.now() / 1000)}_w_${img.width}_h_${img.height}_${makeid()}.${file.name.split('.').pop()}`
+              Request
+              .post(this.state.uploadUrl)
+              .field('key', uploadKey)
+              .field('token', uploadToken)
+              .field('x:filename', file.name)
+              .field('x:size', file.size)
+              .attach('file', file, file.name)
+              .set('Accept', 'application/json')
+              .end((err, res) =>{
+                  const posters = this.state.posters
+                  posters.push(uploadKey)
+                  this.setState({posters,thumbnail:CDN.show(uploadKey)})
+              })
+          };
+          img.src = file.preview
+      })
   }
   onSubmit() {
     if (this.state.uploadKey === '') {
@@ -94,10 +125,13 @@ export default class extends Component {
     let data = {
       userId: this.state.userId,
       uploadKey: this.state.uploadKey,
-      offset:this.state.offset
+      thumbnail:this.state.thumbnail
     };
     if (this.state.caption.trim() !== '') {
       data.caption = this.state.caption
+    }
+    if (this.state.title.trim() !== '') {
+      data.title = this.state.title
     }
     Request
       .post('/api/uploadvideo')
@@ -109,6 +143,7 @@ export default class extends Component {
           progress: 0,
           uploadKey: '',
           caption: '',
+          title:'',
           showPoster:false,
         },() => {
           alert('提交成功')
@@ -146,6 +181,12 @@ export default class extends Component {
                 </Col>
               </FormGroup>
               <FormGroup>
+                <Col className="control-label sm-2-label" sm={3}>TITLE</Col>
+                <Col sm={9}>
+                  <FormControl type="text" value={this.state.title} onChange={(e) => this.setState({title:e.target.value})}/>
+                </Col>
+              </FormGroup>
+              <FormGroup>
                 <Col className="control-label sm-2-label" sm={3}>CAPTION</Col>
                 <Col sm={9}>
                   <textarea style={{width:'100%'}} onChange={(e) => this.setState({caption:e.target.value})} value={this.state.caption} />
@@ -166,10 +207,13 @@ export default class extends Component {
                 <FormGroup>
                   <Col className="control-label sm-2-label" sm={3}>POSTER</Col>
                   <Col sm={3}>
-                    <img style={{width:'100%'}} src={`http://img.playalot.cn/${this.state.uploadKey}?vframe/jpg/offset/${this.state.offset}`}/>
+                    <img style={{width:'100%'}} src={this.state.thumbnail}/>
                   </Col>
                   <Col sm={6}>
-                    <button onClick={() => this.setState({modalPoster:true})} className="btn btn-success">更换封面</button>
+                    <button onClick={() => this.setState({modalPoster:true})} className="btn btn-success">更换封面</button> <br/><br/>
+                    <Dropzone style={{display:'inline-block',border:'none'}} accept="image/*" onDrop={this.uploadCover}>
+                      <button className="btn btn-info">上传封面</button>
+                    </Dropzone>
                   </Col>
                 </FormGroup>
                 :null
@@ -193,9 +237,18 @@ export default class extends Component {
                       }
                       return(
                         <Col key={`poster_${i}`} sm={2} style={{padding:10}}>
-                          <img onClick={() => this.setState({modalPoster:false,offset:item})} style={{width:'100%'}} src={`http://img.playalot.cn/${this.state.uploadKey}?vframe/jpg/offset/${item}`}/>
+                          <img onClick={() => this.setState({modalPoster:false,thumbnail:`http://img.playalot.cn/${this.state.uploadKey}?vframe/jpg/offset/${item}`})} style={{width:'100%'}} src={`http://img.playalot.cn/${this.state.uploadKey}?vframe/jpg/offset/${item}`}/>
                         </Col>
                       )              
+                    })
+                  }
+                  {
+                    this.state.posters.map((poster,i) => {
+                      return (
+                        <Col key={`poster_u_${i}`} sm={2} style={{padding:10}}>
+                          <img onClick={() => this.setState({modalPoster:false,thumbnail:CDN.show(poster)})} style={{width:'100%',height:80,objectFit:'cover'}} src={CDN.show(poster)}/>
+                        </Col>
+                      )
                     })
                   }
                 </div>

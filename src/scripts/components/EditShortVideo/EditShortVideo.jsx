@@ -111,7 +111,7 @@ export default class extends Component {
               .end((err, res) =>{
                   const posters = this.state.posters
                   posters.push(uploadKey)
-                  this.setState({posters,thumbnail:CDN.show(uploadKey)})
+                  this.setState({posters,thumbnail:uploadKey})
               })
           };
           img.src = file.preview
@@ -207,7 +207,7 @@ export default class extends Component {
                 <FormGroup>
                   <Col className="control-label sm-2-label" sm={3}>POSTER</Col>
                   <Col sm={3}>
-                    <img style={{width:'100%'}} src={this.state.thumbnail}/>
+                    <img style={{width:'100%'}} src={CDN.show(this.state.thumbnail)}/>
                   </Col>
                   <Col sm={6}>
                     <button onClick={() => this.setState({modalPoster:true})} className="btn btn-success">更换封面</button> <br/><br/>
@@ -239,7 +239,7 @@ export default class extends Component {
                         <Col key={`poster_${i}`} sm={2} style={{padding:10}}>
                           <img onClick={() => this.setState({modalPoster:false,thumbnail:`http://img.playalot.cn/${this.state.uploadKey}?vframe/jpg/offset/${item}`})} style={{width:'100%'}} src={`http://img.playalot.cn/${this.state.uploadKey}?vframe/jpg/offset/${item}`}/>
                         </Col>
-                      )              
+                      )
                     })
                   }
                   {

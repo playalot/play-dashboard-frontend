@@ -3,7 +3,7 @@ import React, {
 } from 'react'
 import PropTypes from 'prop-types'
 import {Link} from 'react-router'
-import {Row, Button, FormControl,Form, FormGroup } from 'react-bootstrap'
+import {Row, Button, FormControl,Form, FormGroup,InputGroup } from 'react-bootstrap'
 import ReactPaginate from 'react-paginate'
 import Moment from 'moment'
 
@@ -16,6 +16,7 @@ export default class OrderList extends Component{
 	  		merchant:'',
 	  		year:'',
 			month:'',
+			filter:'',
 	  	}
 	  	this.goPage = this._goPage.bind(this)
 	  	this.search = this._search.bind(this)
@@ -23,10 +24,11 @@ export default class OrderList extends Component{
 		this.onChangeMonth = (e) => this.setState({month:e.target.value},() => this.search())
 	}
 	componentWillMount() {
-		const { page, status, merchant } = this.props.location.query
+		const { page, status, merchant,filter } = this.props.location.query
 		this.setState({
 			status: status || '',
-			merchant: merchant || ''
+			merchant: merchant || '',
+			filter: filter || ''
 		},() => this.goPage(page || 0))
 	}
 	_goPage(page) {
@@ -38,12 +40,13 @@ export default class OrderList extends Component{
 		this.props.getOrder(page,status,merchant,year,month)
 	}
 	_search() {
-		let { status,merchant,year,month } = this.state
+		let { status,merchant,year,month,filter } = this.state
 		let path = `/order?page=${0}`
 		path += status ? `&status=${status}` : ``
 		path += merchant ? `&merchant=${merchant}` : ``
+		path += filter ? `&filter=${filter}` : ``
 		this.context.router.push(path)
-		this.props.getOrder(0,status,merchant,year,month)
+		this.props.getOrder(0,status,merchant,year,month,filter)
 	}
 	render() {
 		const { year,month,status } = this.state
@@ -102,6 +105,15 @@ export default class OrderList extends Component{
 							<option value="12">12月</option>
 						</FormControl>
 					</FormGroup>
+					{' '}
+					<FormGroup>
+		              <InputGroup>
+		                <FormControl type="text" placeholder='请输入搜索关键字' value={this.state.filter} onKeyDown={e => e.keyCode === 13 && this.search()} onChange={(e) => this.setState({filter:e.target.value})} />
+		                <InputGroup.Button>
+		                  <Button onClick={this.search}>搜索</Button>
+		                </InputGroup.Button>
+		              </InputGroup>
+		            </FormGroup>
 			  	</Form>
 			  </div>
 			  <div className="alert alert-dismissible">

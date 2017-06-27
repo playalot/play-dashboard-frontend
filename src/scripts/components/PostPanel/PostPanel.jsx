@@ -4,6 +4,7 @@ import {
 	Col, ButtonToolbar,
 } from 'react-bootstrap'
 import Moment from 'moment'
+import CopyToClipboard from 'react-copy-to-clipboard'
 const _ = require('lodash')
 
 export default class PostPanel extends Component{
@@ -104,6 +105,10 @@ export default class PostPanel extends Component{
 	            </div>
 	            <div className="box-footer">
 	              <ButtonToolbar className="pull-right">
+	              	<CopyToClipboard text={post.id}
+			          	onCopy={() => null}>
+			          	<span className="btn btn-sm"><i className="fa fa-copy"></i></span>
+			        </CopyToClipboard>
 	                <span onClick={ this.addToy } className="btn btn-sm"><i className="fa fa-plus"></i></span>
 	                <span onClick={ this.addTag } className="btn btn-sm"><i className="fa fa-tag"></i></span>
 	                <span onClick={ this.props.openClass.bind(null, post) } className="btn btn-sm"><i className="fa fa-th-large"></i></span>

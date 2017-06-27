@@ -7,7 +7,7 @@ export const ORDER_L_ADD_TRACKING = 'ORDER_L_ADD_TRACKING'
 export const ORDER_L_SET_STATUS = 'ORDER_L_SET_STATUS'
 export const ORDER_L_START_PAY = 'ORDER_L_START_PAY'
 
-function receiveOrder(res,totalPages,page,status,merchant,year,month,summary) {
+function receiveOrder(res,totalPages,page,status,merchant,year,month,summary,filter) {
     return {
         type: ORDER_L_RECEIVE_ORDER,
         res,
@@ -18,6 +18,7 @@ function receiveOrder(res,totalPages,page,status,merchant,year,month,summary) {
         year,
         month,
         summary,
+        filter
     }
 }
 function receiveOrderByToy(orders,toy) {
@@ -114,7 +115,7 @@ export function getOrderByUser(id) {
     }
 }
 
-export function getOrder (page = 0,status = 'paid',merchant = '',year,month) {
+export function getOrder (page = 0,status = 'paid',merchant = '',year,month,filter) {
     return (dispatch,getState) => {
         let params = { page }
         if(status) {
@@ -129,11 +130,14 @@ export function getOrder (page = 0,status = 'paid',merchant = '',year,month) {
         if(month) {
             params.month = month
         }
+        if(filter) {
+            params.filter = filter
+        }
         return Request
             .get(`/api/orders`)
             .query(params)
             .end((err, res) => {
-                dispatch(receiveOrder(res.body.orders,res.body.totalPages,page,status,merchant,year,month,res.body.summary))
+                dispatch(receiveOrder(res.body.orders,res.body.totalPages,page,status,merchant,year,month,res.body.summary,filter))
             })
     }
 }

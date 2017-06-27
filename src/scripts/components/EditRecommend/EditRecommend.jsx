@@ -12,10 +12,11 @@ export default class EditBannerSet extends Component {
       image:'',
       id:'',
       title:'',
+      description:'',
       type:'',
       targetId:'',
       targetType:'',
-      targetUrl:'',
+      extra:'',
       titleError:null
     }
     this.submit = this._submit.bind(this)
@@ -34,13 +35,13 @@ export default class EditBannerSet extends Component {
     .get(`/api/recommend/${this.props.params.id}`)
     .end((err,res) => {
       if(!err) {
-        const { id,image,targetId,targetType,targetUrl,title,type } = res.body
+        const { id,image,targetId,targetType,extra,title,type } = res.body
         this.setState({
           id:id||'',
           image:image||'',
           targetId:targetId||'',
           targetType:targetType||'page',
-          targetUrl:targetUrl||'',
+          extra:extra||'',
           title:title||'No title',
           type:type||'banner'
         })
@@ -65,9 +66,9 @@ export default class EditBannerSet extends Component {
   }
   _submit() {
 
-    const { id,image,targetId,targetType,targetUrl,title,type } = this.state
+    const { id,image,targetId,targetType,extra,title,type } = this.state
     const data = {
-      id,image,targetId,targetType,targetUrl,title,type
+      id,image,targetId,targetType,extra,title,type
     }
     Object.keys(data).forEach(key => !data[key] ? delete data[key] : null)
     Request
@@ -89,14 +90,14 @@ export default class EditBannerSet extends Component {
         {value: 'url', label: 'URL链接'},
         {value: 'page', label: '文章'},
         {value: 'toy', label: '玩具'},
-        {value: 'promotion', label: '商品集'},
-        {value: 'toyindex', label: '玩具集'},
         {value: 'question', label: '问题'},
         {value: 'answer', label: '回答'},
+        {value: 'promotion', label: '商品集'},
+        {value: 'toyindex', label: '玩具集'},
     ]
     const typeOptions = [
         {value: 'banner', label: '发现页面Banner'},
-        {value: 'toy', label: '玩具页面Banner'},
+        {value: 'toy', label: '玩具商品页面Banner'},
         {value: 'home', label: '首页推荐'},
         {value: 'theme', label: '主题'}
     ];
@@ -119,6 +120,14 @@ export default class EditBannerSet extends Component {
                 </Col>
                 <Col sm={8}>
                   <FormControl value={this.state.title} type="text" onChange={this.onChangeTitle}/>
+                </Col>
+              </FormGroup>
+              <FormGroup>
+                <Col sm={3} className="sm-2-label" style={{fontWeight:'bold'}}>
+                  描述
+                </Col>
+                <Col sm={8}>
+                  <FormControl value={this.state.description} type="text" onChange={(e) => this.setState({desc:e.target.value})}/>
                 </Col>
               </FormGroup>
               <FormGroup>
@@ -159,10 +168,10 @@ export default class EditBannerSet extends Component {
               </FormGroup>
               <FormGroup>
                 <Col sm={3} className="sm-2-label" style={{fontWeight:'bold'}}>
-                  目标Url
+                  附加(如url)
                 </Col>
                 <Col sm={8}>
-                  <FormControl value={this.state.targetUrl} type="text" onChange={(e) => this.setState({targetUrl:e.target.value})}/>
+                  <FormControl value={this.state.extra} type="text" onChange={(e) => this.setState({extra:e.target.value})}/>
                 </Col>
               </FormGroup>
               <FormGroup>

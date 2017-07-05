@@ -1,6 +1,7 @@
 import Immutable from 'immutable'
 import {
     PAGE_L_RECEIVE_PAGE,
+    PAGE_CLEAR_PAGE,
     PAGE_L_TOGGLE_PUB,
     PAGE_L_TOGGLE_REC,
     PAGE_L_DELETE_ARTICLE,
@@ -21,6 +22,13 @@ export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'',fil
                 .set('page',action.page)
                 .set('query',action.query)
                 .set('filter',action.filter)
+        case PAGE_CLEAR_PAGE:
+            return state
+                .updateIn(['pages'], (pages) => pages.clear())
+                .set('totalPages',100)
+                .set('page',null)
+                .set('query','')
+                .set('filter','')
         case PAGE_L_TOGGLE_PUB:
             return state.updateIn(['pages'], (pages) => {
                 return pages.update(

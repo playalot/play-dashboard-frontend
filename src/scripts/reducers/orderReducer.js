@@ -1,5 +1,5 @@
 import Immutable from 'immutable'
-import { ORDER_L_RECEIVE_ORDER, ORDER_L_RECEIVE_ORDER_BY_TOY,ORDER_L_RECEIVE_ORDER_BY_USER, ORDER_L_ADD_TRACKING,ORDER_L_SET_STATUS,ORDER_L_START_PAY } from '../actions/orderAction'
+import { ORDER_L_RECEIVE_ORDER,ORDER_CLEAR_ORDER, ORDER_L_RECEIVE_ORDER_BY_TOY,ORDER_L_RECEIVE_ORDER_BY_USER, ORDER_L_ADD_TRACKING,ORDER_L_SET_STATUS,ORDER_L_START_PAY } from '../actions/orderAction'
 
 export default (state = Immutable.fromJS({ orders: [],toy:{}, totalPages:100,order:{},status:'',merchant:'',summary:{},filter:'' }),action)=>{
     switch (action.type) {
@@ -15,6 +15,18 @@ export default (state = Immutable.fromJS({ orders: [],toy:{}, totalPages:100,ord
                 .set('init',true)
                 .set('summary',action.summary || {count:0,totalPrice:0})
                 .set('filter',action.filter)
+        case ORDER_CLEAR_ORDER:
+            return state
+                .updateIn(['orders'], (orders) => orders.clear())
+                .set('totalPages',100)
+                .set('page',null)
+                .set('status','')
+                .set('merchant','')
+                .set('year','')
+                .set('month','')
+                .set('init',true)
+                .set('summary',{count:0,totalPrice:0})
+                .set('filter','')
         case ORDER_L_RECEIVE_ORDER_BY_TOY:
             return state
                 .updateIn(['orders'], orders => orders.clear().concat(Immutable.fromJS(action.orders)))

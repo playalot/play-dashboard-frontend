@@ -4,8 +4,8 @@ import UserDetail from './UserDetail'
 import { etchUserInfo, setActive,fetchUserInfo } from '../../actions/userDetailAction'
 import { fetchTagClass } from '../../actions/tagClassAction'
 import { approveUser } from '../../actions/userAction'
-import { getUserPage } from '../../actions/pageAction'
-import { getUserPost,setClassification,removeClassification } from '../../actions/postAction'
+import { getUserPage,clearPage } from '../../actions/pageAction'
+import { getUserPost,setClassification,removeClassification,clearPost } from '../../actions/postAction'
 const mapActionCreators = {
 	getUserPost,
 	setClassification,
@@ -19,7 +19,9 @@ const mapActionCreators = {
 
 	fetchTagClass,
 
-	approveUser
+	approveUser,
+	clearPost,
+	clearPage
 }
 
 const mapStateToProps = (state) => {

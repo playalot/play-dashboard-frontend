@@ -30,6 +30,10 @@ export default class extends Component{
 		this.props.getUserPost(userId)
 		this.props.getUserPage(userId)
 	}
+	componentWillUnmount() {
+		this.props.clearPost()
+		this.props.clearPage()
+	}
 	_approve() {
 		const { id } = this.props.user
 		const { type,note } = this.state

@@ -1,6 +1,7 @@
 import Request from 'superagent'
 
 export const POST_RECEIVE_POST = 'POST_RECEIVE_POST'
+export const POST_CLEAR_POST = 'POST_CLEAR_POST'
 export const POST_TOGGLE_RECOMMEND = 'POST_TOGGLE_RECOMMEND'
 export const POST_TOGGLE_BLOCK = 'POST_TOGGLE_BLOCK'
 export const POST_TOGGLE_R18 = 'POST_TOGGLE_R18'
@@ -288,5 +289,11 @@ export function getUserPost (id) {
             .end((err, res) => {
                 dispatch(receivePost(res.body.posts))
             })
+    }
+}
+
+export function clearPost() {
+    return {
+        type:POST_CLEAR_POST
     }
 }

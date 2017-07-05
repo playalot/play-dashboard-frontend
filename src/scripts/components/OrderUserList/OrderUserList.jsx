@@ -8,7 +8,9 @@ export default class extends Component {
 		const id = this.props.match.params.id
 		this.props.getOrderByUser(id)
 	}
-
+	componentWillUnmount() {
+		this.props.clearOrder()
+	}
 	render() {
 		return(
 			<div className="content" style={{backgroundColor:'#fff'}}>

@@ -9,7 +9,9 @@ export default class extends Component {
 		const id = this.props.match.params.id
 		this.props.getOrderByToy(id)
 	}
-
+	componentWillUnmount() {
+		this.props.clearOrder()
+	}
 	render() {
 		const { toy } = this.props
 		return(

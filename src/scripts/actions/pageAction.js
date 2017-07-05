@@ -1,6 +1,7 @@
 import Request from 'superagent'
 
 export const PAGE_L_RECEIVE_PAGE = 'PAGE_L_RECEIVE_PAGE'
+export const PAGE_CLEAR_PAGE = 'PAGE_CLEAR_PAGE'
 export const PAGE_L_TOGGLE_PUB = 'PAGE_L_TOGGLE_PUB'
 export const PAGE_L_TOGGLE_REC = 'PAGE_L_TOGGLE_REC'
 export const PAGE_L_DELETE_ARTICLE = 'PAGE_L_DELETE_ARTICLE'
@@ -229,5 +230,11 @@ export function setPageRaw(raw,gallery,created = Date.now()) {
 export function clearPageRaw() {
     return {
         type: PAGE_EDIT_CLEAR_RAW
+    }
+}
+
+export function clearPage() {
+    return {
+        type: PAGE_CLEAR_PAGE
     }
 }

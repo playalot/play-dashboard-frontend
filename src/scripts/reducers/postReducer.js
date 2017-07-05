@@ -1,6 +1,7 @@
 import Immutable from 'immutable'
 import { 
     POST_RECEIVE_POST, 
+    POST_CLEAR_POST,
     POST_TOGGLE_RECOMMEND, 
     POST_TOGGLE_BLOCK, 
     POST_TOGGLE_R18,
@@ -24,6 +25,13 @@ export default (state = Immutable.fromJS({ posts:[],totalPages:100,filter:'',que
                 .set('page',action.page)
                 .set('filter',action.filter)
                 .set('query',action.query)
+        case POST_CLEAR_POST:
+            return state
+                .updateIn(['posts'], (posts) => posts.clear())
+                .set('totalPages',100)
+                .set('page',null)
+                .set('filter','')
+                .set('query','')
         case POST_ADD_TOY:
             return state.updateIn(['posts'], (posts) => {
                 return posts.update(

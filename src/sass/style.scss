@@ -4,7 +4,8 @@
 @import "~bootstrap/dist/css/bootstrap.css";
 //admin-lte
 @import "~admin-lte/dist/css/AdminLTE.css";
-@import "~admin-lte/dist/css/skins/skin-black.css";
+@import "skin/skin-custom";
+// @import "~admin-lte/dist/css/skins/skin-blue.css";
 //font-awesome
 $fa-font-path: "~font-awesome/fonts";
 @import "~font-awesome/scss/font-awesome";

@@ -1,6 +1,7 @@
 import Request from 'superagent'
 
 export const ORDER_L_RECEIVE_ORDER = 'ORDER_L_RECEIVE_ORDER'
+export const ORDER_CLEAR_ORDER = 'ORDER_CLEAR_ORDER'
 export const ORDER_L_RECEIVE_ORDER_BY_TOY = 'ORDER_L_RECEIVE_ORDER_BY_TOY'
 export const ORDER_L_RECEIVE_ORDER_BY_USER = 'ORDER_L_RECEIVE_ORDER_BY_USER'
 export const ORDER_L_ADD_TRACKING = 'ORDER_L_ADD_TRACKING'
@@ -142,3 +143,8 @@ export function getOrder (page = 0,status = 'paid',merchant = '',year,month,filt
     }
 }
 
+export function clearOrder() {
+    return {
+        type:ORDER_CLEAR_ORDER
+    }
+}

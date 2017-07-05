@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import {
 	Col, Row, Modal, Form, FormGroup, InputGroup, FormControl, Button, ButtonToolbar, DropdownButton, Checkbox, Tab, Tabs
 } from 'react-bootstrap'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import CDN from '../../widgets/cdn'
 import Moment from 'moment'
 import ReactPaginate from 'react-paginate'
 import DatePicker from 'react-datepicker'
 import Request from 'superagent'
 import CopyToClipboard from 'react-copy-to-clipboard'
+import { parsePage } from '../../widgets/parse'
 const _ = require('lodash')
 
 
@@ -94,26 +95,26 @@ export default class SkuList extends Component{
 		this.changeOrderClose = (date) => this.setState({orderClose:date})
 	}
 	componentWillMount() {
-		const { page,filter,filterType } = this.props
-		if(typeof page === 'number') {
-			this.context.router.push(`/sku?page=${page}`)
-			this.setState({filter,filterType})
-		}else{
-			this.props.getSku(this.props.location.query.page)
-		}
 		if(!this.props.toyLoaded){
 			this.props.fetchToyClass()
+		}
+		const { page,filter,filterType } = this.props
+		if(typeof page === 'number') {
+			this.props.history.push(`/skus?page=${page}`)
+			this.setState({filter,filterType})
+		}else{
+			this.props.getSku(0)
 		}
 	}
 	_onChangeFilter(filter) {
 		this.setState({ filter },() => {
-			this.context.router.push(`/sku?page=0`)
+			this.context.router.push(`/skus?page=0`)
 			this.props.getSkuBy(this.state.filter,this.state.filterType)
 		})
 	}
 	_onChangeFilterType(filterType) {
 		this.setState({ filterType },() => {
-			this.context.router.push(`/sku?page=0`)
+			this.context.router.push(`/skus?page=0`)
 			this.props.getSkuBy(this.state.filter,this.state.filterType)
 		})
 	}
@@ -129,7 +130,7 @@ export default class SkuList extends Component{
 		this.context.router.push(path)
 	}
 	_goPage(page) {
-		this.context.router.push(`/sku?page=${page}`)
+		this.props.history.push(`/sku?page=${page}`)
 		this.props.getSku(page)
 	}
 	_addToyClass(tid,c) {
@@ -293,7 +294,7 @@ export default class SkuList extends Component{
 													</div>													
 													<div className="sku-body-item vertical"><span><strong>{Moment(stock.created).format('MM-DD')}</strong></span><small>{Moment(stock.created).format('HH:mm')}</small>{ stock.type === 'preOrder' ? <span><small>(截单{Moment(stock.preOrder.orderClose).format('MM-DD')})</small></span> : null }</div>													
 													<div className="sku-body-item operate">
-														<a onClick={() => this.editSku(sku.id,stock.stockId)}>修改</a>&nbsp;/&nbsp;
+														<Link to={`/sku/${sku.id}?sid=${stock.stockId}`}>修改</Link>&nbsp;/&nbsp;
 														{stock.type === 'preOrder' ? <a onClick={() => this.fillMoney(sku.id,stock.stockId)}>开使补款</a> : ''}&nbsp;/&nbsp;
 														<a onClick={() => this.deleteSku(sku.id,stock.stockId)}>下架</a>
 													</div>													
@@ -320,7 +321,7 @@ export default class SkuList extends Component{
 						onPageChange={obj => this.goPage(obj.selected)}
 						containerClassName={"pagination"}
 						subContainerClassName={"pages pagination"}
-						forcePage={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
+						forcePage={parsePage(this.props.location.search)}
 						activeClassName={"active"} />
 					</Row>
 					{modal}

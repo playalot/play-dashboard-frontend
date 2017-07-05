@@ -1,28 +1,20 @@
 import { connect } from 'react-redux'
-import { setClassification, removeClassification, getUnCls, getPost, getPostBy } from '../../actions/postAction'
-import { fetchTagClass } from '../../actions/tagClassAction'
+import { getUnCls, getPost, getPostBy } from '../../actions/postAction'
 import PostList from './PostList'
 
 const mapActionCreators ={
-	fetchTagClass,
-	setClassification,
-	removeClassification,
 	getUnCls,
 	getPost,
 	getPostBy,
 }
 
 const mapStateToProps = (state) => {
-	const { posts,page,totalPages,filter,query } = state.postReducer.toJS()
-	const { classifications, loaded } = state.tagClassReducer.toJS()
+	const { page,totalPages,filter,query } = state.postReducer.toJS()
 	return {
-		posts,
 		page,
 		totalPages,
 		filter,
 		query,
-		classifications,
-		classLoaded:loaded
 	}
 }
 

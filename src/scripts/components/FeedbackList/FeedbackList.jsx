@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import Moment from 'moment'
 import ReactPaginate from 'react-paginate'
 import PlayAliBaichuan from '../Common/PlayAliBaichuan'
+import { parsePage } from '../../widgets/parse'
 export default class FeedbackList extends Component{
 	constructor(props) {
 	  	super(props)
@@ -13,13 +13,13 @@ export default class FeedbackList extends Component{
 	componentWillMount() {
 		const { page } = this.props
 		if(typeof page === 'number') {
-			this.context.router.push(`/feedback?page=${page}`)
+			this.props.history.push(`/feedbacks?page=${page}`)
 		}else{
-			this.props.getFeedback(this.props.location.query.page)
+			this.props.getFeedback(0)
 		}
 	}
 	_goPage(page) {
-		this.context.router.push(`/feedback?page=${page}`)
+		this.props.history.push(`/feedbacks?page=${page}`)
 		this.props.getFeedback(page)
 	}
 	render() {
@@ -67,7 +67,7 @@ export default class FeedbackList extends Component{
 					onPageChange={obj => this.goPage(obj.selected)}
 					containerClassName={"pagination"}
 					subContainerClassName={"pages pagination"}
-					forcePage={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
+					forcePage={parsePage(this.props.location.search)}
 					activeClassName={"active"} />
 		        </div>
 		        <PlayAliBaichuan/>
@@ -76,7 +76,3 @@ export default class FeedbackList extends Component{
 	}
 }
 
-
-FeedbackList.contextTypes = {
-  	router : PropTypes.object
-}

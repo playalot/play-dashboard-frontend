@@ -1,18 +1,17 @@
-import React, {
-    Component
-} from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import {makeWidthFlexible,XYPlot, XAxis, YAxis,VerticalGridLines, HorizontalGridLines, VerticalBarSeries,Crosshair} from 'react-vis';
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import Moment from 'moment'
 import ReactPaginate from 'react-paginate'
+import { parsePage } from '../../widgets/parse'
+
 
 const FlexibleXYPlot = makeWidthFlexible(XYPlot)
 export default class Home extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        crosshairValues:[],
+        crosshairValues:[]
       };
       this.nearestXHandler = this._nearestXHandler.bind(this)
       this.goPage = this._goPage.bind(this)
@@ -23,27 +22,26 @@ export default class Home extends Component {
       }
       const { page } = this.props
       if(typeof page === 'number') {
-        this.context.router.push(`/home?page=${page}`)
+        this.props.history.push(`/home?page=${page}`)
       }else{
-        this.props.getActivities(this.props.location.query.page)
+        this.props.getActivities(0)
       }
     }
     _goPage(page) {
-      this.context.router.push(`/home?page=${page}`)
+      this.props.history.push(`/home?page=${page}`)
       this.props.getActivities(page)
     }
     _nearestXHandler(value, {index}){
       const { last, aggregate } = this.props.stats
       this.setState({
         crosshairValues: [last[index],aggregate[index]]
-      });
+      })
     }
-
     _formatCrosshairTitle(values){
       return {
         title: '日期',
         value: values[0].x
-      };
+      }
     }
     _formatCrosshairItems (values) {
       return values.map((v, i) => {
@@ -115,7 +113,7 @@ export default class Home extends Component {
                     <div className="box-body">
                       <FlexibleXYPlot
                         onMouseLeave={() => this.setState({crosshairValues:[]})}
-                        height={300}>
+                        height={350}>
                         <VerticalGridLines />
                         <HorizontalGridLines />
                         <VerticalBarSeries
@@ -148,7 +146,7 @@ export default class Home extends Component {
                   onPageChange={obj => this.goPage(obj.selected)}
                   containerClassName={"pagination"}
                   subContainerClassName={"pages pagination"}
-                  forcePage={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
+                  forcePage={parsePage(this.props.location.search)}
                   activeClassName={"active"} />
               </div>
               <div className="box box-widget">
@@ -205,8 +203,4 @@ export default class Home extends Component {
             </div>
         )
     }
-}
-
-Home.contextTypes = {
-    router : PropTypes.object
 }

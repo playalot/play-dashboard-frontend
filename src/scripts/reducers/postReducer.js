@@ -40,7 +40,7 @@ export default (state = Immutable.fromJS({ posts:[],totalPages:100,filter:'',que
                     posts.findIndex((item) => {
                         return item.get('id') === action.id
                     }), (item) => {
-                        return item.set('toy',null)
+                        return item.set('toys',[])
                     }
                 )
             })

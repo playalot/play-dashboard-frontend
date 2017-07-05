@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import PropTypes from 'prop-types'
 import { stateToHTML } from 'draft-js-export-html'
 import Request from 'superagent'
 import Dropzone from 'react-dropzone'
@@ -26,6 +25,7 @@ import { createLinkEntity,createImageEntity,createVideoEntityWithHtml,createVide
 import DraftToolbar from '../PlayDraft/DraftToolbar'
 
 import CDN from '../../widgets/cdn'
+import parse from '../../widgets/parse'
 export default class EditPage extends Component {
     constructor(props) {
         super(props)
@@ -76,7 +76,8 @@ export default class EditPage extends Component {
     }
     componentDidMount() {
         const data = window.localStorage.getItem('editor-draft')
-        if (data !== null && !this.props.params.id) {
+        const { id } = parse(this.props.location.search)
+        if (data !== null && !id) {
             if (confirm('请问是否要载入保存的草稿')) {
                 const draftData = JSON.parse(data)
                 let { title, cover, tags, category, gallery, raw, authorId } = draftData
@@ -87,9 +88,11 @@ export default class EditPage extends Component {
                 })
             }
         }
-        if(this.props.params.id) {
+
+        if(id) {
+            this.setState({pageId:id})
 			Request
-			.get(`/api/page/${this.props.params.id}/raw`)
+			.get(`/api/page/${id}/raw`)
 			.end((err,res) => {
 				const { title, cover, tags, category, gallery, raw, authorId } = res.body
                 let rawData = convertFromRaw(raw)
@@ -101,7 +104,7 @@ export default class EditPage extends Component {
 		}
     }
     componentWillReceiveProps(nextProps) {
-        if(!this.props.params.id){
+        if(!this.state.pageId){
             this.setState({authorId:nextProps.user.id})
         }
     }
@@ -202,8 +205,8 @@ export default class EditPage extends Component {
         this.setState({
             dialogSubmit:true
         },()=> {
-            if(this.props.params.id) {
-                data.id = this.props.params.id
+            if(this.state.pageId) {
+                data.id = this.state.pageId
             }
             Request
                 .post(`/api/page/publish`)
@@ -536,6 +539,3 @@ export default class EditPage extends Component {
     }
 }
 
-EditPage.contextTypes = {
-    router : PropTypes.object
-}

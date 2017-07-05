@@ -1,12 +1,11 @@
 import React,{ Component } from 'react'
 import PropTypes from 'prop-types'
 import { Form, FormGroup, Row, Col, Checkbox, FormControl, Alert } from 'react-bootstrap'
-import { Router } from 'react-router'
 import Dropzone from 'react-dropzone'
 import CDN from '../../widgets/cdn'
 import Request from 'superagent'
 
-export default class EditStickerSet extends Component{
+export default class extends Component{
 	constructor(props) {
 	  	super(props)
 	  	this.state = {
@@ -26,7 +25,7 @@ export default class EditStickerSet extends Component{
 	  	this.submit = this._submit.bind(this)
 	}
 	componentWillMount() {
-		Request.get(`/api/sticker/set/${this.props.params.id}`)
+		Request.get(`/api/sticker/set/${this.props.match.params.id}`)
 			.end((err,res) => {
 				this.setState({
 					name:res.body.name,
@@ -41,7 +40,7 @@ export default class EditStickerSet extends Component{
 		let formData = new FormData();
 		formData.append('file', images[0]);
 		$.ajax({
-			url: '/api/upload?key=stickerset/' + this.props.params.id + '.png',
+			url: '/api/upload?key=stickerset/' + this.props.match.params.id + '.png',
 			type: 'POST',
 			data: formData,
 			processData: false,
@@ -59,7 +58,7 @@ export default class EditStickerSet extends Component{
   			return alert('name is required')
   		}
 		Request
-			.post(`/api/sticker/set/${this.props.params.id}`)
+			.post(`/api/sticker/set/${this.props.match.params.id}`)
 			.send({
                 name, image, author, description, active, frame
             })
@@ -134,8 +133,4 @@ export default class EditStickerSet extends Component{
 
 		)
 	}
-}
-
-EditStickerSet.contextTypes = {
-	router : PropTypes.object
 }

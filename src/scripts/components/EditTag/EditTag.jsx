@@ -1,6 +1,5 @@
 import React,{ Component } from 'react'
 import { Form, FormGroup, Row, Col, Checkbox, FormControl, Alert, Modal } from 'react-bootstrap'
-import { Router } from 'react-router'
 import Dropzone from 'react-dropzone'
 import CDN from '../../widgets/cdn'
 import Request from 'superagent'
@@ -10,7 +9,7 @@ export default class EditTag extends Component{
     constructor(props) {
         super(props)
         this.state = {
-            id: this.props.params.id,
+            id: this.props.match.params.id,
             text: '',
             image: '',
             cover: '',
@@ -53,7 +52,7 @@ export default class EditTag extends Component{
             this.props.fetchTagClass()
         }
         Request
-            .get(`/api/tag/${this.props.params.id}`)
+            .get(`/api/tag/${this.state.id}`)
             .end((err,res) => {
                 this.setState({
                     text: res.body.text,
@@ -96,7 +95,7 @@ export default class EditTag extends Component{
     }
     _onDropImage(files) {
         let file = files[0];
-        let uploadKey = `tag/image/${this.props.params.id}.${Math.random().toString().substring(2,12)}`
+        let uploadKey = `tag/image/${this.state.id}.${Math.random().toString().substring(2,12)}`
         Request
             .get(`/api/uptoken?key=${uploadKey}`)
             .end((err,res) => {
@@ -116,7 +115,7 @@ export default class EditTag extends Component{
     }
     _onDropCover(files) {
         let file = files[0];
-        let uploadKey = `tag/cover/${this.props.params.id}.${Math.random().toString().substring(2,12)}`
+        let uploadKey = `tag/cover/${this.state.id}.${Math.random().toString().substring(2,12)}`
         Request
             .get(`/api/uptoken?key=${uploadKey}`)
             .end((err,res) => {
@@ -158,7 +157,7 @@ export default class EditTag extends Component{
             }
         })
         Request
-            .post(`/api/tag/${this.props.params.id}`)
+            .post(`/api/tag/${this.state.id}`)
             .send(data)
             .end((err, res) => {
                 alert("success!")

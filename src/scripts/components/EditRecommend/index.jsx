@@ -1,22 +1,22 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import Dropzone from 'react-dropzone'
 import CDN from '../../widgets/cdn'
 import { Modal, Button,Form, FormGroup, Col, FormControl, Row,Radio } from 'react-bootstrap'
 import Request from 'superagent'
 
-export default class EditBannerSet extends Component {
+export default class extends Component {
   constructor(props) {
     super(props)
     this.state = {
       image:'',
       id:'',
       title:'',
-      description:'',
       type:'',
+      description:'',
       targetId:'',
       targetType:'',
       extra:'',
+      targetUrl:'',
       titleError:null
     }
     this.submit = this._submit.bind(this)
@@ -32,7 +32,7 @@ export default class EditBannerSet extends Component {
   }
   componentDidMount() {
     Request
-    .get(`/api/recommend/${this.props.params.id}`)
+    .get(`/api/recommend/${this.props.match.params.id}`)
     .end((err,res) => {
       if(!err) {
         const { id,image,targetId,targetType,extra,title,type } = res.body
@@ -52,7 +52,7 @@ export default class EditBannerSet extends Component {
     let formData = new FormData()
     formData.append('file', images[0])
     $.ajax({
-      url: `/api/upload?key=recommend_${this.props.params.id+Date.now()}.jpg&temp=false`,
+      url: `/api/upload?key=recommend_${this.props.match.params.id+Date.now()}.jpg&temp=false`,
       type: 'POST',
       data: formData,
       processData: false, // tell jQuery not to process the data
@@ -72,12 +72,12 @@ export default class EditBannerSet extends Component {
     }
     Object.keys(data).forEach(key => !data[key] ? delete data[key] : null)
     Request
-    .post(`/api/recommend/${this.props.params.id}`)
+    .post(`/api/recommend/${this.props.match.params.id}`)
     .send(data)
     .end((err,res) =>{
       if(!err){
         if(confirm('保存成功')){
-          this.context.router.push('/explorepage')
+          this.props.history.push('/explorepage')
         }
       }
     })
@@ -127,7 +127,7 @@ export default class EditBannerSet extends Component {
                   描述
                 </Col>
                 <Col sm={8}>
-                  <FormControl value={this.state.description} type="text" onChange={(e) => this.setState({desc:e.target.value})}/>
+                  <FormControl value={this.state.description} type="text" onChange={(e) => this.setState({description:e.target.value})}/>
                 </Col>
               </FormGroup>
               <FormGroup>
@@ -208,8 +208,4 @@ export default class EditBannerSet extends Component {
       </div>
     )
   }
-}
-
-EditBannerSet.contextTypes = {
-    router : PropTypes.object
 }

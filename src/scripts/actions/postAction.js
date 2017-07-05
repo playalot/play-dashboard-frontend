@@ -279,3 +279,14 @@ export function getPostBy (filter = '',query ='') {
             })
     }
 }
+
+
+export function getUserPost (id) {
+    return (dispatch,getState) => {
+        return Request
+            .get(`/api/user/${id}/posts`)
+            .end((err, res) => {
+                dispatch(receivePost(res.body.posts))
+            })
+    }
+}

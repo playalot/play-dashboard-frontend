@@ -1,5 +1,4 @@
 import React,{ Component } from 'react'
-import {Link} from 'react-router'
 import {
 	Col, Row, Modal, Form, FormGroup, InputGroup, FormControl, Button, ButtonToolbar
 } from 'react-bootstrap'
@@ -7,7 +6,7 @@ import OrderPanel from '../OrderPanel'
 export default class extends Component {
 
 	componentWillMount() {
-		const id = this.props.params.id
+		const id = this.props.match.params.id
 		this.props.getOrderByToy(id)
 	}
 

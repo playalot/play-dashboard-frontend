@@ -1,27 +1,32 @@
 import React,{ Component, PropTypes } from 'react'
-import { render } from 'react-dom'
+import ReactDOM from 'react-dom'
+import { AppContainer } from 'react-hot-loader'
 import { Provider } from 'react-redux'
-import { Router, Route, hashHistory, browserHistory} from 'react-router'
-import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
+import { HashRouter } from 'react-router-dom'
 
-import _createStore from './store'
-import routes from './routes'
+import store from './store'
 
 import '../sass/style.scss'
-// const AdminLTEOptions = {
-//     enableBoxRefresh: true,
-//     enableBSToppltip: true
-// }
-const initialState = {}
-const store = _createStore(hashHistory, initialState)
-const history = syncHistoryWithStore(hashHistory, store, {
-    selectLocationState: (state) => state.router
-})
-render((
-    <Provider store={store}>
-        <Router
-            history={history}
-            children={routes}
-        />
-    </Provider>
-), document.getElementById('app'))
+
+import App from './components/App'
+
+const render = (Component) => {
+    ReactDOM.render(
+        <Provider store={store}>
+            <HashRouter>
+                <AppContainer>
+                    <Component/>
+                </AppContainer>
+            </HashRouter>
+        </Provider>,
+        document.getElementById('app')
+    )
+}
+
+render(App)
+
+if (module.hot) {
+    module.hot.accept('./components/App', () => {
+        render(App)
+    })
+}

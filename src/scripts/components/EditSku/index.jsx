@@ -5,6 +5,7 @@ import {
 import DatePicker from 'react-datepicker'
 import Moment from 'moment'
 import Request from 'superagent'
+import parse from '../../widgets/parse'
 export default class EditSku extends Component {
     constructor(props) {
         super(props)
@@ -26,13 +27,15 @@ export default class EditSku extends Component {
         this.changeOrderClose = (date) => this.setState({orderClose:date})
     }
     componentWillMount() {
+        const id = this.props.match.params.id
+        const sid = parse(this.props.location.search).sid
         Request
-        .get(`/api/toy/${this.props.params.id}/stock/${this.props.location.query.sid}`)
+        .get(`/api/toy/${id}/stock/${sid}`)
         .end((err,res) => {
             let stock = res.body
             this.setState({
-                id:this.props.params.id,
-                sid:this.props.location.query.sid,
+                id,
+                sid,
                 quantity:stock.quantity || 100,
                 price:stock.price || 9999,
                 costPrice:stock.costPrice || 0,

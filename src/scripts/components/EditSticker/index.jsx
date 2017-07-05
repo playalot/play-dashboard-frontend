@@ -1,12 +1,11 @@
 import React,{ Component } from 'react'
 import PropTypes from 'prop-types'
 import { Form, FormGroup, Row, Col, Checkbox, FormControl, Alert } from 'react-bootstrap'
-import { Router } from 'react-router'
 import Dropzone from 'react-dropzone'
 import CDN from '../../widgets/cdn'
 import Request from 'superagent'
 
-export default class EditSticker extends Component{
+export default class extends Component{
     constructor(props) {
         super(props)
         this.state = {
@@ -20,7 +19,7 @@ export default class EditSticker extends Component{
         this.submit = this._submit.bind(this)
     }
     componentWillMount() {
-        this.setState({setId:this.props.params.id})
+        this.setState({setId:this.props.match.params.id})
     }
     _onDropImage(images) {
         let formData = new FormData()
@@ -103,10 +102,6 @@ export default class EditSticker extends Component{
 
         )
     }
-}
-
-EditSticker.contextTypes = {
-  router : PropTypes.object
 }
 
 

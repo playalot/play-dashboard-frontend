@@ -65,7 +65,7 @@ export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'',fil
                         return item.get('id') === action.id
                     }), (item) => {
                         return item.updateIn(['toys'],toys => {
-                            return toys.push(Immutable.fromJS(action.toy))
+                            return toys.push(action.toy)
                         })
                     }
                 )

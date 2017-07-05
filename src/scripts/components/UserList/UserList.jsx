@@ -3,12 +3,13 @@ import PropTypes from 'prop-types'
 import {
 	Row, Form, FormGroup, FormControl, Button, InputGroup,
 } from 'react-bootstrap'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import Moment from 'moment'
 import ReactPaginate from 'react-paginate'
 import Select from 'react-select'
 import Request from 'superagent'
 import PlayAliBaichuan from '../Common/PlayAliBaichuan'
+import { parsePage } from '../../widgets/parse'
 
 export default class UserList extends Component{
 	constructor(props) {
@@ -32,10 +33,10 @@ export default class UserList extends Component{
 	componentWillMount() {
 		const { page,filter,filterType } = this.props
 		if(typeof page === 'number') {
-			this.context.router.push(`/user?page=${page}`)
+			this.props.history.push(`/users?page=${page}`)
 			this.setState({filter,filterType})
 		}else{
-			this.props.getUser(this.props.location.query.page)
+			this.props.getUser(0)
 		}
 	}
 	_approve() {
@@ -66,11 +67,11 @@ export default class UserList extends Component{
 	}
 	_search() {
     const { filter, filterType } = this.state
-		this.context.router.push(`/user?page=0`)
+		this.props.history.push(`/users?page=0`)
 		this.props.getUserBy(filter.trim(),filterType)
 	}
 	_goPage(page) {
-		this.context.router.push(`/user?page=${page}`)
+		this.props.history.push(`/users?page=${page}`)
 		this.props.getUser(page)
 	}
 	render() {
@@ -117,7 +118,7 @@ export default class UserList extends Component{
                   	<div className="btn-group">
 										  <img style={{width:'45px'}} src={user.avatar}  data-toggle="dropdown" className="img-circle"/>
 										  <ul className="dropdown-menu">
-										    <li><a onClick={() => this.context.router.push(`/user/${user.id}`)}>查看<small>({user.nickname})</small></a></li>
+										    <li><a onClick={() => this.props.history.push(`/user/${user.id}`)}>查看<small>({user.nickname})</small></a></li>
 										    <li><a onClick={() => this.props.setTouid(user.id,user.avatar)}>私信</a></li>
 										  </ul>
 										</div>
@@ -150,7 +151,7 @@ export default class UserList extends Component{
 						onPageChange={obj => this.goPage(obj.selected)}
 						containerClassName={"pagination"}
 						subContainerClassName={"pages pagination"}
-						forcePage={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
+						forcePage={parsePage(this.props.location.search)}
 						activeClassName={"active"} />
 	      </Row>
 	      {

@@ -27,7 +27,7 @@ export default class extends Component{
 	}
 	componentWillMount() {
 		Request
-			.get(`/api/order/${this.props.params.id}`)
+			.get(`/api/order/${this.props.match.params.id}`)
 			.end((err,res) => {
 				const {
 					id, title, created, address, note, description,

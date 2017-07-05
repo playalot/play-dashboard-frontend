@@ -1,6 +1,5 @@
 import React,{Component} from 'react'
-import PropTypes from 'prop-types'
-import {Link} from 'react-router'
+import {Link} from 'react-router-dom'
 import {Row, Button,Form,FormGroup,InputGroup,FormControl, Modal} from 'react-bootstrap'
 import Moment from 'moment'
 import Request from 'superagent'
@@ -26,26 +25,13 @@ export default class PagePanel extends Component {
   	this.togglePub = (id) => this.props.togglePub(id)
   	this.toggleRec = (id) => this.props.toggleRec(id)
   	this.toggleShare = (id) => this.props.toggleShare(id)
-  	this.deleteArticle = this._deleteArticle.bind(this)
+  	this.deleteArticle = (id) => confirm('删除这个文章?') && this.props.deleteArticle(id)
   	this.addToy = (pageId) => this.setState({modalAddToy:true,pageId})
   	this.removeToy = (id) => confirm('删除这个玩具标签?') && this.props.removeToy(id)
 
   	//玩具搜索
   	this.closeAddToy = () => this.setState({modalAddToy:false,pageId:'',toyId:''})
   	this.setTime = this._setTime.bind(this)
-	}
-	_deleteArticle(id) {
-		if (confirm('删除这个文章?')) {
-			this.props.deleteArticle(id)
-		}
-	}
-	_goPage(page) {
-		this.context.router.push(`/page?page=${page}`)
-		this.props.getPage(page)
-	}
-	_search() {
-		this.context.router.push(`/page?page=0`)
-		this.props.getPageBy(this.state.filter,this.state.query.trim())
 	}
 	_setTime() {
 		const { curDate, curTime, timePageId } = this.state
@@ -119,7 +105,7 @@ export default class PagePanel extends Component {
 	                  <td style={{width:150}}> 
 	                  	<div className="page-flex-column">
 	                    	<div>
-	                    		<Link to={`/page/edit/${page.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link>
+	                    		<Link to={`/page/edit?id=${page.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link>
 	                    		<span style={{color:'#333'}} onClick={() => this.togglePub(page.id)} className={isPubClass}><i className="fa fa-eye-slash"></i></span>
 	                    		<span style={{color:'#333'}} onClick={() => this.deleteArticle(page.id)} className="btn btn-sm"><i className="fa fa-trash"></i></span>
 	                    	</div>
@@ -136,57 +122,67 @@ export default class PagePanel extends Component {
           	}
           </tbody>
         </table>
-        <Modal show={!!timePageId} onHide={() => this.setState({timePageId:null})}>
-      		<Modal.Header closeButton>
-            <Modal.Title>修改发布时间</Modal.Title>
-        	</Modal.Header>
-          <Modal.Body>
-         		<DatePicker
-							selected={curDate}
-							onChange={(date) => this.setState({curDate:date})}
-							maxDate={Moment()}
-							dateFormat="YYYY/MM/DD"
-						/>
-						<input style={{marginLeft:20}} type="text" value={curTime} onChange={(e) => this.setState({curTime:e.target.value})}/>
-          </Modal.Body>
-          <Modal.Footer>
-          	<Button onClick={this.setTime}>修改</Button>
-          </Modal.Footer>
-        </Modal>
-        <Modal show={modalAddToy} onHide={this.closeAddToy}>
-        	<Modal.Header closeButton>
-          	<Modal.Title>搜索玩具</Modal.Title>
-        	</Modal.Header>
-        	<Modal.Body>
-        		<InputGroup>
+				{
+					timePageId ?
+					<div className="play-modal" style={{zIndex:2}} onClick={() => this.setState({timePageId:null})}>
+						<div className="play-dialog" onClick={e => e.stopPropagation()}>
+							<p className="dialog-title">修改发布时间</p>
+							<span onClick={() => this.setState({timePageId:null})} className="dialog-close">×</span>
+							<div>
+								<DatePicker
+									selected={curDate}
+									onChange={(date) => this.setState({curDate:date})}
+									maxDate={Moment()}
+									dateFormat="YYYY/MM/DD"
+								/>
+								<input style={{marginLeft:20}} type="text" value={curTime} onChange={(e) => this.setState({curTime:e.target.value})}/>
+							</div>
+							<div className="dialog-footer">
+								<Button onClick={this.setTime}>修改</Button>
+							</div>
+						</div>
+					</div>
+					:null
+				}
+				{
+					modalAddToy ?
+					<div className="play-modal" style={{zIndex:2}} onClick={this.closeAddToy}>
+						<div className="play-dialog" onClick={e => e.stopPropagation()}>
+							<p className="dialog-title">搜索玩具</p>
+							<span onClick={this.closeAddToy} className="dialog-close">×</span>
+							<div>
+								<InputGroup>
               <FormControl type="text" placeholder='输入玩具ID' value={toyId} onChange={(e) => this.setState({toyId:e.target.value})} />
               <InputGroup.Button>
                 <Button onClick={() => {
                 	this.props.addToy(pageId,toyId)
                 	this.closeAddToy()
-                }}>添加玩具</Button>
-              </InputGroup.Button>
-            </InputGroup>
-            <br/>
-          	<PlayAutoSuggest
-							fetch={(o) => this.props.fetchToyByQuery(o.value)}
-							clear={this.props.clearSuggestion}
-							getValue={suggestion => suggestion.name}
-							selectValue={(event,{suggestion, suggestionValue, method }) => {
-								this.props.addToy(pageId,suggestion.id)
-								this.closeAddToy()
-							}}
-							desc="release"
-							placeholder="请输入玩具关键字"
-							results={toyResults}
-						/>
-        	</Modal.Body>
-      	</Modal>
+										}}>添加玩具</Button>
+									</InputGroup.Button>
+								</InputGroup>
+								<br/>
+								<PlayAutoSuggest
+									fetch={(o) => this.props.fetchToyByQuery(o.value)}
+									clear={this.props.clearSuggestion}
+									getValue={suggestion => suggestion.name}
+									selectValue={(event,{suggestion, suggestionValue, method }) => {
+										this.props.addToy(pageId,suggestion.id)
+										this.closeAddToy()
+									}}
+									desc="release"
+									placeholder="请输入玩具关键字"
+									results={toyResults}
+								/>
+							</div>
+							<div className="dialog-footer">
+								<button className="btn btn-primary" onClick={this.addLink}>插入</button>
+							</div>
+						</div>
+					</div>
+					: null
+				}
       </div>
 		)
 	}
 }
 
-PagePanel.contextTypes = {
-  router : PropTypes.object
-}

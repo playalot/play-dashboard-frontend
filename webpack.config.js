@@ -1,10 +1,13 @@
 const path = require('path');
 const webpack = require('webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-// const proxyIp = `http://121.41.51.24:4400`;
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const proxyIp = `http://121.41.51.24:4400`;
 module.exports = {
 	entry: {
-		app: path.resolve(__dirname, 'src/scripts/main.js'),
+		app: [
+			'react-hot-loader/patch',
+			path.resolve(__dirname, 'src/scripts/main.js'),
+		],
 		vendor: [
 			'jquery',
 			'bootstrap-sass/assets/javascripts/bootstrap.js',
@@ -41,10 +44,10 @@ module.exports = {
 				]
 			}, {
 				test:/\.(woff|svg|eot|ttf)\??.*$/,
-				use:'url-loader?limit=8192&name=/fonts/[name].[ext]'
+				use:'url-loader?limit=8192&name=fonts/[name].[ext]'
 			}, {
 				test:/\.(gif|jpg|png)\??.*$/,
-				use:'url-loader?limit=8192&name=/images/[name].[ext]'
+				use:'url-loader?limit=8192&name=images/[name].[ext]'
 			}
 		]
 	},
@@ -53,38 +56,44 @@ module.exports = {
 		new webpack.DefinePlugin({
 			'process.env.NODE_ENV': '"development"'
 		}),
-		new webpack.optimize.CommonsChunkPlugin({name:'vendor',filename:'/scripts/vendor.js'}),
+		new HtmlWebpackPlugin({
+            template: path.resolve(__dirname, 'src/index.html'),
+        }),
+		new webpack.optimize.CommonsChunkPlugin({name:'vendor',filename:'scripts/vendor.js'}),
 		new webpack.ProvidePlugin({
 			$: "jquery",
 			jQuery: "jquery",
 			"window.jQuery": "jquery"
 		}),
 	],
-	// devServer: {
-	// 	contentBase: path.join(__dirname, "src"),
-	// 	hot: true,
-	// 	port: 8081,
-	// 	proxy: {
-	// 		'/query/*': {
-	// 			target: proxyIp,
-	// 			secure: false
-	// 		},
-	// 		'/api/*': {
-	// 			target: proxyIp,
-	// 			secure: false
-	// 		},
-	// 		'/signIn': {
-	// 			target: proxyIp,
-	// 			secure: false
-	// 		},
-	// 		'/webjars/*':{
-	// 			target: proxyIp,
-	// 			secure: false
-	// 		},
-	// 		'/authenticate/*':{
-	// 			target: proxyIp,
-	// 			secure: false
-	// 		},
-	// 	},
-	// },
+	devServer: {
+		hot: true,
+		port: 8081,
+		proxy: {
+			'/query/*': {
+				target: proxyIp,
+				secure: false
+			},
+			'/api/*': {
+				target: proxyIp,
+				secure: false
+			},
+			'/signIn': {
+				target: proxyIp,
+				secure: false
+			},
+			'/signOut': {
+				target: proxyIp,
+				secure: false
+			},
+			'/webjars/*':{
+				target: proxyIp,
+				secure: false
+			},
+			'/authenticate/*':{
+				target: proxyIp,
+				secure: false
+			},
+		},
+	},
 }

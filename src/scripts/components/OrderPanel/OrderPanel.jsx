@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import { Row, Button, FormControl,Form, FormGroup } from 'react-bootstrap'
 import Moment from 'moment'
 
@@ -88,7 +88,7 @@ export default class extends Component{
 										    订单操作&nbsp;<span className="caret"></span>
 										  </button>
 										  	<ul className="dropdown-menu">
-										  		<li><Link to={`/order/${order.id}`}>订单详情</Link></li>
+										  		<li><Link to={`/order/edit/${order.id}`}>订单详情</Link></li>
 										  		<li><Link to={`/order/toy/${order.items[0].toyId}`}>显示全部订单</Link></li>
 											  	{order.status === 'open' ? <li><a onClick={() => this.setStatus(order.id,'closed')}>关闭订单</a></li> : null}
 											  	{order.status === 'paid' ? <li><a onClick={() => this.setStatus(order.id,'done')}>订单完成</a></li> : null}

@@ -1,55 +1,19 @@
 import React,{ Component } from 'react'
-import {
-	Row, Col, Button, ButtonToolbar
-} from 'react-bootstrap'
-import { Link } from 'react-router'
-
+import { Row, Col, Button } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 export default class ExplorePage extends Component{
 	constructor(props) {
 	  	super(props)
-	  	this.state = {}
-	  	this.addBanner = this._addBanner.bind(this)
-	  	this.deleteBanner = this._deleteBanner.bind(this)
-	  	this.addTopic = this._addTopic.bind(this)
-	  	this.deleteTopic = this._deleteTopic.bind(this)
-	  	this.addToy = this._addToy.bind(this)
-	  	this.deleteToy = this._deleteToy.bind(this)
+	  	this.addBanner = () => confirm('创建一个新Banner？') && this.props.addBanner()
+	  	this.deleteBanner = (id) => confirm('删除这个Banner?') && this.props.deleteBanner(id,'banner')
+	  	this.addTopic = () => confirm('创建一个新主题？') && this.props.addTopic()
+	  	this.deleteTopic = (id) => confirm('删除这个主题?') && this.props.deleteBanner(id,'topic')
+	  	this.addToy = () => confirm('创建一个新玩具页banner？') && this.props.addToy()
+	  	this.deleteToy = (id) => confirm('删除这个玩具banner?') && this.props.deleteBanner(id,'toy')
 	}
 	componentWillMount() {
-		if(!this.props.loaded) {
-			this.props.fetchExplore()
-		}
-	}
-	_addBanner() {
-		if (confirm('创建一个新Banner？')) {
-			this.props.addBanner()
-		}
-	}
-	_deleteBanner(id) {
-		if (confirm('删除这个Banner?')) {
-			this.props.deleteBanner(id,'banner')
-		}
-	}
-	_addTopic() {
-		if (confirm('创建一个新主题？')) {
-			this.props.addTopic()
-		}
-	}
-	_deleteTopic(id) {
-		if (confirm('删除这个主题?')) {
-			this.props.deleteBanner(id,'topic')
-		}
-	}
-	_addToy() {
-		if (confirm('创建一个新玩具页banner？')) {
-			this.props.addToy()
-		}
-	}
-	_deleteToy(id) {
-		if (confirm('删除这个玩具banner?')) {
-			this.props.deleteBanner(id,'toy')
-		}
+		!this.props.loaded && this.props.fetchExplore()
 	}
 	render() {
 		return(
@@ -77,7 +41,7 @@ export default class ExplorePage extends Component{
 			                      </h3>
 			                      <div className="box-tools pull-right">
 			                        <Link
-			                          to={`/recommend/${banner.id}/edit`}
+			                          to={`/recommend/${banner.id}`}
 			                          className="btn btn-box-tool" >
 			                          <i className="fa fa-edit">
 			                          </i>

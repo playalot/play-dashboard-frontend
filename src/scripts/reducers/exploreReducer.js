@@ -24,7 +24,7 @@ export default (state = Immutable.fromJS({
         	return state.updateIn(['topics'],(topics) => {
         		return topics.unshift(Immutable.fromJS(action.res))
         	})
-        case EXPLORE_ADD_TOPIC:
+        case EXPLORE_ADD_TOY:
             return state.updateIn(['toys'],(toys) => {
                 return toys.unshift(Immutable.fromJS(action.res))
             })

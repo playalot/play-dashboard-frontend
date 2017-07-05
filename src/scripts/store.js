@@ -1,5 +1,4 @@
 import { combineReducers, applyMiddleware, compose, createStore } from 'redux'
-import { routerReducer as router, routerMiddleware } from 'react-router-redux'
 import thunk from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import admin from './reducers/adminReducer'
@@ -19,9 +18,8 @@ import feedback from './reducers/feedbackReducer'
 import sku from './reducers/skuReducer'
 import order from './reducers/orderReducer'
 import trade from './reducers/tradeReducer'
-export const makeRootReducer = (asyncReducers) => {
+export const makeRootReducer = () => {
 	return combineReducers({
-		// Add sync reducers here
 		admin,
 		postReducer,
 		tagClassReducer,
@@ -39,36 +37,25 @@ export const makeRootReducer = (asyncReducers) => {
 		sku,
 		order,
 		trade,
-		router,
-		...asyncReducers
 	})
 }
 
-export const injectReducer = (store, { key, reducer }) => {
-	store.asyncReducers[key] = reducer
-	store.replaceReducer(makeRootReducer(store.asyncReducers))
+
+const middleware = [thunk]
+
+if (process.env.NODE_ENV === `development`) {
+	
+	const logger = createLogger();
+	middleware.push(logger);
 }
 
-export default ( history, initialState ) => {
 
-	const middleware = [thunk, routerMiddleware(history)];
-
-	if (process.env.NODE_ENV === `development`) {
-		
-		const logger = createLogger();
-		middleware.push(logger);
-	}
-
-
-	const store = createStore(
-	    makeRootReducer(),
-	    initialState,
-	    compose(
-	      	applyMiddleware(...middleware)
-	    )
+const store = createStore(
+	makeRootReducer(),
+	{},
+	compose(
+		applyMiddleware(...middleware)
 	)
+)
 
-	store.asyncReducers = {}
-
-	return store
-}
+export default store

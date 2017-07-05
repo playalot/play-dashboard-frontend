@@ -56,7 +56,7 @@ export default class EditToy extends Component {
 	}
 	componentWillMount() {
 		Request
-			.get(`/api/toy/${this.props.params.id}`)
+			.get(`/api/toy/${this.props.match.params.id}`)
 			.end((err,res) => {
 				this.setState({
 					cover:res.body.cover,
@@ -109,7 +109,7 @@ export default class EditToy extends Component {
 			let formData = new FormData()
 			formData.append('file', image)
 			$.ajax({
-				url: `/api/upload?key=toy/img/${this.props.params.id}_${(Date.now().toString()+index)}_(size).${image.name.split('.').pop()}`,
+				url: `/api/upload?key=toy/img/${this.props.match.params.id}_${(Date.now().toString()+index)}_(size).${image.name.split('.').pop()}`,
 				type: 'POST',
 				data: formData,
 				processData: false,
@@ -132,7 +132,7 @@ export default class EditToy extends Component {
 				const file = images[0]
 				const img = new Image()
 				img.onload = () => {
-					const uploadKey = 'toy/cover/'+_this.props.params.id+Date.now()+'_w_'+img.width+'_h_'+img.height+'.'+file.name.split('.').pop();
+					const uploadKey = 'toy/cover/'+_this.props.match.params.id+Date.now()+'_w_'+img.width+'_h_'+img.height+'.'+file.name.split('.').pop();
 					Request
 						.post('http://upload.qiniu.com/')
 						.field('key', uploadKey)
@@ -225,7 +225,7 @@ export default class EditToy extends Component {
 		data.money = parseInt(data.money)
 		Object.keys(data).forEach(key => data[key]=== '' ? delete data[key] : '')
   		Request
-	  		.post(`/api/toy/${this.props.params.id}`)
+	  		.post(`/api/toy/${this.props.match.params.id}`)
 	  		.send(data)
 	  		.end((err,res) => {
 					if (err || !res.ok) {

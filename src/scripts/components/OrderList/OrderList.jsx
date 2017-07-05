@@ -1,11 +1,9 @@
-import React, {
-    Component
-} from 'react'
-import PropTypes from 'prop-types'
-import {Link} from 'react-router'
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import {Row, Button, FormControl,Form, FormGroup,InputGroup } from 'react-bootstrap'
 import ReactPaginate from 'react-paginate'
 import Moment from 'moment'
+import parse,{ parsePage } from '../../widgets/parse'
 
 import OrderPanel from '../OrderPanel'
 export default class OrderList extends Component{
@@ -20,32 +18,36 @@ export default class OrderList extends Component{
 	  	}
 	  	this.goPage = this._goPage.bind(this)
 	  	this.search = this._search.bind(this)
-	  	this.onChangeYear= (e) => this.setState({year:e.target.value},() => this.search())
-		this.onChangeMonth = (e) => this.setState({month:e.target.value},() => this.search())
+	  	this.onChangeYear= (e) => this.setState({year:e.target.value},this.search)
+		this.onChangeMonth = (e) => this.setState({month:e.target.value},this.search)
+		this.onChangeFilter = (e) => this.setState({filter:e.target.value})
 	}
 	componentWillMount() {
-		const { page, status, merchant,filter } = this.props.location.query
-		this.setState({
-			status: status || '',
-			merchant: merchant || '',
-			filter: filter || ''
-		},() => this.goPage(page || 0))
+		const { page,status,merchant,year,month,filter } = this.props
+		if(typeof page === 'number') {
+			let path = `/orders?page=${page}`
+			path += status ? `&status=${status}` : ``
+			path += merchant ? `&merchant=${merchant}` : ``
+			this.props.history.push(path)
+			this.setState({status,merchant,year,month,filter})
+		}else{
+			this.props.getOrder(0)
+		}
 	}
 	_goPage(page) {
-		let { status, merchant,year,month } = this.state
-		let path = `/order?page=${page}`
+		let { status, merchant,year,month,filter } = this.state
+		let path = `/orders?page=${page}`
 		path += status ? `&status=${status}` : ``
 		path += merchant ? `&merchant=${merchant}` : ``
-		this.context.router.push(path)
-		this.props.getOrder(page,status,merchant,year,month)
+		this.props.history.push(path)
+		this.props.getOrder(page,status,merchant,year,month,filter)
 	}
 	_search() {
 		let { status,merchant,year,month,filter } = this.state
-		let path = `/order?page=${0}`
+		let path = `/orders?page=${0}`
 		path += status ? `&status=${status}` : ``
 		path += merchant ? `&merchant=${merchant}` : ``
-		path += filter ? `&filter=${filter}` : ``
-		this.context.router.push(path)
+		this.props.history.push(path)
 		this.props.getOrder(0,status,merchant,year,month,filter)
 	}
 	render() {
@@ -55,15 +57,15 @@ export default class OrderList extends Component{
 			  <div className="page-header">
 			  	<Form inline onSubmit={(e) => e.preventDefault()}>
 				  	<div className="btn-group">
-					  <button onClick={()=> this.setState({status:''},() => this.search())} className={`btn btn-default ${status === '' ? 'active':''}`}>全部</button>
-					  <button onClick={()=> this.setState({status:'prepaid'},() => this.search())} className={`btn btn-default ${status === 'prepaid' ? 'active':''}`}>已预订</button>
-					  <button onClick={()=> this.setState({status:'due'},() => this.search())} className={`btn btn-default ${status === 'due' ? 'active':''}`}>待补款</button>
-					  <button onClick={()=> this.setState({status:'paid'},() => this.search())} className={`btn btn-default ${status === 'paid' ? 'active':''}`}>已支付</button>
-					  <button onClick={()=> this.setState({status:'done'},() => this.search())} className={`btn btn-default ${status === 'done' ? 'active':''}`}>已完成</button>
+					  <button onClick={()=> this.setState({status:''},this.search)} className={`btn btn-default ${status === '' ? 'active':''}`}>全部</button>
+					  <button onClick={()=> this.setState({status:'prepaid'},this.search)} className={`btn btn-default ${status === 'prepaid' ? 'active':''}`}>已预订</button>
+					  <button onClick={()=> this.setState({status:'due'},this.search)} className={`btn btn-default ${status === 'due' ? 'active':''}`}>待补款</button>
+					  <button onClick={()=> this.setState({status:'paid'},this.search)} className={`btn btn-default ${status === 'paid' ? 'active':''}`}>已支付</button>
+					  <button onClick={()=> this.setState({status:'done'},this.search)} className={`btn btn-default ${status === 'done' ? 'active':''}`}>已完成</button>
 					</div>
 					{' '}
 					<FormGroup>
-						<FormControl componentClass="select" placeholder="select" value={this.state.merchant} onChange={(e) => this.setState({merchant:e.target.value},() => this.search())}>
+						<FormControl componentClass="select" placeholder="select" value={this.state.merchant} onChange={(e) => this.setState({merchant:e.target.value},this.search)}>
 		                  <option value="">所有商家</option>
 		                  <option value="PLAY玩具控">PLAY玩具控</option>
 		                  <option value="PLAY玩具控(上海)">PLAY玩具控(上海)</option>
@@ -108,7 +110,7 @@ export default class OrderList extends Component{
 					{' '}
 					<FormGroup>
 		              <InputGroup>
-		                <FormControl type="text" placeholder='请输入搜索关键字' value={this.state.filter} onKeyDown={e => e.keyCode === 13 && this.search()} onChange={(e) => this.setState({filter:e.target.value})} />
+		                <FormControl type="text" placeholder='请输入搜索关键字' value={this.state.filter} onChange={this.onChangeFilter} />
 		                <InputGroup.Button>
 		                  <Button onClick={this.search}>搜索</Button>
 		                </InputGroup.Button>
@@ -157,15 +159,11 @@ export default class OrderList extends Component{
 					onPageChange={obj => this.goPage(obj.selected)}
 					containerClassName={"pagination"}
 					subContainerClassName={"pages pagination"}
-					forcePage={this.props.location.query.page ? parseInt(this.props.location.query.page) : 0}
+					forcePage={parsePage(this.props.location.search)}
 					activeClassName={"active"} />
 	          </Row>
 	        </div>
 
 		)
 	}
-}
-
-OrderList.contextTypes = {
-  	router : PropTypes.object
 }

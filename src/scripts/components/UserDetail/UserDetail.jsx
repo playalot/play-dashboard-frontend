@@ -1,32 +1,38 @@
 import React,{ Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Row, Col, Modal, Tab, Tabs, ButtonToolbar } from 'react-bootstrap'
-const _ = require('lodash')
-import Select from 'react-select'
-
+import { Row, Col, Modal, ButtonToolbar,FormControl } from 'react-bootstrap'
 import CDN from '../../widgets/cdn'
 import PostPanels from '../PostPanels'
 import PagePanel from '../PagePanel'
+import PlayAccount from '../Common/PlayAccount'
+import Request from 'superagent'
 export default class extends Component{
 	constructor(props) {
 		super(props)
 		this.state = {
-				userId:this.props.match.params.id,
-				filter: '',
-				dialogApprove:false,
-				type:'master',
-				note:'',
+			userId:this.props.match.params.id,
+			filter: '',
+			dialogApprove:false,
+			note:'',
+			user:{},
+			currentPage:'info'
 		}
-
 		this.setActive = this._setActive.bind(this)
 		this.approve = this._approve.bind(this)
 	}
 	componentWillMount() {
 		if(!this.props.classLoaded){
-				this.props.fetchTagClass()
+			this.props.fetchTagClass()
 		}
 		const { userId } = this.state 
-		this.props.fetchUserInfo(userId)
+		Request
+            .get(`/api/user/${userId}`)
+            .end((err,res) => {
+				this.setState({
+					user:res.body,
+					type:res.body.verify ? res.body.verify.type : 'master'
+				})
+            })
 		this.props.getUserPost(userId)
 		this.props.getUserPage(userId)
 	}
@@ -35,31 +41,11 @@ export default class extends Component{
 		this.props.clearPage()
 	}
 	_approve() {
-		const { id } = this.props.user
-		const { type,note } = this.state
-		this.props.approveUser(id,type,note)
+		const { userId,type,note } = this.state
+		this.props.approveUser(userId,type,note)
 		this.setState({
 			note:'',dialogApprove:false
 		})
-	}
-	renderAccounts(accounts) {
-		return (
-			<span>
-				{
-					accounts.map( acc => {
-						if (acc.providerID === "weibo") {
-								return <a href={'http://weibo.com/'+acc.providerKey} style={{color:'#E71D34', marginRight: '5px'}}><i className="fa fa-weibo fa-lg"></i></a>
-						} else if (acc.providerID === "mobile") {
-								return <a style={{color:'#55acee', marginRight: '5px'}}><i className="fa fa-mobile-phone fa-lg" title={acc.providerKey}  ></i></a>
-						} else if (acc.providerID === 'qq') {
-							return <a style={{color:'rgb(21,167,240)', marginRight: '5px'}}><i className="fa fa-qq fa-lg"></i></a>
-						} else if (acc.providerID === 'wechat') {
-							return <a style={{color:'rgb(73,190,56)', marginRight: '5px'}}><i className="fa fa-wechat fa-lg"></i></a>
-						}
-				})
-				}
-			</span>
-		)
 	}
 	_setActive() {
 		if(this.props.user.isActive) {
@@ -74,17 +60,12 @@ export default class extends Component{
 		
 	}
 	render() {
-		const { user } = this.props
-		const { dialogApprove,note,type } = this.state
-		const options = [
-      { value: 'master', label: '达人玩家' },
-      { value: 'custom', label: '代工定制' },
-      { value: 'designer', label: '设计师' },
-      { value: 'brand', label: '品牌商家' },
-			{ value: 'media', label: 'KOL自媒体' }
-    ]
+		const { dialogApprove,note,type,currentPage,user } = this.state
 		return (
 			<div className="content">
+				<Row>
+					
+				</Row>
 				<Row>
 					{
 						user.id ?
@@ -123,98 +104,129 @@ export default class extends Component{
 					}
 				</Row>
 				<Row>
-					<Col className="col" xs={12} sm={12} lg={12}>
-						<Tabs defaultActiveKey={1} className="nav-tabs-custom">
-							<Tab eventKey={1} title="Posts">
-								<Row>
-									<PostPanels openImage={this.openImage} openClass={this.openClass}/>
-								</Row>
-							</Tab>
-							<Tab eventKey={2} title="Pages">
-								<PagePanel></PagePanel>
-							</Tab>
-							<Tab eventKey={3} title="Info">
-								<div className="row">
-									<div className="col-sm-2 sm-2-label">
-										<b>Nickname</b>
-									</div>
-									<div className="col-sm-10" style={{padding:7}}>
-										{ user.nickname }
-									</div>
-								</div>
-								<div className="row">
-									<div className="col-sm-2 sm-2-label">
-										<b>Approval</b>
-									</div>
-									<div className="col-sm-10" style={{padding:7,fontSize:12}}>
-										<span className="label label-info">{user.approval}</span>
-										<span className="btn btn-sm"  style={{marginLeft:'5px'}} onClick={() => this.setState({dialogApprove:true})}><i className="fa fa-edit"></i></span>
-									</div>
-								</div>
-								<div className="row">
-									<div className="col-sm-2 sm-2-label">
-										<b>Level</b>
-									</div>
-									<div className="col-sm-10" style={{padding:7,fontSize:12}}>
-										<span className="label label-warning">lv{user.level}</span>
-									</div>
-								</div>
-								<div className="row">
-									<div className="col-sm-2 sm-2-label">
-										<b>Gender</b>
-									</div>
-									<div className="col-sm-10" style={{padding:7}}>
-										<span>
-											{
-												user.gender === 'm' ?
-												<i style={{color:'deepskyblue'}} className="fa fa-mars"></i>
-												:<i style={{color:'pink'}} className="fa fa-venus"></i>
-											}
-										</span>
-									</div>
-								</div>
-								<div className="row">
-									<div className="col-sm-2 sm-2-label">
-										<b>Accounts</b>
-									</div>
-									<div className="col-sm-10" style={{padding:7}}>
-										<span>{user.id && this.renderAccounts(user.accounts)}</span>
-									</div>
-								</div>
-								<div className="row">
-									<div className="col-sm-2 sm-2-label">
-										<b>Introduction</b>
-									</div>
-									<div className="col-sm-10" style={{padding:7}}>
-										{ user.bio ? user.bio : '这家伙很懒' }
-									</div>
-								</div>
-								<div className="row">
-									<div className="col-sm-2 sm-2-label">
-										<b>Active</b>
-									</div>
-									<div className="col-sm-10">
-										<button onClick={this.setActive} className="btn btn-danger"><i className="fa fa-eye-slash">&nbsp;</i>{user.isActive?'ban':'activate'}</button>
-									</div>
-								</div>
-							</Tab>
-						</Tabs>
+					<Col xs={12}>
+						<ul className="play-tabs clearfix" style={{backgroundColor:'white'}}>
+							<li onClick={() => this.setState({currentPage:'info'})} className={currentPage === 'info' ? 'active' : ''}>Info</li>
+							<li onClick={() => this.setState({currentPage:'posts'})} className={currentPage === 'posts' ? 'active' : ''}>Posts</li>
+							<li onClick={() => this.setState({currentPage:'pages'})} className={currentPage === 'pages' ? 'active' : ''}>Pages</li>
+						</ul>
+						{
+							(() => {
+								switch (currentPage) {
+								case "info":
+									return (
+										<div style={{backgroundColor:'white',padding:10}}>
+											<div className="row">
+												<div className="col-sm-2 sm-2-label">
+													<b>Nickname</b>
+												</div>
+												<div className="col-sm-10" style={{padding:7}}>
+													{ user.nickname }
+												</div>
+											</div>
+											<div className="row">
+												<div className="col-sm-2 sm-2-label">
+													<b>Approval</b>
+												</div>
+												<div className="col-sm-10" style={{padding:7}}>
+													{
+														type ?
+														<span style={{marginRight:15}}>{type}</span>
+														:null
+													}
+													<button onClick={() => this.setState({dialogApprove:true})} className="btn btn-xs green">
+														{
+															type ? '修改' : '添加'
+														}
+													</button>
+												</div>
+											</div>
+											<div className="row">
+												<div className="col-sm-2 sm-2-label">
+													<b>Level</b>
+												</div>
+												<div className="col-sm-10" style={{padding:7}}>
+													<span className="btn yellow-gold btn-xs btn-outline">LV {user.level}</span>
+												</div>
+											</div>
+											<div className="row">
+												<div className="col-sm-2 sm-2-label">
+													<b>Gender</b>
+												</div>
+												<div className="col-sm-10" style={{padding:7}}>
+													<span>
+														{
+															user.gender === 'm' ?
+															<i style={{color:'deepskyblue'}} className="fa fa-mars"></i>
+															:<i style={{color:'pink'}} className="fa fa-venus"></i>
+														}
+													</span>
+												</div>
+											</div>
+											<div className="row">
+												<div className="col-sm-2 sm-2-label">
+													<b>Accounts</b>
+												</div>
+												<div className="col-sm-10" style={{padding:7}}>
+													{
+														user.id ?
+														<PlayAccount accounts={user.accounts} />
+														:<span></span>
+													}
+												</div>
+											</div>
+											<div className="row">
+												<div className="col-sm-2 sm-2-label">
+													<b>Introduction</b>
+												</div>
+												<div className="col-sm-10" style={{padding:7}}>
+													{ user.bio ? user.bio : '这家伙很懒' }
+												</div>
+											</div>
+											<div className="row">
+												<div className="col-sm-2 sm-2-label">
+													<b>Active</b>
+												</div>
+												<div className="col-sm-10" style={{padding:7}}>
+													<button onClick={this.setActive} className="btn red btn-xs"><i className="fa fa-eye-slash">&nbsp;</i>{user.isActive?'ban':'activate'}</button>
+												</div>
+											</div>
+										</div>
+									);
+								case "posts":
+									return (
+										<div  style={{backgroundColor:'white'}}>
+											<PostPanels/>
+										</div>
+
+									)
+								case "pages":
+									return (
+										<div>
+											<PagePanel/>
+										</div>
+
+									)
+								default: return null;
+								}
+							})()
+						}
 					</Col>
 				</Row>
 				{
 					dialogApprove ?
-					<div className="play-modal">
-						<div className="play-dialog">
+					<div className="play-modal" onClick={() => this.setState({dialogApprove:false})}>
+						<div className="play-dialog" onClick={e => e.stopPropagation()}>
 							<p className="dialog-title">添加认证</p>
 							<span onClick={() => this.setState({dialogApprove:false})} className="dialog-close">×</span>
 							<div>
-								<Select
-									name="form-field-name"
-									value={type}
-									options={options}
-									clearable={false}
-									onChange={(newValue) => this.setState({type:newValue.value})}
-								/>
+								<FormControl componentClass="select" value={type} onChange={e => this.setState({type:e.target.value})}>
+									<option value="master">达人玩家</option>
+									<option value="custom">代工定制</option>
+									<option value="designer">设计师</option>
+									<option value="brand">品牌商家</option>
+									<option value="media">KOL自媒体</option>
+								</FormControl>
 								<h5 style={{marginTop:20}}>认证信息</h5>
 								<input onChange={(e) => this.setState({note:e.target.value})} type="text" className="form-control" />
 							</div>

@@ -6,9 +6,9 @@ import {
 import { Link } from 'react-router-dom'
 import Moment from 'moment'
 import ReactPaginate from 'react-paginate'
-import Select from 'react-select'
 import Request from 'superagent'
 import PlayAliBaichuan from '../Common/PlayAliBaichuan'
+import PlayAccount from '../Common/PlayAccount'
 import { parsePage } from '../../widgets/parse'
 
 export default class UserList extends Component{
@@ -46,25 +46,6 @@ export default class UserList extends Component{
 			curId:'',note:'',dialogApprove:false
 		})
 	}
-	renderAccounts(accounts) {
-    return (
-    	<span>
-	      {
-	      	accounts.map( (acc,i) => {
-		        if (acc.providerID === "weibo") {
-		          	return <a key={`acc_wb_${i}`} href={'http://weibo.com/'+acc.providerKey} style={{color:'#E71D34', marginRight: '5px'}}><i className="fa fa-weibo fa-lg"></i></a>
-		        } else if (acc.providerID === "mobile") {
-		          	return <a key={`acc_mb_${i}`} style={{color:'#55acee', marginRight: '5px'}}><i className="fa fa-mobile-phone fa-lg" title={acc.providerKey}  ></i></a>
-		        } else if (acc.providerID === 'qq') {
-		        	return <a key={`acc_qq_${i}`} style={{color:'rgb(21,167,240)', marginRight: '5px'}}><i className="fa fa-qq fa-lg"></i></a>
-		        } else if (acc.providerID === 'wechat') {
-		        	return <a key={`acc_wx_${i}`} style={{color:'rgb(73,190,56)', marginRight: '5px'}}><i className="fa fa-wechat fa-lg"></i></a>
-		        }
-	    	})
-	      }
-	    </span>
-    )
-	}
 	_search() {
     const { filter, filterType } = this.state
 		this.props.history.push(`/users?page=0`)
@@ -76,13 +57,6 @@ export default class UserList extends Component{
 	}
 	render() {
 		const { dialogApprove,note,type,filterType } = this.state
-		const options = [
-      { value: 'master', label: '达人玩家' },
-      { value: 'custom', label: '代工定制' },
-      { value: 'designer', label: '设计师' },
-      { value: 'brand', label: '品牌商家' },
-			{ value: 'media', label: 'KOL自媒体' }
-    ]
 		return(
 			<div className="content">
         <div className="page-header">
@@ -125,7 +99,9 @@ export default class UserList extends Component{
                     </td>
                     <td> <Link to={`/user/${user.id}`}>{user.nickname} {user.approval ? <span style={{color:'gold'}} className="fa fa-vimeo"></span> :null} </Link></td>
                     <td>{user.counts.posts}</td>
-                    <td>{this.renderAccounts(user.accounts)}</td>
+                    <td>
+											<PlayAccount accounts={user.accounts} />
+										</td>
                     <td>{user.location ? `${user.location.province}-${user.location.city}` : ''}</td>
                     <td>{Moment.unix(user.lastSeen / 1000).fromNow()}</td>
                     <td>
@@ -155,29 +131,29 @@ export default class UserList extends Component{
 						activeClassName={"active"} />
 	      </Row>
 	      {
-          dialogApprove ?
-          <div className="play-modal">
-            <div className="play-dialog">
-              <p className="dialog-title">添加认证</p>
-              <span onClick={() => this.setState({dialogApprove:false})} className="dialog-close">×</span>
-              <div>
-              	<Select
-	                name="form-field-name"
-	                value={type}
-	                options={options}
-	                clearable={false}
-	                onChange={(newValue) => this.setState({type:newValue.value})}
-                />
-                <h5 style={{marginTop:20}}>认证信息</h5>
-                <input onChange={(e) => this.setState({note:e.target.value})} type="text" className="form-control" />
-              </div>
-              <div className="dialog-footer">
-                <button className="btn btn-primary pull-right" onClick={this.approve}>添加</button>
-              </div>
-            </div>
-          </div>
-          : null
-        }
+					dialogApprove ?
+					<div className="play-modal" onClick={() => this.setState({dialogApprove:false})}>
+						<div className="play-dialog" onClick={e => e.stopPropagation()}>
+							<p className="dialog-title">添加认证</p>
+							<span onClick={() => this.setState({dialogApprove:false})} className="dialog-close">×</span>
+							<div>
+								<FormControl componentClass="select" value={type} onChange={e => this.setState({type:e.target.value})}>
+									<option value="master">达人玩家</option>
+									<option value="custom">代工定制</option>
+									<option value="designer">设计师</option>
+									<option value="brand">品牌商家</option>
+									<option value="media">KOL自媒体</option>
+								</FormControl>
+								<h5 style={{marginTop:20}}>认证信息</h5>
+								<input onChange={(e) => this.setState({note:e.target.value})} type="text" className="form-control" />
+							</div>
+							<div className="dialog-footer">
+								<button className="btn btn-primary pull-right" onClick={this.approve}>添加</button>
+							</div>
+						</div>
+					</div>
+					: null
+				}
         <PlayAliBaichuan/>
     	</div>
 		)

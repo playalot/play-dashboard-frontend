@@ -1,4 +1,4 @@
-import React,{ Component, PropTypes } from 'react'
+import React,{ Component } from 'react'
 import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 import { Provider } from 'react-redux'

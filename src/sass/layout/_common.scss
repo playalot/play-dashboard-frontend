@@ -126,3 +126,50 @@
         }
     }
 }
+
+@media print {
+	.order-detail{
+		.btn-print{
+			display:none;
+		}
+		font-family: sans-serif;
+	}	
+}
+.activity_content{
+	padding:15px 10px;
+	margin:0;
+	border-bottom:1px solid #eee ;
+	.activity_content_image{
+		display:flex;
+		flex-wrap:wrap;
+		img{
+			margin:0 10px 10px 0;
+			object-fit: cover;
+			width:65px;
+			height:65px;
+		}
+	}
+}
+
+.play-tabs{
+    padding-left: 0;
+    list-style: none;
+    margin:0;
+    border-bottom: 1px solid #eee;
+    li{
+        float: left;
+        margin: 0;
+        border-bottom: 4px solid transparent;
+        padding:6px 18px;
+        cursor: pointer;
+        &.active{
+            border-bottom: 4px solid #36c6d3;
+            &:hover{
+                border-bottom: 4px solid #9fe4ea;
+            }
+        }
+        &:hover{
+            border-bottom: 4px solid #9fe4ea;
+        }
+    }
+}

@@ -4,13 +4,11 @@
 @import "~bootstrap/dist/css/bootstrap.css";
 //admin-lte
 @import "~admin-lte/dist/css/AdminLTE.css";
-@import "skin/skin-custom";
+@import "custom/skin";
 // @import "~admin-lte/dist/css/skins/skin-blue.css";
 //font-awesome
 $fa-font-path: "~font-awesome/fonts";
 @import "~font-awesome/scss/font-awesome";
-//rc-switch
-// @import "~rc-switch/assets/index.css";
 
 //editor style
 @import '~draft-js/dist/Draft.css';
@@ -31,26 +29,3 @@ $fa-font-path: "~font-awesome/fonts";
 //react-vis
 @import "~react-vis/dist/styles/plot";
 
-@media print {
-	.order-detail{
-		.btn-print{
-			display:none;
-		}
-		font-family: sans-serif;
-	}	
-}
-.activity_content{
-	padding:15px 10px;
-	margin:0;
-	border-bottom:1px solid #eee ;
-	.activity_content_image{
-		display:flex;
-		flex-wrap:wrap;
-		img{
-			margin:0 10px 10px 0;
-			object-fit: cover;
-			width:65px;
-			height:65px;
-		}
-	}
-}

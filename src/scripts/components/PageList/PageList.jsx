@@ -43,7 +43,7 @@ export default class PageList extends Component{
 			<div className="content pagelist">
 	          <div className="page-header">
 	            <Form inline onSubmit={(e) => e.preventDefault()}>
-            	  <Link to="/page/edit"><Button bsStyle='success'>发布文章</Button></Link>
+            	  <Link to="/page/edit"><button className="btn green btn-outline">发布文章</button></Link>
             	  {' '}
 	              <FormGroup>
 	                <FormControl componentClass="select" placeholder="select" value={this.state.filter} onChange={(e) => this.setState({filter:e.target.value},this.search)}>

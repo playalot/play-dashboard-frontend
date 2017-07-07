@@ -15,7 +15,7 @@ export default class extends Component{
 			dialogApprove:false,
 			note:'',
 			user:{},
-			currentPage:'info'
+			currentPage:'posts'
 		}
 		this.setActive = this._setActive.bind(this)
 		this.approve = this._approve.bind(this)
@@ -63,156 +63,134 @@ export default class extends Component{
 		const { dialogApprove,note,type,currentPage,user } = this.state
 		return (
 			<div className="content">
-				<Row>
-					
-				</Row>
-				<Row>
-					{
-						user.id ?
-						<div className="col-md-12">
-							<div className="box box-widget widget-user">
-								<div className="widget-user-header bg-black" style={{background: "url('"+CDN.show(user.cover ? user.cover : 'default_cover.jpg')+"') center center"}}>
-								</div>
-								<div className="widget-user-image">
-									<img className="img-circle" src={user.avatar} alt="User Avatar" />
-								</div>
-								<div className="box-footer">
-									<div className="row">
-										<div className="col-sm-4 border-right">
-											<div className="description-block">
-												<h5 className="description-header">{user.counts.posts}</h5>
-												<span className="description-text">POSTS</span>
-											</div>
-										</div>
-										<div className="col-sm-4 border-right">
-											<div className="description-block">
-												<h5 className="description-header">{user.counts.followers}</h5>
-												<span className="description-text">FOLLOWERS</span>
-											</div>
-										</div>
-										<div className="col-sm-4">
-											<div className="description-block">
-												<h5 className="description-header">{user.counts.following}</h5>
-												<span className="description-text">FOLLOWING</span>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						:null
-					}
-				</Row>
-				<Row>
-					<Col xs={12}>
-						<ul className="play-tabs clearfix" style={{backgroundColor:'white'}}>
-							<li onClick={() => this.setState({currentPage:'info'})} className={currentPage === 'info' ? 'active' : ''}>Info</li>
-							<li onClick={() => this.setState({currentPage:'posts'})} className={currentPage === 'posts' ? 'active' : ''}>Posts</li>
-							<li onClick={() => this.setState({currentPage:'pages'})} className={currentPage === 'pages' ? 'active' : ''}>Pages</li>
-						</ul>
+				<Row style={{marginBottom:20}}>
+					<Col sm={4}>
 						{
-							(() => {
-								switch (currentPage) {
-								case "info":
-									return (
-										<div style={{backgroundColor:'white',padding:10}}>
-											<div className="row">
-												<div className="col-sm-2 sm-2-label">
-													<b>Nickname</b>
-												</div>
-												<div className="col-sm-10" style={{padding:7}}>
-													{ user.nickname }
-												</div>
-											</div>
-											<div className="row">
-												<div className="col-sm-2 sm-2-label">
-													<b>Approval</b>
-												</div>
-												<div className="col-sm-10" style={{padding:7}}>
-													{
-														type ?
-														<span style={{marginRight:15}}>{type}</span>
-														:null
-													}
-													<button onClick={() => this.setState({dialogApprove:true})} className="btn btn-xs green">
-														{
-															type ? '修改' : '添加'
-														}
-													</button>
-												</div>
-											</div>
-											<div className="row">
-												<div className="col-sm-2 sm-2-label">
-													<b>Level</b>
-												</div>
-												<div className="col-sm-10" style={{padding:7}}>
-													<span className="btn yellow-gold btn-xs btn-outline">LV {user.level}</span>
-												</div>
-											</div>
-											<div className="row">
-												<div className="col-sm-2 sm-2-label">
-													<b>Gender</b>
-												</div>
-												<div className="col-sm-10" style={{padding:7}}>
-													<span>
-														{
-															user.gender === 'm' ?
-															<i style={{color:'deepskyblue'}} className="fa fa-mars"></i>
-															:<i style={{color:'pink'}} className="fa fa-venus"></i>
-														}
-													</span>
-												</div>
-											</div>
-											<div className="row">
-												<div className="col-sm-2 sm-2-label">
-													<b>Accounts</b>
-												</div>
-												<div className="col-sm-10" style={{padding:7}}>
-													{
-														user.id ?
-														<PlayAccount accounts={user.accounts} />
-														:<span></span>
-													}
-												</div>
-											</div>
-											<div className="row">
-												<div className="col-sm-2 sm-2-label">
-													<b>Introduction</b>
-												</div>
-												<div className="col-sm-10" style={{padding:7}}>
-													{ user.bio ? user.bio : '这家伙很懒' }
-												</div>
-											</div>
-											<div className="row">
-												<div className="col-sm-2 sm-2-label">
-													<b>Active</b>
-												</div>
-												<div className="col-sm-10" style={{padding:7}}>
-													<button onClick={this.setActive} className="btn red btn-xs"><i className="fa fa-eye-slash">&nbsp;</i>{user.isActive?'ban':'activate'}</button>
-												</div>
-											</div>
+							user.id ?
+							<div className="play-user-detail">
+								<img style={{maxWidth:120}} className="img-circle" src={user.avatar} alt="User Avatar" />
+								<h4 className="text-info"><strong>{ user.nickname }</strong></h4>
+								<Row>
+									<Col xs={4} className="border-right">
+										<div className="description-block">
+											<h4 className="text-primary"><strong>{user.counts.posts}</strong></h4>
+											<strong className="description-text text-muted">图片</strong>
 										</div>
-									);
-								case "posts":
-									return (
-										<div  style={{backgroundColor:'white'}}>
-											<PostPanels/>
+									</Col>
+									<Col xs={4} className="border-right">
+										<div className="description-block">
+											<h4 className="text-primary"><strong>{user.counts.followers}</strong></h4>
+											<strong className="description-text text-muted">粉丝</strong>
 										</div>
-
-									)
-								case "pages":
-									return (
-										<div>
-											<PagePanel/>
+									</Col>
+									<Col xs={4} className="border-right">
+										<div className="description-block">
+											<h4 className="text-primary"><strong>{user.counts.following}</strong></h4>
+											<strong className="description-text text-muted">关注</strong>
 										</div>
-
-									)
-								default: return null;
-								}
-							})()
+									</Col>
+								</Row>
+							</div>
+							:null
 						}
 					</Col>
+					<Col sm={8}>
+						<div style={{backgroundColor:'white',padding:'20px 0'}}>
+							<Row>
+								<Col xsOffset={1} sm={3} className="sm-2-label">
+									<strong>Approval</strong>
+								</Col>
+								<Col sm={8} style={{padding:'7px 20px'}}>
+									{
+										type ?
+										<span style={{marginRight:15}}>{type}</span>
+										:null
+									}
+									<button onClick={() => this.setState({dialogApprove:true})} className="btn btn-xs green">
+										{
+											type ? '修改' : '添加'
+										}
+									</button>
+								</Col>
+							</Row>
+							<Row>
+								<Col xsOffset={1} sm={3} className="sm-2-label">
+									<strong>Level</strong>
+								</Col>
+								<Col sm={8} style={{padding:'7px 20px'}}>
+									<span className="btn yellow-gold btn-xs btn-outline">LV {user.level}</span>
+								</Col>
+							</Row>
+							<Row>
+								<Col xsOffset={1} sm={3} className="sm-2-label">
+									<strong>Gender</strong>
+								</Col>
+								<Col sm={8} style={{padding:'7px 20px'}}>
+									<span>
+										{
+											user.gender === 'm' ?
+											<i style={{color:'deepskyblue'}} className="fa fa-mars"></i>
+											:<i style={{color:'pink'}} className="fa fa-venus"></i>
+										}
+									</span>
+								</Col>
+							</Row>
+							<Row>
+								<Col xsOffset={1} sm={3} className="sm-2-label">
+									<strong>Accounts</strong>
+								</Col>
+								<Col sm={8} style={{padding:'7px 20px'}}>
+									{
+										user.id ?
+										<PlayAccount accounts={user.accounts} />
+										:<span></span>
+									}
+								</Col>
+							</Row>
+							<Row>
+								<Col xsOffset={1} sm={3} className="sm-2-label">
+									<strong>Introduction</strong>
+								</Col>
+								<Col sm={8} style={{padding:'7px 20px'}}>
+									{ user.bio ? user.bio : '这家伙很懒' }
+								</Col>
+							</Row>
+							<Row>
+								<Col xsOffset={1} sm={3} className="sm-2-label">
+									<strong>Active</strong>
+								</Col>
+								<Col sm={8} style={{padding:'7px 20px'}}>
+									<button onClick={this.setActive} className="btn red btn-xs"><i className="fa fa-eye-slash">&nbsp;</i>{user.isActive?'ban':'activate'}</button>
+								</Col>
+							</Row>
+						</div>
+					</Col>
 				</Row>
+				<div>
+					<ul className="play-tabs clearfix" style={{backgroundColor:'white'}}>
+						<li onClick={() => this.setState({currentPage:'posts'})} className={currentPage === 'posts' ? 'active' : ''}>Posts</li>
+						<li onClick={() => this.setState({currentPage:'pages'})} className={currentPage === 'pages' ? 'active' : ''}>Pages</li>
+					</ul>
+					{
+						(() => {
+							switch (currentPage) {
+							case "posts":
+								return (
+									<div  style={{backgroundColor:'#f9f9f9'}}>
+										<PostPanels/>
+									</div>
+								)
+							case "pages":
+								return (
+									<div>
+										<PagePanel/>
+									</div>
+								)
+							default: return null;
+							}
+						})()
+					}
+				</div>
 				{
 					dialogApprove ?
 					<div className="play-modal" onClick={() => this.setState({dialogApprove:false})}>

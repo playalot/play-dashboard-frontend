@@ -173,3 +173,12 @@
         }
     }
 }
+
+.play-user-detail{
+    display:flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    padding:20px 0;
+    background-color: white;
+}

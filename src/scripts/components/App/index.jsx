@@ -1,6 +1,8 @@
 import React,{ Component } from 'react'
 import { Route,Link,Switch,NavLink } from 'react-router-dom'
 
+import PlayMainHeader from '../Common/PlayMainHeader'
+
 import Home from '../Home'
 import ExplorePage from '../ExplorePage'
 import RecommendHome from '../RecommendHome'
@@ -36,41 +38,25 @@ import EditPage from '../EditPage'
 
 
 export default class App extends Component{
-	constructor(props) {
-    super(props)
-		this.signOut = () => {
-		if(confirm('确定登出吗?')){
-			window.location.href = '/signOut'
-		}
-    }
-	}
-	componentWillMount() {
-		!this.props.loaded && this.props.fetchInfo()
-	}
+	// constructor(props) {
+    // super(props)
+	// 	this.signOut = () => {
+	// 	if(confirm('确定登出吗?')){
+	// 		window.location.href = '/signOut'
+	// 	}
+    // }
+	// }
+	// componentWillMount() {
+	// 	// !this.props.loaded && this.props.fetchInfo()
+	// }
 	render() {
-		const { nickName, avatar, email } = this.props.user
+		// const { nickName, avatar, email } = {}//this.props.user
 		return(
 			<div className="wrapper">
-				<div className="main-header">
-					<a href="#" className="logo">
-						<span className="logo-mini"><b>P</b></span>
-						<span className="logo-lg"><b>Play</b></span>
-					</a>
-					<nav className="navbar navbar-static-top" role="navigation">
-						<a className="sidebar-toggle" data-toggle="offcanvas" role="button">
-							<span className="sr-only">Toggle navigation</span>
-						</a>
-						<div className="navbar-custom-menu">
-							<ul className="nav navbar-nav">
-								<li><a href="">{email}</a></li>
-								<li><a onClick={this.signOut}><i className="fa fa-sign-out"></i></a></li>
-							</ul>
-						</div>
-					</nav>
-				</div>
+				<PlayMainHeader/>
 				<div className="main-sidebar">
 					<section className="sidebar">
-						<div className="user-panel" style={avatar ? {}:{minHeight:40}}>
+						{/*<div className="user-panel" style={avatar ? {}:{minHeight:40}}>
 							<div className="pull-left image">
 								{
 								avatar ?
@@ -86,7 +72,7 @@ export default class App extends Component{
 								:null
 								}
 							</div>
-						</div>
+						</div>*/}
 						<ul className="sidebar-menu">
 							<li><NavLink activeClassName="active" to="/home"><i className="fa fa-dashboard"></i><span>概况</span></NavLink></li>
 							<li>

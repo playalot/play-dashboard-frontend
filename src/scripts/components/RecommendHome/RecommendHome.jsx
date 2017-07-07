@@ -1,7 +1,7 @@
 import React,{ Component } from 'react'
 import { Row, Col } from 'react-bootstrap'
 import CDN from '../../widgets/cdn'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 
 export default class RecommendHome extends Component{
 	constructor(props) {

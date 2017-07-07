@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import {makeWidthFlexible,XYPlot, XAxis, YAxis,VerticalGridLines, HorizontalGridLines, VerticalBarSeries,Crosshair} from 'react-vis';
+import {makeWidthFlexible,XYPlot, XAxis, YAxis,VerticalGridLines, HorizontalGridLines, VerticalBarSeries,Crosshair} from 'react-vis'
 import { Link } from 'react-router-dom'
 import Moment from 'moment'
 import ReactPaginate from 'react-paginate'
 import { parsePage } from '../../widgets/parse'
-
 
 const FlexibleXYPlot = makeWidthFlexible(XYPlot)
 export default class Home extends Component {

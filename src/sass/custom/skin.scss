@@ -3,43 +3,49 @@
  * -----------
  */
 /* skin-custom navbar */
+$skin-custom-bg : #2D5F8B;
+$skin-custom-txt : #b6d0e7;
+$skin-custom-bg-hover: rgb(57,121,178);
+$skin-custom-left-bg: rgb(66,118,164);
+$skin-custom-left-li-hover:rgb(73,127,174);
+$skin-custom-left-ul-hover:rgb(57,127,174);
 .skin-custom {
     .main-header{
         .navbar{
-            background-color: #2b3643;
+            background-color: $skin-custom-bg;
             .nav{
                 li{
                     a{
-                        color: rgb(164,174,186);
+                        color: $skin-custom-txt;
                         &:hover,&:active,&:focus{
-                            background-color: #3f4f62;
+                            background-color: $skin-custom-bg-hover;
                             color: white;
                         }
                     }
                 }
-                .open {
-                    a{
-                        background-color: #3f4f62;
-                        color: white;
-                        &:hover,&:focus{
-                            background-color: #3f4f62;
-                            color: white;
-                        }
-                    }
-                }
+                // .open {
+                //     a{
+                //         background-color: $skin-custom-bg;
+                //         color: white;
+                //         &:hover,&:focus{
+                //             background-color: $skin-custom-bg-hover;
+                //             color: white;
+                //         }
+                //     }
+                // }
                 .active{
                     a{
-                        background-color: #3f4f62;
+                        background-color: $skin-custom-bg-hover;
                         color: white;  
                     }
                 }
             }
             .sidebar-toggle{
                 cursor: pointer;
-                color: rgb(164,174,186);
+                color: $skin-custom-txt;
                 &:hover{
                     color: white;
-                    background: #3f4f62;
+                    background: $skin-custom-bg-hover;
                 }
             }
             .navbar-nav {
@@ -51,12 +57,12 @@
             }
         }
         .logo{
-            background-color: #2b3643;
-            color: rgb(164,174,186);
+            background-color: $skin-custom-bg;
+            color: $skin-custom-txt;
             border-bottom: 0 solid transparent;
             &:hover{
-                background-color: #3f4f62;
-                color:white;
+                color: white;
+                background: $skin-custom-bg-hover;
             }
         }
     }
@@ -64,30 +70,30 @@
         li{
             &.active{
                 a{
-                    background: rgb(44,53,66);
+                    background: $skin-custom-left-li-hover;
                     border-left-color: #ffffff;
                 }
             }
             a{
-                border-bottom:1px solid #3d4957;
+                border-bottom:1px solid #4a83b6;
                 border-left: 3px solid transparent;
-                background-color: rgb(54,65,80);
+                background-color: $skin-custom-left-bg;
                 &:hover,&.active,&:active{
-                    background: rgb(44,53,66);
+                    background: $skin-custom-left-li-hover;
                     border-left-color: #ffffff;
                 }
             }
             .treeview-menu{
                 margin: 0 1px;
-                background-color: rgb(54,65,80);
+                background-color: $skin-custom-left-bg;
                 padding: 5px 0;
                 li{
                     a{
                         border-left: 3px solid transparent;
                         border-bottom:none;
-                        background-color: rgb(54,65,80);
+                        background-color: $skin-custom-left-bg;
                         &:hover,&.active{
-                            background-color: rgb(62,75,92);
+                            background-color: $skin-custom-left-ul-hover;
                         }
                     }
                 }
@@ -96,7 +102,7 @@
     }
     .sidebar{
         a{
-            color: #b8c7ce;
+            color: $skin-custom-txt;
             text-decoration: none;
         }
     }
@@ -117,7 +123,7 @@
 .skin-custom .wrapper,
 .skin-custom .main-sidebar,
 .skin-custom .left-side {
-  background-color: rgb(54,65,80);
+  background-color: $skin-custom-left-bg;
 }
 .skin-custom .user-panel > .info,
 .skin-custom .user-panel > .info > a {

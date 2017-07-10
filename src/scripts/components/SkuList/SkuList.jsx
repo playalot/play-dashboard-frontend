@@ -103,18 +103,19 @@ export default class SkuList extends Component{
 			this.props.history.push(`/skus?page=${page}`)
 			this.setState({filter,filterType})
 		}else{
+			this.props.history.push(`/skus?page=0`)
 			this.props.getSku(0)
 		}
 	}
 	_onChangeFilter(filter) {
 		this.setState({ filter },() => {
-			this.context.router.push(`/skus?page=0`)
+			this.props.history.push(`/skus?page=0`)
 			this.props.getSkuBy(this.state.filter,this.state.filterType)
 		})
 	}
 	_onChangeFilterType(filterType) {
 		this.setState({ filterType },() => {
-			this.context.router.push(`/skus?page=0`)
+			this.props.history.push(`/skus?page=0`)
 			this.props.getSkuBy(this.state.filter,this.state.filterType)
 		})
 	}
@@ -130,7 +131,7 @@ export default class SkuList extends Component{
 		this.context.router.push(path)
 	}
 	_goPage(page) {
-		this.props.history.push(`/sku?page=${page}`)
+		this.props.history.push(`/skus?page=${page}`)
 		this.props.getSku(page)
 	}
 	_addToyClass(tid,c) {

@@ -32,11 +32,11 @@ export default class extends Component {
 	render() {
 		return(
 			<div style={{padding:20}}>
-				<div className="box">
-				  	<div className="box-header with-border text-center">
+				<div>
+				  	<div>
 				    	<h3 className="box-title">玩具日报</h3>
 				  	</div>
-				  	<div className="box-body">
+				  	<div>
 				  		<Row>
 				  			<Col sm={4}>
 			                  <FormControl value={this.state.id} placeholder="ID" type="text" onChange={e => this.setState({id:e.target.value})}/>
@@ -45,7 +45,7 @@ export default class extends Component {
 			                  <FormControl value={this.state.pages} placeholder="页数" type="text" onChange={e => this.setState({pages:e.target.value})}/>
 			                </Col>
 			                <Col sm={4}>
-			                	<Button disabled={this.state.loading} onClick={this.toysdaily}>爬取</Button>
+			                	<button className="btn red btn-outline" disabled={this.state.loading} onClick={this.toysdaily}>爬取</button>
 			                </Col>
 				  		</Row>
 				  	</div>

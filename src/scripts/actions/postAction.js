@@ -282,12 +282,14 @@ export function getPostBy (filter = '',query ='') {
 }
 
 
-export function getUserPost (id) {
+export function getUserPost (id,page = 0) {
     return (dispatch,getState) => {
+        let params = { page }
         return Request
             .get(`/api/user/${id}/posts`)
+            .query(params)
             .end((err, res) => {
-                dispatch(receivePost(res.body.posts))
+                dispatch(receivePost(res.body.posts,res.body.totalPages))
             })
     }
 }

@@ -13,10 +13,10 @@ const config = {
     entry: {
         app: path.resolve(__dirname, 'src/scripts/main.js'),
         vendor: [
-            'jquery',
-            'bootstrap-sass/assets/javascripts/bootstrap.js',
-            'admin-lte/dist/js/app.js'
-        ]
+			'jquery',
+			'bootstrap-sass/assets/javascripts/bootstrap.js',
+			path.resolve(__dirname, 'src/scripts/metronic/app.js')
+		]
     },
     output: {
         path: path.resolve(__dirname, 'build'),

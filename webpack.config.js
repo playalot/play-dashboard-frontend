@@ -11,7 +11,8 @@ module.exports = {
 		vendor: [
 			'jquery',
 			'bootstrap-sass/assets/javascripts/bootstrap.js',
-			'admin-lte/dist/js/app.js'
+			// 'admin-lte/dist/js/app.js'
+			path.resolve(__dirname, 'src/scripts/metronic/app.js')
 		]
 	},
 	resolve: {

@@ -15,31 +15,43 @@ export default class extends Component {
     render() {
         const { nickName, avatar, email } = this.props.user
         return(
-            <div className="main-header">
-                <a href="#" className="logo">
-                    <span className="logo-mini"><b>P</b></span>
-                    <span className="logo-lg"><b>Play</b></span>
-                </a>
-                <nav className="navbar navbar-static-top" role="navigation">
-                    <a className="sidebar-toggle" data-toggle="offcanvas" role="button">
-                        <span className="sr-only">Toggle navigation</span>
+            <div className="page-header navbar navbar-fixed-top">
+                <div className="page-header-inner ">
+                    <div className="page-logo">
+                        <a href="#">
+                            <img style={{maxWidth:86}} className="logo-default" src="http://www.playalot.cn/assets/images/a64ada1d3b0ec825a0ba1d9fc4dee6c3-nav_lg.png" alt=""/>
+                        </a>
+                        <div className="menu-toggler sidebar-toggler">
+                            <span></span>
+                        </div>
+                    </div>
+                    <a href="javascript:;" className="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span></span>
                     </a>
-                    <div className="navbar-custom-menu">
-                        <ul className="nav navbar-nav">
-                            <li>
-                                <a data-toggle="dropdown" style={{padding:'10px 15px 10px 20px'}}>
-                                    <img style={{width:'30px',marginRight:10}} src={avatar}  data-toggle="dropdown" className="img-circle"/>
+                    <div className="top-menu">
+                        <ul className="nav navbar-nav pull-right">
+                            <li className="dropdown dropdown-user">
+                                <a href="javascript:;" className="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                    <img alt="" className="img-circle" src={avatar} />
+                                    <span className="username username-hide-on-mobile">{nickName}</span>
                                     <i className="fa fa-angle-down"></i>
                                 </a>
-                                <ul className="dropdown-menu">
-                                    <li><a style={{color:'#999',padding:'5px 20px'}}><i className="fa fa-envelope"></i>{email}</a></li>
-                                    <li><a style={{color:'#999',padding:'5px 20px'}}><i className="fa fa-user"></i>{nickName}</a></li>
+                                <ul className="dropdown-menu dropdown-menu-default">
+                                    <li>
+                                        <a>
+                                            <i className="fa fa-envelope"></i> {email}
+                                        </a>
+                                    </li>
+                                    <li className="divider"> </li>
+                                    <li>
+                                        <a onClick={this.signOut}>
+                                            <i className="fa fa-key"></i> Log Out </a>
+                                    </li>
                                 </ul>
                             </li>
-                            <li><a onClick={this.signOut}><i className="fa fa-sign-out"></i></a></li>
                         </ul>
                     </div>
-                </nav>
+                </div>
             </div>
         )
     }

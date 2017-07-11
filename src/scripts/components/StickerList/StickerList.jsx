@@ -21,26 +21,23 @@ export default class StickerList extends Component{
 		return(
 			<div className="content">
 				<Row>
-					<Col sm={3}>
-						<Button bsStyle='success' onClick={this.addStickerSet}>Add Collection</Button>
-						<br/><br/>
-					</Col>
+					<button className="btn btn-outline green" onClick={this.addStickerSet}>Add Collection</button>
 				</Row>
 				{
 					this.props.sets.map((set) => {
 						return (
-							<Row key={'set_'+set.id}>
+							<Row key={'set_'+set.id} style={{borderBottom:'1px solid #eee'}}>
 								<Col sm={12}>
-									<div className="box">
-										<div className="box-header with-border">
-											<h3 className="box-title"><img style={{maxHeight:'45px'}} src={set.image}/>{' '}{set.name}</h3>
-											<div className="box-tools pull-right">
+									<div>
+										<div className="d-flex justify-content-between">
+											<h3><img style={{maxHeight:'45px'}} src={set.image}/>{' '}{set.name}</h3>
+											<div>
 												<span onClick={() => this.riseStickerSet(set.id) } className="btn btn-sm"><i className="fa fa-angle-double-up"></i></span>
-												<Link to={`/sticker/${set.id}/add`} className="btn btn-box-tool" ><i className="fa fa-plus"></i></Link>
-												<Link to={`/sticker/${set.id}/edit`} className="btn btn-box-tool" ><i className="fa fa-edit"></i></Link>
+												<Link to={`/sticker/${set.id}/add`} className="btn btn-sm" style={{color:'#333'}} ><i className="fa fa-plus"></i></Link>
+												<Link to={`/sticker/${set.id}/edit`} className="btn btn-sm"  style={{color:'#333'}} ><i className="fa fa-edit"></i></Link>
 											</div>
 										</div>
-										<div className="box-body">
+										<div>
 											{set.stickers.map((sticker) => {
 												return (
 													<Col className="col" xs={6} sm={1} lg={1} key={'sticker_'+sticker.id}>

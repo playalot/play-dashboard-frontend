@@ -116,7 +116,7 @@ export function getOrderByUser(id) {
     }
 }
 
-export function getOrder (page = 0,status = 'paid',merchant = '',year,month,filter) {
+export function getOrder (page = 0,status = '',merchant = '',year,month,filter) {
     return (dispatch,getState) => {
         let params = { page }
         if(status) {

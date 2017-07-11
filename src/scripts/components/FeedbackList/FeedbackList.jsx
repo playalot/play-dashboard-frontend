@@ -37,7 +37,7 @@ export default class FeedbackList extends Component{
 					                    		<div className="btn-group">
 												  <img style={{width:'30px'}} src={feedback.user.avatar}  data-toggle="dropdown" className="img-circle"/>
 												  <ul className="dropdown-menu">
-												    <li><a onClick={() => this.context.router.push(`/user/${feedback.user.id}`)}>查看<small>({feedback.user.nickname})</small></a></li>
+												    <li><a onClick={() => this.props.history.push(`/user/${feedback.user.id}`)}>查看<small>({feedback.user.nickname})</small></a></li>
 												    <li><a onClick={() => this.props.setTouid(feedback.user.id,feedback.user.avatar)}>私信</a></li>
 												  </ul>
 												</div>

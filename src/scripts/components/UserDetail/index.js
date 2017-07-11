@@ -25,9 +25,11 @@ const mapActionCreators = {
 }
 
 const mapStateToProps = (state) => {
+	const { totalPages } = state.postReducer.toJS()
 	const { user } = state.userDetail.toJS()
 	const { classifications, loaded } = state.tagClassReducer.toJS()
 	return {
+		totalPages,
 		user,
 		classifications,
 		classLoaded:loaded,

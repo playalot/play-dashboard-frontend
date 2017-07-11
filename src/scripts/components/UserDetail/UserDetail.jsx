@@ -6,6 +6,7 @@ import PostPanels from '../PostPanels'
 import PagePanel from '../PagePanel'
 import PlayAccount from '../Common/PlayAccount'
 import Request from 'superagent'
+import ReactPaginate from 'react-paginate'
 export default class extends Component{
 	constructor(props) {
 		super(props)
@@ -15,10 +16,12 @@ export default class extends Component{
 			dialogApprove:false,
 			note:'',
 			user:{},
-			currentPage:'posts'
+			currentPage:'posts',
+			postPage:0
 		}
 		this.setActive = this._setActive.bind(this)
 		this.approve = this._approve.bind(this)
+		this.goPage = this._goPage.bind(this)
 	}
 	componentWillMount() {
 		if(!this.props.classLoaded){
@@ -57,10 +60,14 @@ export default class extends Component{
 				this.props.setActive(this.state.userId)
 			}
 		}
-		
+	}
+	_goPage(postPage) {
+		this.setState({ postPage })
+		this.props.getUserPost(this.state.userId,postPage)
 	}
 	render() {
-		const { dialogApprove,note,type,currentPage,user } = this.state
+		const { dialogApprove,note,type,user } = this.state
+		console.info(this.props.totalPages)
 		return (
 			<div className="content">
 				<Row style={{marginBottom:20}}>
@@ -71,19 +78,19 @@ export default class extends Component{
 								<img style={{maxWidth:120}} className="img-circle" src={user.avatar} alt="User Avatar" />
 								<h4 className="text-info"><strong>{ user.nickname }</strong></h4>
 								<Row>
-									<Col xs={4} className="border-right">
+									<Col xs={4}>
 										<div className="description-block">
 											<h4 className="text-primary"><strong>{user.counts.posts}</strong></h4>
 											<strong className="description-text text-muted">图片</strong>
 										</div>
 									</Col>
-									<Col xs={4} className="border-right">
+									<Col xs={4}>
 										<div className="description-block">
 											<h4 className="text-primary"><strong>{user.counts.followers}</strong></h4>
 											<strong className="description-text text-muted">粉丝</strong>
 										</div>
 									</Col>
-									<Col xs={4} className="border-right">
+									<Col xs={4}>
 										<div className="description-block">
 											<h4 className="text-primary"><strong>{user.counts.following}</strong></h4>
 											<strong className="description-text text-muted">关注</strong>
@@ -166,30 +173,47 @@ export default class extends Component{
 						</div>
 					</Col>
 				</Row>
-				<div>
-					<ul className="play-tabs clearfix" style={{backgroundColor:'white'}}>
-						<li onClick={() => this.setState({currentPage:'posts'})} className={currentPage === 'posts' ? 'active' : ''}>Posts</li>
-						<li onClick={() => this.setState({currentPage:'pages'})} className={currentPage === 'pages' ? 'active' : ''}>Pages</li>
-					</ul>
-					{
-						(() => {
-							switch (currentPage) {
-							case "posts":
-								return (
-									<div  style={{backgroundColor:'#f9f9f9'}}>
-										<PostPanels/>
-									</div>
-								)
-							case "pages":
-								return (
-									<div>
-										<PagePanel/>
-									</div>
-								)
-							default: return null;
-							}
-						})()
-					}
+				<div className="portlet light ">
+					<div className="portlet-title tabbable-line">
+						<div className="caption caption-md">
+							<span className="caption-subject font-blue-madison bold uppercase">用户发表</span>
+						</div>
+						<ul className="nav nav-tabs">
+							<li className="active">
+								<a href="#user_post_1" data-toggle="tab">图片</a>
+							</li>
+							<li>
+								<a href="#user_post_2" data-toggle="tab">文章</a>
+							</li>
+						</ul>
+					</div>
+					<div className="portlet-body">
+						<div className="tab-content">
+							<div className="tab-pane active" id="user_post_1">
+								<div>
+									<PostPanels/>
+									<Row style={{textAlign:'center'}}>
+										<ReactPaginate 
+											previousLabel={<span>&laquo;</span>}
+											nextLabel={<span>&raquo;</span>}
+											breakLabel={<span>...</span>}
+											breakClassName={"break-me"}
+											pageCount={this.props.totalPages}
+											marginPagesDisplayed={2}
+											pageRangeDisplayed={5}
+											onPageChange={obj => this.goPage(obj.selected)}
+											containerClassName={"pagination"}
+											subContainerClassName={"pages pagination"}
+											forcePage={this.state.postPage}
+											activeClassName={"active"} />
+									</Row>
+								</div>
+							</div>
+							<div className="tab-pane active" id="user_post_2">
+								<PagePanel/>
+							</div>
+						</div>
+					</div>
 				</div>
 				{
 					dialogApprove ?

@@ -41,80 +41,82 @@ export default class PostPanel extends Component{
 		const { post } = this.props
 		const btnClass = 'btn btn-sm'
 		return(
-			<Col style={{padding:10}} xs={12} sm={4} lg={3}>
-	          <div className="box box-solid">
-	            <div className="box-header with-border">
-	              <div className="user-block">
-	                <Link to={'/user/'+post.user.id}>
-	                  <img className="img-circle" src={ post.user.avatar } alt="User Image" />
-	                </Link>
-	                <span className="username"><Link to={'/user/'+post.user.id}>{ post.user.nickname }</Link></span>
-	                <span className="description">{ Moment.unix(post.created / 1000).fromNow() }</span>
-	              </div>
-	            </div>
-	            {
-					post.video ?
-					<div className="box-body no-padding" style={{paddingBottom:'2px !important'}}>
-						<div >
-							<video className="" src={post.video.url} controls></video>
+			<Col xs={12} sm={4} lg={3}>
+				<div className="portlet bordered light" style={{padding:'12px 5px 15px 5px'}}>
+					<div className="portlet-title" style={{marginBottom:0}}>
+						<div className="d-flex">
+							<Link to={`/user/${post.user.id}`}>
+								<img style={{maxWidth:40}} className="img-circle" src={ post.user.avatar } alt="User Image" />
+							</Link>
+							<div className="d-flex flex-column pl-2">
+								<span><Link to={`/user/${post.user.id}`}>{ post.user.nickname }</Link></span>
+	                			<small className="text-muted">{ Moment.unix(post.created / 1000).fromNow() }</small>
+							</div>
 						</div>
 					</div>
-					:<div className="box-body no-padding" style={{paddingBottom:'2px !important'}}>
-						<div>
-							<ImgLoad src={post.photos[0].url640} onClick={() => this.props.openImage(this.formatUrl(post.photos),0) } />
-						</div>
-						{
-							post.photos.length === 1 ? null :
-							<div className="play-posts-preview-box">
+					<div className="portlet-body">
+						 {
+							post.video ?
+							<div>
+								<video className="" src={post.video.url} controls></video>
+							</div>
+							:<div>
+								<div>
+									<ImgLoad src={post.photos[0].url640} onClick={() => this.props.openImage(this.formatUrl(post.photos),0) } />
+								</div>
 								{
-									post.photos.slice(1, post.photos.length).map((photo, i) => {
-										return (
-											<div className="play-posts-preview" key={`post_${post.id}_${i}`}>
-												<img src={photo.url320} alt="Photo"
-													onClick={() => this.props.openImage(this.formatUrl(post.photos),i+1) } />
-											</div>
-										)
-									})
+									post.photos.length === 1 ? null :
+									<div className="play-posts-preview-box pt-2">
+										{
+											post.photos.slice(1, post.photos.length).map((photo, i) => {
+												return (
+													<div className="play-posts-preview" key={`post_${post.id}_${i}`}>
+														<img src={photo.url320} alt="Photo"
+															onClick={() => this.props.openImage(this.formatUrl(post.photos),i+1) } />
+													</div>
+												)
+											})
+										}
+									</div>
 								}
+								
 							</div>
 						}
-						
+						{
+							post.caption ? <p className="text-muted mb-2">{post.caption}</p> : null
+						}
+						<div className="">
+							{post.tags.map(t => <span key={`post_${post.id}_t_${t.id}`} className='label label-info label-margin'><Link to={'/tag/'+t.id}>{t.text}</Link>{" "}<i className="fa fa-close" onClick={ () => this.removeTag(t.id)}></i></span>)}
+							{
+								post.toys.length ?
+								<span className='label label-success label-margin'>
+									<Link to={'/toy/'+post.toys[0].id}>{post.toys[0].name.substring(0, 25)+'...'}
+									</Link>
+									<i className="fa fa-close" onClick={ () => this.removeToy()}></i>
+								</span>
+								:null
+							}
+						</div>
+						<div className="">
+							{post.cls.map(c => <span key={`post_${post.id}_c_${c}`} className="label label-warning label-margin" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>)}
+						</div>
+						<div className="clearfix">
+							<ButtonToolbar className="pull-right">
+								<span onClick={ this.toggleRecommend } className={`${btnClass} ${post.isRec ? 'yellow-casablanca':''}`}><i className="fa fa-thumbs-o-up"></i></span>
+								<CopyToClipboard text={post.id} onCopy={() => null}>
+									<span className="btn btn-sm"><i className="fa fa-copy"></i></span>
+								</CopyToClipboard>
+								<span onClick={ this.addToy } className="btn btn-sm"><i className="fa fa-plus"></i></span>
+								<span onClick={ this.addTag } className="btn btn-sm"><i className="fa fa-tag"></i></span>
+								<span onClick={ () => this.props.openClass( post ) } className="btn btn-sm"><i className="fa fa-th-large"></i></span>
+								<span onClick={ () => this.props.removeAllClassification(post.id) } className="btn btn-sm"><i className="fa fa-chain-broken"></i></span>
+								<span onClick={ this.toggleR18 } className={`${btnClass} ${post.isR18 ? 'yellow-casablanca':''}`}><i className="fa fa-venus-mars"></i></span>
+								<span onClick={ this.toggleBlock } className={`${btnClass} ${post.isBlk ? 'yellow-casablanca':''}`}><i className="fa fa-eye-slash"></i></span>
+								<span onClick={ this.deletePost } className="post-caption-btn btn btn-sm"><i className="fa fa-trash"></i></span>
+							</ButtonToolbar>
+						</div>
 					</div>
-				}
-	            <div className="box-body no-top-padding">
-	              <p style={{color:"#999"}}>{post.caption}</p>
-	            </div>
-	            <div className="box-body no-top-padding">
-	              {post.tags.map(t => <span key={`post_${post.id}_t_${t.id}`} className='label label-info label-margin'><Link to={'/tag/'+t.id}>{t.text}</Link>{" "}<i className="fa fa-close" onClick={ () => this.removeTag(t.id)}></i></span>)}
-	              {
-					 post.toys.length ?
-					<span className='label label-success label-margin'>
-						<Link to={'/toy/'+post.toys[0].id}>{post.toys[0].name.substring(0, 25)+'...'}
-						</Link>
-						<i className="fa fa-close" onClick={ () => this.removeToy()}></i>
-					</span>
-					:null
-				  }
-	            </div>
-	            <div className="box-body no-top-padding">
-	              {post.cls.map(c => <span key={`post_${post.id}_c_${c}`} className="label label-warning label-margin" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>)}
-	            </div>
-	            <div className="box-footer">
-	              <ButtonToolbar className="pull-right">
-	              	<CopyToClipboard text={post.id} onCopy={() => null}>
-			        	<span className="btn btn-sm"><i className="fa fa-copy"></i></span>
-			        </CopyToClipboard>
-	                <span onClick={ this.addToy } className="btn btn-sm"><i className="fa fa-plus"></i></span>
-	                <span onClick={ this.addTag } className="btn btn-sm"><i className="fa fa-tag"></i></span>
-	                <span onClick={ () => this.props.openClass( post ) } className="btn btn-sm"><i className="fa fa-th-large"></i></span>
-	                <span onClick={ () => this.props.removeAllClassification(post.id) } className="btn btn-sm"><i className="fa fa-chain-broken"></i></span>
-	                <span onClick={ this.toggleR18 } className={`${btnClass} ${post.isR18 ? 'bg-orange':''}`}><i className="fa fa-venus-mars"></i></span>
-	                <span onClick={ this.toggleBlock } className={`${btnClass} ${post.isBlk ? 'bg-orange':''}`}><i className="fa fa-eye-slash"></i></span>
-	                <span onClick={ this.toggleRecommend } className={`${btnClass} ${post.isRec ? 'bg-orange':''}`}><i className="fa fa-thumbs-o-up"></i></span>
-	                <span onClick={ this.deletePost } className="post-caption-btn btn btn-sm"><i className="fa fa-trash"></i></span>
-	              </ButtonToolbar>
-	            </div>
-	          </div>
+				</div>
 	        </Col>
 		)
 	}

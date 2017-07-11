@@ -21,7 +21,7 @@ export default class RecommendHome extends Component{
 	}
 	render() {
 		return (
-			<div className="content">
+			<div>
 	          	  <Row>
 	              {
 	            	this.props.homeads.map( (ad) => {

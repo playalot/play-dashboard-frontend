@@ -38,12 +38,12 @@ export default class Post extends Component{
 	}
 	render() {
 		return(
-			<div className="content">
+			<div>
 				<div className="page-header">
 					<Form inline onSubmit={(e) => e.preventDefault()}>
 						<FormGroup>
 							<div className="btn-group">
-								<button type="button" className="btn btn-default"><Link to="/video/edit">发布视频</Link></button>
+								<Link className="btn btn-default" to="/video/edit">发布视频</Link>
 								<button onClick={() => this.props.getUnCls()} type="button" className="btn btn-default">未定义标签</button>
 							</div>
 						</FormGroup>
@@ -85,7 +85,6 @@ export default class Post extends Component{
 						forcePage={parsePage(this.props.location.search)}
 						activeClassName={"active"} />
 				</Row>
-				
 			</div>
 		)
 	}

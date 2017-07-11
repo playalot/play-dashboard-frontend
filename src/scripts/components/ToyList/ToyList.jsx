@@ -195,7 +195,7 @@ export default class Toy extends Component{
 					<Form inline className="form-input-filter" onSubmit={(e) => e.preventDefault()}>
 						<FormGroup>
 							<Col smOffset={2} style={{marginRight: '25px'}}>
-								<Button bsStyle='success' onClick={this.addtoy}>创建新玩具</Button>
+								<button className="btn green btn-outline" onClick={this.addtoy}>创建新玩具</button>
 							</Col>
 						</FormGroup>
 						<FormGroup>
@@ -247,12 +247,12 @@ export default class Toy extends Component{
 						</FormGroup>
 						{' '}
 						<FormGroup>
-								<InputGroup>
-									<FormControl type="text" value={this.state.query} onKeyDown={e => e.keyCode === 13 && this.search()} onChange={this.onChangeQuery} />
-									<InputGroup.Button>
-										<Button onClick={this.search}>搜索</Button>
-									</InputGroup.Button>
-								</InputGroup>
+							<InputGroup>
+								<FormControl type="text" value={this.state.query} onKeyDown={e => e.keyCode === 13 && this.search()} onChange={this.onChangeQuery} />
+								<InputGroup.Button>
+									<Button onClick={this.search}>搜索</Button>
+								</InputGroup.Button>
+							</InputGroup>
 						</FormGroup>
 					</Form>
 				</div>
@@ -260,16 +260,17 @@ export default class Toy extends Component{
 					{this.props.toys.map((toy) => {
 						let recommendClass = 'btn btn-sm';
 						if (toy.isRec === true) {
-							recommendClass = 'btn bg-orange btn-sm';
+							recommendClass = 'btn yellow-casablanca btn-sm';
 						}
 						let r18Class = 'btn btn-sm';
 						if (toy.isR18 === true) {
-							r18Class = 'btn bg-orange btn-sm';
+							r18Class = 'btn yellow-casablanca btn-sm';
 						}
 						return (
 							<Col className="col" xs={6} sm={3} lg={3} key={'toy_'+toy.id}>
-									<div className="box box-solid">
-										<div className="box-body toy-item">
+								<div className="portlet bordered light" style={{padding:'12px 5px 15px 5px'}}>
+									<div className="portlet-title pb-2" style={{marginBottom:0}}>
+										<div className="toy-item">
 											<div className="toy-item-img">
 												<img src={toy.cover} alt={toy.name} />
 											</div>
@@ -278,15 +279,20 @@ export default class Toy extends Component{
 												<span className="toy-item-desc">{'厂商 ' + toy.company}</span>
 												<span className="toy-item-desc">{'发售 ' + toy.release}</span>
 												<span className="toy-item-desc">{'价格 ' + toy.money? toy.money : '不知道呀'}</span>
-												<span className="toy-item-desc">{'本周热度 ' + toy.counts.updates}</span>
+												<span className="toy-item-desc">{'本周热度 ' + toy.counts.hits}</span>
 											</div>
 										</div>
-										<div className="box-body no-top-padding">
+									</div>
+									<div className="portlet-body">
+										<div>
 											{toy.cls.map(c => <span key={'t_'+toy.id+'_c_'+c} className="label label-warning label-margin" >{this.props.toyClass[c].name}</span>)}
 										</div>
-										<div className="box-footer">
+										<div className="clearfix mb-2">
 											<ButtonToolbar className="pull-right">
-												<Link to={'/toy/' + toy.id } ><span className="btn btn-sm"><i className="fa fa-edit"></i></span></Link>
+												<CopyToClipboard text={toy.id} onCopy={() => null}>
+													<span className="btn btn-sm"><i className="fa fa-copy"></i></span>
+												</CopyToClipboard>
+												<Link to={'/toy/' + toy.id } ><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link>
 												<span onClick={() => 	this.setState({selectedToy:toy})} className="btn btn-sm"><i className="fa fa-th-large"></i></span>
 												<span onClick={() =>	this.recommend(toy.id) } className="btn btn-sm"><i className="fa fa-bookmark-o"></i></span>
 												<span onClick={() =>	this.toggleR18(toy.id) } className={r18Class}><i className="fa fa-venus-mars"></i></span>
@@ -294,20 +300,16 @@ export default class Toy extends Component{
 												<span onClick={() =>	this.deletetoy(toy.id) } className="btn btn-sm"><i className="fa fa-trash"></i></span>
 											</ButtonToolbar>
 										</div>
-										<div className="box-footer">
+										<div className="clearfix">
 											<ButtonToolbar className="pull-right">
-												<CopyToClipboard text={toy.id}
-													onCopy={() => null}>
-													<span className="btn btn-default btn-sm">复制ID</span>
-												</CopyToClipboard>
-												<a target="_blank" href={`http://www.playalot.cn/toy/${toy.id}`} className="btn btn-default btn-sm">查看详情</a>
-												<span onClick={() => this.addStock(toy.id,toy.name,toy.cover) } className="btn btn-default btn-sm"><i className="fa fa-plus"></i>添加该商品库存</span>
+												<a target="_blank" href={`http://www.playalot.cn/toy/${toy.id}`} className="btn yellow btn-outline btn-sm">查看详情</a>
+												<span onClick={() => this.addStock(toy.id,toy.name,toy.cover) } className="btn blue btn-outline btn-sm">添加该商品库存</span>
 											</ButtonToolbar>
 										</div>
-										
 									</div>
+								</div>
 							</Col>
-						);
+						)
 					})}
 				</Row>
 				<Row style={{textAlign:'center'}}>

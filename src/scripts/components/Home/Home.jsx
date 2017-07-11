@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Row,Col } from 'react-bootstrap'
 import {makeWidthFlexible,XYPlot, XAxis, YAxis,VerticalGridLines, HorizontalGridLines, VerticalBarSeries,Crosshair} from 'react-vis'
 import { Link } from 'react-router-dom'
 import Moment from 'moment'
@@ -53,85 +54,108 @@ export default class Home extends Component {
     render() {
         const { stats } = this.props
         return (
-            <div className="content">
-              <div className="box">
-                <div className="box-header"></div>
-                  <div className="box-body text-center">
-                    <p>We will change the world.</p>
-                    <p><em>Innovation distinguishes between a leader and a follower.</em></p>
-                    <small>
-                      — Steve Jobs
-                    </small>
-                  </div>
-              </div>
-              <div className="row" >
-                <div className="col-sm-2" >
-                  <div className="box">
-                    <div className="box-body">
-                        <div className="col-sm-12 col-xs-4">
-                          <div className="description-block">
-                            <h5 className="description-header">{stats.users}</h5>
-                            <span className="description-text">用户数</span>
-                          </div>
-                        </div>
-                        <div className="col-sm-12 col-xs-4">
-                          <div className="description-block">
-                            <h5 className="description-header">{stats.toys}</h5>
-                            <span className="description-text">玩具数</span>
-                          </div>
-                        </div>
-                        <div className="col-sm-12 col-xs-4">
-                          <div className="description-block">
-                            <h5 className="description-header">{stats.tags}</h5>
-                            <span className="description-text">标签数</span>
-                          </div>
-                        </div>
-                        <div className="col-sm-12 col-xs-4">
-                          <div className="description-block">
-                            <h5 className="description-header">{stats.posts}</h5>
-                            <span className="description-text">照片总数</span>
-                          </div>
-                        </div>
-                        <div className="col-sm-12 col-xs-4">
-                          <div className="description-block">
-                            <h5 className="description-header">{stats.postYesterday}</h5>
-                            <span className="description-text">昨日发图</span>
-                          </div>
-                        </div>
-                        <div className="col-sm-12 col-xs-4">
-                          <div className="description-block">
-                            <h5 className="description-header">{stats.postToday}</h5>
-                            <span className="description-text">今日发图</span>
-                          </div>
-                        </div>
+            <div>
+              <Row>
+                <Col xs={6} sm={4} lg={2}>
+                  <a className="dashboard-stat dashboard-stat-v2 blue" href="#">
+                    <div className="visual">
+                      <i className="fa fa-users"></i>
                     </div>
-                  </div>
-                </div>
-                <div className="col-sm-10 col-xs-12">
-                  <div className="box">
-                    <div className="box-body">
-                      <FlexibleXYPlot
-                        onMouseLeave={() => this.setState({crosshairValues:[]})}
-                        height={350}>
-                        <VerticalGridLines />
-                        <HorizontalGridLines />
-                        <VerticalBarSeries
-                          onNearestX={this.nearestXHandler}
-                          data={stats.last || []}
-                        />
-                        <VerticalBarSeries
-                          data={stats.aggregate || [] }
-                        />
-                        <Crosshair
-                          itemsFormat={this._formatCrosshairItems}
-                          titleFormat={this._formatCrosshairTitle}
-                          values={this.state.crosshairValues}/>
-                        <XAxis />
-                        <YAxis />
-                      </FlexibleXYPlot>
+                    <div className="details">
+                        <div className="number">
+                          <span>{stats.users}</span>
+                        </div>
+                        <div className="desc">用户数</div>
                     </div>
-                  </div>
-                </div>
+                  </a>
+                </Col>
+                <Col xs={6} sm={4} lg={2}>
+                  <a className="dashboard-stat dashboard-stat-v2 green" href="#">
+                    <div className="visual">
+                      <i className="fa fa-rocket"></i>
+                    </div>
+                    <div className="details">
+                        <div className="number">
+                          <span>{stats.toys}</span>
+                        </div>
+                        <div className="desc">玩具数</div>
+                    </div>
+                  </a>
+                </Col>
+                <Col xs={6} sm={4} lg={2}>
+                  <a className="dashboard-stat dashboard-stat-v2 yellow" href="#">
+                    <div className="visual">
+                      <i className="fa fa-tags"></i>
+                    </div>
+                    <div className="details">
+                        <div className="number">
+                          <span>{stats.tags}</span>
+                        </div>
+                        <div className="desc">标签数</div>
+                    </div>
+                  </a>
+                </Col>
+                <Col xs={6} sm={4} lg={2}>
+                  <a className="dashboard-stat dashboard-stat-v2 red" href="#">
+                    <div className="visual">
+                      <i className="fa fa-comments"></i>
+                    </div>
+                    <div className="details">
+                        <div className="number">
+                          <span>{stats.posts}</span>
+                        </div>
+                        <div className="desc">照片总数</div>
+                    </div>
+                  </a>
+                </Col>
+                <Col xs={6} sm={4} lg={2}>
+                  <a className="dashboard-stat dashboard-stat-v2 purple" href="#">
+                    <div className="visual">
+                      <i className="fa fa-photo"></i>
+                    </div>
+                    <div className="details">
+                        <div className="number">
+                          <span>{stats.postYesterday}</span>
+                        </div>
+                        <div className="desc">昨日发图</div>
+                    </div>
+                  </a>
+                </Col>
+                <Col xs={6} sm={4} lg={2}>
+                  <a className="dashboard-stat dashboard-stat-v2 blue-dark" href="#">
+                    <div className="visual">
+                      <i className="fa fa-photo"></i>
+                    </div>
+                    <div className="details">
+                        <div className="number">
+                          <span>{stats.postToday}</span>
+                        </div>
+                        <div className="desc">今日发图</div>
+                    </div>
+                  </a>
+                </Col>
+               
+              </Row>
+              <div style={{padding:20}}>
+                <FlexibleXYPlot
+                  onMouseLeave={() => this.setState({crosshairValues:[]})}
+                  height={350}>
+                  <VerticalGridLines />
+                  <HorizontalGridLines />
+                  <VerticalBarSeries
+                    onNearestX={this.nearestXHandler}
+                    data={stats.last || []}
+                  />
+                  <VerticalBarSeries
+                    data={stats.aggregate || [] }
+                  />
+                  <Crosshair
+                    itemsFormat={this._formatCrosshairItems}
+                    titleFormat={this._formatCrosshairTitle}
+                    values={this.state.crosshairValues}/>
+                  <XAxis />
+                  <YAxis />
+                </FlexibleXYPlot>
               </div>
               <div style={{textAlign:'center'}}>
                 <ReactPaginate
@@ -148,11 +172,11 @@ export default class Home extends Component {
                   forcePage={parsePage(this.props.location.search)}
                   activeClassName={"active"} />
               </div>
-              <div className="box box-widget">
+              <div>
                 {
                   this.props.activities.map((activity,i) => {
                     return (
-                      <div className="media activity_content" key={`act_${activity.id}`}>
+                      <div className="media home-activity" key={`act_${activity.id}`}>
                         <div className="media-left">
                           <Link to={`/user/${activity.user.id}`} className="thumbnail" style={{borderRadius:'50%',width:60}}>
                             <img style={{borderRadius:'50%'}} src={activity.user.avatar} alt="avatar"/>
@@ -184,7 +208,7 @@ export default class Home extends Component {
                             </a>
                             :null
                           }
-                          <a target="_blank" href={`http://www.playalot.cn/${activity.target.type}/${activity.target.id}`} className="activity_content_image">
+                          <a target="_blank" href={`http://www.playalot.cn/${activity.target.type}/${activity.target.id}`} className="home-activity-image">
                             {
                               activity.images.map((img,i) => {
                                 return (

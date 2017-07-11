@@ -105,8 +105,8 @@ export default class UserList extends Component{
                     <td>{user.location ? `${user.location.province}-${user.location.city}` : ''}</td>
                     <td>{Moment.unix(user.lastSeen / 1000).fromNow()}</td>
                     <td>
-                    	<Button onClick={() => this.recommend(user.id)}>推荐</Button>
-                    	<Button style={{marginLeft:'5px'}} onClick={() => this.setState({curId:user.id,dialogApprove:true})}>认证</Button>
+                    	<button className="btn btn-primary blue btn-outline" onClick={() => this.recommend(user.id)}>推荐</button>
+                    	<button className="btn btn-primary green btn-outline" style={{marginLeft:'5px'}} onClick={() => this.setState({curId:user.id,dialogApprove:true})}>认证</button>
                     </td>
                   </tr>
                 );

@@ -184,9 +184,6 @@ export default class SkuList extends Component{
 	    }
 		return(
 			<div className="content" style={{backgroundColor:'#fff'}}>
-				<div className="page-header">
-					<Button onClick={() => this.context.router.push(`/toy`)}>添加玩具库存</Button>
-				</div>
 				<div className="sku-container">
 					<div className="sku-title">
 						<div className="sku-title-box">

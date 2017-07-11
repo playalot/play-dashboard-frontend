@@ -92,7 +92,7 @@ export default class extends Component {
         {value: 'toy', label: '玩具'},
         {value: 'question', label: '问题'},
         {value: 'answer', label: '回答'},
-        {value: 'promotion', label: '商品集'},
+        {value: 'catalog', label: '商品集'},
         {value: 'toyindex', label: '玩具集'},
     ]
     const typeOptions = [

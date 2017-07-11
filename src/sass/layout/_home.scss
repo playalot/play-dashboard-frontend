@@ -1,0 +1,15 @@
+.home-activity{
+	padding:15px 10px;
+	margin:0;
+	border-bottom:1px solid #eee ;
+	.home-activity-image{
+		display:flex;
+		flex-wrap:wrap;
+		img{
+			margin:0 10px 10px 0;
+			object-fit: cover;
+			width:65px;
+			height:65px;
+		}
+	}
+}

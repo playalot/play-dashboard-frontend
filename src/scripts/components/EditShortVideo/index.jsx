@@ -159,14 +159,14 @@ export default class extends Component {
     };
     return (
       <div className="content">
-        <div className="row">
-          <div className="col-sm-3" >
+        <Row>
+          <Col sm={3}>
             <Dropzone onDrop={this.onDrop} multiple={false} style={dropZoneStyles}>
               <div>将视频文件拖入该区域</div>
             </Dropzone>
-            <video ref="vtag" style={{marginTop:15}} src={this.state.videoUrl} controls></video>
-          </div>
-          <div className="col-sm-9">
+            <video ref="vtag" style={{marginTop:15,width:'100%'}} src={this.state.videoUrl} controls></video>
+          </Col>
+          <Col sm={9}>
             <Form horizontal onSubmit={(e) => e.preventDefault()}>
               <FormGroup>
                 <Col className="control-label sm-2-label" sm={3}>USERID</Col>
@@ -219,11 +219,11 @@ export default class extends Component {
                 :null
               }
               <Col sm={9} smOffset={3}>
-                <button className="btn btn-primary" onClick={this.onSubmit}>提交</button>
+                <button className="btn green btn-outline" onClick={this.onSubmit}>提交</button>
               </Col>
             </Form>
-          </div>
-        </div>
+          </Col>
+        </Row>
         {
           this.state.modalPoster ?
           <div className="modal" style={{display:'block'}} tabIndex="-1" onClick={() => this.setState({modalPoster:false})}>

@@ -335,7 +335,7 @@ export default class EditToy extends Component {
 	                      <input  className="form-control"  type="text" value={this.state.newValue} onChange={this.changeNewValue} placeholder="value"></input>
   		  				</Col>
   		  				<Col  xs={2} smOffset={1} xsOffset={1}>
-	                      <button className="btn btn-primary" onClick={this.addOtherInfo}>添加</button>
+	                      <button className="btn btn-outline green" onClick={this.addOtherInfo}>添加</button>
   		  				</Col>
 	                </Row>
       			  	<legend>官方图片</legend>

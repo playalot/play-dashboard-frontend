@@ -43,17 +43,17 @@ export default class PageList extends Component{
 			<div className="content pagelist">
 	          <div className="page-header">
 	            <Form inline onSubmit={(e) => e.preventDefault()}>
-            	  <Link to="/page/edit"><button className="btn green btn-outline">发布文章</button></Link>
+            	  <Link to="/page/edit"><button type="button" className="btn green btn-outline">发布文章</button></Link>
             	  {' '}
 	              <FormGroup>
 	                <FormControl componentClass="select" placeholder="select" value={this.state.filter} onChange={(e) => this.setState({filter:e.target.value},this.search)}>
 	                  <option value="">全部</option>
 	                  <option value="forShare">分享</option>
-					  <option value="isRec">推荐</option>
-					  <option value="isBlk">屏蔽</option>
-	                </FormControl>
-	              </FormGroup>
-				  {' '}
+										<option value="isRec">推荐</option>
+										<option value="isBlk">屏蔽</option>
+									</FormControl>
+								</FormGroup>
+								{' '}
 	              <FormGroup>
 	                <InputGroup>
 	                  <FormControl type="text" placeholder='输入关键字' value={this.state.query} onKeyDown={e => e.keyCode === 13 && this.search()} onChange={(e) => this.setState({query:e.target.value})} />

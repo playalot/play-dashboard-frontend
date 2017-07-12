@@ -19,7 +19,7 @@ export default class extends Component {
                 <div className="page-header-inner ">
                     <div className="page-logo">
                         <a href="#">
-                            <img style={{maxWidth:86}} className="logo-default" src="http://www.playalot.cn/assets/images/a64ada1d3b0ec825a0ba1d9fc4dee6c3-nav_lg.png" alt=""/>
+                            <img style={{maxWidth:86,filter:'invert(1)'}} className="logo-default" src="http://www.playalot.cn/assets/images/a64ada1d3b0ec825a0ba1d9fc4dee6c3-nav_lg.png" alt=""/>
                         </a>
                         <div className="menu-toggler sidebar-toggler">
                             <span></span>

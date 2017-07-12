@@ -19,7 +19,7 @@ module.exports = {
 		extensions: ['.js', '.jsx', '.scss', '.css']
 	},
 	output: {
-		path: path.resolve(__dirname, 'build'),
+		path: path.resolve(__dirname, 'dist'),
 		filename: 'scripts/bundle.js'
 	},
 	module: {

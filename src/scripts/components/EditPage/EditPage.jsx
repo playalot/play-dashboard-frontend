@@ -454,7 +454,7 @@ export default class EditPage extends Component {
                     </div>
 
                     <div className="col-sm-4">
-                        <button className="btn btn-primary pull-right" onClick={this.publish.bind(this)}>发布文章</button>
+                        <button className="btn btn-outline green pull-right" onClick={this.publish.bind(this)}>发布文章</button>
                         <div style={{marginRight:15}} className="btn-group dropup pull-right">
                           <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             {(() => {
@@ -527,7 +527,7 @@ export default class EditPage extends Component {
                                 </div>
                             }
                             <div className="dialog-footer">
-                                <button className="btn btn-primary" onClick={this.addVideo}>插入</button>
+                                <button className="btn btn-outline green" onClick={this.addVideo}>插入</button>
                             </div>
                         </div>
 

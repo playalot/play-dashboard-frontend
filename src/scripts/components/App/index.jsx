@@ -46,7 +46,7 @@ export default class App extends Component{
 				<div className="page-container" style={{backgroundColor:'rgb(66,118,164)'}}>
 					<div className="page-sidebar-wrapper">
 						<div className="page-sidebar navbar-collapse collapse">
-							<ul className="page-sidebar-menu  page-header-fixed " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style={{paddingTop:20}}>
+							<ul className="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style={{paddingTop:20}}>
 								<li className="sidebar-toggler-wrapper hide">
 									<div className="sidebar-toggler">
 										<span></span>

@@ -57,9 +57,9 @@ export default class PagePanel extends Component {
           <tbody>
           	{
           		pages.map((page) => {
-          			let isPubClass = `btn btn-sm ${page.isPub ? '' : 'bg-orange'}`
-          			let isRecClass = `btn btn-sm ${page.isRec ? 'bg-orange' : ''}`
-          			let isShareClass = `btn btn-sm ${page.forShare ? 'bg-orange' : ''}`
+          			let isPubClass = `btn btn-sm ${page.isPub ? '' : 'yellow-casablanca'}`
+          			let isRecClass = `btn btn-sm ${page.isRec ? 'yellow-casablanca' : ''}`
+          			let isShareClass = `btn btn-sm ${page.forShare ? 'yellow-casablanca' : ''}`
           			return (
           				<tr key={page.id}>
           					<td>

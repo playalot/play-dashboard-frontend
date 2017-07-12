@@ -23,11 +23,16 @@ export default class extends Component {
 
 		this.setPostClassification = (pid,cid) => this._setPostClassification(pid,cid)
 		this.removePostClassification = (pid,c) => this._removePostClassification(pid,c)
+		this.resize = () => { this.masonry.layout() }
 	}
 	componentWillMount() {
 		if(!this.props.classLoaded){
 			this.props.fetchTagClass()
 		}
+		$(window).on('resize',this.resize)
+	}
+	componentWillUnmount() {
+		$(window).off('resize',this.resize)
 	}
 	_setPostClassification(pid,cid) {
 		this.state.selectedPost.cls.push(cid)
@@ -78,7 +83,7 @@ export default class extends Component {
 		}
 		return(
 			<div>
-				<Masonry options={{transitionDuration: 0}}>
+				<Masonry ref={(c) => this.masonry = this.masonry || c.masonry} options={{transitionDuration: 0}}>
 					{
 						this.props.posts ?
 						this.props.posts.map(post => {

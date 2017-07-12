@@ -23,7 +23,7 @@ export default class extends Component {
 	componentDidMount() {
 		$('#page-affix').affix({
 		  offset: {
-		    top: $('#page-affix').offset().top
+		    top: $('#page-affix').offset().top - 50
 		  }
 		})
 	}
@@ -68,7 +68,7 @@ export default class extends Component {
 	render() {
 		const { editorState } = this.props
 		return(
-			<div style={{minHeight:45}}>
+			<div style={{minHeight:40}}>
 				<div id="page-affix">
 					<InlineStyleControls
 						editorState={editorState}

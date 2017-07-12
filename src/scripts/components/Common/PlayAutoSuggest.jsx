@@ -43,7 +43,10 @@ export default class PlayAutoSuggest extends Component {
 				{...other}
 				suggestions={results}
 		        onSuggestionsFetchRequested={fetch}
-		        onSuggestionsClearRequested={clear}
+		        onSuggestionsClearRequested={() => { 
+					clear() 
+					this.setState({query:''})
+				}}
 				getSuggestionValue={getValue}
 				renderSuggestion={this.renderSuggestion}
 				onSuggestionSelected={selectValue}

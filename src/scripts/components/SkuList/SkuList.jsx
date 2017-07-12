@@ -283,11 +283,18 @@ export default class SkuList extends Component{
 														<small>已售:&nbsp;{stock.sold}件</small>
 													</div>													
 													<div className="sku-body-item operate">{stock.merchant}</div>													
-													<div className="sku-body-item operate">
+													<div className="sku-body-item operate vertical">
 														{
 															stock.type === 'preOrder' ? 
-															<span className="label label-warning">{stock.tbUrl ? `淘宝`:``}预售</span> : 
-															<span className="label label-info">{stock.tbUrl ? `淘宝`:``}现货</span>
+															<span className="label label-warning p-2">{stock.tbUrl ? `淘宝`:``}
+																预售
+															</span> : 
+															<span className="label label-info p-2">{stock.tbUrl ? `淘宝`:``}现货</span>
+														}
+														{
+															stock.preOrder.orderClose < Date.now() ? 
+															<span className="label label-danger p-2 mt-2">已结单</span>
+															:null
 														}
 													</div>													
 													<div className="sku-body-item vertical"><span><strong>{Moment(stock.created).format('MM-DD')}</strong></span><small>{Moment(stock.created).format('HH:mm')}</small>{ stock.type === 'preOrder' ? <span><small>(截单{Moment(stock.preOrder.orderClose).format('MM-DD')})</small></span> : null }</div>													

@@ -30,7 +30,8 @@
         border-radius: 3px;
         background-color: #fff;
         z-index: 2;
-        .react-autosuggest__suggestion--focused {
+        
+        .react-autosuggest__suggestion--highlighted {
             background-color: rgba(158,158,158, .3);
             transition:background-color .3s;
         }

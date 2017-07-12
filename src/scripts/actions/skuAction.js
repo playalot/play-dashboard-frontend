@@ -7,6 +7,8 @@ export const SKL_TOGGLE_BLK = 'SKL_TOGGLE_BLK'
 export const SKL_DELETE_SKU = 'SKL_DELETE_SKU'
 export const SKU_ADD_TOY_CLASS = 'SKU_ADD_TOY_CLASS'
 export const SKU_REMOVE_TOY_CLASS = 'SKU_REMOVE_TOY_CLASS'
+export const SKU_RECEIVE_SKU_BY_QUERY = 'SKU_RECEIVE_SKU_BY_QUERY'
+export const SKU_CLEAR_SUGGESTION = 'SKU_CLEAR_SUGGESTION'
 
 function receiveSku(res,totalPages,page,filter,filterType) {
     return {
@@ -131,5 +133,29 @@ export const removeToyClass = (tid, c) => {
             .end((err, res) => {
                 dispatch(_removeToyClass(tid, c))
             })
+    }
+}
+
+export function fetchSkuByQuery(query) {
+    return (dispatch) => {
+        return Request
+            .get(`/api/toys`)
+            .query({query,stock:true})
+            .end((err,res) => {
+                dispatch(receiveSkuByQuery(res.body.toys))
+            })
+    }
+}
+
+export function clearSuggestion() {
+    return {
+        type: SKU_CLEAR_SUGGESTION
+    }
+}
+
+function receiveSkuByQuery(res) {
+    return {
+        type: SKU_RECEIVE_SKU_BY_QUERY,
+        res
     }
 }

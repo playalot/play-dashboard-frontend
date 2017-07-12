@@ -2,10 +2,11 @@ import Immutable from 'immutable'
 import {
 	SKL_RECEIVE_SKU, SKL_DELETE_SKU,
     SKL_TOGGLE_BLK,SKL_TOGGLE_REC,
-    SKU_REMOVE_TOY_CLASS,SKU_ADD_TOY_CLASS
+    SKU_REMOVE_TOY_CLASS,SKU_ADD_TOY_CLASS,
+    SKU_CLEAR_SUGGESTION,SKU_RECEIVE_SKU_BY_QUERY,
 } from '../actions/skuAction'
 
-export default (state = Immutable.fromJS({ skus: [],totalPages:100,filter:'',filterType:'' }),action)=>{
+export default (state = Immutable.fromJS({ skus: [],totalPages:100,filter:'',filterType:'',skuResults:[] }),action)=>{
     switch (action.type) {
         case SKL_RECEIVE_SKU:
             return state
@@ -73,6 +74,12 @@ export default (state = Immutable.fromJS({ skus: [],totalPages:100,filter:'',fil
                         })
                     }
                 )
+            })
+        case SKU_RECEIVE_SKU_BY_QUERY:
+            return state.set('skuResults',Immutable.fromJS(action.res))
+        case SKU_CLEAR_SUGGESTION:
+            return state.updateIn(['skuResults'],(toyResults) => {
+                return toyResults.clear()
             })
         default:
             return state

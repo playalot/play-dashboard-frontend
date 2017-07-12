@@ -6,31 +6,23 @@ import Request from 'superagent'
 import PlayAutoSuggest from '../Common/PlayAutoSuggest'
 
 export default class extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      image:'',
-      id:'',
-      title:'',
-      type:'',
-      description:'',
-      targetId:'',
-      targetType:'',
-      extra:'',
-      targetUrl:'',
-      titleError:null,
-      catalogs:[]
-    }
-    this.submit = this._submit.bind(this)
-    this.onDropImage = this._onDropImage.bind(this)
-    this.onChangeTitle = (e) => {
-      const title = e.target.value
-      this.setState({
-        title,
-        titleError:title.trim() ? null : 'error'
-      })
-    }
-  }
+	constructor(props) {
+		super(props)
+		this.state = {
+			image:'',
+			id:'',
+			title:'',
+			type:'',
+			description:'',
+			targetId:'',
+			targetType:'',
+			extra:'',
+			targetUrl:'',
+			catalogs:[]
+		}
+		this.submit = this._submit.bind(this)
+		this.onDropImage = this._onDropImage.bind(this)
+	}
   componentDidMount() {
     Request
     .get(`/api/recommend/${this.props.match.params.id}`)
@@ -43,7 +35,7 @@ export default class extends Component {
           targetId:targetId||'',
           targetType:targetType||'page',
           extra:extra||'',
-          title:title||'No title',
+          title:title||' ',
           type:type||'banner'
         })
       }
@@ -110,149 +102,133 @@ export default class extends Component {
         {value: 'theme', label: '主题'}
     ];
     return (
-      <div className="content">
-        <div className="box box-solid">
-          <div className="box-body">
-            <Form horizontal  onSubmit={(e) => e.preventDefault()}>
-              <FormGroup>
-                <Col sm={3} className="sm-2-label" style={{fontWeight:'bold'}}>
-                  ID
-                </Col>
-                <Col sm={8}>
-                  <FormControl.Static>{this.state.id}</FormControl.Static>
-                </Col>
-              </FormGroup>
-              <FormGroup validationState={this.state.titleError}>
-                <Col sm={3} className="sm-2-label" style={{fontWeight:'bold'}}>
-                  标题*
-                </Col>
-                <Col sm={8}>
-                  <FormControl value={this.state.title} type="text" onChange={this.onChangeTitle}/>
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col sm={3} className="sm-2-label" style={{fontWeight:'bold'}}>
-                  描述
-                </Col>
-                <Col sm={8}>
-                  <FormControl value={this.state.description} type="text" onChange={(e) => this.setState({description:e.target.value})}/>
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col sm={3} className="sm-2-label" style={{fontWeight:'bold'}}>
-                  位置
-                </Col>
-                <Col sm={8}>
-                  {
-                    typeOptions.map((type,i) => {
-                      return(
-                        <Radio key={`type_${i}`} inline name="type" value={type.value} onChange={(e) => this.setState({type:e.target.value})}  checked={type.value == this.state.type}>{type.label}</Radio>
-                      )
-                    })
-                  }
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col sm={3} className="sm-2-label" style={{fontWeight:'bold'}}>
-                  目标类型
-                </Col>
-                <Col sm={8}>
-                  {
-                    radioOptions.map((targetType,i) => {
-                      return(
-                        <Radio key={`target_type_${i}`} inline name="targetType" value={targetType.value} onChange={(e) => this.setState({targetType:e.target.value})} checked={targetType.value == this.state.targetType}>{targetType.label}</Radio>
-                      )
-                    })
-                  }
-                </Col>
-              </FormGroup>
-              {
-                this.state.targetType === 'catalog' ?
-                <FormGroup>
-                  <Col sm={3} className="sm-2-label" style={{fontWeight:'bold'}}>
-                    商品ID
-                  </Col>
-                  <Col sm={8}>
-                    <div className="d-flex flex-column">
-                        {
-                            this.state.catalogs.map((cat,index) => {
-                                return (
-                                    <div key={`catalog_${cat.id}`} className="d-flex p-2 justify-content-between align-items-center">
-                                        <img style={{maxWidth:45}} src={cat.cover} alt=""/>
-                                        <h5>{cat.name}</h5>
-                                        <button type="button" onClick={ () => {
-                                            let catalogs = this.state.catalogs
-                                            catalogs.splice(index,1)
-                                            this.setState({catalogs})
-                                        }} className="btn btn-sm btn-danger btn-outline">删除</button>
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
-                    <PlayAutoSuggest
-                        fetch={(o) => this.props.fetchSkuByQuery(o.value)}
-                        clear={this.props.clearSuggestion}
-                        getValue={suggestion => suggestion.name}
-                        selectValue={(event,{suggestion, suggestionValue, method }) => {
-                            this.state.catalogs.push(suggestion)
-                        }}
-                        desc="release"
-                        placeholder="请输入玩具关键字"
-                        results={this.props.skuResults}
-                    />
-                  </Col>
-                </FormGroup>
-                :null
-              }
-              <FormGroup>
-                <Col sm={3} className="sm-2-label" style={{fontWeight:'bold'}}>
-                  目标ID
-                </Col>
-                <Col sm={8}>
-                  <FormControl value={this.state.targetId} type="text" onChange={(e) => this.setState({targetId:e.target.value})}/>
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col sm={3} className="sm-2-label" style={{fontWeight:'bold'}}>
-                  附加(如url)
-                </Col>
-                <Col sm={8}>
-                  <FormControl value={this.state.extra} type="text" onChange={(e) => this.setState({extra:e.target.value})}/>
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col sm={3} className="sm-2-label" style={{fontWeight:'bold'}}>
-                  图片
-                </Col>
-                <Col sm={8}>
-                  <FormControl.Static>{this.state.image}</FormControl.Static>
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col className="control-label" sm={3}><strong>上传封面</strong></Col>
-                <Col sm={3}>
-                  <Dropzone onDrop={this.onDropImage} style={{width:'100%',height:100, borderWidth: 2, borderColor: '#666', borderStyle: 'dashed'}}>
-                      <div>将图片拖入此区域</div>
-                  </Dropzone>
-                </Col>
-                <Col sm={3}>
-                  {
-                      this.state.image !== '' ?
-                      <img className="img-responsive cover-img" style={{height:100,width:'auto'}} src={CDN.show(this.state.image)} />
-                      :null
-                  }
-                </Col>
-              </FormGroup>
-            </Form>
-            <Row>
-              <Col sm={3} smOffset={3}>
-                <button className="btn btn-outline green" type="button" onClick={this.submit}>Submit</button>
-              </Col>
-            </Row>
-          </div>
-        </div>
-      </div>
+		<div>
+			<div className="portlet bordered light">
+				<div className="portlet-title">
+					<div className="caption">
+						<span className="caption-subject font-blue-sharp bold uppercase">Recommend编辑器</span>
+					</div>
+				</div>
+				<div className="portlet-body py-5">
+					<Form horizontal  onSubmit={(e) => e.preventDefault()}>
+						<FormGroup>
+							<Col className="control-label" sm={2}>上传封面</Col>
+							<Col sm={3}>
+								<Dropzone onDrop={this.onDropImage} style={{textAlign:'center',width:'100%',height:100, borderWidth: 2, borderColor: '#666', borderStyle: 'dashed'}}>
+									<div>将图片拖入此区域</div>
+								</Dropzone>
+							</Col>
+							<Col sm={3}>
+								{
+									this.state.image !== '' ?
+									<img style={{height:100,width:'auto'}} src={CDN.show(this.state.image)} />
+									:null
+								}
+							</Col>
+						</FormGroup>
+						<FormGroup>
+							<Col sm={2} className="control-label">标题</Col>
+							<Col sm={8}>
+								<FormControl value={this.state.title} type="text" onChange={(e) => this.setState({title:e.target.value})}/>
+							</Col>
+						</FormGroup>
+						<FormGroup>
+							<Col sm={2} className="control-label">描述</Col>
+							<Col sm={8}>
+								<FormControl value={this.state.description} type="text" onChange={(e) => this.setState({description:e.target.value})}/>
+							</Col>
+						</FormGroup>
+						<FormGroup>
+							<Col sm={2} className="control-label">位置</Col>
+							<Col sm={8}>
+								{
+									typeOptions.map((type,i) => {
+										return(
+											<Radio key={`type_${i}`} inline name="type" value={type.value} onChange={(e) => this.setState({type:e.target.value})}  checked={type.value == this.state.type}>{type.label}</Radio>
+										)
+									})
+								}
+							</Col>
+						</FormGroup>
+						<FormGroup>
+							<Col sm={2} className="control-label">目标类型</Col>
+							<Col sm={8}>
+								{
+									radioOptions.map((targetType,i) => {
+										return(
+											<Radio key={`target_type_${i}`} inline name="targetType" value={targetType.value} onChange={(e) => this.setState({targetType:e.target.value})} checked={targetType.value == this.state.targetType}>{targetType.label}</Radio>
+										)
+									})
+								}
+							</Col>
+						</FormGroup>
+						{
+							this.state.targetType === 'catalog' ?
+							<FormGroup>
+								<Col sm={2} className="control-label">
+									商品ID
+								</Col>
+								<Col sm={8}>
+									<div className="d-flex flex-column">
+										{
+											this.state.catalogs.map((cat,index) => {
+												return (
+													<div key={`catalog_${cat.id}`} className="d-flex p-2 justify-content-between align-items-center">
+														<img style={{maxWidth:45}} src={cat.cover} alt=""/>
+														<h5>{cat.name}</h5>
+														<button type="button" onClick={ () => {
+															let catalogs = this.state.catalogs
+															catalogs.splice(index,1)
+															this.setState({catalogs})
+														}} className="btn btn-sm btn-danger btn-outline">删除</button>
+													</div>
+												)
+											})
+										}
+									</div>
+									<PlayAutoSuggest
+										fetch={(o) => this.props.fetchSkuByQuery(o.value)}
+										clear={this.props.clearSuggestion}
+										getValue={suggestion => suggestion.name}
+										selectValue={(event,{suggestion, suggestionValue, method }) => {
+											this.state.catalogs.push(suggestion)
+										}}
+										desc="release"
+										placeholder="请输入玩具关键字"
+										results={this.props.skuResults}
+									/>
+								</Col>
+							</FormGroup>
+							:null
+						}
+						<br />
+						<FormGroup>
+							<Col sm={2} className="control-label">目标ID</Col>
+							<Col sm={8}>
+								<FormControl value={this.state.targetId} type="text" onChange={(e) => this.setState({targetId:e.target.value})}/>
+							</Col>
+						</FormGroup>
+						<FormGroup>
+							<Col sm={2} className="control-label">附加(如url)</Col>
+							<Col sm={8}>
+							<FormControl value={this.state.extra} type="text" onChange={(e) => this.setState({extra:e.target.value})}/>
+							</Col>
+						</FormGroup>
+						<FormGroup>
+							<Col sm={2} className="control-label">图片</Col>
+							<Col sm={8}>
+								<FormControl.Static>{this.state.image}</FormControl.Static>
+							</Col>
+						</FormGroup>
+					</Form>
+					<div className="portlet-body py-5" style={{borderTop:'1px solid #eef1f5'}}>
+						<Col sm={2} smOffset={2}>
+							<button className="btn btn-outline green" type="button" onClick={this.submit}>Submit</button>
+						</Col>
+					</div>
+				</div>
+			</div>
+		</div>
     )
   }
 }

@@ -43,7 +43,7 @@ export default class App extends Component{
 			<div className="page-wrapper">
 				<PlayMainHeader/>
 				<div className="clearfix"> </div>
-				<div className="page-container" style={{backgroundColor:'rgb(66,118,164)'}}>
+				<div className="page-container">
 					<div className="page-sidebar-wrapper">
 						<div className="page-sidebar navbar-collapse collapse">
 							<ul className="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style={{paddingTop:20}}>
@@ -204,13 +204,6 @@ export default class App extends Component{
 								<Route path="/order/user/:id" component={OrderUserList}/>
 							</Switch>
 						</div>
-					</div>
-				</div>
-				<div className="page-footer" style={{backgroundColor:'rgb(66,118,164)'}}>
-                	<div className="page-footer-inner"> Copyright &copy; 2015 Play Co. Ltd All rights reserved.
-					</div>
-					<div className="scroll-to-top">
-						<i className="fa fa-arrow-up"></i>
 					</div>
 				</div>
 			</div>

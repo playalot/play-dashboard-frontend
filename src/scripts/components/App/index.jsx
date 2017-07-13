@@ -55,101 +55,89 @@ export default class App extends Component{
 								<li className="heading">
 									<h3 className="uppercase">菜单</h3>
 								</li>
-								<li className="nav-item  ">
+								<li className="nav-item">
 									<NavLink className="nav-link" activeClassName="active" to="/home">
-										<i className="fa fa-dashboard"></i>
+										<i className="icon-home"></i>
 										<span className="title">概况</span>
 									</NavLink>
 								</li>
-								<li className="nav-item  ">
-									<a href="javascript:;" className="nav-link nav-toggle">
-										<i className="fa fa-calendar-plus-o"></i>
+								<li className="nav-item">
+									<NavLink className="nav-link" activeClassName="active" to="/explorepage">
+										<i className="icon-directions"></i>
 										<span className="title">推荐</span>
 										<span className="arrow"></span>
-									</a>
-									<ul className="sub-menu">
-										<li className="nav-item  ">
-											<NavLink className="nav-link" activeClassName="active" to="/recommendhome">
-												<span className="title">首页推荐页管理</span>
-											</NavLink>
-										</li>
-										<li className="nav-item  ">
-											<NavLink className="nav-link" activeClassName="active" to="/explorepage">
-												<span className="title">发现页管理</span>
-											</NavLink>
-										</li>
-									</ul>
+									</NavLink>
 								</li>
-								<li className="nav-item  ">
+								<li className="nav-item">
 									<NavLink className="nav-link" activeClassName="active" to="/posts">
-										<i className="fa fa-camera"></i>
+										<i className="icon-camera"></i>
 										<span className="title">图片</span>
 									</NavLink>
 								</li>
-								<li className="nav-item  ">
+								<li className="nav-item">
 									<NavLink className="nav-link" activeClassName="active" to="/pages">
-										<i className="fa fa-edit"></i>
+										<i className="icon-pencil"></i>
 										<span className="title">文章</span>
 									</NavLink>
 								</li>
-								<li className="nav-item  ">
+								<li className="nav-item">
 									<NavLink className="nav-link" activeClassName="active" to="/users">
-										<i className="fa fa-users"></i>
+										<i className="icon-users"></i>
 										<span className="title">用户</span>
 									</NavLink>
 								</li>
 								<li className="nav-item  ">
 									<NavLink className="nav-link" activeClassName="active" to="/toys">
-										<i className="fa fa-rocket"></i>
+										<i className="icon-rocket"></i>
 										<span className="title">玩具</span>
 									</NavLink>
 								</li>
-								<li className="nav-item  ">
+								<li className="nav-item">
 									<a href="javascript:;" className="nav-link nav-toggle">
-										<i className="fa fa-shopping-cart"></i>
+										<i className="icon-basket"></i>
 										<span className="title">商家</span>
 										<span className="arrow"></span>
 									</a>
 									<ul className="sub-menu">
-										<li className="nav-item  ">
+										<li className="nav-item">
 											<NavLink className="nav-link" activeClassName="active" to="/skus">
 												<span className="title">商品</span>
 											</NavLink>
 										</li>
-										<li className="nav-item  ">
+										<li className="nav-item">
 											<NavLink className="nav-link" activeClassName="active" to="/orders">
 												<span className="title">订单</span>
 											</NavLink>
 										</li>
 									</ul>
 								</li>
-								<li className="nav-item  ">
+								<li className="nav-item">
 									<NavLink className="nav-link" activeClassName="active" to="/trades">
-										<i className="fa fa-hand-peace-o"></i>
+										<i className="icon-cup"></i>
 										<span className="title">二手交易</span>
 									</NavLink>
 								</li>
-								<li className="nav-item  ">
+								<li className="nav-item">
 									<NavLink className="nav-link" activeClassName="active" to="/tags">
-										<i className="fa fa-tags"></i>
+										<i className="icon-tag"></i>
 										<span className="title">标签</span>
 									</NavLink>
 								</li>
 								<li className="nav-item  ">
 									<NavLink className="nav-link" activeClassName="active" to="/stickers">
-										<i className="fa fa-paw"></i>
+										<i className="icon-ghost"></i>
 										<span className="title">贴纸</span>
 									</NavLink>
 								</li>
 								<li className="nav-item  ">
 									<NavLink className="nav-link" activeClassName="active" to="/tools">
-										<i className="fa fa-wrench"></i>
+										<i className="icon-wrench"></i>
 										<span className="title">工具</span>
 									</NavLink>
 								</li>
 								<li className="nav-item  ">
 									<a href="javascript:;" className="nav-link nav-toggle">
-										<i className="fa fa-info-circle"></i>
+										<i className="icon-info"></i>
 										<span className="title">投诉</span>
 										<span className="arrow"></span>
 									</a>

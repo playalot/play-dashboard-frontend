@@ -134,7 +134,7 @@ export default class Home extends Component {
                     </div>
                   </a>
                 </Col>
-               
+
               </Row>
               <div style={{padding:20}}>
                 <FlexibleXYPlot
@@ -156,6 +156,140 @@ export default class Home extends Component {
                   <XAxis />
                   <YAxis />
                 </FlexibleXYPlot>
+              </div>
+              <div className="row">
+                <div className="col-lg-6 col-xs-12 col-sm-12">
+                  <div className="portlet light bordered">
+                    <div className="portlet-title">
+                      <div className="caption">
+                        <i className="icon-bubbles font-dark hide"></i>
+                        <span className="caption-subject font-dark bold uppercase">评论</span>
+                      </div>
+                      <div className="actions">
+                        <ReactPaginate
+                          previousLabel={<span>&laquo;</span>}
+                          nextLabel={<span>&raquo;</span>}
+                          breakLabel={<span>...</span>}
+                          breakClassName={"break-me"}
+                          pageCount={this.props.totalPages}
+                          marginPagesDisplayed={2}
+                          pageRangeDisplayed={5}
+                          onPageChange={obj => this.goPage(obj.selected)}
+                          containerClassName={"pagination"}
+                          subContainerClassName={"pages pagination"}
+                          forcePage={parsePage(this.props.location.search)}
+                          activeClassName={"active"} />
+                      </div>
+                    </div>
+                    <div className="portlet-body">
+                      <div className="mt-comments">
+                        {
+                          this.props.activities.map((activity,i) => {
+                            return (
+                              <div className="mt-comment">
+
+                                <div className="mt-comment-img">
+                                    <img style={{width:45}} src={activity.user.avatar} alt="avatar"/>
+                                </div>
+
+                                <div className="mt-comment-body">
+                                  <div className="mt-comment-info">
+                                      <span className="mt-comment-author">{activity.user.nickname}</span>
+                                      <span className="mt-comment-date">{Moment.unix(activity.created /1000).format("D MMM, H:mm A")}</span>
+                                  </div>
+                                      <div className="mt-comment-text">{activity.content || 'sadfasdfasdfs'}</div>
+                                      <div className="mt-comment-details">
+                                        {activity.topic ?
+                                          <a target="_blank" style={{marginBottom:5,display:'inline-block'}} href={`http://www.playalot.cn/${activity.topic.type}/${activity.topic.id}`}>
+                                            {activity.topic.text}
+                                          </a>
+                                          :null
+                                        }
+                                        <a target="_blank" href={`http://www.playalot.cn/${activity.target.type}/${activity.target.id}`} className="home-activity-image">
+                                          {
+                                            activity.images.map((img,i) => {
+                                              return (
+                                                <img key={`activity_${activity.id}_${i}`} src={img} alt=""/>
+                                              )
+                                            })
+                                          }
+                                        </a>
+                                      </div>
+                                  </div>
+                              </div>
+                            )
+                          })
+                        }
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-lg-6 col-xs-12 col-sm-12">
+                  <div className="portlet light bordered">
+                    <div className="portlet-title">
+                      <div className="caption">
+                        <i className="icon-bubbles font-dark hide"></i>
+                        <span className="caption-subject font-dark bold uppercase">动态</span>
+                      </div>
+                      <div className="actions">
+                        <ReactPaginate
+                          previousLabel={<span>&laquo;</span>}
+                          nextLabel={<span>&raquo;</span>}
+                          breakLabel={<span>...</span>}
+                          breakClassName={"break-me"}
+                          pageCount={this.props.totalPages}
+                          marginPagesDisplayed={2}
+                          pageRangeDisplayed={5}
+                          onPageChange={obj => this.goPage(obj.selected)}
+                          containerClassName={"pagination"}
+                          subContainerClassName={"pages pagination"}
+                          forcePage={parsePage(this.props.location.search)}
+                          activeClassName={"active"} />
+                      </div>
+                    </div>
+                    <div className="portlet-body">
+                      <div className="mt-comments">
+                        {
+                          this.props.activities.map((activity,i) => {
+                            return (
+                              <div className="mt-comment">
+
+                                <div className="mt-comment-img">
+                                    <img style={{width:45}} src={activity.user.avatar} alt="avatar"/>
+                                </div>
+
+                                <div className="mt-comment-body">
+                                  <div className="mt-comment-info">
+                                      <span className="mt-comment-author">{activity.user.nickname}</span>
+                                      <span className="mt-comment-date">{Moment.unix(activity.created /1000).format("D MMM, H:mm A")}</span>
+                                  </div>
+                                      <div className="mt-comment-text">{activity.content || 'sadfasdfasdfs'}</div>
+                                      <div className="mt-comment-details">
+                                        {activity.topic ?
+                                          <a target="_blank" style={{marginBottom:5,display:'inline-block'}} href={`http://www.playalot.cn/${activity.topic.type}/${activity.topic.id}`}>
+                                            {activity.topic.text}
+                                          </a>
+                                          :null
+                                        }
+                                        <a target="_blank" href={`http://www.playalot.cn/${activity.target.type}/${activity.target.id}`} className="home-activity-image">
+                                          {
+                                            activity.images.map((img,i) => {
+                                              return (
+                                                <img key={`activity_${activity.id}_${i}`} src={img} alt=""/>
+                                              )
+                                            })
+                                          }
+                                        </a>
+                                      </div>
+                                  </div>
+                              </div>
+                            )
+                          })
+                        }
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div style={{textAlign:'center'}}>
                 <ReactPaginate

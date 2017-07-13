@@ -66,15 +66,21 @@ export default class OrderList extends Component{
 					{' '}
 					<FormGroup>
 						<FormControl componentClass="select" placeholder="select" value={this.state.merchant} onChange={(e) => this.setState({merchant:e.target.value},this.search)}>
-		                  <option value="">所有商家</option>
-		                  <option value="PLAY玩具控">PLAY玩具控</option>
-		                  <option value="PLAY玩具控(上海)">PLAY玩具控(上海)</option>
-						  <option value="亿次元商城">亿次元商城</option>
-						  <option value="手办同萌会">手办同萌会</option>
-						  <option value="拆盒网">拆盒网</option>
-						  <option value="塑唐玩具">塑唐玩具</option>
-						  <option value="六部口模型">六部口模型</option>
-						  <option value="HobbyMax官方店">HobbyMax官方店</option>
+							<option value="">所有商家</option>
+							<option value="PLAY玩具控">PLAY玩具控</option>
+							<option value="PLAY玩具控(上海)">PLAY玩具控(上海)</option>
+							<option value="亿次元商城">亿次元商城</option>
+							<option value="手办同萌会">手办同萌会</option>
+							<option value="拆盒网">拆盒网</option>
+							<option value="塑唐玩具">塑唐玩具</option>
+							<option value="六部口模型">六部口模型</option>
+							<option value="HobbyMax官方店">HobbyMax官方店</option>
+							<option value="H教授的玩具讲座">H教授的玩具讲座</option>
+							<option value="鹤屋通贩">鹤屋通贩</option>
+							<option value="电玩男の里屋">电玩男の里屋</option>
+							<option value="万事屋手办店">万事屋手办店 </option>
+							<option value="塑料魂">塑料魂 </option>
+							<option value="刺猬挺">刺猬挺 </option>
 		                </FormControl>
 	                </FormGroup>
 	                {' '}

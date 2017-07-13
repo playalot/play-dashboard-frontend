@@ -82,27 +82,26 @@ export default class extends Component {
       }
     })
   }
-  render() {
-    const radioOptions = [
-        {value: 'post', label: '图片'},
-        {value: 'tag', label: '标签'},
-        {value: 'user', label: '用户'},
-        {value: 'url', label: 'URL链接'},
-        {value: 'page', label: '文章'},
-        {value: 'toy', label: '玩具'},
-        {value: 'question', label: '问题'},
-        {value: 'answer', label: '回答'},
-        {value: 'catalog', label: '商品集'},
-        {value: 'toyindex', label: '玩具集'},
-    ]
-    const typeOptions = [
-        {value: 'banner', label: '发现页面Banner'},
-        {value: 'toy', label: '玩具商品页面Banner'},
-        {value: 'home', label: '首页推荐'},
-        {value: 'theme', label: '主题'}
-    ];
-    return (
-		<div>
+	render() {
+		const radioOptions = [
+			{value: 'post', label: '图片'},
+			{value: 'tag', label: '标签'},
+			{value: 'user', label: '用户'},
+			{value: 'url', label: 'URL链接'},
+			{value: 'page', label: '文章'},
+			{value: 'toy', label: '玩具'},
+			{value: 'question', label: '问题'},
+			{value: 'answer', label: '回答'},
+			{value: 'catalog', label: '商品集'},
+			{value: 'toyindex', label: '玩具集'},
+		]
+		const typeOptions = [
+			{value: 'banner', label: '发现页面Banner'},
+			{value: 'toy', label: '玩具商品页面Banner'},
+			{value: 'home', label: '首页推荐'},
+			{value: 'theme', label: '主题'}
+		];
+		return (
 			<div className="portlet bordered light">
 				<div className="portlet-title">
 					<div className="caption">
@@ -113,12 +112,12 @@ export default class extends Component {
 					<Form horizontal  onSubmit={(e) => e.preventDefault()}>
 						<FormGroup>
 							<Col className="control-label" sm={2}>上传封面</Col>
-							<Col sm={3}>
-								<Dropzone onDrop={this.onDropImage} style={{textAlign:'center',width:'100%',height:100, borderWidth: 2, borderColor: '#666', borderStyle: 'dashed'}}>
+							<Col xs={6} sm={3}>
+								<Dropzone accept="image/jpeg, image/png" onDrop={this.onDropImage} className="play-dropzone-style">
 									<div>将图片拖入此区域</div>
 								</Dropzone>
 							</Col>
-							<Col sm={3}>
+							<Col xs={6} sm={3}>
 								{
 									this.state.image !== '' ?
 									<img style={{height:100,width:'auto'}} src={CDN.show(this.state.image)} />
@@ -228,7 +227,6 @@ export default class extends Component {
 					</div>
 				</div>
 			</div>
-		</div>
-    )
-  }
+		)
+  	}
 }

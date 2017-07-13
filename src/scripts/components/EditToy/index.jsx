@@ -238,10 +238,14 @@ export default class EditToy extends Component {
 	}
 	render() {
 		return(
-			<div className="content">
-        	  <div className="box box-solid">
-          		<div className="box-body">
-	     			<Row>
+			<div className="portlet bordered light">
+				<div className="portlet-title">
+					<div className="caption">
+						<span className="caption-subject font-blue-sharp bold uppercase">玩具编辑器</span>
+					</div>
+				</div>
+				<div className="portlet-body py-5">
+					<Row>
 	     			  	<Dropzone onDrop={this.onDropCover} className="col-sm-3 edit-toy-cover">
 		                	<img className="img-responsive" src={this.state.cover?CDN.show(this.state.cover):''}/>
 		                	<div className="edit-toy-cover-text">
@@ -309,7 +313,7 @@ export default class EditToy extends Component {
 			          		</Col>
 						</Col>
 	      			</Row>
-      			  	<legend>其他信息</legend>
+					<legend>其他信息</legend>
       		  		{
       		  			this.state.otherInfo.map((info,i) => {
       		  				return (
@@ -339,35 +343,39 @@ export default class EditToy extends Component {
   		  				</Col>
 	                </Row>
       			  	<legend>官方图片</legend>
-      			  	<div>
-              		<Dropzone onDrop={this.onDropOfficialImage}  className="col-sm-2 edit-toy-image-box" style={{height:100, borderWidth: 2, borderColor: '#666', borderStyle: 'dashed'}}>
-                		<p>将图片拖入该区域</p>
-                	</Dropzone>
-                	{
-                		this.state.images.map((img,index) => {
-		                    return (
-		                      <div className="pull-left edit-toy-image-box" key={'img_'+img}>
-		                        <img className="img-responsive" onClick={() => this.openModal(img)} src={img?CDN.show(img):''}/>
-		                        <span className="fa fa-close delete" onClick={() => this.removeImg(index)}></span>
-		                        <span className="fa fa-angle-left left" onClick={() => this.upImg(index)}></span>
-		                        <span className="fa fa-angle-right right" onClick={() => this.downImg(index)}></span>
-		                      </div>
-		                    )
-		                })
-                	}
-            		</div>
-              	<legend style={{paddingTop:'15px'}}></legend>
-                <button className="btn btn-primary col-xs-offset-3" onClick={this.submit}>Submit</button>
-                {
-                	<Modal show={this.state.showModal} onHide={this.closeModal}>
-		                <Modal.Body>
-		               		<img className="image-modal" src={this.state.showImage}/>
-		                </Modal.Body>
-		            </Modal>
-                }
-          		</div>
-          	  </div>
-          	</div>
+					<Row>
+						<Col xs={3} sm={2}>
+							<Dropzone accept="image/jpeg, image/png" onDrop={this.onDropOfficialImage} className="play-dropzone-style">
+								<div>将图片拖入此区域</div>
+							</Dropzone>
+						</Col>
+						<Col xs={12} sm={10}>
+							{
+								this.state.images.map((img,index) => {
+									return (
+									<div className="pull-left edit-toy-image-box" key={'img_'+img}>
+										<img className="img-responsive" onClick={() => this.openModal(img)} src={img?CDN.show(img):''}/>
+										<span className="fa fa-close delete" onClick={() => this.removeImg(index)}></span>
+										<span className="fa fa-angle-left left" onClick={() => this.upImg(index)}></span>
+										<span className="fa fa-angle-right right" onClick={() => this.downImg(index)}></span>
+									</div>
+									)
+								})
+							}
+						</Col>
+					</Row>
+					<div className="portlet-body py-5" style={{borderTop:'1px solid #eef1f5'}}>
+						<Col sm={2} smOffset={2}>
+							<button className="btn btn-outline green" type="button" onClick={this.submit}>Submit</button>
+						</Col>
+					</div>
+				</div>
+				<Modal show={this.state.showModal} onHide={this.closeModal}>
+					<Modal.Body>
+						<img className="image-modal" src={this.state.showImage}/>
+					</Modal.Body>
+				</Modal>
+			</div>
 		)
 	}
 }

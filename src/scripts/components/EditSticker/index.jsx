@@ -51,55 +51,57 @@ export default class extends Component{
   }
     render() {
         return(
-          <div className="content">
-            <div className="box box-solid">
-              <div className="box-body">
-                <Form className="pl-form" horizontal>
-                    <FormGroup>
-                      <Col className="control-label" sm={3}><strong>ID</strong></Col>
-                      <Col sm={9}>
-                        <FormControl type="text" value={this.state.id} disabled/>
-                      </Col>
-                    </FormGroup>
-                    <FormGroup>
-                      <Col className="control-label" sm={3}><strong>话题</strong></Col>
-                      <Col sm={9}>
-                        <FormControl onChange={this.changeSubject} type="text" value={this.state.subject} placeholder="Input the subject" />
-                      </Col>
-                    </FormGroup>
-                    <FormGroup>
-                      <Col className="control-label" sm={3}><strong>集合ID</strong></Col>
-                      <Col sm={9}>
-                        <FormControl type="text" value={this.state.setId} disabled/>
-                      </Col>
-                    </FormGroup>
-                    <FormGroup>
-                      <Col className="control-label" sm={3}><strong>图片</strong></Col>
-                      <Col sm={9}>
-                        <FormControl type="text" value={this.state.image} disabled/>
-                      </Col>
-                    </FormGroup>
-                    <Row>
-                      <Dropzone onDrop={this.onDropImage} className="col-sm-offset-3 col-sm-2" style={{width:150, height:100, borderWidth: 2, borderColor: '#666', borderStyle: 'dashed'}}>
-                        <div>将图片拖入该区域</div>
-                      </Dropzone>
-                      <Col sm={3}>
-                        <img className="img-responsive" style={{maxHeight:'100px'}} src={this.state.image? CDN.show(this.state.image):''}/>
-                      </Col>
-                    </Row>
-                    <br/>
-                    <FormGroup>
-                      <Col smOffset={3} sm={9}>
-                        <div onClick={this.submit} className="btn btn-primary">
-                          Submit
-                        </div>
-                      </Col>
-                    </FormGroup>
-                </Form>
-              </div>
-            </div>
-          </div>
-
+			<div className="portlet bordered light">
+				<div className="portlet-title">
+					<div className="caption">
+						<span className="caption-subject font-blue-sharp bold uppercase">贴纸编辑器</span>
+					</div>
+				</div>
+				<div className="portlet-body py-5">
+					<Form horizontal  onSubmit={(e) => e.preventDefault()}>
+						<FormGroup>
+							<Col className="control-label" sm={2}>ID</Col>
+							<Col sm={9}>
+								<FormControl type="text" value={this.state.id} disabled/>
+							</Col>
+						</FormGroup>
+						<FormGroup>
+							<Col className="control-label" sm={2}>话题</Col>
+							<Col sm={9}>
+								<FormControl onChange={this.changeSubject} type="text" value={this.state.subject} placeholder="Input the subject" />
+							</Col>
+						</FormGroup>
+						<FormGroup>
+							<Col className="control-label" sm={2}>集合ID</Col>
+							<Col sm={9}>
+								<FormControl type="text" value={this.state.setId} disabled/>
+							</Col>
+						</FormGroup>
+						<FormGroup>
+							<Col className="control-label" sm={2}>图片</Col>
+							<Col sm={9}>
+								<FormControl type="text" value={this.state.image} disabled/>
+							</Col>
+						</FormGroup>
+						<FormGroup>
+							<Col className="control-label" sm={2}>上传图片</Col>
+							<Col xs={6} sm={3}>
+								<Dropzone onDrop={this.onDropImage} className="play-dropzone-style">
+									<div>将图片拖入该区域</div>
+								</Dropzone>
+							</Col>
+							<Col xs={6} sm={3}>
+								<img className="img-responsive" style={{maxHeight:'100px'}} src={this.state.image? CDN.show(this.state.image):''}/>
+							</Col>
+						</FormGroup>
+					</Form>
+					<div className="portlet-body py-5" style={{borderTop:'1px solid #eef1f5'}}>
+						<Col sm={2} smOffset={2}>
+							<button className="btn btn-outline green" type="button" onClick={this.submit}>Submit</button>
+						</Col>
+					</div>
+				</div>
+			</div>
         )
     }
 }

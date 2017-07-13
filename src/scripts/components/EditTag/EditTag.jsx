@@ -196,146 +196,149 @@ export default class EditTag extends Component{
     render() {
         let cls = _.filter(this.props.classifications,c => this.state.cls.indexOf(c.id) === -1 )
         return(
-            <div className="content">
-                <div className="box box-solid">
-                  <div className="box-body pad">
-                    <Form className="pl-form" horizontal>
+            <div className="portlet bordered light">
+				<div className="portlet-title">
+					<div className="caption">
+						<span className="caption-subject font-blue-sharp bold uppercase">标签编辑器</span>
+					</div>
+				</div>
+				<div className="portlet-body py-5">
+                    <Form horizontal  onSubmit={(e) => e.preventDefault()}>
                         <FormGroup>
-                          <Col className="control-label" sm={3}><strong>编辑</strong></Col>
-                          <Col sm={9}>
-                            <FormControl.Static>{this.state.text}</FormControl.Static>
-                          </Col>
+                            <Col className="control-label" sm={2}>编辑</Col>
+                            <Col sm={9}>
+                                <FormControl.Static>{this.state.text}</FormControl.Static>
+                            </Col>
                         </FormGroup>
                         <FormGroup>
-                          <Col className="control-label" sm={3}><strong>标签类别</strong></Col>
-                          <Col sm={7}>
-                            <select value={this.state.type} className="form-control" onChange={this.changeType}>
-                              <option value="">普通标签</option>
-                              <option value="company">品牌公司</option>
-                              <option value="character">动漫人物</option>
-                              <option value="series">玩具系列</option>
-                              <option value="person">真人</option>
-                              <option value="origin">原著</option>
-                              <option value="topic">话题</option>
-                              <option value="event">活动</option>
-                              <option value="media">媒体</option>
-                            </select>
-                          </Col>
-                          <Col sm={2}>
-                            <span onClick={() => this.setState({openTag:true})} className="btn btn-sm"><i className="fa fa-th-large"></i></span>
-                          </Col>
+                            <Col className="control-label" sm={2}>标签类别</Col>
+                            <Col sm={7}>
+                                <select value={this.state.type} className="form-control" onChange={this.changeType}>
+                                <option value="">普通标签</option>
+                                <option value="company">品牌公司</option>
+                                <option value="character">动漫人物</option>
+                                <option value="series">玩具系列</option>
+                                <option value="person">真人</option>
+                                <option value="origin">原著</option>
+                                <option value="topic">话题</option>
+                                <option value="event">活动</option>
+                                <option value="media">媒体</option>
+                                </select>
+                            </Col>
+                            <Col sm={2}>
+                                <span onClick={() => this.setState({openTag:true})} className="btn btn-sm"><i className="fa fa-th-large"></i></span>
+                            </Col>
                         </FormGroup>
                         <FormGroup>
-                          <Col className="control-label" sm={3}><strong>别名</strong></Col>
-                          <Col sm={9}>
-                            <TagsInput value={this.state.alias} onChange={(alias) => this.handleTagsChange(alias)} />
-                          </Col>
+                            <Col className="control-label" sm={2}>别名</Col>
+                            <Col sm={9}>
+                                <TagsInput value={this.state.alias} onChange={(alias) => this.handleTagsChange(alias)} />
+                            </Col>
+                            </FormGroup>
+                        <FormGroup>
+                            <Col className="control-label" sm={2}>详细描述</Col>
+                            <Col sm={9}>
+                                <textarea className="form-control" value={this.state.description} onChange={this.changeDescription}></textarea>
+                            </Col>
                         </FormGroup>
                         <FormGroup>
-                          <Col className="control-label" sm={3}><strong>详细描述</strong></Col>
-                          <Col sm={9}>
-                            <textarea className="form-control" value={this.state.description} onChange={this.changeDescription}></textarea>
-                          </Col>
-                        </FormGroup>
-                        <FormGroup>
-                          <Col className="control-label" sm={3}><strong>其他信息</strong></Col>
-                          <Col sm={9}>
-                            {
-                                this.state.otherInfo.map((info,i) => {
-                                    return (
-                                        <Row key={`otherInfo_${i}`} >
-                                            <Col  xs={3}>
-                                                <span>{info.key}</span>
-                                            </Col>
-                                            <Col xs={3} >
-                                                <span>{info.value}</span>
-                                            </Col>
-                                            <Col  xs={2} smOffset={1} xsOffset={1}>
-                                                <span onClick={() => this.removeOtherInfo(i)} className="fa fa-minus-circle"></span>
-                                            </Col>
-                                        </Row>
-                                    )
-                                })
-                            }
-                            <Row>
-                                <Col xs={3}>
-                                    <input  className="form-control" type="text" value={this.state.newKey} onKeyDown={this.stop} onChange={this.changeNewKey} placeholder="key"></input>
-                                </Col>
-                                <Col xs={3} >
-                                  <input  className="form-control"  type="text" value={this.state.newValue} onKeyDown={this.stop} onChange={this.changeNewValue} placeholder="value"></input>
-                                </Col>
-                                <Col  xs={2} smOffset={1} xsOffset={1}>
-                                  <button className="btn btn-primary" onClick={this.addOtherInfo}>添加</button>
-                                </Col>
-                            </Row>
-                          </Col>
-                        </FormGroup>
-                        <FormGroup>
-                          <Col className="control-label" sm={3}><strong>上传图片</strong></Col>
-                          <Col sm={3}>
-                            <Dropzone onDrop={this.onDropImage} style={{width:'100%',height:100, borderWidth: 2, borderColor: '#666', borderStyle: 'dashed'}}>
-                                <div>将图片拖入该区域</div>
-                            </Dropzone>
-                          </Col>
-                          <Col sm={3}>
-                            {
-                                this.state.image !== '' ?
-                                <img className="img-responsive cover-img" style={{height:100,width:'auto'}} src={CDN.show(this.state.image)} />
-                                :null
-                            }
-                          </Col>
-                        </FormGroup>
-                        <FormGroup>
-                          <Col className="control-label" sm={3}><strong>上传封面</strong></Col>
-                          <Col sm={3}>
-                            <Dropzone onDrop={this.onDropCover} style={{width:'100%',height:100, borderWidth: 2, borderColor: '#666', borderStyle: 'dashed'}}>
-                                <div>将图片拖入该区域</div>
-                            </Dropzone>
-                          </Col>
-                          <Col sm={3}>
-                            {
-                                this.state.cover !== '' ?
-                                <img className="img-responsive cover-img" style={{height:100,width:'auto'}} src={CDN.show(this.state.cover)} />
-                                :null
-                            }
-                          </Col>
-                        </FormGroup>
-                      <br/>
-                      <button className="btn btn-default col-sm-offset-3" onClick={this.submit}>Submit</button>
-                    </Form>
-                  </div>
-                </div>
-                <div>
-                    <Modal className='modal-container' animation={false} show={this.state.openTag} onHide={this.closeTag}>
-                       <Modal.Body>
-                            <strong>已选类别</strong>
-                            <div>
+                            <Col className="control-label" sm={2}>其他信息</Col>
+                            <Col sm={9}>
                                 {
-                                    this.state.cls.map(c =>{
+                                    this.state.otherInfo.map((info,i) => {
                                         return (
-                                            <span key={'t_c_m_'+c}
-                                            onClick={ () => this.removeTagClassification( this.state.id, c) }
-                                            className="label label-warning label-margin" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>);
-                                    })
-                                }
-                            </div>
-                            <strong>全部类别</strong>
-                            <div>
-                                {
-                                    cls.map((c,key) => {
-                                        return (
-                                            <span key={'c_m_'+key}
-                                            className='label label-info label-margin'
-                                            bsStyle='success'
-                                            onClick={() => this.setTagClassification(this.state.id, c.id)}>{c.name}</span>
+                                            <Row key={`otherInfo_${i}`} >
+                                                <Col  xs={3}>
+                                                    <span>{info.key}</span>
+                                                </Col>
+                                                <Col xs={3} >
+                                                    <span>{info.value}</span>
+                                                </Col>
+                                                <Col  xs={2} smOffset={1} xsOffset={1}>
+                                                    <span onClick={() => this.removeOtherInfo(i)} className="fa fa-minus-circle"></span>
+                                                </Col>
+                                            </Row>
                                         )
                                     })
                                 }
-                            </div>
-                        </Modal.Body>
-                    </Modal>
-                </div>
-            </div>
+                                <Row>
+                                    <Col xs={3}>
+                                        <input  className="form-control" type="text" value={this.state.newKey} onKeyDown={this.stop} onChange={this.changeNewKey} placeholder="key"></input>
+                                    </Col>
+                                    <Col xs={3} >
+                                        <input  className="form-control"  type="text" value={this.state.newValue} onKeyDown={this.stop} onChange={this.changeNewValue} placeholder="value"></input>
+                                    </Col>
+                                    <Col  xs={2} smOffset={1} xsOffset={1}>
+                                        <button className="btn btn-outline blue" onClick={this.addOtherInfo}>添加</button>
+                                    </Col>
+                                </Row>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup>
+							<Col className="control-label" sm={2}>上传图片</Col>
+							<Col xs={6} sm={3}>
+								<Dropzone accept="image/jpeg, image/png" onDrop={this.onDropImage} className="play-dropzone-style">
+									<div>将图片拖入此区域</div>
+								</Dropzone>
+							</Col>
+							<Col xs={6} sm={3}>
+								{
+                                    this.state.image !== '' ?
+                                    <img className="img-responsive cover-img" style={{height:100,width:'auto'}} src={CDN.show(this.state.image)} />
+                                    :null
+                                }
+							</Col>
+						</FormGroup>
+                        <FormGroup>
+							<Col className="control-label" sm={2}>上传封面</Col>
+							<Col xs={6} sm={3}>
+								<Dropzone accept="image/jpeg, image/png" onDrop={this.onDropCover} className="play-dropzone-style">
+									<div>将图片拖入此区域</div>
+								</Dropzone>
+							</Col>
+							<Col xs={6} sm={3}>
+								{
+                                    this.state.cover !== '' ?
+                                    <img className="img-responsive cover-img" style={{height:100,width:'auto'}} src={CDN.show(this.state.cover)} />
+                                    :null
+                                }
+							</Col>
+						</FormGroup>
+                    </Form>
+                    <div className="portlet-body py-5" style={{borderTop:'1px solid #eef1f5'}}>
+						<Col sm={2} smOffset={2}>
+							<button className="btn btn-outline green" type="button" onClick={this.submit}>Submit</button>
+						</Col>
+					</div>
+				</div>
+                <Modal className='modal-container' animation={false} show={this.state.openTag} onHide={this.closeTag}>
+                    <Modal.Body>
+                        <strong>已选类别</strong>
+                        <div>
+                            {
+                                this.state.cls.map(c =>{
+                                    return (
+                                        <span key={'t_c_m_'+c}
+                                        onClick={ () => this.removeTagClassification( this.state.id, c) }
+                                        className="label label-warning label-margin" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>);
+                                })
+                            }
+                        </div>
+                        <strong>全部类别</strong>
+                        <div>
+                            {
+                                cls.map((c,key) => {
+                                    return (
+                                        <span key={'c_m_'+key}
+                                        className='label label-info label-margin'
+                                        onClick={() => this.setTagClassification(this.state.id, c.id)}>{c.name}</span>
+                                    )
+                                })
+                            }
+                        </div>
+                    </Modal.Body>
+                </Modal>
+			</div>
         )
     }
 }

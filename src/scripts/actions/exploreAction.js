@@ -12,8 +12,9 @@ function receiveExplore(res) {
     return {
         type: EXPLORE_RECEIVE_DATA,
         banners:res.banners,
-        topics:res.topics,
-        toys:res.toys
+        themes:res.themes,
+        toys:res.toys,
+        drafts:res.drafts,
     }
 }
         
@@ -46,7 +47,7 @@ function _deleteBanner(id,target) {
 export function fetchExplore() {
     return(dispatch) => {
         return Request
-            .get(`/api/banners`)
+            .get(`/api/recommends`)
             .end((err,res) => {
                 dispatch(receiveExplore(res.body))
             })

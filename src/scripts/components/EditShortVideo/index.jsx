@@ -150,114 +150,118 @@ export default class extends Component {
         })
       })
   }
-  render() {
-    let dropZoneStyles = {
-      width:'100%',
-      height:200,
-      border:'2px dashed rgb(102, 102, 102)',
-      borderRadius:5
-    };
-    return (
-      <div className="content">
-        <Row>
-          <Col sm={3}>
-            <Dropzone onDrop={this.onDrop} multiple={false} style={dropZoneStyles}>
-              <div>将视频文件拖入该区域</div>
-            </Dropzone>
-            <video ref="vtag" style={{marginTop:15,width:'100%'}} src={this.state.videoUrl} controls></video>
-          </Col>
-          <Col sm={9}>
-            <Form horizontal onSubmit={(e) => e.preventDefault()}>
-              <FormGroup>
-                <Col className="control-label sm-2-label" sm={3}>USERID</Col>
-                <Col sm={9}>
-                  <FormControl type="text" value={this.state.userId} onChange={(e) => this.setState({userId:e.target.value})} />
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col className="control-label sm-2-label" sm={3}>UPLOADKEY</Col>
-                <Col sm={9}>
-                  <FormControl type="text" value={this.state.uploadKey} readOnly/>
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col className="control-label sm-2-label" sm={3}>TITLE</Col>
-                <Col sm={9}>
-                  <FormControl type="text" value={this.state.title} onChange={(e) => this.setState({title:e.target.value})}/>
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col className="control-label sm-2-label" sm={3}>CAPTION</Col>
-                <Col sm={9}>
-                  <textarea style={{width:'100%'}} onChange={(e) => this.setState({caption:e.target.value})} value={this.state.caption} />
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col className="control-label sm-2-label" sm={3}>PROGRESS</Col>
-                <Col sm={9} style={{padding:7}}>
-                  <div className="progress" >
-                    <div className="progress-bar" style={{width:`${this.state.progress}%`}}>
-                      {this.state.progress}
-                    </div>
-                  </div>
-                </Col>
-              </FormGroup>
-              {
-                this.state.showPoster ?
-                <FormGroup>
-                  <Col className="control-label sm-2-label" sm={3}>POSTER</Col>
-                  <Col sm={3}>
-                    <img style={{width:'100%'}} src={CDN.show(this.state.thumbnail)}/>
-                  </Col>
-                  <Col sm={6}>
-                    <button onClick={() => this.setState({modalPoster:true})} className="btn btn-success">更换封面</button> <br/><br/>
-                    <Dropzone style={{display:'inline-block',border:'none'}} accept="image/*" onDrop={this.uploadCover}>
-                      <button className="btn btn-info">上传封面</button>
-                    </Dropzone>
-                  </Col>
-                </FormGroup>
-                :null
-              }
-              <Col sm={9} smOffset={3}>
-                <button className="btn green btn-outline" onClick={this.onSubmit}>提交</button>
-              </Col>
-            </Form>
-          </Col>
-        </Row>
-        {
-          this.state.modalPoster ?
-          <div className="modal" style={{display:'block'}} tabIndex="-1" onClick={() => this.setState({modalPoster:false})}>
-            <div className="modal-dialog" onClick={e => e.stopPropagation()}>
-              <div className="modal-content">
-                <div className="modal-body row">
-                  {
-                    [1,2,3,5,10,15,20,25,30].map((item,i) => {
-                      if(item >= this.state.duration){
-                        return null
-                      }
-                      return(
-                        <Col key={`poster_${i}`} sm={2} style={{padding:10}}>
-                          <img onClick={() => this.setState({modalPoster:false,thumbnail:`http://img.playalot.cn/${this.state.uploadKey}?vframe/jpg/offset/${item}`})} style={{width:'100%'}} src={`http://img.playalot.cn/${this.state.uploadKey}?vframe/jpg/offset/${item}`}/>
-                        </Col>
-                      )
-                    })
-                  }
-                  {
-                    this.state.posters.map((poster,i) => {
-                      return (
-                        <Col key={`poster_u_${i}`} sm={2} style={{padding:10}}>
-                          <img onClick={() => this.setState({modalPoster:false,thumbnail:CDN.show(poster)})} style={{width:'100%',height:80,objectFit:'cover'}} src={CDN.show(poster)}/>
-                        </Col>
-                      )
-                    })
-                  }
-                </div>
-              </div>
-            </div>
-          </div>
-          :null
-        }
-      </div>
-    );
-  }
+  	render() {
+		let dropZoneStyles = {
+			width:'100%',
+			height:200,
+			border:'2px dashed rgb(102, 102, 102)',
+			borderRadius:5
+		}
+		return (
+			<div className="portlet bordered light">
+				<div className="portlet-title">
+					<div className="caption">
+						<span className="caption-subject font-blue-sharp bold uppercase">视频编辑器</span>
+					</div>
+				</div>
+				<div className="portlet-body py-5">
+					<Form horizontal onSubmit={(e) => e.preventDefault()}>
+						<FormGroup>
+							<Col className="control-label" sm={2}>上传视频</Col>
+							<Col xs={6} sm={3}>
+								<Dropzone onDrop={this.onDrop} multiple={false} className="play-dropzone-style">
+									<div>将视频文件拖入该区域</div>
+								</Dropzone>
+							</Col>
+							<Col xs={6} sm={3}>
+								<video ref="vtag" style={{height:100,width:'auto'}} src={this.state.videoUrl} controls></video>
+							</Col>
+						</FormGroup>
+						<FormGroup>
+							<Col className="control-label" sm={2}>用户ID</Col>
+							<Col sm={9}>
+								<FormControl type="text" value={this.state.userId} onChange={(e) => this.setState({userId:e.target.value})} />
+							</Col>
+						</FormGroup>
+						<FormGroup>
+							<Col className="control-label" sm={2}>标题</Col>
+							<Col sm={9}>
+								<FormControl type="text" value={this.state.title} onChange={(e) => this.setState({title:e.target.value})}/>
+							</Col>
+						</FormGroup>
+						<FormGroup>
+							<Col className="control-label" sm={2}>描述</Col>
+							<Col sm={9}>
+								<textarea style={{width:'100%'}} onChange={(e) => this.setState({caption:e.target.value})} value={this.state.caption} />
+							</Col>
+						</FormGroup>
+						<FormGroup>
+							<Col className="control-label" sm={2}>进度</Col>
+							<Col sm={9}>
+								<div className="progress progress-striped active mt-3">
+									<div className="progress-bar progress-bar-info" role="progressbar" style={{width:`${this.state.progress}%`}}>
+										{this.state.progress}
+									</div>
+								</div>
+							</Col>
+						</FormGroup>
+						{
+							this.state.showPoster ?
+							<FormGroup>
+								<Col className="control-label" sm={2}>封面</Col>
+								<Col xs={2}>
+									<img style={{width:'100%'}} src={CDN.show(this.state.thumbnail)}/>
+								</Col>
+								<Col xs={8}>
+									<button onClick={() => this.setState({modalPoster:true})} className="btn btn-outline purple">更换封面</button> <br/><br/>
+									<Dropzone style={{display:'inline-block',border:'none'}} accept="image/*" onDrop={this.uploadCover}>
+										<button className="btn btn-outline red">上传封面</button>
+									</Dropzone>
+								</Col>
+							</FormGroup>
+							:null
+						}
+					</Form>
+					<div className="portlet-body py-5" style={{borderTop:'1px solid #eef1f5'}}>
+						<Col sm={2} smOffset={2}>
+							<button className="btn green btn-outline" onClick={this.onSubmit}>提交</button>
+						</Col>
+					</div>
+				</div>
+				{
+				this.state.modalPoster ?
+					<div className="modal" style={{display:'block'}} tabIndex="-1" onClick={() => this.setState({modalPoster:false})}>
+						<div className="modal-dialog" onClick={e => e.stopPropagation()}>
+						<div className="modal-content">
+							<div className="modal-body row">
+							{
+								[1,2,3,5,10,15,20,25,30].map((item,i) => {
+								if(item >= this.state.duration){
+									return null
+								}
+								return(
+									<Col key={`poster_${i}`} sm={2} style={{padding:10}}>
+									<img onClick={() => this.setState({modalPoster:false,thumbnail:`http://img.playalot.cn/${this.state.uploadKey}?vframe/jpg/offset/${item}`})} style={{width:'100%'}} src={`http://img.playalot.cn/${this.state.uploadKey}?vframe/jpg/offset/${item}`}/>
+									</Col>
+								)
+								})
+							}
+							{
+								this.state.posters.map((poster,i) => {
+								return (
+									<Col key={`poster_u_${i}`} sm={2} style={{padding:10}}>
+									<img onClick={() => this.setState({modalPoster:false,thumbnail:CDN.show(poster)})} style={{width:'100%',height:80,objectFit:'cover'}} src={CDN.show(poster)}/>
+									</Col>
+								)
+								})
+							}
+							</div>
+						</div>
+						</div>
+					</div>
+					:null
+				}
+			</div>
+		)
+  	}
 }

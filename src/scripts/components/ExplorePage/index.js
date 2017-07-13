@@ -15,10 +15,11 @@ const mapActionCreators = {
 }
 
 const mapStateToProps = (state) => {
-    const { banners, topics, toys, loaded }  = state.explore.toJS()
+    const { banners, themes,drafts, toys, loaded }  = state.explore.toJS()
     return {
         banners,
-        topics,
+        themes,
+        drafts,
         toys,
         loaded,
     }

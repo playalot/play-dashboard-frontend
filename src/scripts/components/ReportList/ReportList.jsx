@@ -46,7 +46,7 @@ export default class ReportList extends Component{
 						<tbody>
 							{
 								this.props.reports.map((report) => {
-									let invisibleClass = report.target && report.target.isBlk === true ? 'btn bg-orange btn-sm' : 'btn btn-sm'
+									let invisibleClass = report.target && report.target.isBlk === true ? 'btn yellow-casablanca btn-sm' : 'btn btn-sm'
 									return(
 										<tr key={`report_${report.id}`}>
 											<td>

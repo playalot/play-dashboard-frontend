@@ -81,105 +81,111 @@ export default class EditSku extends Component {
     }
     render() {
         return(
-          <div className="content">
-            <Form horizontal>
-              <FormGroup>
-                <Col sm={2} className="sm-2-label">
-                  库存数量
-                </Col>
-                <Col sm={10}>
-                  <FormControl value={this.state.quantity} type="number" onChange={(e) => this.setState({quantity:e.target.value})}/>
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col sm={2} className="sm-2-label">
-                  购买类型
-                </Col>
-                <Col sm={10} style={{padding:'6px 15px'}}>
-                  <label>
-                    <input type="radio" name="type" value="inStock" onChange={(e) => this.setState({type:e.target.value})} checked={this.state.type==='inStock'}/>现货
-                  </label>&nbsp;&nbsp;
-                  <label>
-                    <input type="radio" name="type" value="preOrder" onChange={(e) => this.setState({type:e.target.value})} checked={this.state.type==='preOrder'}/>预定
-                  </label>
-                </Col>
-              </FormGroup>
-              {
-                this.state.type === 'preOrder' ?
-                <FormGroup>
-                  <Col sm={2} className="sm-2-label">
-                    定金
-                  </Col>
-                  <Col sm={10}>
-                    <FormControl value={this.state.prepay} type="number" onChange={(e) => this.setState({prepay:e.target.value})}/>
-                  </Col>
-                </FormGroup>
-                :null
-              }
-              {
-                this.state.type === 'preOrder' ?
-                <FormGroup>
-                  <Col sm={2} className="sm-2-label">
-                    截止时间
-                  </Col>
-                  <Col sm={10}  style={{padding:'6px 15px'}}>
-                      <DatePicker
-                        selected={this.state.orderClose}
-                        onChange={this.changeOrderClose}
-                        // minDate={Moment()}
-                        dateFormat="YYYY/MM/DD"
-                     />
-                  </Col>
-                </FormGroup>
-                :null
-              }
-              <FormGroup>
-                <Col sm={2} className="sm-2-label">
-                  售价
-                </Col>
-                <Col sm={10}>
-                  <FormControl value={this.state.price} type="number" onChange={(e) => this.setState({price:e.target.value})}/>
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col sm={2} className="sm-2-label">
-                  进货成本价
-                </Col>
-                <Col sm={10}>
-                  <FormControl value={this.state.costPrice} type="number" onChange={(e) => this.setState({costPrice:e.target.value})}/>
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col sm={2} className="sm-2-label">
-                  运费
-                </Col>
-                <Col sm={10}>
-                  <FormControl value={this.state.freight} type="number" onChange={(e) => this.setState({freight:e.target.value})}/>
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col sm={2} className="sm-2-label">
-                  版本
-                </Col>
-                <Col sm={10}>
-                  <FormControl value={this.state.version} type="text" onChange={(e) => this.setState({version:e.target.value})}/>
-                </Col>
-              </FormGroup>
-              <FormGroup>
-                <Col sm={2} className="sm-2-label">
-                  淘宝链接
-                </Col>
-                <Col sm={10}>
-                  <FormControl value={this.state.tbUrl} type="text" onChange={(e) => this.setState({tbUrl:e.target.value})}/>
-                </Col>
-              </FormGroup>
-              <Row>
-                <Col sm={10} smOffset={2}>
-                  <Button bsStyle="primary" onClick={this.save}>保存</Button>
-                </Col>
-              </Row>
-            </Form>
-          </div>
+			<div className="portlet bordered light">
+				<div className="portlet-title">
+					<div className="caption">
+						<span className="caption-subject font-blue-sharp bold uppercase">商品编辑器</span>
+					</div>
+				</div>
+				<div className="portlet-body py-5">
+					<Form horizontal  onSubmit={(e) => e.preventDefault()}>
+						<FormGroup>
+							<Col sm={2} className="control-label">
+								库存数量
+							</Col>
+							<Col sm={10}>
+								<FormControl value={this.state.quantity} type="number" onChange={(e) => this.setState({quantity:e.target.value})}/>
+							</Col>
+						</FormGroup>
+						<FormGroup>
+							<Col sm={2} className="control-label">
+								购买类型
+							</Col>
+							<Col sm={10} className="mt-2">
+								<label>
+									<input type="radio" name="type" value="inStock" onChange={(e) => this.setState({type:e.target.value})} checked={this.state.type==='inStock'}/>现货
+								</label>&nbsp;&nbsp;
+								<label>
+									<input type="radio" name="type" value="preOrder" onChange={(e) => this.setState({type:e.target.value})} checked={this.state.type==='preOrder'}/>预定
+								</label>
+							</Col>
+						</FormGroup>
+						{
+							this.state.type === 'preOrder' ?
+							<FormGroup>
+								<Col sm={2} className="control-label">
+									定金
+								</Col>
+								<Col sm={10}>
+									<FormControl value={this.state.prepay} type="number" onChange={(e) => this.setState({prepay:e.target.value})}/>
+								</Col>
+							</FormGroup>
+							:null
+						}
+						{
+							this.state.type === 'preOrder' ?
+							<FormGroup>
+								<Col sm={2} className="control-label">
+									截止时间
+								</Col>
+								<Col sm={10} className="mt-2">
+									<DatePicker
+										selected={this.state.orderClose}
+										onChange={this.changeOrderClose}
+										dateFormat="YYYY/MM/DD"
+									/>
+								</Col>
+							</FormGroup>
+							:null
+						}
+						<FormGroup>
+							<Col sm={2} className="control-label">
+								售价
+							</Col>
+							<Col sm={10}>
+								<FormControl value={this.state.price} type="number" onChange={(e) => this.setState({price:e.target.value})}/>
+							</Col>
+						</FormGroup>
+						<FormGroup>
+							<Col sm={2} className="control-label">
+								进货成本价
+							</Col>
+							<Col sm={10}>
+								<FormControl value={this.state.costPrice} type="number" onChange={(e) => this.setState({costPrice:e.target.value})}/>
+							</Col>
+						</FormGroup>
+						<FormGroup>
+							<Col sm={2} className="control-label">
+								运费
+							</Col>
+							<Col sm={10}>
+								<FormControl value={this.state.freight} type="number" onChange={(e) => this.setState({freight:e.target.value})}/>
+							</Col>
+						</FormGroup>
+						<FormGroup>
+							<Col sm={2} className="control-label">
+								版本
+							</Col>
+							<Col sm={10}>
+								<FormControl value={this.state.version} type="text" onChange={(e) => this.setState({version:e.target.value})}/>
+							</Col>
+						</FormGroup>
+						<FormGroup>
+							<Col sm={2} className="control-label">
+								淘宝链接
+							</Col>
+							<Col sm={10}>
+								<FormControl value={this.state.tbUrl} type="text" onChange={(e) => this.setState({tbUrl:e.target.value})}/>
+							</Col>
+						</FormGroup>
+					</Form>
+					<div className="portlet-body py-5" style={{borderTop:'1px solid #eef1f5'}}>
+						<Col sm={2} smOffset={2}>
+							<button className="btn btn-outline green" type="button" onClick={this.save}>保存</button>
+						</Col>
+					</div>
+				</div>
+			</div>
         )
     }
 }

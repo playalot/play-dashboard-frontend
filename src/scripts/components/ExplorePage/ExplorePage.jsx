@@ -23,17 +23,20 @@ export default class ExplorePage extends Component{
 						<div className="portlet light ">
 							<div className="portlet-title tabbable-line">
 								<div className="caption caption-md">
-									<span className="caption-subject font-blue-madison bold uppercase">Banner</span>
+									<span className="caption-subject font-blue-madison bold uppercase">推荐</span>
 								</div>
 								<ul className="nav nav-tabs">
 									<li className="active">
 										<a href="#explore_1" data-toggle="tab">发现页banner</a>
 									</li>
 									<li>
-										<a href="#explore_2" data-toggle="tab">首页主题</a>
+										<a href="#explore_2" data-toggle="tab">发现页主题</a>
 									</li>
 									<li>
 										<a href="#explore_3" data-toggle="tab">玩具页Banner</a>
+									</li>
+									<li>
+										<a href="#explore_4" data-toggle="tab">草稿</a>
 									</li>
 								</ul>
 							</div>
@@ -75,11 +78,11 @@ export default class ExplorePage extends Component{
 									<div className="tab-pane" id="explore_2">
 										<button onClick={this.addTopic} className="btn green btn-outline">创建新主题</button> <br/><br/>
 										{
-											this.props.topics ?
+											this.props.themes ?
 											<table className="table table-striped">
 												<tbody>
 													{
-														this.props.topics.map((topic,index) =>{
+														this.props.themes.map((topic,index) =>{
 															return(
 																<tr key={'b_'+topic.id+index}>
 																	<td>
@@ -137,6 +140,9 @@ export default class ExplorePage extends Component{
 											</table>
 											:null
 										}
+									</div>
+									<div className="tab-pane" id="explore_4">
+										草稿
 									</div>
 								</div>
 							</div>

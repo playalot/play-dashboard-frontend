@@ -47,107 +47,114 @@ export default class Home extends Component {
         return (
             <div>
               <Row>
-                <Col xs={6} sm={4} lg={2}>
-                  <a className="dashboard-stat dashboard-stat-v2 blue" href="#">
-                    <div className="visual">
-                      <i className="fa fa-users"></i>
-                    </div>
-                    <div className="details">
-                        <div className="number">
-                          <span>{stats.users}</span>
+                <Col xs={6} sm={12} lg={6}>
+                  <Row>
+                    <Col xs={4} sm={6} lg={4}>
+                      <a className="dashboard-stat dashboard-stat-v2 blue" href="#">
+                        <div className="visual">
+                          <i className="fa fa-users"></i>
                         </div>
-                        <div className="desc">用户数</div>
-                    </div>
-                  </a>
-                </Col>
-                <Col xs={6} sm={4} lg={2}>
-                  <a className="dashboard-stat dashboard-stat-v2 green" href="#">
-                    <div className="visual">
-                      <i className="fa fa-rocket"></i>
-                    </div>
-                    <div className="details">
-                        <div className="number">
-                          <span>{stats.toys}</span>
+                        <div className="details">
+                            <div className="number">
+                              <span>{stats.users}</span>
+                            </div>
+                            <div className="desc">用户数</div>
                         </div>
-                        <div className="desc">玩具数</div>
-                    </div>
-                  </a>
-                </Col>
-                <Col xs={6} sm={4} lg={2}>
-                  <a className="dashboard-stat dashboard-stat-v2 yellow" href="#">
-                    <div className="visual">
-                      <i className="fa fa-tags"></i>
-                    </div>
-                    <div className="details">
-                        <div className="number">
-                          <span>{stats.tags}</span>
+                      </a>
+                    </Col>
+                    <Col xs={4} sm={6} lg={4}>
+                      <a className="dashboard-stat dashboard-stat-v2 green" href="#">
+                        <div className="visual">
+                          <i className="fa fa-rocket"></i>
                         </div>
-                        <div className="desc">标签数</div>
-                    </div>
-                  </a>
-                </Col>
-                <Col xs={6} sm={4} lg={2}>
-                  <a className="dashboard-stat dashboard-stat-v2 red" href="#">
-                    <div className="visual">
-                      <i className="fa fa-comments"></i>
-                    </div>
-                    <div className="details">
-                        <div className="number">
-                          <span>{stats.posts}</span>
+                        <div className="details">
+                            <div className="number">
+                              <span>{stats.toys}</span>
+                            </div>
+                            <div className="desc">玩具数</div>
                         </div>
-                        <div className="desc">照片总数</div>
-                    </div>
-                  </a>
-                </Col>
-                <Col xs={6} sm={4} lg={2}>
-                  <a className="dashboard-stat dashboard-stat-v2 purple" href="#">
-                    <div className="visual">
-                      <i className="fa fa-photo"></i>
-                    </div>
-                    <div className="details">
-                        <div className="number">
-                          <span>{stats.postYesterday}</span>
+                      </a>
+                    </Col>
+                    <Col xs={4} sm={6} lg={4}>
+                      <a className="dashboard-stat dashboard-stat-v2 yellow" href="#">
+                        <div className="visual">
+                          <i className="fa fa-tags"></i>
                         </div>
-                        <div className="desc">昨日发图</div>
-                    </div>
-                  </a>
-                </Col>
-                <Col xs={6} sm={4} lg={2}>
-                  <a className="dashboard-stat dashboard-stat-v2 blue-dark" href="#">
-                    <div className="visual">
-                      <i className="fa fa-photo"></i>
-                    </div>
-                    <div className="details">
-                        <div className="number">
-                          <span>{stats.postToday}</span>
+                        <div className="details">
+                            <div className="number">
+                              <span>{stats.tags}</span>
+                            </div>
+                            <div className="desc">标签数</div>
                         </div>
-                        <div className="desc">今日发图</div>
-                    </div>
-                  </a>
+                      </a>
+                    </Col>
+                    <Col xs={4} sm={6} lg={4}>
+                      <a className="dashboard-stat dashboard-stat-v2 red" href="#">
+                        <div className="visual">
+                          <i className="fa fa-comments"></i>
+                        </div>
+                        <div className="details">
+                            <div className="number">
+                              <span>{stats.posts}</span>
+                            </div>
+                            <div className="desc">照片总数</div>
+                        </div>
+                      </a>
+                    </Col>
+                    <Col xs={4} sm={6} lg={4}>
+                      <a className="dashboard-stat dashboard-stat-v2 purple" href="#">
+                        <div className="visual">
+                          <i className="fa fa-photo"></i>
+                        </div>
+                        <div className="details">
+                            <div className="number">
+                              <span>{stats.postYesterday}</span>
+                            </div>
+                            <div className="desc">昨日发图</div>
+                        </div>
+                      </a>
+                    </Col>
+                    <Col xs={4} sm={6} lg={4}>
+                      <a className="dashboard-stat dashboard-stat-v2 blue-dark" href="#">
+                        <div className="visual">
+                          <i className="fa fa-photo"></i>
+                        </div>
+                        <div className="details">
+                            <div className="number">
+                              <span>{stats.postToday}</span>
+                            </div>
+                            <div className="desc">今日发图</div>
+                        </div>
+                      </a>
+                    </Col>
+                  </Row>
                 </Col>
-
+                <Col xs={6} sm={12} lg={6}>
+                  <div className="portlet light bordered">
+                    <div className="portlet-body">
+                      <FlexibleXYPlot
+                        onMouseLeave={() => this.setState({crosshairValues:[]})}
+                        height={350}>
+                        <VerticalGridLines />
+                        <HorizontalGridLines />
+                        <VerticalBarSeries
+                          onNearestX={this.nearestXHandler}
+                          data={stats.last || []}
+                        />
+                        <VerticalBarSeries
+                          data={stats.aggregate || [] }
+                        />
+                        <Crosshair
+                          itemsFormat={this._formatCrosshairItems}
+                          titleFormat={this._formatCrosshairTitle}
+                          values={this.state.crosshairValues}/>
+                        <XAxis />
+                        <YAxis />
+                      </FlexibleXYPlot>
+                    </div>
+                  </div>
+                </Col>
               </Row>
-              <div style={{padding:20}}>
-                <FlexibleXYPlot
-                  onMouseLeave={() => this.setState({crosshairValues:[]})}
-                  height={350}>
-                  <VerticalGridLines />
-                  <HorizontalGridLines />
-                  <VerticalBarSeries
-                    onNearestX={this.nearestXHandler}
-                    data={stats.last || []}
-                  />
-                  <VerticalBarSeries
-                    data={stats.aggregate || [] }
-                  />
-                  <Crosshair
-                    itemsFormat={this._formatCrosshairItems}
-                    titleFormat={this._formatCrosshairTitle}
-                    values={this.state.crosshairValues}/>
-                  <XAxis />
-                  <YAxis />
-                </FlexibleXYPlot>
-              </div>
               <div className="row">
                 <div className="col-lg-6 col-xs-12 col-sm-12">
                   <div className="portlet light bordered">
@@ -196,7 +203,7 @@ export default class Home extends Component {
                                           </a>
                                           :null
                                         }
-                                        <a target="_blank" href={`http://www.playalot.cn/${activity.target.type}/${activity.target.id}`} className="home-activity-image">
+                                        <a target="_blank" href={`http://www.playalot.cn/${activity.target.type}/${activity.target.id}`} className="activity-image">
                                           {
                                             activity.images.map((img,i) => {
                                               return (
@@ -262,7 +269,7 @@ export default class Home extends Component {
                                           </a>
                                           :null
                                         }
-                                        <a target="_blank" href={`http://www.playalot.cn/${activity.target.type}/${activity.target.id}`} className="home-activity-image">
+                                        <a target="_blank" href={`http://www.playalot.cn/${activity.target.type}/${activity.target.id}`} className="activity-image">
                                           {
                                             activity.images.map((img,i) => {
                                               return (
@@ -281,72 +288,6 @@ export default class Home extends Component {
                     </div>
                   </div>
                 </div>
-              </div>
-              <div style={{textAlign:'center'}}>
-                <ReactPaginate
-                  previousLabel={<span>&laquo;</span>}
-                  nextLabel={<span>&raquo;</span>}
-                  breakLabel={<span>...</span>}
-                  breakClassName={"break-me"}
-                  pageCount={this.props.totalPages}
-                  marginPagesDisplayed={2}
-                  pageRangeDisplayed={5}
-                  onPageChange={obj => this.goPage(obj.selected)}
-                  containerClassName={"pagination"}
-                  subContainerClassName={"pages pagination"}
-                  forcePage={parsePage(this.props.location.search)}
-                  activeClassName={"active"} />
-              </div>
-              <div>
-                {
-                  this.props.activitiesO.map((activity,i) => {
-                    return (
-                      <div className="media home-activity" key={`act_${activity.id}`}>
-                        <div className="media-left">
-                          <Link to={`/user/${activity.user.id}`} className="thumbnail" style={{borderRadius:'50%',width:60}}>
-                            <img style={{borderRadius:'50%'}} src={activity.user.avatar} alt="avatar"/>
-                          </Link>
-                        </div>
-                        <div className="media-body">
-                          <h5 className="media-heading">{activity.user.nickname}&nbsp;&nbsp;
-                            <strong>
-                              {
-                                (() => {
-                                  switch (activity.type) {
-                                    case "ut":   return "更新了玩具";
-                                    case "st": return "评分了玩具";
-                                    case "pt":  return "发布了玩具";
-                                    case "cmt":  return "评论了图片";
-                                    case "pp":  return "发布了图片";
-                                    default:      return "";
-                                  }
-                                })()
-                              }
-                            </strong>
-                          </h5>
-                          <h5><small>{Moment.unix(activity.created /1000).fromNow()}</small></h5>
-                          <p>{activity.content || ''}</p>
-                          {
-                            activity.topic ?
-                            <a target="_blank" style={{marginBottom:5,display:'inline-block'}} href={`http://www.playalot.cn/${activity.topic.type}/${activity.topic.id}`}>
-                              {activity.topic.text}
-                            </a>
-                            :null
-                          }
-                          <a target="_blank" href={`http://www.playalot.cn/${activity.target.type}/${activity.target.id}`} className="home-activity-image">
-                            {
-                              activity.images.map((img,i) => {
-                                return (
-                                  <img key={`activity_${activity.id}_${i}`} src={img} alt=""/>
-                                )
-                              })
-                            }
-                          </a>
-                        </div>
-                      </div>
-                    )
-                  })
-                }
               </div>
             </div>
         )

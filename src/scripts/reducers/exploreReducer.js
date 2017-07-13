@@ -5,10 +5,11 @@ import {
 	EXPLORE_DELETE_BANNER, 
 	EXPLORE_ADD_TOPIC,
     EXPLORE_ADD_TOY,
+    EXPLORE_ADD_DRAFT,
 } from '../actions/exploreAction'
 
 export default (state = Immutable.fromJS({ 
-    banners:[],topics:[],toys:[],loaded:false,
+    banners:[],themes:[],toys:[],loaded:false,
 }),action) => {
     switch (action.type) {
         case EXPLORE_RECEIVE_DATA:
@@ -22,12 +23,16 @@ export default (state = Immutable.fromJS({
         		return banners.unshift(Immutable.fromJS(action.res))
         	})
         case EXPLORE_ADD_TOPIC:
-        	return state.updateIn(['topics'],(topics) => {
-        		return topics.unshift(Immutable.fromJS(action.res))
+        	return state.updateIn(['themes'],(themes) => {
+        		return themes.unshift(Immutable.fromJS(action.res))
         	})
         case EXPLORE_ADD_TOY:
             return state.updateIn(['toys'],(toys) => {
                 return toys.unshift(Immutable.fromJS(action.res))
+            })
+        case EXPLORE_ADD_DRAFT:
+            return state.updateIn(['drafts'],(drafts) => {
+                return drafts.unshift(Immutable.fromJS(action.res))
             })
         case EXPLORE_DELETE_BANNER:
             let target = `${action.target}s`

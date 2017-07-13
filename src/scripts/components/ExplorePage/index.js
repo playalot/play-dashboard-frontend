@@ -5,12 +5,14 @@ import {
     fetchExplore,
     addBanner, deleteBanner,
     addTopic, addToy,
+    addDraft
 } from '../../actions/exploreAction'
 const mapActionCreators = {
     fetchExplore,
     addBanner,
     addTopic, 
     addToy,
+    addDraft,
     deleteBanner,
 }
 

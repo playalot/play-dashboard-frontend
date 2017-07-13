@@ -11,6 +11,8 @@ export default class ExplorePage extends Component{
 	  	this.deleteTopic = (id) => confirm('删除这个主题?') && this.props.deleteBanner(id,'topic')
 	  	this.addToy = () => confirm('创建一个新玩具页banner？') && this.props.addToy()
 	  	this.deleteToy = (id) => confirm('删除这个玩具banner?') && this.props.deleteBanner(id,'toy')
+	  	this.addDraft = () => confirm('创建一个新草稿？') && this.props.addDraft()
+	  	this.deleteDraft = (id) => confirm('删除这个草稿?') && this.props.deleteBanner(id,'draft')
 	}
 	componentWillMount() {
 		!this.props.loaded && this.props.fetchExplore()
@@ -142,7 +144,37 @@ export default class ExplorePage extends Component{
 										}
 									</div>
 									<div className="tab-pane" id="explore_4">
-										草稿
+										<button onClick={this.addDraft} className="btn green btn-outline">创建新草稿</button> <br/><br/>
+										{
+											this.props.drafts ?
+											<table className="table table-striped">
+												<tbody>
+													{
+														this.props.drafts.map((draft,index) =>{
+															return(
+																<tr key={'b_'+draft.id+index}>
+																	<td>
+																		<img src={draft.image} style={{width:150}} />
+																	</td>
+																	<td>
+																		<span>{draft.title}</span>
+																	</td>
+																	<td style={{textAlign:'right'}}>
+																		<Link className="btn btn-circle btn-icon-only btn-default" to={`/recommend/${draft.id}`}>
+																			<i className="fa fa-edit"></i>
+																		</Link>
+																		<a className="btn btn-circle btn-icon-only btn-default" onClick={() => this.deleteDraft(draft.id)}>
+																			<i className="fa fa-trash"></i>
+																		</a>
+																	</td>
+																</tr>
+															)
+														})
+													}
+												</tbody>
+											</table>
+											:null
+										}
 									</div>
 								</div>
 							</div>

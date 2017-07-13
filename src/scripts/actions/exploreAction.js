@@ -7,6 +7,7 @@ export const EXPLORE_ADD_BANNER = 'EXPLORE_ADD_BANNER'
 export const EXPLORE_DELETE_BANNER = 'EXPLORE_DELETE_BANNER'
 export const EXPLORE_ADD_TOPIC = 'EXPLORE_ADD_TOPIC'
 export const EXPLORE_ADD_TOY = 'EXPLORE_ADD_TOY'
+export const EXPLORE_ADD_DRAFT = 'EXPLORE_ADD_DRAFT'
 
 function receiveExplore(res) {
     return {
@@ -33,6 +34,12 @@ function _addTopic(res) {
 function _addToy(res) {
     return {
         type: EXPLORE_ADD_TOY,
+        res
+    }
+}
+function _addDraft(res) {
+    return {
+        type: EXPLORE_ADD_DRAFT,
         res
     }
 }
@@ -91,6 +98,15 @@ export function addToy() {
             .post(`/api/recommend?place=toy`)
             .end((err,res) => {
                 dispatch(_addToy(res.body))
+            })
+    }
+}
+export function addDraft() {
+    return (dispatch) => {
+        return Request
+            .post(`/api/recommend?place=draft`)
+            .end((err,res) => {
+                dispatch(_addDraft(res.body))
             })
     }
 }

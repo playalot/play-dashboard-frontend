@@ -19,7 +19,7 @@ const config = {
 		]
     },
     output: {
-        path: path.resolve(__dirname, 'build'),
+        path: path.resolve(__dirname, 'dist'),
         filename: 'scripts/bundle.[hash].js'
     },
     resolve: {
@@ -72,16 +72,16 @@ const config = {
         }),
         new CopyWebpackPlugin([{
             from: path.resolve(__dirname, "src/index.html"),
-            to: path.resolve(__dirname, "build/index.html")
+            to: path.resolve(__dirname, "dist/index.html")
         }]),
         // ExtractVendor,
         // ExtractMain,
         function() {
             this.plugin('done', stats => {
-                fs.readFile('./build/index.html', (err, data) => {
+                fs.readFile('./dist/index.html', (err, data) => {
                     const $ = cheerio.load(data.toString());
                     $('#bundle').attr('src', '/scripts/bundle.'+stats.hash+'.js');
-                    fs.writeFile('./build/index.html', $.html(), err => {
+                    fs.writeFile('./dist/index.html', $.html(), err => {
                         !err && console.log('Set has success: '+stats.hash)
                     })
                 })

@@ -99,17 +99,18 @@ export default class extends Component {
         {value: 'banner', label: '发现页面Banner'},
         {value: 'toy', label: '玩具商品页面Banner'},
         {value: 'home', label: '首页推荐'},
-        {value: 'theme', label: '主题'}
+        {value: 'theme', label: '发现页主题推荐'},
+				{value: 'draft', label: '草稿'}
     ];
     return (
 		<div>
 			<div className="portlet bordered light">
 				<div className="portlet-title">
 					<div className="caption">
-						<span className="caption-subject font-blue-sharp bold uppercase">Recommend编辑器</span>
+						<span className="caption-subject font-blue-sharp bold uppercase">推荐编辑器</span>
 					</div>
 				</div>
-				<div className="portlet-body py-5">
+				<div className="portlet-body form py-5">
 					<Form horizontal  onSubmit={(e) => e.preventDefault()}>
 						<FormGroup>
 							<Col className="control-label" sm={2}>上传封面</Col>
@@ -127,13 +128,13 @@ export default class extends Component {
 							</Col>
 						</FormGroup>
 						<FormGroup>
-							<Col sm={2} className="control-label">标题</Col>
+							<Col sm={2} className="control-label">标题(必填)</Col>
 							<Col sm={8}>
 								<FormControl value={this.state.title} type="text" onChange={(e) => this.setState({title:e.target.value})}/>
 							</Col>
 						</FormGroup>
 						<FormGroup>
-							<Col sm={2} className="control-label">描述</Col>
+							<Col sm={2} className="control-label">描述(选填)</Col>
 							<Col sm={8}>
 								<FormControl value={this.state.description} type="text" onChange={(e) => this.setState({description:e.target.value})}/>
 							</Col>

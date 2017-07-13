@@ -205,6 +205,13 @@ export default class SkuList extends Component{
 								    <li><a onClick={() => this.onChangeFilter('塑唐玩具')}>塑唐玩具</a></li>
 								    <li><a onClick={() => this.onChangeFilter('六部口模型')}>六部口模型</a></li>
 								    <li><a onClick={() => this.onChangeFilter('HobbyMax官方店')}>HobbyMax官方店</a></li>
+								    
+									<li><a onClick={() => this.onChangeFilter('H教授的玩具讲座')}>H教授的玩具讲座</a></li>
+								    <li><a onClick={() => this.onChangeFilter('鹤屋通贩')}>鹤屋通贩</a></li>
+								    <li><a onClick={() => this.onChangeFilter('电玩男の里屋')}>电玩男の里屋</a></li>
+								    <li><a onClick={() => this.onChangeFilter('万事屋手办店')}>万事屋手办店</a></li>
+								    <li><a onClick={() => this.onChangeFilter('塑料魂')}>塑料魂</a></li>
+								    <li><a onClick={() => this.onChangeFilter('刺猬挺')}>刺猬挺</a></li>
 								  </ul>
 								</div>
 				            </div>
@@ -292,7 +299,7 @@ export default class SkuList extends Component{
 															<span className="label label-info p-2">{stock.tbUrl ? `淘宝`:``}现货</span>
 														}
 														{
-															stock.preOrder.orderClose < Date.now() ? 
+															stock.type === 'preOrder' && stock.preOrder.orderClose < Date.now() ? 
 															<span className="label label-danger p-2 mt-2">已结单</span>
 															:null
 														}

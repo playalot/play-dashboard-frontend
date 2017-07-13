@@ -1,7 +1,8 @@
 import Request from 'superagent'
 
 export const HOME_RECEIVE_STATS = 'HOME_RECEIVE_STATS'
-export const HOME_RECEIVE_ACTIVITIES = 'HOME_RECEIVE_ACTIVITIES'
+export const HOME_RECEIVE_ACTIVITIES_C = 'HOME_RECEIVE_ACTIVITIES_C'
+export const HOME_RECEIVE_ACTIVITIES_O = 'HOME_RECEIVE_ACTIVITIES_O'
 
 function receiveStats(res) {
     res.last.map((item,i) => {
@@ -18,9 +19,17 @@ function receiveStats(res) {
     }
 }
 
-function receiveActivities(res,totalPages,page) {
+function receiveActivitiesC(res,totalPages,page) {
     return {
-        type: HOME_RECEIVE_ACTIVITIES,
+        type: HOME_RECEIVE_ACTIVITIES_C,
+        res,
+        totalPages,
+        page
+    }
+}
+function receiveActivitiesO(res,totalPages,page) {
+    return {
+        type: HOME_RECEIVE_ACTIVITIES_O,
         res,
         totalPages,
         page
@@ -37,14 +46,25 @@ export function fetchStats() {
     }
 }
 
-export function getActivities(page = 0) {
+export function getActivitiesC(page = 0) {
     return (dispatch,getState) => {
         let params = { page }
         return Request
-            .get(`/api/activities`)
+            .get(`/api/activities/comment`)
             .query(params)
             .end((err, res) => {
-                dispatch(receiveActivities(res.body.activities,res.body.totalPages,page))
+                dispatch(receiveActivitiesC(res.body.activities,res.body.totalPages,page))
+            })
+    }
+}
+export function getActivitiesO(page = 0) {
+    return (dispatch,getState) => {
+        let params = { page }
+        return Request
+            .get(`/api/activities/other`)
+            .query(params)
+            .end((err, res) => {
+                dispatch(receiveActivitiesO(res.body.activities,res.body.totalPages,page))
             })
     }
 }

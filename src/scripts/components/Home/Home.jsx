@@ -14,22 +14,13 @@ export default class Home extends Component {
         crosshairValues:[]
       };
       this.nearestXHandler = this._nearestXHandler.bind(this)
-      this.goPage = this._goPage.bind(this)
     }
     componentWillMount() {
       if(!this.props.loaded){
         this.props.fetchStats()
       }
-      const { page } = this.props
-      if(typeof page === 'number') {
-        this.props.history.push(`/home?page=${page}`)
-      }else{
-        this.props.getActivities(0)
-      }
-    }
-    _goPage(page) {
-      this.props.history.push(`/home?page=${page}`)
-      this.props.getActivities(page)
+      this.props.getActivitiesC()
+      this.props.getActivitiesO()
     }
     _nearestXHandler(value, {index}){
       const { last, aggregate } = this.props.stats
@@ -171,22 +162,22 @@ export default class Home extends Component {
                           nextLabel={<span>&raquo;</span>}
                           breakLabel={<span>...</span>}
                           breakClassName={"break-me"}
-                          pageCount={this.props.totalPages}
+                          pageCount={this.props.totalPagesC}
                           marginPagesDisplayed={2}
                           pageRangeDisplayed={5}
-                          onPageChange={obj => this.goPage(obj.selected)}
+                          onPageChange={obj => this.props.getActivitiesC(obj.selected)}
                           containerClassName={"pagination"}
                           subContainerClassName={"pages pagination"}
-                          forcePage={parsePage(this.props.location.search)}
+                          forcePage={this.props.pageC}
                           activeClassName={"active"} />
                       </div>
                     </div>
                     <div className="portlet-body">
                       <div className="mt-comments">
                         {
-                          this.props.activities.map((activity,i) => {
+                          this.props.activitiesC.map((activity,i) => {
                             return (
-                              <div className="mt-comment">
+                              <div className="mt-comment" key={`act_c_${activity.id}`} >
 
                                 <div className="mt-comment-img">
                                     <img style={{width:45}} src={activity.user.avatar} alt="avatar"/>
@@ -237,22 +228,22 @@ export default class Home extends Component {
                           nextLabel={<span>&raquo;</span>}
                           breakLabel={<span>...</span>}
                           breakClassName={"break-me"}
-                          pageCount={this.props.totalPages}
+                          pageCount={this.props.totalPagesO}
                           marginPagesDisplayed={2}
                           pageRangeDisplayed={5}
-                          onPageChange={obj => this.goPage(obj.selected)}
+                          onPageChange={obj => this.props.getActivitiesO(obj.selected)}
                           containerClassName={"pagination"}
                           subContainerClassName={"pages pagination"}
-                          forcePage={parsePage(this.props.location.search)}
+                          forcePage={this.props.pageO}
                           activeClassName={"active"} />
                       </div>
                     </div>
                     <div className="portlet-body">
                       <div className="mt-comments">
                         {
-                          this.props.activities.map((activity,i) => {
+                          this.props.activitiesO.map((activity,i) => {
                             return (
-                              <div className="mt-comment">
+                              <div className="mt-comment" key={`act_o_${activity.id}`}>
 
                                 <div className="mt-comment-img">
                                     <img style={{width:45}} src={activity.user.avatar} alt="avatar"/>
@@ -308,7 +299,7 @@ export default class Home extends Component {
               </div>
               <div>
                 {
-                  this.props.activities.map((activity,i) => {
+                  this.props.activitiesO.map((activity,i) => {
                     return (
                       <div className="media home-activity" key={`act_${activity.id}`}>
                         <div className="media-left">

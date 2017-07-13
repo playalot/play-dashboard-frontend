@@ -1,7 +1,7 @@
 import React,{ Component } from 'react'
 import { Row, Col, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-
+import Request from 'superagent'
 export default class ExplorePage extends Component{
 	constructor(props) {
 	  	super(props)
@@ -11,11 +11,22 @@ export default class ExplorePage extends Component{
 	  	this.deleteTopic = (id) => confirm('删除这个主题?') && this.props.deleteBanner(id,'topic')
 	  	this.addToy = () => confirm('创建一个新玩具页banner？') && this.props.addToy()
 	  	this.deleteToy = (id) => confirm('删除这个玩具banner?') && this.props.deleteBanner(id,'toy')
-	  	this.addDraft = () => confirm('创建一个新草稿？') && this.props.addDraft()
+	  	this.addDraft = this._addDraft.bind(this)
 	  	this.deleteDraft = (id) => confirm('删除这个草稿?') && this.props.deleteBanner(id,'draft')
 	}
+	_addDraft() {
+		if(confirm('创建一个新草稿？')){
+			 Request
+            .post(`/api/recommend?place=draft`)
+            .end((err,res) => {
+				if(!err){
+					this.props.history.push(`/recommend/${res.body.id}`)
+				}
+            })
+		}
+	}
 	componentWillMount() {
-		!this.props.loaded && this.props.fetchExplore()
+		this.props.fetchExplore()
 	}
 	render() {
 		return(
@@ -25,7 +36,7 @@ export default class ExplorePage extends Component{
 						<div className="portlet light ">
 							<div className="portlet-title tabbable-line">
 								<div className="caption caption-md">
-									<span className="caption-subject font-blue-madison bold uppercase">推荐</span>
+									<button onClick={this.addDraft} className="btn green btn-outline">创建草稿</button>
 								</div>
 								<ul className="nav nav-tabs">
 									<li className="active">
@@ -45,7 +56,6 @@ export default class ExplorePage extends Component{
 							<div className="portlet-body">
 								<div className="tab-content">
 									<div className="tab-pane active" id="explore_1">
-										<button onClick={this.addBanner} className="btn green btn-outline">创建新Banner</button> <br/><br/>
 										{
 											this.props.banners ?
 											<table className="table table-striped">
@@ -78,7 +88,6 @@ export default class ExplorePage extends Component{
 										}
 									</div>
 									<div className="tab-pane" id="explore_2">
-										<button onClick={this.addTopic} className="btn green btn-outline">创建新主题</button> <br/><br/>
 										{
 											this.props.themes ?
 											<table className="table table-striped">
@@ -111,7 +120,6 @@ export default class ExplorePage extends Component{
 										}
 									</div>
 									<div className="tab-pane" id="explore_3">
-										<button onClick={this.addToy} className="btn green btn-outline">创建新玩具页Banner</button> <br/><br/>
 										{
 											this.props.toys?
 											<table className="table table-striped">
@@ -144,7 +152,6 @@ export default class ExplorePage extends Component{
 										}
 									</div>
 									<div className="tab-pane" id="explore_4">
-										<button onClick={this.addDraft} className="btn green btn-outline">创建新草稿</button> <br/><br/>
 										{
 											this.props.drafts ?
 											<table className="table table-striped">

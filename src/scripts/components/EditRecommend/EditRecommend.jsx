@@ -24,6 +24,15 @@ export default class extends Component {
 		}
 		this.submit = this._submit.bind(this)
 		this.onDropImage = this._onDropImage.bind(this)
+		this.addId = () => {
+			if(this.state.tmpId.length !== 24){
+				this.setState({tmpId:''})
+				alert('无效的玩具ID')
+			}else{
+				this.state.toyIds.push(this.state.tmpId)
+				this.setState({tmpId:''})
+			}
+		}
 	}
   componentDidMount() {
     Request
@@ -177,29 +186,27 @@ export default class extends Component {
 										this.setState({toyIds})
 									}}></PlayToyList>
 									<Row>
-										<Col sm={7}>
+										<Col sm={10}>
 											<PlayAutoSuggest
-												fetch={(o) => this.props.fetchSkuByQuery(o.value)}
+												fetch={(o) => {
+													if(o.value.length === 24){
+														this.setState({tmpId:o.value})
+													}else{
+														this.props.fetchSkuByQuery(o.value)
+													}
+												}}
 												clear={this.props.clearSuggestion}
 												getValue={suggestion => suggestion.name}
 												selectValue={(event,{suggestion, suggestionValue, method }) => {
 													this.state.toyIds.push(suggestion.id)
 												}}
 												desc="release"
-												placeholder="请输入玩具关键字"
+												placeholder="请输入玩具关键字或ID"
 												results={this.props.skuResults}
 											/>
 										</Col>
-										<Col sm={5}>
-											<div className="input-group">
-												<FormControl value={this.state.tmpId} onChange={(e) => this.setState({tmpId:e.target.value})} type="text"/>
-												<span className="input-group-btn">
-													<button type="button" onClick={() => {
-														this.state.toyIds.push(this.state.tmpId)
-														this.setState({tmpId:''})
-													}} className="btn green" type="button">添加ID</button>
-												</span>
-											</div>
+										<Col sm={2}>
+											<button type="button" onClick={this.addId} className="btn green" type="button">添加ID</button>
 										</Col>
 									</Row>
 								</Col>

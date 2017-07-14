@@ -108,6 +108,11 @@ export default class EditPage extends Component {
             this.setState({authorId:nextProps.user.id})
         }
     }
+    scrollToTop(e) {
+        e.preventDefault()
+        $('html, body').animate({scrollTop: 0}, 1000)
+        return false
+    }
     _onDropCover(files) {
         Request.get('/api/uptoken')
         .end((err, res) => {
@@ -534,6 +539,9 @@ export default class EditPage extends Component {
                     </div>
                     : null
                 }
+                <div onClick={this.scrollToTop} className="scroll-to-top">
+                    <i className="fa fa-arrow-up"></i>
+                </div>
             </div>
         )
     }

@@ -15,6 +15,7 @@ export default class extends Component{
 			filter: '',
 			dialogApprove:false,
 			note:'',
+			type:'master',
 			user:{},
 			currentPage:'posts',
 			postPage:0
@@ -28,14 +29,7 @@ export default class extends Component{
 			this.props.fetchTagClass()
 		}
 		const { userId } = this.state 
-		Request
-            .get(`/api/user/${userId}`)
-            .end((err,res) => {
-				this.setState({
-					user:res.body,
-					type:res.body.verify ? res.body.verify.type : 'master'
-				})
-            })
+		this.props.fetchUserInfo(userId)
 		this.props.getUserPost(userId)
 		this.props.getUserPage(userId)
 	}
@@ -44,7 +38,7 @@ export default class extends Component{
 		this.props.clearPage()
 	}
 	_approve() {
-		const { userId,type,note } = this.state
+		const { userId,note,type } = this.state
 		this.props.approveUser(userId,type,note)
 		this.setState({
 			note:'',dialogApprove:false
@@ -66,8 +60,8 @@ export default class extends Component{
 		this.props.getUserPost(this.state.userId,postPage)
 	}
 	render() {
-		const { dialogApprove,note,type,user } = this.state
-		console.info(this.props.totalPages)
+		const { dialogApprove,note,type } = this.state
+		const { user } = this.props
 		return (
 			<div className="content">
 				<Row style={{marginBottom:20}}>
@@ -109,13 +103,13 @@ export default class extends Component{
 								</Col>
 								<Col sm={8} style={{padding:'7px 20px'}}>
 									{
-										type ?
-										<span style={{marginRight:15}}>{type}</span>
+										user.verify && user.verify.type ?
+										<span style={{marginRight:15}}>{user.verify.type}</span>
 										:null
 									}
 									<button onClick={() => this.setState({dialogApprove:true})} className="btn btn-xs green">
 										{
-											type ? '修改' : '添加'
+											user.verify && user.verify.type ? '修改' : '添加'
 										}
 									</button>
 								</Col>

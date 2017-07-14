@@ -6,7 +6,7 @@ import {
     SKU_CLEAR_SUGGESTION,SKU_RECEIVE_SKU_BY_QUERY,
 } from '../actions/skuAction'
 
-export default (state = Immutable.fromJS({ skus: [],totalPages:100,filter:'',filterType:'',skuResults:[] }),action)=>{
+export default (state = Immutable.fromJS({ skus: [],totalPages:100,filter:'',filterType:'',query:'',skuResults:[] }),action)=>{
     switch (action.type) {
         case SKL_RECEIVE_SKU:
             return state
@@ -15,6 +15,7 @@ export default (state = Immutable.fromJS({ skus: [],totalPages:100,filter:'',fil
                 .set('page',action.page)
                 .set('filter',action.filter)
                 .set('filterType',action.filterType)
+                .set('query',action.query)
         case SKL_DELETE_SKU:
            return state.updateIn(['skus'], (skus) => {
                 return skus.update(

@@ -20,7 +20,7 @@ const mapActionCreators = {
 }
 
 const mapStateToProps = (state) => {
-	const { skus,totalPages,page,filter,filterType } = state.sku.toJS()
+	const { skus,totalPages,page,filter,filterType,query } = state.sku.toJS()
 	const { toyResults } = state.toyReducer.toJS()
 	const { toyClass, toyLoaded } = state.tagClassReducer.toJS()
 	return {
@@ -29,6 +29,7 @@ const mapStateToProps = (state) => {
 		page,
 		filter,
 		filterType,
+		query,
 
 		toyResults,
 

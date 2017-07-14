@@ -303,7 +303,7 @@ export default class Toy extends Component{
 										<div className="clearfix">
 											<ButtonToolbar className="pull-right">
 												<a target="_blank" href={`http://www.playalot.cn/toy/${toy.id}`} className="btn yellow btn-outline btn-sm">查看详情</a>
-												<span onClick={() => this.addStock(toy.id,toy.name,toy.cover) } className="btn blue btn-outline btn-sm">添加该商品库存</span>
+												<span onClick={() => this.props.history.push(`/sku/${toy.id}`) } className="btn blue btn-outline btn-sm">添加该商品库存</span>
 											</ButtonToolbar>
 										</div>
 									</div>

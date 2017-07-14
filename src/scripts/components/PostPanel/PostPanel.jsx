@@ -58,7 +58,7 @@ export default class PostPanel extends Component{
 						 {
 							post.video ?
 							<div>
-								<video className="" src={post.video.url} controls></video>
+								<video style={{width:'100%'}} src={post.video.url} controls></video>
 							</div>
 							:<div>
 								<div>

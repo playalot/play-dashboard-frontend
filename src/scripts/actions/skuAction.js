@@ -10,7 +10,7 @@ export const SKU_REMOVE_TOY_CLASS = 'SKU_REMOVE_TOY_CLASS'
 export const SKU_RECEIVE_SKU_BY_QUERY = 'SKU_RECEIVE_SKU_BY_QUERY'
 export const SKU_CLEAR_SUGGESTION = 'SKU_CLEAR_SUGGESTION'
 
-function receiveSku(res,totalPages,page,filter,filterType) {
+function receiveSku(res,totalPages,page,filter,filterType,query) {
     return {
         type: SKL_RECEIVE_SKU,
         res,
@@ -18,6 +18,7 @@ function receiveSku(res,totalPages,page,filter,filterType) {
         page,
         filter,
         filterType,
+        query,
     }
 }
 
@@ -85,10 +86,13 @@ export function getSku (page = 0) {
     }
 }
 
-export function getSkuBy (filter = '',filterType = '') {
+export function getSkuBy (filter = '',filterType = '',query = '') {
     return (dispatch,getState) => {
         let page = 0
         let params = { page }
+        if(query) {
+            params.query = query
+        }
         if(filter) {
             params.merchant = filter
         }
@@ -102,7 +106,7 @@ export function getSkuBy (filter = '',filterType = '') {
             .get(`/api/stocks`)
             .query(params)
             .end((err, res) => {
-                dispatch(receiveSku(res.body.stocks,res.body.totalPages,page,filter,filterType))
+                dispatch(receiveSku(res.body.stocks,res.body.totalPages,page,filter,filterType,query))
             })
     }
 }

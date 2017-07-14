@@ -17,3 +17,17 @@
 .portlet .portlet-title .pagination {
 	margin: 0;
 }
+
+.portlet .mt-comment-details .activity-image img {
+	margin: 0 10px 10px 0;
+  object-fit: cover;
+  width: 65px;
+  height: 65px;
+}
+
+.activity-scroll {
+	position: relative;
+	overflow: hidden;
+	width: auto;
+	height: 200px;
+}

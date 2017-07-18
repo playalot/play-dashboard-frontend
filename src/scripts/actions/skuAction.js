@@ -70,12 +70,15 @@ export function toggleRec(id) {
 export function getSku (page = 0) {
     return (dispatch,getState) => {
         let params = { page }
-        const { filter, filterType } = getState().sku.toJS()
+        const { filter, filterType,query } = getState().sku.toJS()
         if(filter) {
             params.merchant = filter
         }
         if(filterType) {
             params.type = filterType
+        }
+        if(query) {
+            params.query = query
         }
         return Request
             .get(`/api/stocks`)

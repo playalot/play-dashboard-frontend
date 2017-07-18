@@ -4,7 +4,7 @@ import CDN from '../../widgets/cdn'
 import { Modal, Button,Form, FormGroup, Col, FormControl, Row,Radio } from 'react-bootstrap'
 import Request from 'superagent'
 import PlayAutoSuggest from '../Common/PlayAutoSuggest'
-import PlayToyList from '../Common/PlayToyList'
+import PlayToyPanel from '../Common/PlayToyPanel'
 
 export default class extends Component {
 	constructor(props) {
@@ -179,12 +179,23 @@ export default class extends Component {
 									商品
 								</Col>
 								<Col sm={8}>
-									<PlayToyList ids={this.state.toyIds} remove={(i) => {
-										let toyIds = this.state.toyIds
-										toyIds[i] = null
-										{/*toyIds.splice(i,1)*/}
-										this.setState({toyIds})
-									}}></PlayToyList>
+									<div className="d-flex flex-column">
+										{
+											this.state.toyIds.map((id,index) => {
+												if(id){
+													return(
+														<PlayToyPanel tid={id} key={`play-toy-list-${id}_${index}`}>
+															<button type="button" onClick={() => {
+																let toyIds = this.state.toyIds
+																toyIds[index] = null
+																this.setState({toyIds})
+															}} className="btn btn-sm red btn-outline">删除</button>
+														</PlayToyPanel>
+													)
+												}
+											})
+										}
+									</div>
 									<Row>
 										<Col sm={10}>
 											<PlayAutoSuggest

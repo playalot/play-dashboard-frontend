@@ -6,16 +6,18 @@ import {
     SKU_CLEAR_SUGGESTION,SKU_RECEIVE_SKU_BY_QUERY,
 } from '../actions/skuAction'
 
-export default (state = Immutable.fromJS({ skus: [],totalPages:100,filter:'',filterType:'',query:'',skuResults:[] }),action)=>{
+export default (state = Immutable.fromJS({ skus: [],totalPages:100,filter:'',filterType:'',query:'',orderBy:'created',asc:false,skuResults:[] }),action)=>{
     switch (action.type) {
         case SKL_RECEIVE_SKU:
             return state
                 .updateIn(['skus'], (skus) => skus.clear().concat(Immutable.fromJS(action.res)))
                 .set('totalPages',action.totalPages)
                 .set('page',action.page)
-                .set('filter',action.filter)
-                .set('filterType',action.filterType)
+                .set('merchant',action.merchant)
+                .set('type',action._type)
                 .set('query',action.query)
+                .set('orderBy',action.orderBy)
+                .set('asc',action.asc)
         case SKL_DELETE_SKU:
            return state.updateIn(['skus'], (skus) => {
                 return skus.update(

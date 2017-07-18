@@ -10,15 +10,17 @@ export const SKU_REMOVE_TOY_CLASS = 'SKU_REMOVE_TOY_CLASS'
 export const SKU_RECEIVE_SKU_BY_QUERY = 'SKU_RECEIVE_SKU_BY_QUERY'
 export const SKU_CLEAR_SUGGESTION = 'SKU_CLEAR_SUGGESTION'
 
-function receiveSku(res,totalPages,page,filter,filterType,query) {
+function receiveSku(res,totalPages,page,merchant,_type,query,orderBy,asc) {
     return {
         type: SKL_RECEIVE_SKU,
         res,
         totalPages,
         page,
-        filter,
-        filterType,
+        merchant,
+        _type,
         query,
+        orderBy,
+        asc
     }
 }
 
@@ -69,13 +71,13 @@ export function toggleRec(id) {
 
 export function getSku (page = 0) {
     return (dispatch,getState) => {
-        let params = { page }
-        const { filter, filterType,query } = getState().sku.toJS()
-        if(filter) {
-            params.merchant = filter
+        const { merchant, type,query,orderBy,asc } = getState().sku.toJS()
+        let params = { page,orderBy,asc }
+        if(merchant) {
+            params.merchant = merchant
         }
-        if(filterType) {
-            params.type = filterType
+        if(type) {
+            params.type = type
         }
         if(query) {
             params.query = query
@@ -84,32 +86,29 @@ export function getSku (page = 0) {
             .get(`/api/stocks`)
             .query(params)
             .end((err, res) => {
-                dispatch(receiveSku(res.body.stocks,res.body.totalPages,page,filter,filterType))
+                dispatch(receiveSku(res.body.stocks,res.body.totalPages,page,merchant,type,query))
             })
     }
 }
 
-export function getSkuBy (filter = '',filterType = '',query = '') {
+export function getSkuBy (merchant = '',type = '',query = '',orderBy,asc) {
     return (dispatch,getState) => {
         let page = 0
-        let params = { page }
+        let params = { page,orderBy,asc }
         if(query) {
-            params.query = query
+            params.q = query
         }
-        if(filter) {
-            params.merchant = filter
+        if(merchant) {
+            params.merchant = merchant
         }
-        if(filterType) {
-            params.type = filterType
-            if(filterType === 'preOrder') {
-                params.orderBy = 'orderClose'
-            }
+        if(type) {
+            params.type = type
         }
         return Request
             .get(`/api/stocks`)
             .query(params)
             .end((err, res) => {
-                dispatch(receiveSku(res.body.stocks,res.body.totalPages,page,filter,filterType,query))
+                dispatch(receiveSku(res.body.stocks,res.body.totalPages,page,merchant,type,query,orderBy,asc))
             })
     }
 }

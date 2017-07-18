@@ -19,21 +19,7 @@ export default class Toy extends Component{
 			sort: 'created',
 			month:'',
 			year:'',
-			showModal:false,
 			id:'',
-			name:'',
-			preview:'',
-			quantity:100,
-			price:9999,
-			originPrice:0,
-			merchant:'PLAY玩具控',
-			freight:0,
-			type:'inStock',
-			prepay:0,
-			orderClose:Moment(),
-			costPrice:0,
-			version:'',
-			tbUrl:'',
 
 			selectedToy:null,
 		}
@@ -42,55 +28,11 @@ export default class Toy extends Component{
 		this.onChangeQuery = (e) => this.setState({query:e.target.value})
 		this.onChangeYear= (e) => this.setState({year:e.target.value},this.search)
 		this.onChangeMonth = (e) => this.setState({month:e.target.value},this.search)
-		this.open = () => this.setState({ showModal: true })
-		this.close = () => this.setState({
-			showModal: false,
-			id:'',
-			name:'',
-			quantity:100,
-			price:9999,
-			originPrice:0,
-			costPrice:0,
-			merchant:'PLAY玩具控',
-			freight:0,
-			costPrice:0,
-			version:'',
-			tbUrl:'',
-		})
-		this.submit = () => {
-			const {
-				id,price,originPrice,merchant,quantity,freight, prepay, orderClose, type, costPrice,version,tbUrl
-			} = this.state
-			let data = {
-				price:parseFloat(price),merchant,costPrice:parseFloat(costPrice),
-				quantity:parseInt(quantity),freight:parseFloat(freight),preOrder:{
-					prepay:parseFloat(prepay),
-					orderClose:`${orderClose.format('YYYY-MM-DD')} 23:59:59`
-				},version,tbUrl
-			}
-		// Object.keys(data).forEach(key => !data[key] && data[key] !== 0 ? delete data[key] : null)
-		type ==='preOrder' ? null:delete data['preOrder']
-		version.trim() ? null : delete data['version']
-        tbUrl.trim() ? null : delete data['tbUrl'] 
-			Request
-				.post(`/api/toy/${id}/stock`)
-				.send(data)
-				.end((err,res) => {
-					if(err) {
-						console.warn(err)
-					}else{
-						this.close()
-						alert('添加商品成功')
-					}
-				})
-		}
-		this.recommend = this._recommend.bind(this)
-		this.addStock = this._addStock.bind(this)
+
 		this.toggleR18 = (id) => this.props.toggleR18(id)
 		this.toggleRecommend = (id) => this.props.toggleRecommend(id)
-		this.deletetoy = this._deletetoy.bind(this)
-		this.addtoy = this._addtoy.bind(this)
-		this.changeOrderClose = (date) => this.setState({orderClose:date})
+		this.deletetoy = (id) => confirm('删除这个玩具?') && this.props.deleteToy(id)
+		this.addtoy = () => confirm('创建一个新的玩具？') && this.props.addToy()
 		this.search = this._search.bind(this)
 	  	this.goPage = this._goPage.bind(this)
 
@@ -109,28 +51,6 @@ export default class Toy extends Component{
 		}else{
 			this.props.getToy(0)
 		}
-	}
-	_deletetoy(id) {
-		if (confirm('Delete this toy?')) {
-			this.props.deleteToy(id)
-			}
-	}
-	_recommend(id) {
-		if (confirm('推荐这个玩具?')) {
-			this.props.recommend(id)
-			}
-	}
-	_addtoy() {
-		if (confirm('创建一个新的玩具？')) {
-					this.props.addToy()
-			}
-	}
-	_addStock(id,name,preview) {
-		this.setState({
-			id,name,preview
-		},() => {
-			this.open()
-		})
 	}
 	_goPage(page) {
 		this.props.history.push(`/toys?page=${page}`)

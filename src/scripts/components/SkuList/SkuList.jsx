@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {
-	Col, Row, Modal, Form, FormGroup, InputGroup, FormControl, Button, ButtonToolbar, DropdownButton, Checkbox, Tab, Tabs
+	Col, Row, Modal, Form, FormGroup, InputGroup, FormControl, Button, ButtonToolbar, DropdownButton, Checkbox
 } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import CDN from '../../widgets/cdn'
@@ -17,108 +17,39 @@ export default class SkuList extends Component{
 	constructor(props) {
 		super(props)
 		this.state = {
-			filter: '',
-			filterType:'',
+			merchant:'',
+			type:'',
 			query:'',
-
-			id:'',
-			quantity:100,
-			price:9999,
-			originPrice:0,
-			merchant:'PLAY玩具控',
-			tbUrl:'',
-			freight:0,
-			type:'inStock',
-			prepay:0,
-			orderClose:Moment(),
-			costPrice:0,
-
-			cover:'',
-			company:'',
-			name:'',
-
-			selectedSku:null
+			selectedSku:null,
+			orderBy:'created',//'preOrder.orderClose' 'sold'
+			asc:false,
 		}
-		this.toggleRec = id => this.props.toggleRec(id)
-		this.toggleBlk = id => this.props.toggleBlk(id)
-		this.onChangeFilter = this._onChangeFilter.bind(this)
-		this.onChangeFilterType = this._onChangeFilterType.bind(this)
-		this.editSku = this._editSku.bind(this)
+		this.onChangeMerchant = (merchant) => this.setState({merchant},this.search)
+		this.onChangeType = (type) => this.setState({type},this.search)
 		this.goPage = this._goPage.bind(this)
 		this.search = this._search.bind(this)
 		this.fillMoney = this._fillMoney.bind(this)
 		this.deleteSku = (id,sid) => confirm('确定下架这个商品?') && this.props.deleteSku(id,sid)
 
-		this.open = () => this.setState({ showModal: true })
-		this.close = () => this.setState({
-			showModal: false,
-			id:'',
-			quantity:100,
-			price:9999,
-			originPrice:0,
-			costPrice:0,
-			merchant:'PLAY玩具控',
-			freight:0,
-
-			cover:'',
-			company:'',
-			name:'',
-
-		})
 		this.closeClass = () => this.setState({ selectedSku: null })
 		this.addToyClass = (tid,c) => this._addToyClass(tid,c)
 	  	this.removeToyClass = (tid,c) => this._removeToyClass(tid,c)
-		this.submit = () => {
-			const {
-				id,price,originPrice,merchant,quantity,freight, prepay, orderClose, type, costPrice
-			} = this.state
-			let data = {
-				price:parseFloat(price),originPrice:parseFloat(originPrice),merchant,costPrice:parseFloat(costPrice),
-				quantity:parseInt(quantity),freight:parseFloat(freight),preOrder:{
-					prepay:parseFloat(prepay),
-					orderClose:`${orderClose.format('YYYY-MM-DD')} 23:59:59`
-				}
-			}
-			Object.keys(data).forEach(key => !data[key] ? delete data[key] : null)
-			type ==='preOrder' ? null:delete data['preOrder']
-			Request
-			.post(`/api/toy/${id}/stock`)
-			.send(data)
-			.end((err,res) => {
-				if(err) {
-					console.warn(err)
-				}else{
-					this.close()
-					alert('添加商品成功')
-				}
-			})
-		}
 		this.changeOrderClose = (date) => this.setState({orderClose:date})
+
+		this.sortBy = this._sortBy.bind(this)
 	}
 	componentWillMount() {
 		if(!this.props.toyLoaded){
 			this.props.fetchToyClass()
 		}
-		const { page,filter,filterType,query } = this.props
+		const { page,merchant,type,query,orderBy,asc } = this.props
 		if(typeof page === 'number') {
 			this.props.history.push(`/skus?page=${page}`)
-			this.setState({filter,filterType,query})
+			this.setState({merchant,type,query,orderBy,asc})
 		}else{
 			this.props.history.push(`/skus?page=0`)
-			this.props.getSku(0)
+			this.props.getSku()
 		}
-	}
-	_onChangeFilter(filter) {
-		this.setState({ filter },() => {
-			this.props.history.push(`/skus?page=0`)
-			this.props.getSkuBy(this.state.filter,this.state.filterType,this.state.query)
-		})
-	}
-	_onChangeFilterType(filterType) {
-		this.setState({ filterType },() => {
-			this.props.history.push(`/skus?page=0`)
-			this.props.getSkuBy(this.state.filter,this.state.filterType,this.state.query)
-		})
 	}
 	_fillMoney(id,sid) {
 		if(confirm('确认补款吗?')){
@@ -127,13 +58,19 @@ export default class SkuList extends Component{
 			console.info('取消操作')
 		}
 	}
-	_editSku(id,sid) {
-		let path = `/sku/${id}/edit?sid=${sid}`
-		this.context.router.push(path)
+	_sortBy(str) {
+		const { orderBy,asc } = this.state
+		if(str == orderBy){
+			this.setState({asc:!asc},this.search)
+		}else{
+			this.setState({orderBy:str,asc:false},this.search)
+		}
+
 	}
 	_search() {
+		const { merchant,type,query,orderBy,asc } = this.state
 		this.props.history.push(`/skus?page=0`)
-		this.props.getSkuBy(this.state.filter,this.state.filterType,this.state.query)
+		this.props.getSkuBy(merchant,type,query,orderBy,asc)
 	}
 	_goPage(page) {
 		this.props.history.push(`/skus?page=${page}`)
@@ -156,7 +93,7 @@ export default class SkuList extends Component{
 	      	})
 	      	modal = (
 		        <div>
-		         	<Modal className='modal-container' animation={false} show={true} onHide={this.closeClass}>
+		         	<Modal className='modal-container' animation={true} show={true} onHide={this.closeClass}>
 			           <Modal.Body>
 			             	<strong>已选类别</strong>
 			             	<div>
@@ -187,67 +124,69 @@ export default class SkuList extends Component{
 		       	</div>
 	     	)
 	    }
+		const { orderBy,asc } = this.state
 		return(
 			<div>
-				<Row>
-					<Col sm={4}>
-						<FormGroup>
-							<InputGroup>
-								<FormControl value={this.state.query} onKeyDown={e => e.keyCode === 13 && this.search()} placeholder="输入商品关键字" onChange={(e) => this.setState({query:e.target.value})} type="text" />
-								<InputGroup.Addon onClick={this.search} className="btn green">搜索</InputGroup.Addon>
-							</InputGroup>
-						</FormGroup>
-					</Col>
-				</Row>
 				<div className="table-responsive skus-table">
 					<table className="table table-bordered table-hover">
 						<thead>
 							<tr>
-								<th colSpan={2}></th>
+								<th colSpan={2}>
+									<FormGroup className="mb-0">
+										<InputGroup>
+											<FormControl value={this.state.query} onKeyDown={e => e.keyCode === 13 && this.search()} placeholder="输入商品关键字" onChange={(e) => this.setState({query:e.target.value})} type="text" />
+											<InputGroup.Addon onClick={this.search} className="btn green">搜索</InputGroup.Addon>
+										</InputGroup>
+									</FormGroup>
+								</th>
 								<th> 版本 </th>
 								<th> 售价 </th>
 								<th> 库存 </th>
-								<th style={{minWidth:60}}> 销量 <span className="fa fa-sort"></span></th>
+								<th onClick={() => this.sortBy('sold')} style={{minWidth:60}}> 销量 <span className={`fa ${orderBy == 'sold' ? ( asc ? 'font-purple fa-sort-up' : 'font-purple fa-sort-down' ):'fa-sort font-grey'}`}></span></th>
 								<th> 
 									<div className="btn-group">
 										<button type="button" className="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
-											{this.state.filter ? this.state.filter : '所有商家'}
+											{this.state.merchant ? this.state.merchant : '所有商家'}
+											&nbsp;
+											<span className="fa fa-angle-down"></span>
 										</button>
 										<ul className="dropdown-menu">
-											<li><a onClick={() => this.onChangeFilter('')}>所有商家</a></li>
-											<li><a onClick={() => this.onChangeFilter('PLAY玩具控')}>PLAY玩具控</a></li>
-											<li><a onClick={() => this.onChangeFilter('PLAY玩具控(上海)')}>PLAY玩具控(上海)</a></li>
-											<li><a onClick={() => this.onChangeFilter('亿次元商城')}>亿次元商城</a></li>
-											<li><a onClick={() => this.onChangeFilter('手办同萌会')}>手办同萌会</a></li>
-											<li><a onClick={() => this.onChangeFilter('拆盒网')}>拆盒网</a></li>
-											<li><a onClick={() => this.onChangeFilter('塑唐玩具')}>塑唐玩具</a></li>
-											<li><a onClick={() => this.onChangeFilter('六部口模型')}>六部口模型</a></li>
-											<li><a onClick={() => this.onChangeFilter('HobbyMax官方店')}>HobbyMax官方店</a></li>
+											<li><a onClick={() => this.onChangeMerchant('')}>所有商家</a></li>
+											<li><a onClick={() => this.onChangeMerchant('PLAY玩具控')}>PLAY玩具控</a></li>
+											<li><a onClick={() => this.onChangeMerchant('PLAY玩具控(上海)')}>PLAY玩具控(上海)</a></li>
+											<li><a onClick={() => this.onChangeMerchant('亿次元商城')}>亿次元商城</a></li>
+											<li><a onClick={() => this.onChangeMerchant('手办同萌会')}>手办同萌会</a></li>
+											<li><a onClick={() => this.onChangeMerchant('拆盒网')}>拆盒网</a></li>
+											<li><a onClick={() => this.onChangeMerchant('塑唐玩具')}>塑唐玩具</a></li>
+											<li><a onClick={() => this.onChangeMerchant('六部口模型')}>六部口模型</a></li>
+											<li><a onClick={() => this.onChangeMerchant('HobbyMax官方店')}>HobbyMax官方店</a></li>
 											
-											<li><a onClick={() => this.onChangeFilter('H教授的玩具讲座')}>H教授的玩具讲座</a></li>
-											<li><a onClick={() => this.onChangeFilter('鹤屋通贩')}>鹤屋通贩</a></li>
-											<li><a onClick={() => this.onChangeFilter('电玩男の里屋')}>电玩男の里屋</a></li>
-											<li><a onClick={() => this.onChangeFilter('万事屋手办店')}>万事屋手办店</a></li>
-											<li><a onClick={() => this.onChangeFilter('塑料魂')}>塑料魂</a></li>
-											<li><a onClick={() => this.onChangeFilter('刺猬挺')}>刺猬挺</a></li>
+											<li><a onClick={() => this.onChangeMerchant('H教授的玩具讲座')}>H教授的玩具讲座</a></li>
+											<li><a onClick={() => this.onChangeMerchant('鹤屋通贩')}>鹤屋通贩</a></li>
+											<li><a onClick={() => this.onChangeMerchant('电玩男の里屋')}>电玩男の里屋</a></li>
+											<li><a onClick={() => this.onChangeMerchant('万事屋手办店')}>万事屋手办店</a></li>
+											<li><a onClick={() => this.onChangeMerchant('塑料魂')}>塑料魂</a></li>
+											<li><a onClick={() => this.onChangeMerchant('刺猬挺')}>刺猬挺</a></li>
 										</ul>
 									</div>	 
 								</th>
 								<th> 
 									<div className="btn-group">
 										<button type="button" className="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
-											{this.state.filterType ? (this.state.filterType === 'inStock' ? '现货':'预售') : '全部类型'}
+											{this.state.type ? (this.state.type === 'inStock' ? '现货':'预售') : '全部类型'} 
+											&nbsp;
+											<span className="fa fa-angle-down"></span>
 										</button>
 										<ul className="dropdown-menu">
-											<li><a onClick={() => this.onChangeFilterType('')}>全部类型</a></li>
-											<li><a onClick={() => this.onChangeFilterType('inStock')}>现货</a></li>
-											<li><a onClick={() => this.onChangeFilterType('preOrder')}>预售</a></li>
+											<li><a onClick={() => this.onChangeType('')}>全部类型</a></li>
+											<li><a onClick={() => this.onChangeType('inStock')}>现货</a></li>
+											<li><a onClick={() => this.onChangeType('preOrder')}>预售</a></li>
 										</ul>
 									</div>
 								</th>
-								<th style={{minWidth:90}}> 上架日期 <span className="fa fa-sort"></span></th>
-								<th style={{minWidth:90}}> 截单日期 <span className="fa fa-sort"></span></th>
-								<th> 操作 </th>
+								<th onClick={() => this.sortBy('created')} style={{minWidth:90}}> 上架日期 <span className={`fa ${orderBy == 'created' ? ( asc ? 'font-purple fa-sort-up' : 'font-purple fa-sort-down' ):'fa-sort font-grey'}`}></span></th>
+								<th onClick={() => this.sortBy('preOrder.orderClose')} style={{minWidth:90}}> 截单日期 <span className={`fa ${orderBy == 'preOrder.orderClose' ? ( asc ? 'font-purple fa-sort-up' : 'font-purple fa-sort-down' ):'fa-sort font-grey'}`}></span></th>
+								<th style={{minWidth:150}}> 操作 </th>
 							</tr>
 						</thead>
 						<tbody>
@@ -265,7 +204,7 @@ export default class SkuList extends Component{
 						</tbody>
 					</table>
 				</div>
-				<Row style={{textAlign:'center'}}>
+				<Row className="text-center">
 					<ReactPaginate
 						previousLabel={<span>&laquo;</span>}
 						nextLabel={<span>&raquo;</span>}
@@ -275,10 +214,11 @@ export default class SkuList extends Component{
 						marginPagesDisplayed={2}
 						pageRangeDisplayed={5}
 						onPageChange={obj => this.goPage(obj.selected)}
-						containerClassName={"pagination"}
+						containerClassName={"pagination mb-3 mt-0"}
 						subContainerClassName={"pages pagination"}
 						forcePage={parsePage(this.props.location.search)}
-						activeClassName={"active"} />
+						activeClassName={"active"} 
+					/>
 				</Row>
 				{modal}
 			</div>
@@ -301,7 +241,7 @@ class SkuTr extends Component {
 				}
 				{
 					noRender ? null :
-					<td rowSpan={total} style={{width:150}}> 
+					<td rowSpan={total}  style={{width:150}}> 
 						<span>{sku.name}</span>
 						<div>
 							{
@@ -315,7 +255,7 @@ class SkuTr extends Component {
 						</div>
 					</td>
 				}
-				<td style={{width:100}}>
+				<td>
 					<span>{stock.version||'普通版'}</span>
 				</td>
 				<td>
@@ -361,11 +301,22 @@ class SkuTr extends Component {
 						: null 
 					}
 				</td>
-				<td style={{width:100}}>
-					<a onClick={() => this.props.setSelectedSku(sku)}>分类</a><br/>
-					<Link to={`/sku/${sku.id}?sid=${stock.stockId}`}>修改</Link><br/>
-					<a onClick={() => this.props.deleteSku(sku.id,stock.stockId)}>下架</a><br/>
-					{stock.type === 'preOrder' ? <a onClick={() => this.props.fillMoney(sku.id,stock.stockId)}>开使补款</a> : ''}
+				<td>
+					<Link className="btn dark btn-outline btn-sm" to={`/sku/${sku.id}?sid=${stock.stockId}`}>修改</Link>
+					<div className="btn-group">
+						<button type="button" className="btn dark btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+							更多 <span className="fa fa-angle-down"></span>
+						</button>
+						<ul className="dropdown-menu pull-right">
+							<li><a onClick={() => this.props.setSelectedSku(sku)}>分类</a></li>
+							<li><Link to={`/order/toy/${sku.id}`}>全部订单</Link></li>
+							<li className="divider"></li>
+							<li><a onClick={() => this.props.deleteSku(sku.id,stock.stockId)}>下架</a></li>
+						</ul>
+					</div>
+					{
+						//stock.type === 'preOrder' ? <a className="d-inline-block p-1" onClick={() => this.props.fillMoney(sku.id,stock.stockId)}>开使补款</a> : ''
+					}
 				</td>
 			</tr>
 		)

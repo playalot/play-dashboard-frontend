@@ -143,7 +143,7 @@ export default class SkuList extends Component{
 								<th> 售价 </th>
 								<th> 库存 </th>
 								<th onClick={() => this.sortBy('sold')} style={{minWidth:60}}> 销量 <span className={`fa ${orderBy == 'sold' ? ( asc ? 'font-purple fa-sort-up' : 'font-purple fa-sort-down' ):'fa-sort font-grey'}`}></span></th>
-								<th> 
+								<th>
 									<div className="btn-group">
 										<button type="button" className="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
 											{this.state.merchant ? this.state.merchant : '所有商家'}
@@ -153,27 +153,23 @@ export default class SkuList extends Component{
 										<ul className="dropdown-menu">
 											<li><a onClick={() => this.onChangeMerchant('')}>所有商家</a></li>
 											<li><a onClick={() => this.onChangeMerchant('PLAY玩具控')}>PLAY玩具控</a></li>
-											<li><a onClick={() => this.onChangeMerchant('PLAY玩具控(上海)')}>PLAY玩具控(上海)</a></li>
 											<li><a onClick={() => this.onChangeMerchant('亿次元商城')}>亿次元商城</a></li>
-											<li><a onClick={() => this.onChangeMerchant('手办同萌会')}>手办同萌会</a></li>
-											<li><a onClick={() => this.onChangeMerchant('拆盒网')}>拆盒网</a></li>
 											<li><a onClick={() => this.onChangeMerchant('塑唐玩具')}>塑唐玩具</a></li>
-											<li><a onClick={() => this.onChangeMerchant('六部口模型')}>六部口模型</a></li>
 											<li><a onClick={() => this.onChangeMerchant('HobbyMax官方店')}>HobbyMax官方店</a></li>
-											
 											<li><a onClick={() => this.onChangeMerchant('H教授的玩具讲座')}>H教授的玩具讲座</a></li>
 											<li><a onClick={() => this.onChangeMerchant('鹤屋通贩')}>鹤屋通贩</a></li>
 											<li><a onClick={() => this.onChangeMerchant('电玩男の里屋')}>电玩男の里屋</a></li>
 											<li><a onClick={() => this.onChangeMerchant('万事屋手办店')}>万事屋手办店</a></li>
 											<li><a onClick={() => this.onChangeMerchant('塑料魂')}>塑料魂</a></li>
 											<li><a onClick={() => this.onChangeMerchant('刺猬挺')}>刺猬挺</a></li>
+											<li><a onClick={() => this.onChangeMerchant('拆盒网')}>拆盒网</a></li>
 										</ul>
-									</div>	 
+									</div>
 								</th>
-								<th> 
+								<th>
 									<div className="btn-group">
 										<button type="button" className="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
-											{this.state.type ? (this.state.type === 'inStock' ? '现货':'预售') : '全部类型'} 
+											{this.state.type ? (this.state.type === 'inStock' ? '现货':'预售') : '全部类型'}
 											&nbsp;
 											<span className="fa fa-angle-down"></span>
 										</button>
@@ -217,7 +213,7 @@ export default class SkuList extends Component{
 						containerClassName={"pagination mb-3 mt-0"}
 						subContainerClassName={"pages pagination"}
 						forcePage={parsePage(this.props.location.search)}
-						activeClassName={"active"} 
+						activeClassName={"active"}
 					/>
 				</Row>
 				{modal}
@@ -236,12 +232,12 @@ class SkuTr extends Component {
 				{
 					noRender ? null :
 					<td rowSpan={total} style={{width:100}}>
-						<a target="_blank" href={`http://www.playalot.cn/toy/${sku.id}`}><img style={{width:'100%'}} src={sku.images[0] ? CDN.show(sku.images[0]):null}/></a>
+						<a target="_blank" href={`http://www.playalot.cn/toy/${sku.id}`}><img style={{width:'100%'}} src={sku.cover}/></a>
 					</td>
 				}
 				{
 					noRender ? null :
-					<td rowSpan={total}  style={{width:150}}> 
+					<td rowSpan={total}  style={{width:150}}>
 						<span>{sku.name}</span>
 						<div>
 							{
@@ -259,12 +255,12 @@ class SkuTr extends Component {
 					<span>{stock.version||'普通版'}</span>
 				</td>
 				<td>
-					<span>¥ {stock.price}</span> 
+					<span>¥ {stock.price}</span>
 					<br/>
 					<span>运费:¥ {stock.freight}</span>
 				</td>
 				<td>
-					<span>{stock.quantity}件</span> 
+					<span>{stock.quantity}件</span>
 				</td>
 				<td>
 					<span>{stock.sold}件</span>
@@ -274,15 +270,15 @@ class SkuTr extends Component {
 				</td>
 				<td>
 					{
-						stock.type === 'preOrder' ? 
+						stock.type === 'preOrder' ?
 						<span className="label label-warning label-margin">
 							预售
-						</span> : 
+						</span> :
 						<span className="label label-info label-margin">现货</span>
 					}
 					<br/>
 					{
-						stock.type === 'preOrder' && stock.preOrder.orderClose < Date.now() ? 
+						stock.type === 'preOrder' && stock.preOrder.orderClose < Date.now() ?
 						<span className="label label-danger  label-margin">已结单</span>
 						:null
 					}
@@ -292,13 +288,13 @@ class SkuTr extends Component {
 					<small>{Moment(stock.created).format('HH:mm')}</small>
 				</td>
 				<td>
-					{ 
-						stock.type === 'preOrder' ? 
+					{
+						stock.type === 'preOrder' ?
 						<span>
 							<small>{Moment(stock.preOrder.orderClose).format('MM-DD')}</small><br/>
 							<small>{Moment(stock.preOrder.orderClose).format('HH:mm')}</small>
-						</span> 
-						: null 
+						</span>
+						: null
 					}
 				</td>
 				<td>

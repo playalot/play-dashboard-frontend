@@ -54,8 +54,8 @@ export default class extends Component{
 	render() {
 		const { orders } = this.props
 		return(
-			<div className="table-responsive" style={{paddingBottom:50}}>
-        <table className="table table-striped">
+			<div className="table-responsive skus-table">
+        <table className="table table-bordered table-hover">
         	<thead><tr><th>用户</th><th>商家</th><th></th><th>订单</th><th>总金额</th><th>下单时间</th><th>订单状态</th><th></th><th></th></tr></thead>
           <tbody>
             {orders.map((order,index) => {

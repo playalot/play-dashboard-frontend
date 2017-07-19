@@ -14,6 +14,7 @@ import {
     POST_REMOVE_TOY,
     POST_DELETE_POST,
     POST_GET_UN_CLS,
+    POST_GET_VIDEO,
 } from '../actions/postAction'
 
 export default (state = Immutable.fromJS({ posts:[],totalPages:100,filter:'',query:''}),action)=>{
@@ -156,6 +157,12 @@ export default (state = Immutable.fromJS({ posts:[],totalPages:100,filter:'',que
             return state.updateIn(['posts'], (posts) => {
                 return posts.filter((item) => {
                     return item.get('cls').size === 0
+                })
+            })
+        case POST_GET_VIDEO:
+            return state.updateIn(['posts'], (posts) => {
+                return posts.filter((item) => {
+                    return item.get('video') !== null
                 })
             })
         default:

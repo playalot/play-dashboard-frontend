@@ -140,6 +140,7 @@ export default class SkuList extends Component{
 									</FormGroup>
 								</th>
 								<th> 版本 </th>
+								<th> 备注 </th>
 								<th> 售价 </th>
 								<th> 库存 </th>
 								<th onClick={() => this.sortBy('sold')} style={{minWidth:60}}> 销量 <span className={`fa ${orderBy == 'sold' ? ( asc ? 'font-purple fa-sort-up' : 'font-purple fa-sort-down' ):'fa-sort font-grey'}`}></span></th>
@@ -252,7 +253,20 @@ class SkuTr extends Component {
 					</td>
 				}
 				<td>
-					<span>{stock.version||'普通版'}</span>
+					<span>
+						{stock.version||'普通版'}
+						{
+							stock.tbUrl ?
+							<a href={stock.tbUrl}>
+								<span style={{fontSize:16}} className="fa fa-drupal"></span>
+							</a>
+							:null
+						}
+						
+					</span>
+				</td>
+				<td>
+					<span>{stock.note || ''}</span>
 				</td>
 				<td>
 					<span>¥ {stock.price}</span>

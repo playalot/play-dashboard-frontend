@@ -14,6 +14,7 @@ export const POST_ADD_TOY = 'POST_ADD_TOY'
 export const POST_REMOVE_TOY = 'POST_REMOVE_TOY'
 export const POST_DELETE_POST = 'POST_DELETE_POST'
 export const POST_GET_UN_CLS = 'POST_GET_UN_CLS'
+export const POST_GET_VIDEO = 'POST_GET_VIDEO'
 
 function receivePost(res,totalPages,page,filter,query) {
     return {
@@ -110,6 +111,11 @@ function _clearPost() {
 export const getUnCls = () => {
     return (dispatch) => {
         dispatch(_getUnCls())
+    }
+}
+export const getVideoPost = () => {
+    return {
+        type:POST_GET_VIDEO
     }
 }
 export const addTag = (id, text) => {

@@ -1,11 +1,31 @@
 import React,{ Component } from 'react'
 import Request from 'superagent'
 import Dropzone from 'react-dropzone'
-import {
-	Row, Col, FromControl, Modal,
-} from 'react-bootstrap'
+import { Row, Col, FromControl, Modal } from 'react-bootstrap'
 import CDN from '../../widgets/cdn'
 import PlaySwitch from '../Common/playSwitch'
+
+import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc'
+const SortableItem = SortableElement(({img,onRemove,index}) =>
+	<div className="edit-toy-image-box">
+		<button type="button" className="close" aria-label="Close" onClick={() => onRemove(index)}>
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<img style={{height:100}} className="img-responsive" src={CDN.show(img)}/>
+	</div>
+);
+
+const SortableList = SortableContainer(({items,onRemove}) => {
+  	return (
+		<div className="d-flex flex-wrap">
+			{
+				items.map((img, index) => <SortableItem onRemove={onRemove} key={`toy-img-${index}`} index={index} img={img} />)
+			}
+		</div>
+  	)
+})
+
+
 export default class EditToy extends Component {
 	constructor(props) {
 	  	super(props)
@@ -31,6 +51,13 @@ export default class EditToy extends Component {
 			newValue: '',
 			showModal: false,
 			showImage:null,
+
+			items:['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6']
+		}
+		this.onSortEnd = ({oldIndex, newIndex}) => {
+			this.setState({
+				images: arrayMove(this.state.images, oldIndex, newIndex),
+			});
 		}
 	  	this.removeOtherInfo = this._removeOtherInfo.bind(this)
 	  	this.addOtherInfo = this._addOtherInfo.bind(this)
@@ -343,6 +370,7 @@ export default class EditToy extends Component {
   		  				</Col>
 	                </Row>
       			  	<legend>官方图片</legend>
+						
 					<Row>
 						<Col xs={3} sm={2}>
 							<Dropzone accept="image/jpeg, image/png" onDrop={this.onDropOfficialImage} className="play-dropzone-style">
@@ -350,18 +378,7 @@ export default class EditToy extends Component {
 							</Dropzone>
 						</Col>
 						<Col xs={12} sm={10}>
-							{
-								this.state.images.map((img,index) => {
-									return (
-									<div className="pull-left edit-toy-image-box" key={'img_'+img}>
-										<img className="img-responsive" onClick={() => this.openModal(img)} src={img?CDN.show(img):''}/>
-										<span className="fa fa-close delete" onClick={() => this.removeImg(index)}></span>
-										<span className="fa fa-angle-left left" onClick={() => this.upImg(index)}></span>
-										<span className="fa fa-angle-right right" onClick={() => this.downImg(index)}></span>
-									</div>
-									)
-								})
-							}
+							<SortableList onRemove={this.removeImg} axis="xy" items={this.state.images} onSortEnd={this.onSortEnd} />
 						</Col>
 					</Row>
 					<div className="portlet-body py-5" style={{borderTop:'1px solid #eef1f5'}}>

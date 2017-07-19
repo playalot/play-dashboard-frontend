@@ -45,6 +45,7 @@ export default class Post extends Component{
 							<div className="btn-group">
 								<Link className="btn btn-default" to="/video/edit">发布视频</Link>
 								<button onClick={() => this.props.getUnCls()} type="button" className="btn btn-default">未定义标签</button>
+								<button onClick={() => this.props.getVideoPost()} type="button" className="btn btn-default">视频</button>
 							</div>
 						</FormGroup>
 						{' '}

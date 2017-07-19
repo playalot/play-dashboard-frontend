@@ -1,9 +1,10 @@
 import { connect } from 'react-redux'
-import { getUnCls, getPost, getPostBy } from '../../actions/postAction'
+import { getUnCls, getPost, getPostBy,getVideoPost } from '../../actions/postAction'
 import PostList from './PostList'
 
 const mapActionCreators ={
 	getUnCls,
+	getVideoPost,
 	getPost,
 	getPostBy,
 }

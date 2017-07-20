@@ -27,23 +27,22 @@ export default class PlaySwitch extends Component {
         })
     }
     render() {
-        const { bgColor, readOnly, on, off } = this.props
-        let classStyle = `play-switch `
-        classStyle += this.state.active ? `play-switch-active ` : ` `
-        classStyle += readOnly ? `play-switch-readonly ` : ` `
-        let isColor = this.state.active && bgColor 
+        const { bgColor, on, off } = this.props
+        let className = `play-switch `
+        className += this.state.active ? `active ` : ` `
         return(
-            <div className={classStyle} style={isColor ? {backgroundColor:bgColor}:{}} onClick={this.handleClick}>
-                <div className="play-switch-round"></div>
-                <span>{on}</span>
-                <span>{off}</span>
+            <div className={className} onClick={this.handleClick}>
+                <div className="play-switch-rect">
+                    <div>{on}</div>
+                    <div></div>
+                    <div>{off}</div>
+                </div>
             </div>
         )
     }
 }
 PlaySwitch.defaultProps = {
     active:false,
-    readOnly:false,
-    on:'',
-    off:'',
+    on:'ON',
+    off:'OFF',
 }

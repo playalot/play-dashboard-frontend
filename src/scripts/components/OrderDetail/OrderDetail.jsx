@@ -121,7 +121,7 @@ export default class extends Component{
 	                        {
 	                        	this.state.payments.map((payment,index) => {
 	                        		return(
-			                            <FormControl.Static style={{borderBottom:'1px solid #eee'}}  key={`payment_${index}`}>
+			                            <FormControl.Static style={{borderBottom:'1px solid #eee',marginRight:10}}  key={`payment_${index}`}>
 			                            {payment.method}<br/>
 			                            {payment.timestamp}<br/> 
 			                            {payment.tradeNo}

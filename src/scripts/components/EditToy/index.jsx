@@ -1,13 +1,14 @@
 import React,{ Component } from 'react'
 import Request from 'superagent'
 import Dropzone from 'react-dropzone'
-import { Row, Col, FromControl, Modal } from 'react-bootstrap'
+import { Row, Col, Modal,InputGroup,FormControl } from 'react-bootstrap'
 import CDN from '../../widgets/cdn'
 import PlaySwitch from '../Common/playSwitch'
+import Select from 'react-select'
 
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc'
 const SortableItem = SortableElement(({img,onRemove,index}) =>
-	<div className="edit-toy-image-box">
+	<div style={{margin:'0 5px 5px 0'}}>
 		<button type="button" className="close" aria-label="Close" onClick={() => onRemove(index)}>
 			<span aria-hidden="true">&times;</span>
 		</button>
@@ -52,7 +53,16 @@ export default class EditToy extends Component {
 			showModal: false,
 			showImage:null,
 
-			items:['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6']
+			companys:[
+				{ value: '万代', label: '万代' },
+				{ value: '眼镜厂', label: '眼镜厂' },
+				{ value: '寿屋', label: '寿屋' },
+				{ value: '良笑社', label: '良笑社' },
+				{ value: 'MegaHouse', label: 'MegaHouse' },
+				{ value: '世嘉', label: '世嘉' },
+				{ value: 'FuRyu', label: 'FuRyu' },
+				{ value: '大气工业', label: '大气工业' }
+			]
 		}
 		this.onSortEnd = ({oldIndex, newIndex}) => {
 			this.setState({
@@ -266,132 +276,213 @@ export default class EditToy extends Component {
 	render() {
 		return(
 			<div className="portlet bordered light">
-				<div className="portlet-title">
-					<div className="caption">
-						<span className="caption-subject font-blue-sharp bold uppercase">玩具编辑器</span>
+				<div className="portlet-title tabbable-line">
+					<div className="caption caption-md">
+						<span className="caption-subject font-blue-sharp bold uppercase pr-3">玩具</span>
+						<input type="text" className="edit-toy-title" placeholder="玩具名称" onChange={(e) => this.setState({name:e.target.value})} value={this.state.name}/>
 					</div>
-				</div>
-				<div className="portlet-body py-5">
-					<Row>
-	     			  	<Dropzone onDrop={this.onDropCover} className="col-sm-3 edit-toy-cover">
-		                	<img className="img-responsive" src={this.state.cover?CDN.show(this.state.cover):''}/>
-		                	<div className="edit-toy-cover-text">
-		                		<span>更换封面</span>
-		                	</div>
-		              	</Dropzone>
-	      				<Col sm={9}>
-							<Col sm={12} className="edit-toy-item no-border">
-								<input type="text" className="text-input title" placeholder="玩具名称" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({name:e.target.value})} value={this.state.name}/>
-							</Col>
-							<Col sm={12} className="edit-toy-item">
-								<span className="toy-label">原名:</span>
-								<input type="text" className="text-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({nameRaw:e.target.value})} value={this.state.nameRaw}/>
-							</Col>
-							<Col sm={6} className="edit-toy-item">
-								<span className="toy-label">发售日:</span>
-								<input type="text" className="text-input" placeholder="例:2017/5" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({release:e.target.value})} value={this.state.release}/>
-							</Col>
-							<Col sm={6} className="edit-toy-item">
-								<span className="toy-label">价格:</span>
-								<input type="number" className="text-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({money:e.target.value})} value={this.state.money}/>
-								<select className="text-select" value={this.state.currency} onChange={(e) => this.setState({currency:e.target.value})}>
-									<option value="rmb">人民币</option>
-									<option value="yen">日元</option>
-									<option value="dollar">美元</option>
-									<option value="euro">欧元</option>
-								</select>
-							</Col>
-							<Col sm={6} className="edit-toy-item">
-								<span className="toy-label">公司:</span>
-								<input type="text" className="text-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({company:e.target.value})} value={this.state.company}/>
-							</Col>
-							<Col sm={6} className="edit-toy-item">
-								<span className="toy-label">比例:</span>
-								<input type="text" className="text-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({scale:e.target.value})} value={this.state.scale}/>
-							</Col>
-							<Col sm={6} className="edit-toy-item">
-								<span className="toy-label">系列:</span>
-								<input type="text" className="text-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({series:e.target.value})} value={this.state.series}/>
-			          		</Col>
-							<Col sm={6} className="edit-toy-item">
-								<span className="toy-label">角色:</span>
-								<input type="text" className="text-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({character:e.target.value})} value={this.state.character}/>
-			          		</Col>
-							<Col sm={6} className="edit-toy-item">
-								<span className="toy-label">原著:</span>
-								<input type="text" className="text-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({origin:e.target.value})} value={this.state.origin}/>
-							</Col>
-			          		<Col sm={6} className="edit-toy-item">
-								<span className="toy-label">原型师:</span>
-								<input type="text" className="text-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({artist:e.target.value})} value={this.state.artist}/>
-			          		</Col>
-			          		<Col sm={6} className="edit-toy-item">
-								<span className="toy-label">R18:</span>
-								<PlaySwitch active={this.state.isR18} onChange={isR18 => this.setState({isR18})}/>
-			          		</Col>
-			          		<Col sm={12} className="edit-toy-item no-border">
-	        		  			<span className="toy-direction">详细描述:</span>
-	        		  			<textarea 
-		        		  			className="text-area" 
-		        		  			rows="3"
-		        		  			onChange={(e) => this.setState({detail:e.target.value})} 
-		        		  			value={this.state.detail}>
-		        		  		</textarea>
-			          		</Col>
-						</Col>
-	      			</Row>
-					<legend>其他信息</legend>
-      		  		{
-      		  			this.state.otherInfo.map((info,i) => {
-      		  				return (
-      		  					<Row key={`otherInfo_${i}`} >
-	          		  				<Col  xs={2} smOffset={3}>
-	          		  					<span>{info.key}</span>
-	          		  				</Col>
-	          		  				<Col xs={2} >
-	          		  					<span>{info.value}</span>
-	          		  				</Col>
-	          		  				<Col  xs={2} smOffset={1} xsOffset={1}>
-	          		  					<span onClick={() => this.removeOtherInfo(i)} className="fa fa-minus-circle"></span>
-	          		  				</Col>
-      		  					</Row>
-      		  				)
-      		  			})
-      		  		}
-          		  	<Row>
-          		  		<Col xs={2} smOffset={3}>
-          		  			<input  className="form-control" type="text" value={this.state.newKey} onChange={this.changeNewKey} placeholder="key"></input>
-          		  		</Col>
-          		  		<Col xs={2} >
-	                      <input  className="form-control"  type="text" value={this.state.newValue} onChange={this.changeNewValue} placeholder="value"></input>
-  		  				</Col>
-  		  				<Col  xs={2} smOffset={1} xsOffset={1}>
-	                      <button className="btn btn-outline green" onClick={this.addOtherInfo}>添加</button>
-  		  				</Col>
-	                </Row>
-      			  	<legend>官方图片</legend>
+					<ul className="nav nav-tabs">
+						<li className="active">
+							<a href="#edit_toy_1" data-toggle="tab">玩具信息</a>
+						</li>
+						<li>
+							<a href="#edit_toy_2" data-toggle="tab">详细描述</a>
+						</li>
 						
-					<Row>
-						<Col xs={3} sm={2}>
-							<Dropzone accept="image/jpeg, image/png" onDrop={this.onDropOfficialImage} className="play-dropzone-style">
-								<div>将图片拖入此区域</div>
-							</Dropzone>
-						</Col>
-						<Col xs={12} sm={10}>
-							<SortableList onRemove={this.removeImg} axis="xy" items={this.state.images} onSortEnd={this.onSortEnd} />
-						</Col>
-					</Row>
+					</ul>
+				</div>
+				<div className="portlet-body">
+					<div className="tab-content pb-3">
+						<div className="tab-pane active" id="edit_toy_1">
+							<Row>
+								<Dropzone onDrop={this.onDropCover} className="col-sm-3 edit-toy-cover">
+									<img className="img-responsive" src={this.state.cover?CDN.show(this.state.cover):''}/>
+									<div className="edit-toy-cover-text">
+										<span>更换封面</span>
+									</div>
+								</Dropzone>
+								<Col sm={9}>
+									<Row className="my-1">
+										<Col sm={2} className="sm-2-label">原名</Col>
+										<Col sm={10}>
+											<input type="text" className="edit-toy-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({nameRaw:e.target.value})} value={this.state.nameRaw}/>
+										</Col>
+									</Row>
+									<Row className="my-1">
+										<Col sm={2} className="sm-2-label">发售日</Col>
+										<Col sm={10}>
+											<input type="text" className="edit-toy-input" placeholder="例:2017/5" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({release:e.target.value})} value={this.state.release}/>
+										</Col>
+									</Row>
+									<Row className="my-1">
+										<Col sm={2} className="sm-2-label">价格</Col>
+										<Col sm={10}>
+											<InputGroup>
+												<input type="number" className="edit-toy-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({money:e.target.value})} value={this.state.money}/>
+												<InputGroup.Button>
+													<button className="btn btn-sm blue btn-outline dropdown-toggle" data-toggle="dropdown" type="button">
+														{(() => {
+															switch(this.state.currency) {
+																case 'yen' : return '日元';
+																case 'dollar' : return '美元';
+																case 'euro' : return '欧元';
+																default : return '人民币'
+															}
+														})()}
+													</button>
+													<ul className="dropdown-menu pull-right">
+														<li>
+															<a onClick={() => this.setState({currency:'rmb'})}>人民币</a>
+														</li>
+														<li>
+															<a onClick={() => this.setState({currency:'yen'})}>日元</a>
+														</li>
+														<li>
+															<a onClick={() => this.setState({currency:'dollar'})}>美元</a>
+														</li>
+														<li>
+															<a onClick={() => this.setState({currency:'euro'})}>欧元</a>
+														</li>
+													</ul>
+												</InputGroup.Button>
+											</InputGroup>
+										</Col>
+									</Row>
+									<Row className="my-1">
+										<Col sm={2} className="sm-2-label">公司</Col>
+										<Col sm={10}>
+											{/*<Select.Creatable
+												options={this.state.companys}
+												onChange={({value}) => this.setState({company:value})}
+												value={this.state.company}
+												promptTextCreator={(label) => `添加 ${label}`}	
+											/>*/}
+											<InputGroup>
+												<input type="text" className="edit-toy-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({company:e.target.value})} value={this.state.company}/>
+												<InputGroup.Button>
+													<button className="btn btn-sm blue btn-outline dropdown-toggle" data-toggle="dropdown" type="button">
+														<i className="fa fa-arrow-left fa-fw"></i>选择
+													</button>
+													<ul className="dropdown-menu pull-right">
+														{
+															this.state.companys.map((c,i) => {
+																return(
+																	<li key={`edit-toy-company_${i}`}>
+																		<a onClick={() => this.setState({company:c.label})}>{c.label}</a>
+																	</li>
+																)
+															})
+														}
+													</ul>
+												</InputGroup.Button>
+											</InputGroup>
+										</Col>
+									</Row>
+									<Row className="my-1">
+										<Col sm={2} className="sm-2-label">比例</Col>
+										<Col sm={10}>
+											<input type="text" className="edit-toy-input" placeholder="例:1/7" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({scale:e.target.value})} value={this.state.scale}/>
+										</Col>
+									</Row>
+									<Row className="my-1">
+										<Col sm={2} className="sm-2-label">系列</Col>
+										<Col sm={10}>
+											<input type="text" className="edit-toy-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({series:e.target.value})} value={this.state.series}/>
+										</Col>
+									</Row>
+									<Row className="my-1">
+										<Col sm={2} className="sm-2-label">角色</Col>
+										<Col sm={10}>
+											<input type="text" className="edit-toy-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({character:e.target.value})} value={this.state.character}/>
+										</Col>
+									</Row>
+									<Row className="my-1">
+										<Col sm={2} className="sm-2-label">原著</Col>
+										<Col sm={10}>
+											<input type="text" className="edit-toy-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({origin:e.target.value})} value={this.state.origin}/>
+										</Col>
+									</Row>
+									<Row className="my-1">
+										<Col sm={2} className="sm-2-label">原型师</Col>
+										<Col sm={10}>
+											<input type="text" className="edit-toy-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({artist:e.target.value})} value={this.state.artist}/>
+										</Col>
+									</Row>
+									<Row className="my-1">
+										<Col sm={2} className="sm-2-label">R18</Col>
+										<Col sm={10}>
+											<PlaySwitch on="YES" off="NO" active={this.state.isR18} onChange={isR18 => this.setState({isR18})}/>
+										</Col>
+									</Row>
+								</Col>
+							</Row>
+							<legend>官方图片</legend>
+								
+							<Row>
+								<Col xs={3} sm={2}>
+									<Dropzone accept="image/jpeg, image/png" onDrop={this.onDropOfficialImage} className="play-dropzone-style">
+										<div>将图片拖入此区域</div>
+									</Dropzone>
+								</Col>
+								<Col xs={12} sm={10}>
+									<SortableList onRemove={this.removeImg} axis="xy" items={this.state.images} onSortEnd={this.onSortEnd} />
+								</Col>
+							</Row>
+						</div>
+						<div className="tab-pane" id="edit_toy_2">
+							<Row className="my-1">
+								<Col sm={2} className="sm-2-label">详细描述</Col>
+								<Col sm={10}>
+									<textarea 
+										className="edit-toy-text-area" 
+										rows="3"
+										onChange={(e) => this.setState({detail:e.target.value})} 
+										value={this.state.detail}>
+									</textarea>
+								</Col>
+							</Row>
+							<Row className="my-1">
+								<Col sm={2} className="sm-2-label">其他信息</Col>
+								<Col sm={10}>
+									{
+										this.state.otherInfo.map((info,i) => {
+											return (
+												<Row className="mb-2" key={`otherInfo_${i}`} >
+													<Col className="pt-2" xs={2}>
+														<span>{info.key}</span>
+													</Col>
+													<Col className="pt-2" xs={2} >
+														<span>{info.value}</span>
+													</Col>
+													<Col xs={2}>
+														<button className="btn btn-outline red" onClick={() => this.removeOtherInfo(i)}>删除</button>
+													</Col>
+												</Row>
+											)
+										})
+									}
+									<Row>
+										<Col xs={2}>
+											<input  className="form-control" type="text" value={this.state.newKey} onChange={this.changeNewKey} placeholder="key"></input>
+										</Col>
+										<Col xs={2} >
+											<input  className="form-control"  type="text" value={this.state.newValue} onChange={this.changeNewValue} placeholder="value"></input>
+										</Col>
+										<Col  xs={2}>
+											<button className="btn btn-outline green" onClick={this.addOtherInfo}>添加</button>
+										</Col>
+									</Row>
+								</Col>
+							</Row>
+						</div>
+					</div>
+					
 					<div className="portlet-body py-5" style={{borderTop:'1px solid #eef1f5'}}>
 						<Col sm={2} smOffset={2}>
 							<button className="btn btn-outline green" type="button" onClick={this.submit}>Submit</button>
 						</Col>
 					</div>
 				</div>
-				<Modal show={this.state.showModal} onHide={this.closeModal}>
-					<Modal.Body>
-						<img className="image-modal" src={this.state.showImage}/>
-					</Modal.Body>
-				</Modal>
 			</div>
 		)
 	}

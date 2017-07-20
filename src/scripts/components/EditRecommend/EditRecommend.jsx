@@ -71,11 +71,12 @@ export default class extends Component {
   }
   _submit() {
 
-    const { id,image,targetId,targetType,extra,title,type,toyIds } = this.state
+    const { id,image,targetId,targetType,extra,title,type,toyIds,description } = this.state
     const data = {
-      id,image,targetId,targetType,extra,title,type
+      id,image,targetId,targetType,extra,type,description
     }
     Object.keys(data).forEach(key => !data[key] ? delete data[key] : null)
+		data.title= title
     if(targetType === 'catalog' && toyIds.length){
 			let ids = []
 			toyIds.map((id) => id && ids.push(id))

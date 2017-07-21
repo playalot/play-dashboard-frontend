@@ -11,13 +11,27 @@ const mapActionCreators ={
 }
 
 const mapStateToProps = (state) => {
-	const { posts } = state.postReducer.toJS()
+	const { posts,filterType } = state.postReducer.toJS()
 	const { classifications, loaded } = state.tagClassReducer.toJS()
 	return {
-		posts,
+		posts:filterPost(posts,filterType),
 		classifications,
 		classLoaded:loaded
 	}
 }
 
 export default connect(mapStateToProps, mapActionCreators)(PostPanels)
+
+function filterPost(posts,filterType) {
+	if(filterType === 'unCls') {
+		return posts.filter((post,i) => {
+			return post.cls.length === 0
+		})
+	}else if(filterType === 'video') {
+		return posts.filter((post,i) => {
+			return post.video !== null
+		}) 
+	}else {
+		return posts
+	}
+}

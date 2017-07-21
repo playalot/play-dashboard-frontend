@@ -70,7 +70,7 @@ export default class TradeList extends Component {
 										<div className="portlet-body">
 											<div>
 												<div>
-													<ImgLoad src={trade.photos[0].url640} onClick={() => this.props.openImage(this.openImage(trade.photos),0) } />
+													<ImgLoad src={trade.photos[0].url640} onClick={() => this.openImage(trade.photos,0) } />
 												</div>
 												{
 													trade.photos.length === 1 ? null :

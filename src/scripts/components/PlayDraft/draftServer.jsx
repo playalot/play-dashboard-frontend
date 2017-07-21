@@ -4,7 +4,7 @@ export class DraftImage extends Component {
 	render() {
 		return(
 			<div className="draft-image">
-				<div className="del" onClick={this.props.delete}>
+				<div className="del" onMouseDown={this.props.delete}>
 					<span className="glyphicon glyphicon-remove"></span>
 				</div>
 				<img src={this.props.src} />

@@ -2,8 +2,6 @@ import Request from 'superagent'
 
 export const SKL_RECEIVE_SKU = 'SKL_RECEIVE_SKU'
 
-export const SKL_TOGGLE_REC = 'SKL_TOGGLE_REC'
-export const SKL_TOGGLE_BLK = 'SKL_TOGGLE_BLK'
 export const SKL_DELETE_SKU = 'SKL_DELETE_SKU'
 export const SKU_ADD_TOY_CLASS = 'SKU_ADD_TOY_CLASS'
 export const SKU_REMOVE_TOY_CLASS = 'SKU_REMOVE_TOY_CLASS'
@@ -24,18 +22,6 @@ function receiveSku(res,totalPages,page,merchant,_type,query,orderBy,asc) {
     }
 }
 
-function _toggleRec(id) {
-    return {
-        type: SKL_TOGGLE_REC,
-        id
-    }
-}
-function _toggleBlk(id) {
-    return {
-        type: SKL_TOGGLE_BLK,
-        id
-    }
-}
 function _deleteSku(id,sid) {
     return {
         type: SKL_DELETE_SKU,
@@ -58,17 +44,6 @@ function _removeToyClass(tid, c) {
         c
     }
 }
-export function toggleBlk(id) {
-    return (dispatch) => {
-        dispatch(_toggleBlk(id))
-    }
-}
-export function toggleRec(id) {
-    return (dispatch) => {
-        dispatch(_toggleRec(id))
-    }
-}
-
 export function getSku (page = 0) {
     return (dispatch,getState) => {
         const { merchant, type,query,orderBy,asc } = getState().sku.toJS()

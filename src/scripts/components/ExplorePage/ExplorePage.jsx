@@ -5,14 +5,11 @@ import Request from 'superagent'
 export default class ExplorePage extends Component{
 	constructor(props) {
 	  	super(props)
-	  	this.addBanner = () => confirm('创建一个新Banner？') && this.props.addBanner()
 	  	this.deleteBanner = (id) => confirm('删除这个Banner?') && this.props.deleteBanner(id,'banner')
-	  	this.addTopic = () => confirm('创建一个新主题？') && this.props.addTopic()
 	  	this.deleteTopic = (id) => confirm('删除这个主题?') && this.props.deleteBanner(id,'topic')
-	  	this.addToy = () => confirm('创建一个新玩具页banner？') && this.props.addToy()
 	  	this.deleteToy = (id) => confirm('删除这个玩具banner?') && this.props.deleteBanner(id,'toy')
-	  	this.addDraft = this._addDraft.bind(this)
 	  	this.deleteDraft = (id) => confirm('删除这个草稿?') && this.props.deleteBanner(id,'draft')
+	  	this.addDraft = this._addDraft.bind(this)
 	}
 	_addDraft() {
 		if(confirm('创建一个新草稿？')){

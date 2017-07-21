@@ -5,7 +5,7 @@ import Moment from 'moment'
 import Request from 'superagent'
 import parse from '../../widgets/parse'
 import CDN from '../../widgets/cdn'
-
+import { MERCHANTS } from '../../widgets/constant'
 export default class EditSku extends Component {
   constructor(props) {
     super(props)
@@ -135,17 +135,7 @@ export default class EditSku extends Component {
               </Col>
               <Col sm={4}>
                 <FormControl componentClass="select" value={this.state.merchant} onChange={(e) => this.setState({merchant:e.target.value})}>
-                  <option value="PLAY玩具控">PLAY玩具控</option>
-                  <option value="亿次元商城">亿次元商城</option>
-                  <option value="拆盒网">拆盒网</option>
-                  <option value="塑唐玩具">塑唐玩具</option>
-                  <option value="HobbyMax官方店">HobbyMax官方店</option>
-                  <option value="H教授的玩具讲座">H教授的玩具讲座</option>
-                  <option value="鹤屋通贩">鹤屋通贩</option>
-                  <option value="电玩男の里屋">电玩男の里屋</option>
-                  <option value="万事屋手办店">万事屋手办店 </option>
-                  <option value="塑料魂">塑料魂 </option>
-                  <option value="刺猬挺">刺猬挺 </option>
+                  { MERCHANTS.map(m => <option key={`edit-sku-${m}`} value={m}>{m}</option>) }
                 </FormControl>
               </Col>
             </FormGroup>

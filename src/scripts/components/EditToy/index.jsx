@@ -7,20 +7,20 @@ import PlaySwitch from '../Common/playSwitch'
 import Select from 'react-select'
 
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc'
-const SortableItem = SortableElement(({img,onRemove,index}) =>
+const SortableItem = SortableElement(({img,onRemove,index,i}) =>
 	<div style={{margin:'0 5px 5px 0'}}>
-		<button type="button" className="close" aria-label="Close" onClick={() => onRemove(index)}>
+		<button type="button" className="close" aria-label="Close" onClick={() => onRemove(i)}>
 			<span aria-hidden="true">&times;</span>
 		</button>
 		<img style={{height:100}} className="img-responsive" src={CDN.show(img)}/>
 	</div>
-);
+)
 
 const SortableList = SortableContainer(({items,onRemove}) => {
   	return (
 		<div className="d-flex flex-wrap">
 			{
-				items.map((img, index) => <SortableItem onRemove={onRemove} key={`toy-img-${index}`} index={index} img={img} />)
+				items.map((img, index) => <SortableItem onRemove={onRemove} key={`toy-img-${index}`} i={index} index={index} img={img} />)
 			}
 		</div>
   	)
@@ -50,9 +50,6 @@ export default class EditToy extends Component {
 			images: [],
 			newKey: '',
 			newValue: '',
-			showModal: false,
-			showImage:null,
-
 			companys:[
 				{ value: '万代', label: '万代' },
 				{ value: '眼镜厂', label: '眼镜厂' },
@@ -78,18 +75,6 @@ export default class EditToy extends Component {
 
 	  	this.submit = this._submit.bind(this)
 	  	this.removeImg = this._removeImg.bind(this)
-	  	this.upImg = this._upImg.bind(this)
-	  	this.downImg = this._downImg.bind(this)
-	  	this.openModal = (img) => {
-	  		this.setState({
-	  			showImage:CDN.show(img),
-	  			showModal:true,
-	  		})
-	  	}
-	  	this.closeModal = () => this.setState({
-	  		showModal:false,
-	  		showImage:null
-	  	})
 	}
 	componentWillMount() {
 		Request
@@ -111,35 +96,22 @@ export default class EditToy extends Component {
 					detail: res.body.info.detail || '',
 					isR18:res.body.isR18,
 					otherInfo: res.body.otherInfo,
-					images: res.body.images
+					images: res.body.images,
 				})
-
 			})
 	}
 	_removeOtherInfo(i) {
-		let tmpArr = this.state.otherInfo
-		tmpArr.splice(i,1)
-		this.setState({
-			otherInfo: tmpArr
-		})
+		const otherInfo = this.state.otherInfo
+		otherInfo.splice(i,1)
+		this.setState({ otherInfo })
 	}
 	_addOtherInfo() {
-		if(!this.state.newKey.trim() || !this.state.newValue.trim()){
+		const { newKey, newValue } = this.state
+		if(!newKey.trim() || !newValue.trim()){
 			return alert('字段不能为空')
 		}
-		let tmpArr = this.state.otherInfo
-		tmpArr.push({
-			key:this.state.newKey,
-			value:this.state.newValue
-		})
-		this.setState({
-			otherInfo:tmpArr
-		},() => {
-			this.setState({
-				newKey:'',
-				newValue:''
-			})
-		})
+		this.state.otherInfo.push({ key:newKey, value:newValue })
+		this.setState({ newKey:'', newValue:'' })
 	}
 	_onDropOfficialImage(images) {
 		images.forEach((image,index) => {
@@ -151,25 +123,24 @@ export default class EditToy extends Component {
 				data: formData,
 				processData: false,
 				contentType: false,
-				success: function(data) {
+				success: (data) => {
 					this.state.images.push(data)
 					this.setState({
 						images: this.state.images
 					})
-				}.bind(this)
+				}
 			})
 		})
 	}
 	_onDropCover(images) {
-		let _this = this
 		Request.get('/api/uptoken')
 			.withCredentials()
-			.end(function(err, res) {
+			.end((err, res) => {
 				let uploadToken = res.body.uptoken
 				const file = images[0]
 				const img = new Image()
 				img.onload = () => {
-					const uploadKey = 'toy/cover/'+_this.props.match.params.id+Date.now()+'_w_'+img.width+'_h_'+img.height+'.'+file.name.split('.').pop();
+					const uploadKey = 'toy/cover/'+this.props.match.params.id+Date.now()+'_w_'+img.width+'_h_'+img.height+'.'+file.name.split('.').pop();
 					Request
 						.post('http://upload.qiniu.com/')
 						.field('key', uploadKey)
@@ -178,95 +149,37 @@ export default class EditToy extends Component {
 						.field('x:size', file.size)
 						.attach('file', file, file.name)
 						.set('Accept', 'application/json')
-						.end(function(err, res) {
-							_this.setState({
-								cover: uploadKey
-							});
-						});
+						.end((err, res) => {
+							this.setState({ cover: uploadKey })
+						})
 				}
 				img.src = file.preview
 			})
 	}
 	_removeImg(index) {
 		if (confirm('删除这个图片?')) {
-			let tmpImg = this.state.images
-	        tmpImg.splice(index,1)
-	        this.setState({
-	            images: tmpImg
-	        })
+			const images = this.state.images
+	        images.splice(index,1)
+	        this.setState({ images })
 		}
-    }
-    _upImg(index) {
-    	if(index <= 0){ return }
-    	let tmpImg = this.state.images
-    	let tmp = tmpImg[index-1]
-    	tmpImg[index-1] = tmpImg[index]
-    	tmpImg[index] = tmp
-    	this.setState({
-            images: tmpImg
-        })
-    }
-    _downImg(index) {
-		if(index >= (this.state.images.length - 1)){ return }
-    	let tmpImg = this.state.images
-    	let tmp = tmpImg[index+1]
-    	tmpImg[index+1] = tmpImg[index]
-    	tmpImg[index] = tmp
-    	this.setState({
-            images: tmpImg
-        })
     }
 	_submit() {
-	  	let {
-			cover,
-			name,
-			nameRaw,
-			release,
-			money,
-			currency,
-			scale,
-			detail,
-			company,
-			character,
-			artist,
-			series,
-			origin,
-			isR18,
-			otherInfo,
-			images
-	    } = this.state
-		const data = {
-			cover,
-			name,
-			nameRaw,
-			release,
-			money,
-			currency,
-			scale,
-			detail,
-			company,
-			character,
-			artist,
-			series,
-			origin,
-			isR18,
-			otherInfo,
-			images
-		}
+	  	let { cover, name, nameRaw, release, money, currency, scale, detail, company,
+			character, artist, series, origin, isR18, otherInfo, images } = this.state
+		const data = { cover, name, nameRaw, release, money:parseInt(money), currency,
+			scale, detail, company, character, artist, series, isR18, otherInfo, images }
 		if(name.trim() === ''){
 			return alert('名字不能为空')
 		}
 		if(!release.match(/\d{4}\/\d{1,2}/)){
 			return alert('发售日期格式不对')
 		}
-		data.money = parseInt(data.money)
 		Object.keys(data).forEach(key => data[key]=== '' ? delete data[key] : '')
   		Request
 	  		.post(`/api/toy/${this.props.match.params.id}`)
 	  		.send(data)
 	  		.end((err,res) => {
 					if (err || !res.ok) {
-						console.log(err)
 			 			alert('保存失败!')
 			 		} else {
 			 			alert('保存成功.')
@@ -419,7 +332,7 @@ export default class EditToy extends Component {
 							<legend>官方图片</legend>
 								
 							<Row>
-								<Col xs={3} sm={2}>
+								<Col xs={12} sm={2} style={{marginBottom:5}}>
 									<Dropzone accept="image/jpeg, image/png" onDrop={this.onDropOfficialImage} className="play-dropzone-style">
 										<div>将图片拖入此区域</div>
 									</Dropzone>

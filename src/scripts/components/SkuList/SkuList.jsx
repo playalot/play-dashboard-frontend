@@ -10,6 +10,7 @@ import DatePicker from 'react-datepicker'
 import Request from 'superagent'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import { parsePage } from '../../widgets/parse'
+import { MERCHANTS } from '../../widgets/constant'
 const _ = require('lodash')
 
 
@@ -153,17 +154,7 @@ export default class SkuList extends Component{
 										</button>
 										<ul className="dropdown-menu">
 											<li><a onClick={() => this.onChangeMerchant('')}>所有商家</a></li>
-											<li><a onClick={() => this.onChangeMerchant('PLAY玩具控')}>PLAY玩具控</a></li>
-											<li><a onClick={() => this.onChangeMerchant('亿次元商城')}>亿次元商城</a></li>
-											<li><a onClick={() => this.onChangeMerchant('塑唐玩具')}>塑唐玩具</a></li>
-											<li><a onClick={() => this.onChangeMerchant('HobbyMax官方店')}>HobbyMax官方店</a></li>
-											<li><a onClick={() => this.onChangeMerchant('H教授的玩具讲座')}>H教授的玩具讲座</a></li>
-											<li><a onClick={() => this.onChangeMerchant('鹤屋通贩')}>鹤屋通贩</a></li>
-											<li><a onClick={() => this.onChangeMerchant('电玩男の里屋')}>电玩男の里屋</a></li>
-											<li><a onClick={() => this.onChangeMerchant('万事屋手办店')}>万事屋手办店</a></li>
-											<li><a onClick={() => this.onChangeMerchant('塑料魂')}>塑料魂</a></li>
-											<li><a onClick={() => this.onChangeMerchant('刺猬挺')}>刺猬挺</a></li>
-											<li><a onClick={() => this.onChangeMerchant('拆盒网')}>拆盒网</a></li>
+											{MERCHANTS.map(m => <li key={`sku-list-${m}`}><a onClick={() => this.onChangeMerchant(m)}>{m}</a></li>)}
 										</ul>
 									</div>
 								</th>

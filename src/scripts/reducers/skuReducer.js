@@ -1,12 +1,11 @@
 import Immutable from 'immutable'
 import {
 	SKL_RECEIVE_SKU, SKL_DELETE_SKU,
-    SKL_TOGGLE_BLK,SKL_TOGGLE_REC,
     SKU_REMOVE_TOY_CLASS,SKU_ADD_TOY_CLASS,
     SKU_CLEAR_SUGGESTION,SKU_RECEIVE_SKU_BY_QUERY,
 } from '../actions/skuAction'
 
-export default (state = Immutable.fromJS({ skus: [],totalPages:100,filter:'',filterType:'',query:'',orderBy:'created',asc:false,skuResults:[] }),action)=>{
+export default (state = Immutable.fromJS({ skus: [],totalPages:100,merchant:'',type:'',query:'',orderBy:'created',asc:false,skuResults:[] }),action)=>{
     switch (action.type) {
         case SKL_RECEIVE_SKU:
             return state
@@ -29,26 +28,6 @@ export default (state = Immutable.fromJS({ skus: [],totalPages:100,filter:'',fil
                                 stock.stockId = action.sid
                             }))
                         })
-                    }
-                )
-            })
-        case SKL_TOGGLE_BLK:
-            return state.updateIn(['skus'], (skus) => {
-                return skus.update(
-                    skus.findIndex((item) => {
-                        return item.get('id') === action.id
-                    }), (item) => {
-                        return item.set('isBlk', !item.get('isBlk'));
-                    }
-                )
-            })
-        case SKL_TOGGLE_REC:
-            return state.updateIn(['skus'], (skus) => {
-                return skus.update(
-                    skus.findIndex((item) => {
-                        return item.get('id') === action.id
-                    }), (item) => {
-                        return item.set('isRec', !item.get('isRec'));
                     }
                 )
             })
@@ -81,8 +60,8 @@ export default (state = Immutable.fromJS({ skus: [],totalPages:100,filter:'',fil
         case SKU_RECEIVE_SKU_BY_QUERY:
             return state.set('skuResults',Immutable.fromJS(action.res))
         case SKU_CLEAR_SUGGESTION:
-            return state.updateIn(['skuResults'],(toyResults) => {
-                return toyResults.clear()
+            return state.updateIn(['skuResults'],(skuResults) => {
+                return skuResults.clear()
             })
         default:
             return state

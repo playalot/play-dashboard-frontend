@@ -25,6 +25,7 @@ export default class Post extends Component{
 			this.setState({filter,query})
 			this.props.history.push(`/posts?page=${page}`)
 		}else{
+			this.props.history.push(`/posts`)
 			this.props.getPost(0)
 		}
 	}

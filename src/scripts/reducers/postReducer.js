@@ -17,7 +17,7 @@ import {
     POST_GET_VIDEO,
 } from '../actions/postAction'
 
-export default (state = Immutable.fromJS({ posts:[],totalPages:100,filter:'',query:''}),action)=>{
+export default (state = Immutable.fromJS({ posts:[],totalPages:100,filter:'',query:'',filterType:''}),action)=>{
     switch (action.type) {
         case POST_RECEIVE_POST:
             return state
@@ -26,6 +26,7 @@ export default (state = Immutable.fromJS({ posts:[],totalPages:100,filter:'',que
                 .set('page',action.page)
                 .set('filter',action.filter)
                 .set('query',action.query)
+                .set('filterType','')
         case POST_CLEAR_POST:
             return state
                 .updateIn(['posts'], (posts) => posts.clear())
@@ -154,16 +155,12 @@ export default (state = Immutable.fromJS({ posts:[],totalPages:100,filter:'',que
                 }))
             })
         case POST_GET_UN_CLS:
-            return state.updateIn(['posts'], (posts) => {
-                return posts.filter((item) => {
-                    return item.get('cls').size === 0
-                })
+            return state.updateIn(['filterType'],(filterType) => {
+               return filterType === 'unCls' ? '' : 'unCls'
             })
         case POST_GET_VIDEO:
-            return state.updateIn(['posts'], (posts) => {
-                return posts.filter((item) => {
-                    return item.get('video') !== null
-                })
+            return state.updateIn(['filterType'],(filterType) => {
+                return filterType === 'video' ? '' : 'video'
             })
         default:
             return state

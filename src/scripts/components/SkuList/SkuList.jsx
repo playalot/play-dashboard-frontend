@@ -128,7 +128,7 @@ export default class SkuList extends Component{
 		const { orderBy,asc } = this.state
 		return(
 			<div>
-				<div className="table-responsive skus-table">
+				<div style={{minHeight:500}} className="table-responsive skus-table">
 					<table className="table table-bordered table-hover">
 						<thead>
 							<tr>

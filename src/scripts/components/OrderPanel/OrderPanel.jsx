@@ -56,7 +56,7 @@ export default class extends Component{
 		return(
 			<div className="table-responsive skus-table">
         <table className="table table-bordered table-hover">
-        	<thead><tr><th>用户</th><th>商家</th><th></th><th>订单</th><th>总金额</th><th>下单时间</th><th>订单状态</th><th></th><th></th></tr></thead>
+        	<thead><tr><th>用户</th><th>商家</th><th></th><th>订单</th><th>总金额</th><th>下单时间</th><th>更新时间</th><th>订单状态</th><th></th><th></th></tr></thead>
           <tbody>
             {orders.map((order,index) => {
               return (
@@ -81,6 +81,7 @@ export default class extends Component{
                   	{order.price.prePay ? <small style={{color:'#6c6c6c',fontSize:'10px'}}>订金:¥&nbsp;{order.price.prePay}</small>:null}
                   </td>
                   <td>{Moment(order.created).format('MM-DD HH:mm')}</td>
+                  <td>{Moment(order.updated).format('MM-DD HH:mm')}</td>
                   <td>{this.formatStatus(order.status,order.startPay)}</td>
                   <td>
                   	<div className="btn-group">

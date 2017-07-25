@@ -61,7 +61,7 @@ export function getSku (page = 0) {
             .get(`/api/stocks`)
             .query(params)
             .end((err, res) => {
-                dispatch(receiveSku(res.body.stocks,res.body.totalPages,page,merchant,type,query))
+                dispatch(receiveSku(res.body.stocks,res.body.totalPages,page,merchant,type,query,orderBy,asc))
             })
     }
 }
@@ -70,6 +70,7 @@ export function getSkuBy (merchant = '',type = '',query = '',orderBy,asc) {
     return (dispatch,getState) => {
         let page = 0
         let params = { page,orderBy,asc }
+        console.log(orderBy,asc)
         if(query) {
             params.q = query
         }

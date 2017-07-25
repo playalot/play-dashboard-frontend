@@ -48,8 +48,8 @@ export default class SkuList extends Component{
 			this.props.history.push(`/skus?page=${page}`)
 			this.setState({merchant,type,query,orderBy,asc})
 		}else{
-			this.props.history.push(`/skus?page=0`)
-			this.props.getSku()
+			const ppage = parsePage(this.props.location.search)
+			this.goPage(ppage)
 		}
 	}
 	_fillMoney(id,sid) {

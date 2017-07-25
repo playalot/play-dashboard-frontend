@@ -4,7 +4,6 @@ import { Row, Col, Modal, Form, FormGroup, InputGroup, FormControl, Button } fro
 import ReactPaginate from 'react-paginate'
 import PostPanels from '../PostPanels'
 import { parsePage } from '../../widgets/parse'
-const _ = require('lodash')
 
 export default class Post extends Component{
 	constructor(props) {
@@ -25,8 +24,8 @@ export default class Post extends Component{
 			this.setState({filter,query})
 			this.props.history.push(`/posts?page=${page}`)
 		}else{
-			this.props.history.push(`/posts`)
-			this.props.getPost(0)
+			const ppage = parsePage(this.props.location.search)
+			this.goPage(ppage)
 		}
 	}
 	_search() {

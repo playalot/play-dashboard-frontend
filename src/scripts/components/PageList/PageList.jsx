@@ -26,7 +26,8 @@ export default class PageList extends Component{
 			this.setState({filter,query})
 			this.props.history.push(`/pages?page=${page}`)
 		}else{
-			this.props.getPage(0)
+			const ppage = parsePage(this.props.location.search)
+			this.goPage(ppage)
 		}
 	}
 	_goPage(page) {

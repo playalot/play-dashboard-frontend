@@ -36,7 +36,8 @@ export default class UserList extends Component{
 			this.props.history.push(`/users?page=${page}`)
 			this.setState({filter,filterType})
 		}else{
-			this.props.getUser(0)
+			const ppage = parsePage(this.props.location.search)
+			this.goPage(ppage)
 		}
 	}
 	_approve() {

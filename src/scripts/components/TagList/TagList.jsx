@@ -36,7 +36,8 @@ export default class TagList extends Component{
 			this.props.history.push(`/tags?page=${page}`)
 			this.setState({type,query})
 		}else{
-			this.props.getTag(0)
+			const ppage = parsePage(this.props.location.search)
+			this.goPage(ppage)
 		}
 	}
 	_setTagClassification(tid,cid) {

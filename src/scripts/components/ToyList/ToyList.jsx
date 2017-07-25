@@ -49,7 +49,8 @@ export default class Toy extends Component{
 			this.props.history.push(`/toys?page=${page}`)
 			this.setState({filter,query,sort,month,year})
 		}else{
-			this.props.getToy(0)
+			const ppage = parsePage(this.props.location.search)
+			this.goPage(ppage)
 		}
 	}
 	_goPage(page) {

@@ -242,6 +242,11 @@
   z-index: 2;
   background-color: rgba(255, 255, 255, 0.9)
 }
+@media screen and  (max-width: 992px) {
+  #page-affix{
+    top:0;
+  }
+}
 
 .draft-image{
   position:relative;

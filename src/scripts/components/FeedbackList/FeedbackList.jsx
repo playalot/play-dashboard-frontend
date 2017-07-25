@@ -15,7 +15,8 @@ export default class FeedbackList extends Component{
 		if(typeof page === 'number') {
 			this.props.history.push(`/feedbacks?page=${page}`)
 		}else{
-			this.props.getFeedback(0)
+			const ppage = parsePage(this.props.location.search)
+			this.goPage(ppage)
 		}
 	}
 	_goPage(page) {

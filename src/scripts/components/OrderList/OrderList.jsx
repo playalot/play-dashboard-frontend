@@ -32,7 +32,14 @@ export default class OrderList extends Component{
 			this.props.history.push(path)
 			this.setState({status,merchant,year,month,filter})
 		}else{
-			this.props.getOrder(0)
+			const ppage = parsePage(this.props.location.search)
+			const pstatus = parse(this.props.location.search).status || ''
+			const pmerchant = parse(this.props.location.search).merchant || ''
+			this.setState({
+				status:pstatus,merchant:pmerchant
+			},() => {
+				this.goPage(ppage)
+			})
 		}
 	}
 	_goPage(page) {

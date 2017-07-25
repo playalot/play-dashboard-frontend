@@ -24,7 +24,7 @@ class PlayAliBaichuan extends Component {
 	    	// logo: 'http://img.alicdn.com/tps/i3/TB12LD9IFXXXXb3XpXXSyFWJXXX-82-82.png',
 	    	// pluginUrl: 'http://www.taobao.com/market/seller/openim/plugindemo.php',
 	    	// sendMsgToCustomService: true,
-	    	// titleBar:true,
+			// titleBar:true,
 	        onMsgSent:function() {
 	            console.log('sent')
 	        },
@@ -41,13 +41,12 @@ class PlayAliBaichuan extends Component {
 	            toAvatar,
 	        });
 		}
-		
 	}
 	render() {
 		let show = this.props.baichuan.touid === 'none' ? false : true
 
 		return(
-			<div
+			<div onClick={this.props.setTouidNull}
 				style={{
 					position:'fixed',
 					top:0,right:0,left:0,bottom:0,
@@ -58,18 +57,7 @@ class PlayAliBaichuan extends Component {
 					zIndex:9999,
 				}}
 			>
-				<span style={{
-					position:'absolute',
-					top:50,right:50,
-					color:'white',
-					fontSize:30,
-					borderRadius:'50%',
-					border:'1px solid white',
-					padding:7
-				}} onClick={this.props.setTouidNull} className="glyphicon glyphicon-remove"></span>
-				<div id="alibaichuan">
-					
-				</div>
+				<div id="alibaichuan" onClick={e => e.stopPropagation()}></div>
 			</div>
 		)
 	}

@@ -28,7 +28,8 @@ export default class TradeList extends Component {
 		if(typeof page === 'number') {
 			this.props.history.push(`/trades?page=${page}`)
 		}else{
-			this.props.getTrade(0)
+			const ppage = parsePage(this.props.location.search)
+			this.goPage(ppage)
 		}
 	}
 	_goPage(page) {

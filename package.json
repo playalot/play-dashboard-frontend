@@ -9,6 +9,7 @@
     "admin-lte": "^2.3.8",
     "bootstrap": "^3.3.7",
     "bootstrap-sass": "^3.3.7",
+    "draft-convert": "^1.4.8",
     "draft-js": "^0.10.1",
     "draft-js-export-html": "^0.5.4",
     "draft-js-utils": "^0.1.6",

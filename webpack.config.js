@@ -22,6 +22,7 @@ module.exports = {
 		path: path.resolve(__dirname, 'dist'),
 		filename: 'scripts/bundle.js'
 	},
+	devtool: 'eval-source-map',
 	module: {
 		rules:[
 			{

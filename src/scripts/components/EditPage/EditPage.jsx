@@ -4,7 +4,6 @@ import { stateToHTML } from 'draft-js-export-html'
 import Request from 'superagent'
 import Dropzone from 'react-dropzone'
 import TagsInput from 'react-tagsinput'
-import Select from 'react-select'
 
 import {
   Editor,
@@ -20,7 +19,7 @@ import {
 } from 'draft-js'
 
 import decorator from '../PlayDraft/DecoratorServer'
-import { getBlockStyle,makeId, DraftImage } from '../PlayDraft/draftServer'
+import { getBlockStyle,makeId, DraftImage,mediaBlockRenderer } from '../PlayDraft/draftServer'
 import { createLinkEntity,createImageEntity,createVideoEntityWithHtml,createVideoEntityWithSrc,removeEntity } from '../PlayDraft/entityServer'
 import DraftToolbar from '../PlayDraft/DraftToolbar'
 
@@ -56,8 +55,8 @@ export default class EditPage extends Component {
         this.onChange = (editorState) => this.setState({ editorState },() => this.saveStorage())
         this.focus = () => this.refs.editor.focus()
         this.blur = () => this.refs.editor.blur()
+        this.handleKeyCommand = (command) => this._handleKeyCommand(command)
 
-        this.blockRendererFn = this._blockRendererFn.bind(this)
         //媒体(图片,视频..)
         this.addImage = this._addImage.bind(this)
         this.addVideo = () => this._addVideo()
@@ -96,6 +95,7 @@ export default class EditPage extends Component {
 			.end((err,res) => {
 				const { title, cover, tags, category, gallery, raw, authorId } = res.body
                 let rawData = convertFromRaw(raw)
+                console.log(rawData.toJS().entityMap)
 				this.setState({
 					title, cover, tags, category, gallery, authorId:authorId.$oid,
                     editorState:EditorState.push(this.state.editorState, rawData)
@@ -113,6 +113,7 @@ export default class EditPage extends Component {
         $('html, body').animate({scrollTop: 0}, 1000)
         return false
     }
+    
     _onDropCover(files) {
         Request.get('/api/uptoken')
         .end((err, res) => {
@@ -225,40 +226,20 @@ export default class EditPage extends Component {
                         this.setState({
                             dialogSubmit:false,
                         },()=>{
-                            this.context.router.push('/page')
+                            this.props.history.push('/pages')
                         })
                     }
                 })
         })
     }
-    _blockRendererFn(block) {
-        const { editorState } = this.state
-        const contentState = editorState.getCurrentContent()
-        if (block.getType() === 'atomic') {
-            return {
-                component: (props) => {
-                    const entityKey = props.block.getEntityAt(0)
-                    const entity = contentState.getEntity(entityKey)
-                    const { html, src } = entity.getData()
-                    const type = entity.getType()
-
-                    let media = null
-                    if (type === 'image') {
-                        media = (
-                            <DraftImage
-                                src={src.split('!')[0]}
-                                delete={() => this.onChange(removeEntity(editorState,props.block.getKey()))}
-                            />
-                        )
-                    }else if (type === 'video') {
-                        media = <div dangerouslySetInnerHTML={{__html: html}}></div>
-                    }
-                    return media
-                },
-                editable: false,
-            };
-        }
-      return null;
+    _handleKeyCommand(command) {
+      	const {editorState} = this.state;
+      	const newState = RichUtils.handleKeyCommand(editorState, command)
+      	if (newState) {
+        	this.onChange(newState)
+        	return true
+      	}
+      	return false
     }
     _uploadImg(files) {
         let _this = this
@@ -400,10 +381,10 @@ export default class EditPage extends Component {
     render() {
         const { cover,title,tags,category,authorId,dialogSubmit,gallery,editorState } = this.state
         const contentState = editorState.getCurrentContent()
-        let className = 'edit-editor'
+        let className = 'RichEditor-editor'
         if (!contentState.hasText()) {
             if (contentState.getBlockMap().first().getType() !== 'unstyled') {
-                className = ' edit-hidePlaceholder'
+                className += ' RichEditor-hidePlaceholder'
             }
         }
         return (
@@ -438,8 +419,7 @@ export default class EditPage extends Component {
                     <div className="edit-root">
                         <div className={className} onClick={this.focus}>
                             <Editor
-                                blockRendererFn={this.blockRendererFn}
-                                blockStyleFn={getBlockStyle}
+                                blockRendererFn={mediaBlockRenderer}
                                 editorState={editorState}
                                 onChange={this.onChange}
                                 placeholder="编辑文章内容"

@@ -1,5 +1,27 @@
 import React,{ Component } from 'react'
 
+export const mediaBlockRenderer = (block) => {
+	if (block.getType() === 'atomic') {
+		return {
+			component: (props) => {
+				const entityKey = props.block.getEntityAt(0)
+				const entity = props.contentState.getEntity(entityKey)
+				const { html, src } = entity.getData()
+				const type = entity.getType()
+
+				if (type === 'image') {
+					return <img src={src} />
+				}else if (type === 'video') {
+					return <div dangerouslySetInnerHTML={{__html: html}}></div>
+				}
+				return null
+			},
+			editable: false,
+		}
+	}
+    return null
+}
+
 export class DraftImage extends Component {
 	render() {
 		return(

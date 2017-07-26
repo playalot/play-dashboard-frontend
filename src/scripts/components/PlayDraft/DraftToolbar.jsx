@@ -87,8 +87,8 @@ export default class extends Component {
 				</div>
 				{
 					this.state.dialogLink ?
-					<div className="modal" style={{zIndex:2}} onClick={() => this.setState({dialogLink:false})}>
-						<div className="dialog" onClick={e => e.stopPropagation()}>
+					<div className="play-modal" style={{zIndex:2}} onClick={() => this.setState({dialogLink:false})}>
+						<div className="play-dialog" onClick={e => e.stopPropagation()}>
 							<p className="dialog-title">添加链接</p>
 							<span onClick={() => this.setState({dialogLink:false})} className="dialog-close">×</span>
 							<div>
@@ -96,7 +96,7 @@ export default class extends Component {
 								<input type="text" style={{marginTop:'10px'}} className="form-control" value={this.state.aTxt} onChange={e => this.setState({aTxt:e.target.value})} placeholder="链接文本"/>
 							</div>
 							<div className="dialog-footer">
-								<button className="btn btn-primary" onClick={this.addLink}>插入</button>
+								<button className="btn green btn-outline pull-right" onClick={this.addLink}>插入</button>
 							</div>
 						</div>
 					</div>

@@ -5,6 +5,7 @@ import { Row, Col, Modal,InputGroup,FormControl } from 'react-bootstrap'
 import CDN from '../../widgets/cdn'
 import PlaySwitch from '../Common/playSwitch'
 import Select from 'react-select'
+// import PlayHtmlEditor from '../Common/PlayHtmlEditor'
 
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc'
 const SortableItem = SortableElement(({img,onRemove,index,i}) =>
@@ -342,10 +343,11 @@ export default class EditToy extends Component {
 								</Col>
 							</Row>
 						</div>
-						<div className="tab-pane" id="edit_toy_2">
+						<div className="tab-pane " id="edit_toy_2">
 							<Row className="my-1">
 								<Col sm={2} className="sm-2-label">详细描述</Col>
 								<Col sm={10}>
+									{/* <PlayHtmlEditor></PlayHtmlEditor> */}
 									<textarea 
 										className="edit-toy-text-area" 
 										rows="3"

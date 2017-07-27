@@ -1,5 +1,7 @@
 import React,{ Component } from 'react'
-
+import { Entity } from 'draft-js'
+import {convertFromHTML} from 'draft-convert'
+import { stateToHTML } from 'draft-js-export-html'
 export const mediaBlockRenderer = (block) => {
 	if (block.getType() === 'atomic') {
 		return {
@@ -129,4 +131,53 @@ export function makeId() {
 		text += possible.charAt(Math.floor(Math.random() * possible.length))
 	}
 	return text
+}
+
+
+export const draftFromHtml = (html) => {
+	return convertFromHTML({
+		htmlToEntity:(nodeName,node) => {
+			if (nodeName === 'a') {
+				return Entity.create(
+					'LINK',
+					'IMMUTABLE',
+					{url: node.href}
+				)
+			}
+			if (nodeName === 'img') {
+				return Entity.create('image','IMMUTABLE',{
+					src:node.src,
+					type:'image'
+				})
+			}
+		},
+		htmlToBlock: (nodeName, node, lastList, inBlock) => {
+			if (nodeName === 'figure' && node.firstChild.nodeName === 'IMG' || (nodeName === 'img' && inBlock !== 'atomic')) {
+				return 'atomic'
+			}
+		}
+	})(html)
+}
+
+export const draftToHtml = (contentState) => {
+	const options = {
+		blockRenderers: {
+			atomic: (block) => {
+				const entity = contentState.getEntity(block.getEntityAt(0))
+				const data = entity.getData()
+				if (data.type === 'image') {
+					return `<figure><img src="${data.src}" style="max-width:'100%'" /></figure>`
+				} else if (data.type === 'video') {
+					if(data.src) {
+						return `<figure><video width="100%" src="${data.src}" poster="${data.poster}" controls /></figure>`
+					}else {
+						return `<figure>${data.html}</figure>`
+					}
+				} else {
+					return null
+				}
+			},
+		}
+	}
+	return stateToHTML(contentState,options).replace(/<p><br><\/p>\s?<figure>/g,'<figure>')
 }

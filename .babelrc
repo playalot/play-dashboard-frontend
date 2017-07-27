@@ -3,6 +3,7 @@
         ["es2015", { "modules": false }], "stage-2", "react" 
     ],
     "plugins": [
-        "react-hot-loader/babel"
+        "react-hot-loader/babel",
+        "transform-runtime"
     ] 
 }

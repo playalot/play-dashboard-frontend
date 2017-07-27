@@ -32,9 +32,10 @@ export default class ReportList extends Component{
 		this.props.history.push(`/reports?page=${page}`)
 		this.props.getReport(page)
 	}
-	formatUrl(images) {
+	formatUrl(images,caption) {
 		images.map((image) => {
 			image.src = image.url
+			image.caption = caption || ''
 		})
 		return images
 	}
@@ -65,7 +66,7 @@ export default class ReportList extends Component{
 											<td style={{textAlign:'center'}}>
 												{
 													report.targetType === 'post' && report.target ?
-													<img onClick={() => this.openImage(this.formatUrl(report.target.photos),0)} src={report.target.preview} style={{width:'45px'}} className="img-thumbnail"/>
+													<img onClick={() => this.openImage(this.formatUrl(report.target.photos,report.target.caption),0)} src={report.target.preview} style={{width:'45px'}} className="img-thumbnail"/>
 													:null
 												}
 												{

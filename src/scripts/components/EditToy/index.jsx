@@ -3,6 +3,7 @@ import Request from 'superagent'
 import Dropzone from 'react-dropzone'
 import { Row, Col, Modal,InputGroup,FormControl } from 'react-bootstrap'
 import CDN from '../../widgets/cdn'
+import { uploadImageWithWH,uploadFiles } from '../../widgets/upload'
 import PlaySwitch from '../Common/playSwitch'
 import Select from 'react-select'
 // import PlayHtmlEditor from '../Common/PlayHtmlEditor'
@@ -71,8 +72,8 @@ export default class EditToy extends Component {
 	  	this.addOtherInfo = this._addOtherInfo.bind(this)
 	  	this.changeNewKey = (e) => this.setState({newKey:e.target.value})
 	  	this.changeNewValue = (e) => this.setState({newValue:e.target.value})
-	  	this.onDropOfficialImage = this._onDropOfficialImage.bind(this)
-	  	this.onDropCover = this._onDropCover.bind(this)
+	  	this.onDropOfficialImage = (files) => uploadFiles(files,`toy/img/${this.props.match.params.id}_`).then(keys => this.setState(prevState => ({images:prevState.images.concat(...keys)})))
+	  	this.onDropCover = (files) => uploadImageWithWH(files[0],'toy/cover/').then(cover => this.setState({cover}))
 
 	  	this.submit = this._submit.bind(this)
 	  	this.removeImg = this._removeImg.bind(this)
@@ -114,49 +115,6 @@ export default class EditToy extends Component {
 		this.state.otherInfo.push({ key:newKey, value:newValue })
 		this.setState({ newKey:'', newValue:'' })
 	}
-	_onDropOfficialImage(images) {
-		images.forEach((image,index) => {
-			let formData = new FormData()
-			formData.append('file', image)
-			$.ajax({
-				url: `/api/upload?key=toy/img/${this.props.match.params.id}_${(Date.now().toString()+index)}_(size).${image.name.split('.').pop()}`,
-				type: 'POST',
-				data: formData,
-				processData: false,
-				contentType: false,
-				success: (data) => {
-					this.state.images.push(data)
-					this.setState({
-						images: this.state.images
-					})
-				}
-			})
-		})
-	}
-	_onDropCover(images) {
-		Request.get('/api/uptoken')
-			.withCredentials()
-			.end((err, res) => {
-				let uploadToken = res.body.uptoken
-				const file = images[0]
-				const img = new Image()
-				img.onload = () => {
-					const uploadKey = 'toy/cover/'+this.props.match.params.id+Date.now()+'_w_'+img.width+'_h_'+img.height+'.'+file.name.split('.').pop();
-					Request
-						.post('http://upload.qiniu.com/')
-						.field('key', uploadKey)
-						.field('token', uploadToken)
-						.field('x:filename', file.name)
-						.field('x:size', file.size)
-						.attach('file', file, file.name)
-						.set('Accept', 'application/json')
-						.end((err, res) => {
-							this.setState({ cover: uploadKey })
-						})
-				}
-				img.src = file.preview
-			})
-	}
 	_removeImg(index) {
 		if (confirm('删除这个图片?')) {
 			const images = this.state.images
@@ -172,7 +130,7 @@ export default class EditToy extends Component {
 		if(name.trim() === ''){
 			return alert('名字不能为空')
 		}
-		if(!release.match(/\d{4}\/\d{1,2}/)){
+		if(!release.match(/\d{4}\/\d{1,2}/) && release !== ''){
 			return alert('发售日期格式不对')
 		}
 		Object.keys(data).forEach(key => data[key]=== '' ? delete data[key] : '')
@@ -343,11 +301,11 @@ export default class EditToy extends Component {
 								</Col>
 							</Row>
 						</div>
-						<div className="tab-pane " id="edit_toy_2">
+						<div className="tab-pane" id="edit_toy_2">
 							<Row className="my-1">
 								<Col sm={2} className="sm-2-label">详细描述</Col>
 								<Col sm={10}>
-									{/* <PlayHtmlEditor></PlayHtmlEditor> */}
+									 {/* <PlayHtmlEditor></PlayHtmlEditor>  */}
 									<textarea 
 										className="edit-toy-text-area" 
 										rows="3"

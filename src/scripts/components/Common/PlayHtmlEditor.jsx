@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
-import { Editor, EditorState,RichUtils,ContentState,Entity,convertToRaw,convertFromHTML } from 'draft-js'
-// import {convertFromHTML} from 'draft-convert'
+import { Editor, EditorState,RichUtils,ContentState,Entity,convertToRaw } from 'draft-js'
 import Request from 'superagent'
 import Dropzone from 'react-dropzone'
 
 import decorator from '../PlayDraft/DecoratorServer'
 import DraftToolbar from '../PlayDraft/DraftToolbar'
-import { makeId, DraftImage,mediaBlockRenderer} from '../PlayDraft/draftServer'
-import { createLinkEntity,createImageEntity,createVideoEntityWithHtml,createVideoEntityWithSrc,removeEntity } from '../PlayDraft/entityServer'
+import { makeId,mediaBlockRenderer, draftFromHtml,draftToHtml} from '../PlayDraft/draftServer'
+import { createImageEntity } from '../PlayDraft/entityServer'
 import CDN from '../../widgets/cdn'
 
+import { uploadFiles } from '../../widgets/upload'
 
 export default class extends Component {
     constructor(props){
@@ -21,11 +21,36 @@ export default class extends Component {
         this.focus = () => this.refs.editor.focus()
 	  	this.onChange = editorState => this.setState({editorState})
 		this.handleKeyCommand = (command) => this._handleKeyCommand(command)
-        this.blockRendererFn = this._blockRendererFn.bind(this)
         
         this.dropImage = this._dropImage.bind(this)
         this.uploadImage = this._uploadImage.bind(this)
         this.addImage = this._addImage.bind(this)
+        this.test = () => {
+            console.log(this.state.editorState.getCurrentContent().getEntityMap())
+            // console.log(draftToHtml(this.state.editorState.getCurrentContent()))
+            // uploadFiles().then(a => console.log(a))
+        }
+        this.test2 = (e) => {
+            console.log(e.dataTransfer.files)
+            const preview = window.URL.createObjectURL(e.target.files[0])
+            const img = new Image()
+            img.onload = () => {
+                console.log(img.width)
+                console.log(img.height)
+            }
+            img.src = preview
+            // var file = e.target.files[0];
+            // var reader = new FileReader();
+            // reader.readAsDataURL(file);
+            // reader.onload = (e) =>{
+            //     // var pic = document.getElementById("preview");
+            //     img.src = e.target.result
+            //     img.onload = () => {
+            //         console.log(img.width)
+            //         console.log(img.height)
+            //     }
+            // }
+        }
     }
     _handleKeyCommand(command) {
       	const {editorState} = this.state;
@@ -36,44 +61,22 @@ export default class extends Component {
       	}
       	return false
     }
-    _blockRendererFn(block) {
-        const { editorState } = this.state
-        const contentState = editorState.getCurrentContent()
-        if (block.getType() === 'atomic') {
-            return {
-                component: (props) => {
-                    const entityKey = props.block.getEntityAt(0)
-                    const entity = contentState.getEntity(entityKey)
-                    const { html, src } = entity.getData()
-                    const type = entity.getType()
-
-                    let media = null
-                    if (type === 'image') {
-                        media = (
-                            <DraftImage
-                                src={src.split('!')[0]}
-                                delete={() => this.onChange(removeEntity(editorState,props.block.getKey()))}
-                            />
-                        )
-                    }
-                    return media
-                },
-                editable: false,
-            };
-        }
-      return null;
-    }
     _dropImage(files) {
-        Request.get(`/api/uptoken`)
-        .end((err, res) => {
-            let uploadToken = res.body.uptoken
-            files.forEach((file) => {
-                let d = new Date()
-                let id = makeId()
-                let uploadKey = 'article/photo/' + Math.round(d.getTime() / 1000) + '_' + id + '.' + file.name.split('.').pop()
-                this.uploadImage(file, uploadKey, uploadToken)
+        uploadFiles(files,'article/photo').then(keys => {
+            keys.map(key => {
+                this.addImage(key)
             })
         })
+        // Request.get(`/api/uptoken`)
+        // .end((err, res) => {
+        //     let uploadToken = res.body.uptoken
+        //     files.forEach((file) => {
+        //         let d = new Date()
+        //         let id = makeId()
+        //         let uploadKey = 'article/photo/' + Math.round(d.getTime() / 1000) + '_' + id + '.' + file.name.split('.').pop()
+        //         this.uploadImage(file, uploadKey, uploadToken)
+        //     })
+        // })
     }
     _uploadImage(file, uploadKey, uploadToken) {
         if (!file || file.size === 0) {
@@ -100,51 +103,24 @@ export default class extends Component {
     }
     componentDidMount() {
         const html = `
+            
+            <div>
             <div>
                 <p style="text-decoration: underline;">
-                
-            <b>Bold text</b>, <i>Italic text</i> 
+                    <b>Bold text</b>, <i>Italic text</i> 
                 </p>
             </div>
-            <img src="http://img.playalot.cn/article/cover/1501052255_w_720_h_474_bz461k14b1.jpg?imageView2/2/w/1280/q/90" />  <br />
-            <a href="http://www.baidu.com">baiduk</a>aasa<br />
+            <figure>
+                <img src="https://www.baidu.com/img/bd_logo1.png" />
+            </figure>
+            <div>
+            <a href="http://www.baidu.com">baiduk</a>aasa
+            </div>
+            </div>
         `
-        const blocksFromHTML = convertFromHTML(html)//.contentBlocks
-        // const entityMaps = convertFromHTML(html).entityMap
-        // blocksFromHTML.map((block,i) => {
-        //     console.log(block.toJS())
-        // })
-        // let i = 1
-        // while(entityMaps.get(i.toString())){
-        //     console.log(entityMaps.get(i.toString()).toJS())
-        //     i++
-        // }
-        // const blocksFromHTML = convertFromHTML(html);
-        // const state = ContentState.createFromBlockArray(
-        //     blocksFromHTML.contentBlocks,
-        //     blocksFromHTML.entityMap
-        // );
-        // this.setState({
-        //     editorState:EditorState.createWithContent(state,decorator)
-        // })
-        // const blocksFromHTML = convertFromHTML(html);
-
-        const defaultConvertedContentState = ContentState.createFromBlockArray(
-            blocksFromHTML.contentBlocks,
-            blocksFromHTML.entityMap,
-        );
-        const raw = convertToRaw(defaultConvertedContentState)
-        console.log(raw)
-
-        // const customConvertedContentState = CustomContentStateConverter(defaultConvertedContentState);
-
-        // const initialEditorState = EditorState.createWithContent(
-        //     customConvertedContentState,
-        //     decorator,
-        // );
-        // this.setState({
-        //     editorState:initialEditorState
-        // })
+        this.setState({
+            editorState:EditorState.createWithContent(draftFromHtml(html),decorator)
+        })
     }
     render() {
         const {editorState} = this.state;
@@ -162,6 +138,10 @@ export default class extends Component {
                          <Dropzone data-toggle="tooltip" data-placement="top" title="图片" className="fa fa-camera-retro"  accept="image/*" onDrop={this.dropImage}>
                         </Dropzone> 
                     </DraftToolbar>
+                    <input type="file" onDrop={this.test2} onChange={this.test2} />
+                    <div style={{width:100,height:100,background:'red'}} onDrop={this.test2}>
+
+                    </div>
                     <div className={className} style={{border:'1px dashed #eee'}} onClick={this.focus}>
                         <Editor
                             blockRendererFn={mediaBlockRenderer}
@@ -172,44 +152,10 @@ export default class extends Component {
                             ref="editor"
                         />
                     </div>
+                    <button onClick={this.test}>转html</button>
                 </div>
             </div>
         )
     }
 }
 
-//  const CustomConvertFromHTML = (html) => {
-//   // Correctly seperates paragraphs into their own blocks
-//   const blockRenderMap = DefaultDraftBlockRenderMap.set('p', { element: 'p' });
-//   const blocksFromHTML = convertFromHTML(html, getSafeBodyFromHTML, blockRenderMap);
-//   blocksFromHTML.contentBlocks = blocksFromHTML.contentBlocks.map(block => (block.get('type') === 'p' ? block.set('type', 'unstyled') : block));
-
-//   return blocksFromHTML;
-// };
-
-// const CustomContentStateConverter = (contentState) => {
-//   // Correctly assign properties to images and links
-//   const newBlockMap = contentState.getBlockMap().map((block) => {
-//     const entityKey = block.getEntityAt(0);
-//     if (entityKey !== null) {
-//       const entityBlock = contentState.getEntity(entityKey);
-//       const entityType = entityBlock.getType();
-//       switch (entityType) {
-//         case 'IMAGE': {
-//           const newBlock = block.merge({
-//             type: 'atomic',
-//             text: 'img',
-//           });
-//           // const newContentState = contentState.mergeEntityData(entityKey, { mutability: 'IMMUTABLE' });
-//           return newBlock;
-//         }
-//         default:
-//           return block;
-//       }
-//     }
-//     return block;
-//   });
-//   const newContentState = contentState.set('blockMap', newBlockMap);
-
-//   return newContentState;
-// };

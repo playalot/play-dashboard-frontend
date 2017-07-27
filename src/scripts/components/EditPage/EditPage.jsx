@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import { stateToHTML } from 'draft-js-export-html'
 import Request from 'superagent'
 import Dropzone from 'react-dropzone'
 import TagsInput from 'react-tagsinput'
@@ -19,12 +18,13 @@ import {
 } from 'draft-js'
 
 import decorator from '../PlayDraft/DecoratorServer'
-import { getBlockStyle,makeId, DraftImage,mediaBlockRenderer } from '../PlayDraft/draftServer'
+import { getBlockStyle,makeId, DraftImage,mediaBlockRenderer,draftToHtml } from '../PlayDraft/draftServer'
 import { createLinkEntity,createImageEntity,createVideoEntityWithHtml,createVideoEntityWithSrc,removeEntity } from '../PlayDraft/entityServer'
 import DraftToolbar from '../PlayDraft/DraftToolbar'
 
 import CDN from '../../widgets/cdn'
 import parse from '../../widgets/parse'
+import { uploadFiles,uploadImageWithWH } from '../../widgets/upload'
 export default class EditPage extends Component {
     constructor(props) {
         super(props)
@@ -48,7 +48,7 @@ export default class EditPage extends Component {
             uploadKey:'',
         }
         //封面
-        this.onDropCover = this._onDropCover.bind(this)
+        this.onDropCover = (files) => uploadImageWithWH(files[0],'article/cover/').then(cover => this.setState({cover},this.saveStorage))
         //自动保存至storage
         this.saveStorage = this._saveStorage.bind(this)
         //editor的回调方法
@@ -61,7 +61,7 @@ export default class EditPage extends Component {
         this.addImage = this._addImage.bind(this)
         this.addVideo = () => this._addVideo()
         this.onChangeVideoCode = (e) => this.setState({videoCode: e.target.value})
-        this.uploadImg = this._uploadImg.bind(this)
+        this.onDropImage = (files) => uploadFiles(files,'article/photo/').then(keys => keys.map(key => this.addImage(key)))
         this.onDropVideo = this._onDropVideo.bind(this)
         this.uploadQiniu = this._uploadQiniu.bind(this)
         //dialog controller
@@ -114,34 +114,6 @@ export default class EditPage extends Component {
         return false
     }
     
-    _onDropCover(files) {
-        Request.get('/api/uptoken')
-        .end((err, res) => {
-            let uploadToken = res.body.uptoken
-            const file = files[0]
-            const img = new Image()
-            img.onload = () => {
-                if(img.width <320){
-                    return alert('图片太小')
-                }
-                const uploadKey = `article/cover/${Math.round(Date.now() / 1000)}_w_${img.width}_h_${img.height}_${makeId()}.${file.name.split('.').pop()}`
-                Request
-                .post(this.state.uploadUrl)
-                .field('key', uploadKey)
-                .field('token', uploadToken)
-                .field('x:filename', file.name)
-                .field('x:size', file.size)
-                .attach('file', file, file.name)
-                .set('Accept', 'application/json')
-                .end((err, res) =>{
-                    this.setState({
-                        cover: uploadKey
-                    },() => this.saveStorage())
-                })
-            };
-            img.src = file.preview
-        })
-    }
     _saveStorage() {
         const {
             title, cover, tags, category, gallery,authorId,editorState
@@ -165,27 +137,8 @@ export default class EditPage extends Component {
             title, cover, tags, category, gallery,authorId,editorState
         } = this.state
         const contentState = editorState.getCurrentContent()
-        const options = {
-            blockRenderers: {
-                atomic: (block) => {
-                    const entity = contentState.getEntity(block.getEntityAt(0))
-                    const data = entity.getData()
-                    if (data.type === 'image') {
-                        return `<figure><img src="${data.src}" style="max-width:'100%'" /></figure>`
-                    } else if (data.type === 'video') {
-                    	if(data.src) {
-                        	return `<figure><video width="100%" src="${data.src}" poster="${data.poster}" controls /></figure>`
-                    	}else {
-                    		return `<figure>${data.html}</figure>`
-                    	}
-                    } else {
-                    	return null
-                    }
-                },
-            }
-        }
         const raw = convertToRaw(contentState)
-        const html = stateToHTML(contentState,options).replace(/<p><br><\/p>\s?<figure>/g,'<figure>')
+        const html = draftToHtml(contentState)
         const data = {
             title,
             authorId,
@@ -240,44 +193,6 @@ export default class EditPage extends Component {
         	return true
       	}
       	return false
-    }
-    _uploadImg(files) {
-        let _this = this
-        Request.get(`/api/uptoken`)
-        .withCredentials()
-        .end(function(err, res) {
-            let uploadToken = res.body.uptoken
-            files.forEach((file) => {
-                let d = new Date()
-                let id = makeId()
-                let uploadKey = 'article/photo/' + Math.round(d.getTime() / 1000) + '_' + id + '.' + file.name.split('.').pop()
-                file.request = _this.uploadToQiniu(file, uploadKey, uploadToken)
-            })
-        })
-    }
-    uploadToQiniu(file, uploadKey, uploadToken) {
-        if (!file || file.size === 0) {
-            return null;
-        }
-        let _this = this;
-        const req = Request
-        .post(this.state.uploadUrl)
-        .field('key', uploadKey)
-        .field('token', uploadToken)
-        .field('x:filename', file.name)
-        .field('x:size', file.size)
-        .attach('file', file, file.name)
-        .set('Accept', 'application/json');
-
-        req.end(function(err, res) {
-            let value = _this.state.gallery.slice();
-            value.push(uploadKey);
-            _this.setState({
-                gallery: value
-            });
-            _this.addImage(uploadKey)
-        });
-        return req;
     }
     _uploadQiniu(file, uploadKey, uploadToken) {
         if (!file || file.size === 0) {
@@ -390,7 +305,7 @@ export default class EditPage extends Component {
         return (
             <div className="editarticle">
                 <div className="edit-section">
-                    <Dropzone className="upload-cover" onDrop={this.onDropCover}>
+                    <Dropzone className="upload-cover" multiple={false} onDrop={this.onDropCover}>
                     {
                         cover ?
                         <div className="cover">
@@ -410,7 +325,7 @@ export default class EditPage extends Component {
                     <input type="text" value={title} className="input" onChange={(e) => this.setState({title:e.target.value},() => this.saveStorage())} placeholder="输入文章标题"/>
                 </div>
                 <DraftToolbar editorState={editorState} onChange={this.onChange}>
-                    <Dropzone data-toggle="tooltip" data-placement="top" title="图片" className="fa fa-camera-retro"  accept="image/*" onDrop={this.uploadImg}>
+                    <Dropzone data-toggle="tooltip" data-placement="top" title="图片" className="fa fa-camera-retro"  accept="image/*" onDrop={this.onDropImage}>
                     </Dropzone>
                     <span data-toggle="tooltip" data-placement="top" title="视频" className="fa fa-video-camera" onClick={this.showVideoDialog}>
                     </span>

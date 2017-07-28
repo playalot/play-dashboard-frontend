@@ -1,13 +1,10 @@
 import React,{Component} from 'react'
 import {Link} from 'react-router-dom'
 import {Row, Button,Form,FormGroup,InputGroup,FormControl, Modal} from 'react-bootstrap'
-import Moment from 'moment'
 import Request from 'superagent'
 import ReactPaginate from 'react-paginate'
-import DatePicker from 'react-datepicker'
 
 import PagePanel from '../PagePanel'
-import PlayAutoSuggest from '../Common/PlayAutoSuggest'
 import PlaySwitch from '../Common/playSwitch'
 import { parsePage } from '../../widgets/parse'
 export default class PageList extends Component{

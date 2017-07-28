@@ -3,7 +3,7 @@ import Dropzone from 'react-dropzone'
 import CDN from '../../widgets/cdn'
 import { Modal, Button,Form, FormGroup, Col, FormControl, Row,Radio } from 'react-bootstrap'
 import Request from 'superagent'
-import PlayAutoSuggest from '../Common/PlayAutoSuggest'
+import Select from 'react-select'
 import PlayToyPanel from '../Common/PlayToyPanel'
 
 export default class extends Component {
@@ -20,18 +20,16 @@ export default class extends Component {
 			extra:'',
 			targetUrl:'',
 			toyIds:[],
-			tmpId:'',
 		}
 		this.submit = this._submit.bind(this)
 		this.onDropImage = this._onDropImage.bind(this)
-		this.addId = () => {
-			if(this.state.tmpId.length !== 24){
-				this.setState({tmpId:''})
-				alert('无效的玩具ID')
-			}else{
-				this.state.toyIds.push(this.state.tmpId)
-				this.setState({tmpId:''})
-			}
+		this.renderOption = (option) => {
+			return (
+				<div className="d-flex align-items-center">
+					<img style={{width:40,height:40,borderRadius:5}} className="play-img-cover" src={CDN.show(option.cover)} alt={option.name}/>
+					<span className="pl-3">{option.name}</span>
+				</div>
+			)
 		}
 	}
   componentDidMount() {
@@ -70,7 +68,6 @@ export default class extends Component {
     })
   }
   _submit() {
-
     const { id,image,targetId,targetType,extra,title,type,toyIds,description } = this.state
     const data = {
       id,image,targetId,targetType,extra,type,description
@@ -92,7 +89,25 @@ export default class extends Component {
         }
       }
     })
-  }
+	}
+	getOptions(input) {
+		if (!input) {
+			return Promise.resolve({ options: [] })
+		}
+		if ( input.length == 24) {
+			return Request
+			.get(`/api/toy/${input}`)
+			.then(res => {
+				return {options: [res.body]}
+			})
+		}
+		return Request
+		.get(`/api/toys`)
+		.query({query:input})
+		.then(res => {
+			return {options: res.body.toys}
+		})
+	}
   render() {
     const radioOptions = [
         {value: 'post', label: '图片'},
@@ -197,30 +212,24 @@ export default class extends Component {
 											})
 										}
 									</div>
-									<Row>
-										<Col sm={10}>
-											<PlayAutoSuggest
-												fetch={(o) => {
-													if(o.value.length === 24){
-														this.setState({tmpId:o.value})
-													}else{
-														this.props.fetchSkuByQuery(o.value)
-													}
-												}}
-												clear={this.props.clearSuggestion}
-												getValue={suggestion => suggestion.name}
-												selectValue={(event,{suggestion, suggestionValue, method }) => {
-													this.state.toyIds.push(suggestion.id)
-												}}
-												desc="release"
-												placeholder="请输入玩具关键字或ID"
-												results={this.props.skuResults}
-											/>
-										</Col>
-										<Col sm={2}>
-											<button type="button" onClick={this.addId} className="btn green" type="button">添加ID</button>
-										</Col>
-									</Row>
+									<div>
+										<Select.Async 
+											value={this.state.toyName} 
+											onChange={v => {
+												this.setState({toyName:v})
+												if(v){
+													const ids = this.state.toyIds
+													ids.push(v.id)
+													this.setState({toyIds:ids})
+												}
+											}}
+											valueKey="id" 
+											labelKey="name" 
+											loadOptions={this.getOptions}  
+											optionRenderer={this.renderOption}
+											placeholder="请输入玩具关键字/玩具ID"
+										/>
+									</div>
 								</Col>
 							</FormGroup>
 							:null

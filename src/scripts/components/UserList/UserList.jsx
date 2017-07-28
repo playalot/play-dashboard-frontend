@@ -84,7 +84,7 @@ export default class UserList extends Component{
         </div>
         <div className="table-responsive" style={{paddingBottom:50}}>
           <table className="table table-striped">
-            <thead><tr><th></th><th>用户名</th><th>照片数</th><th>绑定账号</th><th>所在地</th><th>最近登陆</th><th></th></tr></thead>
+            <thead><tr><th></th><th>用户名</th><th>等级</th><th>照片数</th><th>点赞数</th><th>绑定账号</th><th>所在地</th><th>最近登陆</th><th></th></tr></thead>
             <tbody>
               {this.props.users.map((user,index) => {
                 return (
@@ -99,15 +99,16 @@ export default class UserList extends Component{
 										</div>
                     </td>
                     <td> <Link to={`/user/${user.id}`}>{user.nickname} {user.approval ? <span style={{color:'gold'}} className="fa fa-vimeo"></span> :null} </Link></td>
+                    <td>Lv.{user.level}</td>
                     <td>{user.counts.posts}</td>
+                    <td>{user.counts.likes}</td>
                     <td>
 											<PlayAccount accounts={user.accounts} />
 										</td>
                     <td>{user.location ? `${user.location.province}-${user.location.city}` : ''}</td>
                     <td>{Moment.unix(user.lastSeen / 1000).fromNow()}</td>
                     <td>
-                    	<button className="btn btn-primary blue btn-outline" onClick={() => this.recommend(user.id)}>推荐</button>
-                    	<button className="btn btn-primary green btn-outline" style={{marginLeft:'5px'}} onClick={() => this.setState({curId:user.id,dialogApprove:true})}>认证</button>
+                    	<button className="btn btn-primary green btn-outline" style={{marginLeft:'5px'}} onClick={() => this.setState({curId:user.id,dialogApprove:true})}>加认证</button>
                     </td>
                   </tr>
                 );

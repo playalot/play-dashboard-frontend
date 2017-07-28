@@ -5,33 +5,40 @@ import Moment from 'moment'
 import Request from 'superagent'
 import ReactPaginate from 'react-paginate'
 import DatePicker from 'react-datepicker'
+import Select from 'react-select'
 
-import PlayAutoSuggest from '../Common/PlayAutoSuggest'
 import PlaySwitch from '../Common/playSwitch'
-
 
 export default class PagePanel extends Component {
 	constructor(props) {
-  	super(props)
-  	this.state = {
-  		modalAddToy:false,
-  		pageId:'',
-  		toyId:'',
+		super(props)
+		this.state = {
+			modalAddToy:false,
+			pageId:'',
+			toyId:'',
 
-  		timePageId:null,
-  		curDate:Moment().startOf('day'),
-  		curTime:'15-30'
-  	}
-  	this.togglePub = (id) => this.props.togglePub(id)
-  	this.toggleRec = (id) => this.props.toggleRec(id)
-  	this.toggleShare = (id) => this.props.toggleShare(id)
-  	this.deleteArticle = (id) => confirm('删除这个文章?') && this.props.deleteArticle(id)
-  	this.addToy = (pageId) => this.setState({modalAddToy:true,pageId})
-  	this.removeToy = (id) => confirm('删除这个玩具标签?') && this.props.removeToy(id)
+			timePageId:null,
+			curDate:Moment().startOf('day'),
+			curTime:'15-30'
+		}
+		this.togglePub = (id) => this.props.togglePub(id)
+		this.toggleRec = (id) => this.props.toggleRec(id)
+		this.toggleShare = (id) => this.props.toggleShare(id)
+		this.deleteArticle = (id) => confirm('删除这个文章?') && this.props.deleteArticle(id)
+		this.addToy = (pageId) => this.setState({modalAddToy:true,pageId})
+		this.removeToy = (id) => confirm('删除这个玩具标签?') && this.props.removeToy(id)
 
-  	//玩具搜索
-  	this.closeAddToy = () => this.setState({modalAddToy:false,pageId:'',toyId:''})
-  	this.setTime = this._setTime.bind(this)
+		//玩具搜索
+		this.closeAddToy = () => this.setState({modalAddToy:false,pageId:'',toyId:''})
+		this.setTime = this._setTime.bind(this)
+		this.renderOption = (option) => {
+			return (
+				<div className="d-flex align-items-center">
+					<img style={{width:40,height:40,borderRadius:5}} className="play-img-cover" src={option.cover} alt={option.name}/>
+					<span className="pl-3">{option.name}</span>
+				</div>
+			)
+		}
 	}
 	_setTime() {
 		const { curDate, curTime, timePageId } = this.state
@@ -46,6 +53,17 @@ export default class PagePanel extends Component {
 			if(!err) {
 				this.setState({timePageId:null})
 			}
+		})
+	}
+	getOptions(input) {
+		if (!input) {
+			return Promise.resolve({ options: [] });
+		}
+		return Request
+		.get(`/api/toys`)
+		.query({query:input})
+		.then(res => {
+			return {options: res.body.toys}
 		})
 	}
 	render() {
@@ -151,31 +169,22 @@ export default class PagePanel extends Component {
 							<p className="dialog-title">搜索玩具</p>
 							<span onClick={this.closeAddToy} className="dialog-close">×</span>
 							<div>
-								<InputGroup>
-              <FormControl type="text" placeholder='输入玩具ID' value={toyId} onChange={(e) => this.setState({toyId:e.target.value})} />
-              <InputGroup.Button>
-                <Button onClick={() => {
-                	this.props.addToy(pageId,toyId)
-                	this.closeAddToy()
-										}}>添加玩具</Button>
-									</InputGroup.Button>
-								</InputGroup>
-								<br/>
-								<PlayAutoSuggest
-									fetch={(o) => this.props.fetchToyByQuery(o.value)}
-									clear={this.props.clearSuggestion}
-									getValue={suggestion => suggestion.name}
-									selectValue={(event,{suggestion, suggestionValue, method }) => {
-										this.props.addToy(pageId,suggestion.id)
-										this.closeAddToy()
-									}}
-									desc="release"
-									placeholder="请输入玩具关键字"
-									results={toyResults}
+								<FormControl type="text" placeholder='输入玩具ID' value={toyId} onChange={(e) => this.setState({toyId:e.target.value})} />
+								<br />
+								<Select.Async 
+									value={this.state.toyName} 
+									onChange={(v) => this.setState({toyName:v,toyId:v ? v.id : ''})} 
+									valueKey="id" 
+									labelKey="name" 
+									loadOptions={this.getOptions}  
+									optionRenderer={this.renderOption}
 								/>
 							</div>
 							<div className="dialog-footer">
-								<button className="btn btn-primary" onClick={this.addLink}>插入</button>
+								<button className="btn btn-outline green pull-right" onClick={() => {
+									this.props.addToy(pageId,this.state.toyId)
+									this.closeAddToy()
+								}}>插入</button>
 							</div>
 						</div>
 					</div>

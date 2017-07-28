@@ -5,7 +5,7 @@
 Rounded corners reset
 ***/
 /* Reset rounded corners for all elements */
-div,
+/* div,
 svg,
 input,
 select,
@@ -25,7 +25,8 @@ pre,
 li {
   -webkit-border-radius: 0 !important;
   -moz-border-radius: 0 !important;
-  border-radius: 0 !important; }
+  border-radius: 0 !important; 
+} */
 
 /* except below bootstrap elements */
 .img-circle {

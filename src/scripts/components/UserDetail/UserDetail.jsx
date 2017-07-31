@@ -203,7 +203,7 @@ export default class extends Component{
 									</Row>
 								</div>
 							</div>
-							<div className="tab-pane active" id="user_post_2">
+							<div className="tab-pane" id="user_post_2">
 								<PagePanel/>
 							</div>
 						</div>

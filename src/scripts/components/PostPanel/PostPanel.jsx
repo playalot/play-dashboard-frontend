@@ -102,16 +102,16 @@ export default class PostPanel extends Component{
 						</div>
 						<div className="clearfix">
 							<ButtonToolbar className="pull-right">
-								<span onClick={ this.toggleRecommend } className={`${btnClass} ${post.isRec ? 'yellow-casablanca':''}`}><i className="fa fa-thumbs-o-up"></i></span>
+								<span onClick={() => this.props.toggleRecommend(post.id,!post.isRec)} className={`${btnClass} ${post.isRec ? 'yellow-casablanca':''}`}><i className="fa fa-thumbs-o-up"></i></span>
 								<CopyToClipboard text={post.id} onCopy={() => null}>
 									<span className="btn btn-sm"><i className="fa fa-copy"></i></span>
 								</CopyToClipboard>
 								<span onClick={ this.addToy } className="btn btn-sm"><i className="fa fa-plus"></i></span>
 								<span onClick={ this.addTag } className="btn btn-sm"><i className="fa fa-tag"></i></span>
 								<span onClick={ () => this.props.openClass( post ) } className="btn btn-sm"><i className="fa fa-th-large"></i></span>
-								<span onClick={ () => this.props.removeAllClassification(post.id) } className="btn btn-sm"><i className="fa fa-chain-broken"></i></span>
-								<span onClick={ this.toggleR18 } className={`${btnClass} ${post.isR18 ? 'yellow-casablanca':''}`}><i className="fa fa-venus-mars"></i></span>
-								<span onClick={ this.toggleBlock } className={`${btnClass} ${post.isBlk ? 'yellow-casablanca':''}`}><i className="fa fa-eye-slash"></i></span>
+								<span onClick={ () => this.props.removeAllClassification(post.id,post.cls) } className="btn btn-sm"><i className="fa fa-chain-broken"></i></span>
+								<span onClick={() => this.props.toggleR18(post.id,!post.isR18) } className={`${btnClass} ${post.isR18 ? 'yellow-casablanca':''}`}><i className="fa fa-venus-mars"></i></span>
+								<span onClick={() => this.props.toggleBlock(post.id,!post.isBlk)} className={`${btnClass} ${post.isBlk ? 'yellow-casablanca':''}`}><i className="fa fa-eye-slash"></i></span>
 								<span onClick={ this.deletePost } className="post-caption-btn btn btn-sm"><i className="fa fa-trash"></i></span>
 							</ButtonToolbar>
 						</div>

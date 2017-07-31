@@ -46,6 +46,8 @@ export default class EditPage extends Component {
             progress:null,
             videoUrl:null,
             uploadKey:'',
+
+            uploadingVideo:false
         }
         //封面
         this.onDropCover = (files) => uploadImageWithWH(files[0],'article/cover/').then(cover => this.setState({cover},this.saveStorage))
@@ -198,20 +200,18 @@ export default class EditPage extends Component {
         if (!file || file.size === 0) {
             return null;
         }
-        const req = Request
+        return Request
         .post(this.state.uploadUrl)
         .field('key', uploadKey)
         .field('token', uploadToken)
         .field('x:filename', file.name)
         .field('x:size', file.size)
         .attach('file', file, file.name)
-        .set('Accept', 'application/json');
-
-        req.on('progress', file.onprogress);
-        req.end(function(err, res) {
-            console.log('done!')
+        .set('Accept', 'application/json')
+        .on('progress', file.onprogress)
+        .end((err, res) =>{
+            this.setState({uploadingVideo:false})
         });
-        return req
     }
     //媒体操作
     _addImage(imageKey) {
@@ -222,7 +222,7 @@ export default class EditPage extends Component {
         })
     }
     _addVideo() {
-        const { videoMode,videoCode,editorState } = this.state
+        const { videoMode,videoCode,editorState,uploadingVideo } = this.state
         if(videoMode){
             if (videoCode.trim().length === 0) {
                 return false
@@ -234,7 +234,7 @@ export default class EditPage extends Component {
                 dialogVideo: false
             })
         }else{
-            if (parseInt(this.state.progress) !== 100) {
+            if (parseInt(this.state.progress) !== 100 || uploadingVideo) {
                 return alert('正在上傳請稍等..')
             }
             const src = CDN.show(this.state.uploadKey)
@@ -247,35 +247,26 @@ export default class EditPage extends Component {
 
     }
     _onDropVideo(files) {
-        let video = files[0];
-
-        // 初始化progress
-        let _this = this;
-        video.onprogress = function(e) {
-            // console.log(e.percent);
-            _this.setState({
-                progress: e.percent.toFixed(2)
-            });
-        };
-
+        this.setState({uploadingVideo:true})
+        let video = files[0]
+        video.onprogress = (e) => {
+            this.setState({ progress: e.percent.toFixed(2) });
+        }
         // 获取视频meta
-        let URL = window.URL || window.webkitURL;
-        video.preview = URL.createObjectURL(video);
+        let URL = window.URL || window.webkitURL
+        video.preview = URL.createObjectURL(video)
 
-        let vdom = ReactDOM.findDOMNode(this.refs.vtag);
+        let vdom = ReactDOM.findDOMNode(this.refs.vtag)
 
-        this.setState({
-            videoUrl: video.preview
-        });
+        this.setState({ videoUrl: video.preview })
 
-        let timer = setInterval(function() {
+        let timer = setInterval(() => {
             // console.warn(Date.now())
             if (vdom.readyState === 4) {
                 let d = new Date();
                 let id = makeId();
                 let uploadKey = 'user/video/file/' + id + '_' + Math.round(d.getTime() / 1000) + '_w_' + vdom.videoWidth +
-                '_h_' + vdom.videoHeight + '_d_' + Math.floor(vdom.duration) + '_' + _this.state.userId + '.mp4';
-                // console.log(uploadKey);
+                '_h_' + vdom.videoHeight + '_d_' + Math.floor(vdom.duration) + '_' + this.state.authorId + '.mp4';
                 Request
                 .get(`/api/uptoken`)
                 .query({
@@ -284,14 +275,12 @@ export default class EditPage extends Component {
                 .end((err,res) => {
                     // console.info(res.body.uptoken)
                     let uploadToken = res.body.uptoken
-                    _this.setState({
-                        uploadKey: uploadKey
-                    });
-                    video.request = _this._uploadQiniu(video, uploadKey, uploadToken);
+                    this.setState({ uploadKey })
+                    video.request = this.uploadQiniu(video, uploadKey, uploadToken)
                 })
-                clearInterval(timer);
+                clearInterval(timer)
             }
-        }, 500);
+        }, 500)
     }
     render() {
         const { cover,title,tags,category,authorId,dialogSubmit,gallery,editorState } = this.state
@@ -400,8 +389,8 @@ export default class EditPage extends Component {
                 }
                 {
                     this.state.dialogVideo ?
-                    <div className="modal">
-                        <div className="dialog">
+                    <div className="play-modal">
+                        <div className="play-dialog">
                             <span onClick={() => this.setState({dialogVideo:false})} className="dialog-close">×</span>
                             <ul className="nav nav-tabs">
                               <li className={this.state.videoMode ? 'active':''}><a onClick={() => this.setState({videoMode:true})}>粘贴视频通用代码</a></li>
@@ -427,7 +416,7 @@ export default class EditPage extends Component {
                                 </div>
                             }
                             <div className="dialog-footer">
-                                <button className="btn btn-outline green" onClick={this.addVideo}>插入</button>
+                                <button className="btn btn-outline green" disabled={this.state.uploadingVideo} onClick={this.addVideo}>插入</button>
                             </div>
                         </div>
 

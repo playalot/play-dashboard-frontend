@@ -17,7 +17,7 @@ import {
     POST_GET_VIDEO,
 } from '../actions/postAction'
 
-export default (state = Immutable.fromJS({ posts:[],totalPages:100,filter:'',query:'',filterType:''}),action)=>{
+export default (state = Immutable.fromJS({ posts:[],totalPages:100,filter:'',query:'',filterType:'',isVideo:false}),action)=>{
     switch (action.type) {
         case POST_RECEIVE_POST:
             return state
@@ -26,6 +26,7 @@ export default (state = Immutable.fromJS({ posts:[],totalPages:100,filter:'',que
                 .set('page',action.page)
                 .set('filter',action.filter)
                 .set('query',action.query)
+                .set('isVideo',action.isVideo)
                 .set('filterType','')
         case POST_CLEAR_POST:
             return state

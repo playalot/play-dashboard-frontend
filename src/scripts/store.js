@@ -13,7 +13,6 @@ import user from './reducers/userReducer'
 import page from './reducers/pageReducer'
 import toyReducer from './reducers/toyReducer'
 import stickerReducer from './reducers/stickerReducer'
-import report from './reducers/reportReducer'
 import feedback from './reducers/feedbackReducer'
 import sku from './reducers/skuReducer'
 import order from './reducers/orderReducer'
@@ -32,7 +31,6 @@ export const makeRootReducer = () => {
 		page,
 		toyReducer,
 		stickerReducer,
-		report,
 		feedback,
 		sku,
 		order,

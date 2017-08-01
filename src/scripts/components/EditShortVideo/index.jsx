@@ -24,17 +24,21 @@ export default class extends Component {
       progress: 0,
       uploadKey: '',
       caption: '',
+      category:'news',
       alert: false,
       offset:1,
       modalPoster:false,
       posters:[],
-      thumbnail:''
+      thumbnail:'',
+
+      canSubmit:false
     };
     this.onDrop = this._onDrop.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.uploadCover = this._uploadCover.bind(this)
+    this.uploadQiniu = this._uploadQiniu.bind(this)
   }
-  uploadQiniu(file, uploadKey, uploadToken) {
+  _uploadQiniu(file, uploadKey, uploadToken) {
     if (!file || file.size === 0) {
       return null;
     }
@@ -49,43 +53,38 @@ export default class extends Component {
       .on('progress',file.onprogress)
       .end((err, res) => {
         let vdom = ReactDOM.findDOMNode(this.refs.vtag)
-        this.setState({showPoster:true,duration:vdom.duration})
+        this.setState({showPoster:true,duration:vdom.duration,canSubmit:true})
       })
   }
   _onDrop(files) {
     let video = files[0];
 
     // 初始化progress
-    let _this = this;
-    video.onprogress = function(e) {
-      _this.setState({progress: e.percent.toFixed(2)});
-    };
+    video.onprogress = (e) => {
+      this.setState({progress: e.percent.toFixed(2)})
+    }
 
     // 获取视频meta
-    let URL = window.URL || window.webkitURL;
-    video.preview = URL.createObjectURL(video);
+    let URL = window.URL || window.webkitURL
+    video.preview = URL.createObjectURL(video)
 
-    let vdom = ReactDOM.findDOMNode(this.refs.vtag);
+    let vdom = ReactDOM.findDOMNode(this.refs.vtag)
 
-    this.setState({videoUrl: video.preview});
+    this.setState({videoUrl: video.preview,canSubmit:false})
 
-    let timer = setInterval(function () {
+    let timer = setInterval( () => {
       if (vdom.readyState === 4){
-        let d = new Date();
-        let id = makeid();
-        let uploadKey = 'user/video/raw/' + id + '_' + Math.round(d.getTime()/1000) + '_w_' + vdom.videoWidth +
-          '_h_' + vdom.videoHeight + '_d_' + Math.floor(vdom.duration) + '_' + _this.state.userId + '.mp4';
-        $.ajax({
-           url : '/api/uptoken?key=' + uploadKey,
-           type : 'GET',
-           success : function(data) {
-             let uploadToken = data.uptoken;
-             _this.setState({uploadKey: uploadKey,thumbnail:`http://img.playalot.cn/${uploadKey}?vframe/jpg/offset/1`});
-             video.request = _this.uploadQiniu(video, uploadKey, uploadToken);
-            //  video.uploadPromise = video.request.promise();
-           }
-        });
-        clearInterval(timer);
+        let uploadKey = `user/video/raw/${makeid()}_${Math.round(Date.now()/1000)}_w_${vdom.videoWidth}_h_${vdom.videoHeight}_d_${Math.floor(vdom.duration)}_${this.state.userId}.mp4`
+        Request.get('/api/uptoken').query({key:uploadKey})
+        .end((err,res) => {
+          let uptoken = res.body.uptoken
+          this.setState({
+            uploadKey,
+            thumbnail:`http://img.playalot.cn/${uploadKey}?vframe/jpg/offset/1`
+          })
+          video.request = this.uploadQiniu(video,uploadKey,uptoken)
+        })
+        clearInterval(timer)
       }
     }, 500);
   }
@@ -118,14 +117,22 @@ export default class extends Component {
       })
   }
   onSubmit() {
-    if (this.state.uploadKey === '') {
-      alert('请先上传视频');
-      return;
+    if (this.state.uploadKey === '' ) {
+      return alert('请先上传视频')
+    }
+    if(!this.state.canSubmit){
+      if(this.state.progress > 99){
+        return alert('请等待后台转码')
+      }else{
+        return alert('正在上传..')
+      }
+      
     }
     let data = {
       userId: this.state.userId,
       uploadKey: this.state.uploadKey,
-      thumbnail:this.state.thumbnail
+      thumbnail:this.state.thumbnail,
+      category:this.state.category
     };
     if (this.state.caption.trim() !== '') {
       data.caption = this.state.caption
@@ -193,6 +200,42 @@ export default class extends Component {
 							<Col className="control-label" sm={2}>描述</Col>
 							<Col sm={9}>
 								<textarea style={{width:'100%'}} onChange={(e) => this.setState({caption:e.target.value})} value={this.state.caption} />
+							</Col>
+						</FormGroup>
+						<FormGroup>
+							<Col className="control-label" sm={2}>标签</Col>
+							<Col sm={9}>
+								<div className="btn-group">
+                  <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    {(() => {
+                        switch(this.state.category){
+                            case 'review':
+                                return '评测'
+                            case 'news':
+                                return '新闻'
+                            case 'info':
+                                return '情报'
+                            case 'interview':
+                                return '访谈'
+                            case 'essay':
+                                return '随笔'
+                            case 'knowledge':
+                                return '干货'
+                            default :
+                                return ''
+                        }
+                    })()}
+                    &nbsp;&nbsp;<span className="caret"></span>
+                  </button>
+                    <ul className="dropdown-menu">
+                        <li><a onClick={() => this.setState({category:'review'})}>评测</a></li>
+                        <li><a onClick={() => this.setState({category:'news'})}>新闻</a></li>
+                        <li><a onClick={() => this.setState({category:'info'})}>情报</a></li>
+                        <li><a onClick={() => this.setState({category:'interview'})}>访谈</a></li>
+                        <li><a onClick={() => this.setState({category:'essay'})}>随笔</a></li>
+                        <li><a onClick={() => this.setState({category:'knowledge'})}>干货</a></li>
+                    </ul>
+                </div>
 							</Col>
 						</FormGroup>
 						<FormGroup>

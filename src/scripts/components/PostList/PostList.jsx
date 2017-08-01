@@ -11,17 +11,21 @@ export default class Post extends Component{
 		this.state = {
 			filter: '',
 			query: '',
+			isVideo:false
 		}
 		this.onChangeQuery = (e) => this.setState({ query: e.target.value })
 		this.onChangeFilter = (e) => this.setState({ filter: e.target.value },this.search)
-
+		this.toggleVideo = () => {
+			const { isVideo } = this.state
+			this.setState({isVideo:!isVideo},this.search)
+		}
 		this.search = this._search.bind(this)
 		this.goPage = this._goPage.bind(this)
 	}
 	componentWillMount() {
-		const { page,filter,query } = this.props
+		const { page,filter,query,isVideo } = this.props
 		if(typeof page === 'number') {
-			this.setState({filter,query})
+			this.setState({filter,query,isVideo})
 			this.props.history.push(`/posts?page=${page}`)
 		}else{
 			const ppage = parsePage(this.props.location.search)
@@ -30,7 +34,7 @@ export default class Post extends Component{
 	}
 	_search() {
 		this.props.history.push(`/posts?page=0`)
-		this.props.getPostBy(this.state.filter,this.state.query.trim())
+		this.props.getPostBy(this.state.filter,this.state.query.trim(),this.state.isVideo)
 	}
 	_goPage(page) {
 		this.props.history.push(`/posts?page=${page}`)
@@ -45,7 +49,7 @@ export default class Post extends Component{
 							<div className="btn-group">
 								<Link className="btn btn-default" to="/video/edit">发布视频</Link>
 								<button onClick={() => this.props.getUnCls()} type="button" className="btn btn-default">未定义标签</button>
-								<button onClick={() => this.props.getVideoPost()} type="button" className="btn btn-default">视频</button>
+								<button onClick={this.toggleVideo} type="button" className={`btn btn-default ${this.state.isVideo ? 'active':''}`}>视频</button>
 							</div>
 						</FormGroup>
 						{' '}

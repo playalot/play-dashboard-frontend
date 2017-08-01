@@ -1,21 +1,19 @@
 import Immutable from 'immutable'
 import {
-    PAGE_L_RECEIVE_PAGE,
+    PAGE_RECEIVE_PAGE,
     PAGE_CLEAR_PAGE,
-    PAGE_L_TOGGLE_PUB,
-    PAGE_L_TOGGLE_REC,
-    PAGE_L_DELETE_ARTICLE,
-    PAGE_L_SET_COVER_TYPE,
-    PAGE_L_ADD_TOY,
-    PAGE_L_REMOVE_TOY,
-    PAGE_L_TOGGLE_SHARE,
-    PAGE_EDIT_SET_RAW,
-    PAGE_EDIT_CLEAR_RAW
+    PAGE_TOGGLE_PUB,
+    PAGE_TOGGLE_REC,
+    PAGE_TOGGLE_SHARE,
+    PAGE_DELETE_ARTICLE,
+    PAGE_SET_COVER_TYPE,
+    PAGE_ADD_TOY,
+    PAGE_REMOVE_TOY,
 } from '../actions/pageAction'
 
 export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'',filter:'',nextRaw:{} }),action)=>{
     switch (action.type) {
-        case PAGE_L_RECEIVE_PAGE:
+        case PAGE_RECEIVE_PAGE:
             return state
                 .updateIn(['pages'], (pages) => pages.clear().concat(Immutable.fromJS(action.res)))
                 .set('totalPages',action.totalPages)
@@ -29,7 +27,7 @@ export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'',fil
                 .set('page',null)
                 .set('query','')
                 .set('filter','')
-        case PAGE_L_TOGGLE_PUB:
+        case PAGE_TOGGLE_PUB:
             return state.updateIn(['pages'], (pages) => {
                 return pages.update(
                     pages.findIndex((item) => { 
@@ -39,7 +37,7 @@ export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'',fil
                     }
                 )
             })
-        case PAGE_L_TOGGLE_REC:
+        case PAGE_TOGGLE_REC:
             return state.updateIn(['pages'], (pages) => {
                 return pages.update(
                     pages.findIndex((item) => { 
@@ -49,13 +47,13 @@ export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'',fil
                     }
                 )
             })
-        case PAGE_L_DELETE_ARTICLE:
+        case PAGE_DELETE_ARTICLE:
             return state.updateIn(['pages'],(pages) => {
                 return pages.delete(pages.findKey((article) => {
                     return article.get('id') === action.id
                 }))
             })
-        case PAGE_L_SET_COVER_TYPE:
+        case PAGE_SET_COVER_TYPE:
             return state.updateIn(['pages'],(pages) => {
                 let flag = action.val ? 'l' : 's'
                 return pages.update(
@@ -66,7 +64,7 @@ export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'',fil
                     }
                 )
             })
-        case PAGE_L_ADD_TOY:
+        case PAGE_ADD_TOY:
             return state.updateIn(['pages'], (pages) => {
                 return pages.update(
                     pages.findIndex((item) => {
@@ -78,7 +76,7 @@ export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'',fil
                     }
                 )
             })
-        case PAGE_L_REMOVE_TOY:
+        case PAGE_REMOVE_TOY:
             return state.updateIn(['pages'],(pages) => {
                 return pages.update(
                     pages.findIndex((item) => {
@@ -88,7 +86,7 @@ export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'',fil
                     }
                 )
             })
-        case PAGE_L_TOGGLE_SHARE:
+        case PAGE_TOGGLE_SHARE:
             return state.updateIn(['pages'], pages => {
                 return pages.update(
                     pages.findIndex((item) => {
@@ -98,19 +96,6 @@ export default (state = Immutable.fromJS({ pages: [],totalPages:100,query:'',fil
                     }
                 )
             })
-        case PAGE_EDIT_SET_RAW:
-            return state
-                .updateIn(['nextRaw'],(nextRaw) => {
-                    return nextRaw
-                        .set('raw',action.raw)
-                        .set('gallery',action.gallery)
-                        .set('created',action.created)
-                })
-        case PAGE_EDIT_CLEAR_RAW:
-            return state
-                .updateIn(['nextRaw'],nextRaw => {
-                    return nextRaw.clear()
-                })
         default:
             return state
     }

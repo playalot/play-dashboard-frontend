@@ -2,28 +2,20 @@ import { connect } from 'react-redux'
 import ExplorePage from './ExplorePage'
 
 import { 
-    fetchExplore,
-    addBanner, deleteBanner,
-    addTopic, addToy,
-    addDraft
+    fetchExplore,deleteBanner
 } from '../../actions/exploreAction'
 const mapActionCreators = {
     fetchExplore,
-    addBanner,
-    addTopic, 
-    addToy,
-    addDraft,
     deleteBanner,
 }
 
 const mapStateToProps = (state) => {
-    const { banners, themes,drafts, toys, loaded }  = state.explore.toJS()
+    const { banners, themes,drafts, toys }  = state.explore.toJS()
     return {
         banners,
         themes,
         drafts,
         toys,
-        loaded,
     }
 }
 

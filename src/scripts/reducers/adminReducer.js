@@ -16,13 +16,13 @@ export default (state = Immutable.fromJS({
                     .set('avatar',action.res.avatar)
             		.set('email',action.email)
             })
-        case ADMIN_SET_TOUID_NULL:
-            return state.updateIn(['baichuan'], baichuan => {
-                return baichuan.set('touid','none')
-            })
         case ADMIN_SET_TOUID:
             return state.updateIn(['baichuan'], baichuan => {
                 return baichuan.set('touid',action.touid).set('toAvatar',action.toAvatar)
+            })
+        case ADMIN_SET_TOUID_NULL:
+            return state.updateIn(['baichuan'], baichuan => {
+                return baichuan.set('touid','none')
             })
         default:
             return state

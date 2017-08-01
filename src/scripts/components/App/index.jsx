@@ -15,7 +15,6 @@ import TradeList from '../TradeList'
 import StickerList from '../StickerList'
 import SkuList from '../SkuList'
 import OrderList from '../OrderList'
-import ReportList from '../ReportList'
 import FeedbackList from '../FeedbackList'
 
 import Tools from '../Tools'
@@ -136,23 +135,10 @@ export default class App extends Component{
 									</NavLink>
 								</li>
 								<li className="nav-item  ">
-									<a href="javascript:;" className="nav-link nav-toggle">
+									<NavLink className="nav-link" activeClassName="active" to="/feedbacks">
 										<i className="icon-info"></i>
 										<span className="title">投诉</span>
-										<span className="arrow"></span>
-									</a>
-									<ul className="sub-menu">
-										<li className="nav-item  ">
-											<NavLink className="nav-link" activeClassName="active" to="/reports">
-												<span className="title">举报</span>
-											</NavLink>
-										</li>
-										<li className="nav-item  ">
-											<NavLink className="nav-link" activeClassName="active" to="/feedbacks">
-												<span className="title">反馈</span>
-											</NavLink>
-										</li>
-									</ul>
+									</NavLink>
 								</li>
 							</ul>
 						</div>
@@ -173,7 +159,6 @@ export default class App extends Component{
 								<Route path="/stickers" component={StickerList}/>
 								<Route path="/skus" component={SkuList}/>
 								<Route path="/orders" component={OrderList}/>
-								<Route path="/reports" component={ReportList}/>
 								<Route path="/feedbacks" component={FeedbackList}/>
 
 								<Route path="/tools" component={Tools}/>

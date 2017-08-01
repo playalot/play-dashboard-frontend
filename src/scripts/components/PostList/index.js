@@ -10,12 +10,13 @@ const mapActionCreators ={
 }
 
 const mapStateToProps = (state) => {
-	const { page,totalPages,filter,query } = state.postReducer.toJS()
+	const { page,totalPages,filter,query,isVideo } = state.postReducer.toJS()
 	return {
 		page,
 		totalPages,
 		filter,
 		query,
+		isVideo,
 	}
 }
 

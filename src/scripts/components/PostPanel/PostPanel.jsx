@@ -9,7 +9,10 @@ const _ = require('lodash')
 
 export default class PostPanel extends Component{
 	constructor(props) {
-	  	super(props)
+		super(props)
+		this.state = {
+			videoUrl:''
+		}
 	  	this.toggleRecommend = () => this.props.toggleRecommend(this.props.post.id)
 	  	this.toggleBlock = () => this.props.toggleBlock(this.props.post.id)
 	  	this.toggleR18 = () => this.props.toggleR18(this.props.post.id)
@@ -57,8 +60,12 @@ export default class PostPanel extends Component{
 					<div className="portlet-body">
 						 {
 							post.video ?
-							<div>
-								<video style={{width:'100%'}} src={post.video.url} controls></video>
+							<div style={{position:'relative'}}>
+								<ImgLoad src={post.preview} />
+								<div className="d-flex justify-content-center align-items-center" style={{position:'absolute',top:0,left:0,width:'100%',height:'100%'}}>
+									<span onClick={() => this.setState({videoUrl:post.video.url})} style={{fontSize:80,color:'rgba(255,255,255,.8)',cursor:'pointer'}} className="fa fa-play-circle-o">
+									</span>
+								</div>
 							</div>
 							:<div>
 								<div>
@@ -100,6 +107,11 @@ export default class PostPanel extends Component{
 						<div className="">
 							{post.cls.map(c => <span key={`post_${post.id}_c_${c}`} className="label label-warning label-margin" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>)}
 						</div>
+						<div className="d-flex p-2 justify-content-around">
+							<span>评论 : {post.counts.comments}</span>
+							<span>喜欢 : {post.counts.likes}</span>
+							<span>观看 : {post.counts.views}</span>
+						</div>
 						<div className="clearfix">
 							<ButtonToolbar className="pull-right">
 								<span onClick={() => this.props.toggleRecommend(post.id,!post.isRec)} className={`${btnClass} ${post.isRec ? 'yellow-casablanca':''}`}><i className="fa fa-thumbs-o-up"></i></span>
@@ -117,6 +129,17 @@ export default class PostPanel extends Component{
 						</div>
 					</div>
 				</div>
+				{
+					this.state.videoUrl ?
+					<div className="play-modal" onClick={() => this.setState({videoUrl:''})}>
+						<div className="play-dialog" onClick={e => e.stopPropagation()}>
+							<div>
+								<video style={{width:'100%',maxHeight:500}} src={this.state.videoUrl} controls></video>
+							</div>
+						</div>
+					</div>
+					: null
+				}
 	        </Col>
 		)
 	}

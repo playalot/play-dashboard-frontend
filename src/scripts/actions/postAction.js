@@ -18,14 +18,15 @@ export const POST_REMOVE_ALL_CLASSIFICATION = 'POST_REMOVE_ALL_CLASSIFICATION'
 export const POST_RECEIVE_POST = 'POST_RECEIVE_POST'
 export const POST_DELETE_POST = 'POST_DELETE_POST'
 
-function receivePost(res,totalPages,page,filter,query) {
+function receivePost(res,totalPages,page,filter,query,isVideo) {
     return {
         type: POST_RECEIVE_POST,
         res,
         totalPages,
         page,
         filter,
-        query
+        query,
+        isVideo
     }
 }
 
@@ -145,23 +146,26 @@ export const deletePost = (id) => {
 export function getPost (page = 0) {
     return (dispatch,getState) => {
         let params = { page }
-        const { filter, query } = getState().postReducer.toJS()
+        const { filter, query,isVideo } = getState().postReducer.toJS()
         if(filter) {
             params.filter = filter
         }
         if(query) {
             params.query = query
         }
+        if(isVideo) {
+            params.isVideo = isVideo
+        }
         return Request
             .get(`/api/posts`)
             .query(params)
             .end((err, res) => {
-                dispatch(receivePost(res.body.posts,res.body.totalPages,page,filter,query))
+                dispatch(receivePost(res.body.posts,res.body.totalPages,page,filter,query,isVideo))
             })
     }
 }
 
-export function getPostBy (filter = '',query ='') {
+export function getPostBy (filter = '',query ='',isVideo = false) {
     return (dispatch,getState) => {
         let page = 0
         let params = { page }
@@ -171,11 +175,14 @@ export function getPostBy (filter = '',query ='') {
         if(query) {
             params.query = query
         }
+        if(isVideo) {
+            params.isVideo = isVideo
+        }
         return Request
             .get(`/api/posts`)
             .query(params)
             .end((err, res) => {
-                dispatch(receivePost(res.body.posts,res.body.totalPages,page,filter,query))
+                dispatch(receivePost(res.body.posts,res.body.totalPages,page,filter,query,isVideo))
             })
     }
 }

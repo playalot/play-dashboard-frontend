@@ -379,10 +379,10 @@ export default class EditPage extends Component {
                 </div>
                 {
                     dialogSubmit ?
-                    <div className="modal">
+                    <div className="play-modal">
                         <div className="upload-dialog">
-                        <span className="edit-icon icon-spin3 animate-spin"></span>
-                        <span>正在上传...</span>
+                            <span className="edit-icon icon-spin3 animate-spin"></span>
+                            <span>正在上传...</span>
                         </div>
                     </div>
                     :null

@@ -1,12 +1,14 @@
 import Request from 'superagent'
 
-export const ORDER_L_RECEIVE_ORDER = 'ORDER_L_RECEIVE_ORDER'
+export const ORDER_ADD_TRACKING = 'ORDER_ADD_TRACKING'
+export const ORDER_SET_STATUS = 'ORDER_SET_STATUS'
+export const ORDER_START_PAY = 'ORDER_START_PAY'
 export const ORDER_CLEAR_ORDER = 'ORDER_CLEAR_ORDER'
+
+
+export const ORDER_L_RECEIVE_ORDER = 'ORDER_L_RECEIVE_ORDER'
 export const ORDER_L_RECEIVE_ORDER_BY_TOY = 'ORDER_L_RECEIVE_ORDER_BY_TOY'
 export const ORDER_L_RECEIVE_ORDER_BY_USER = 'ORDER_L_RECEIVE_ORDER_BY_USER'
-export const ORDER_L_ADD_TRACKING = 'ORDER_L_ADD_TRACKING'
-export const ORDER_L_SET_STATUS = 'ORDER_L_SET_STATUS'
-export const ORDER_L_START_PAY = 'ORDER_L_START_PAY'
 
 function receiveOrder(res,totalPages,page,status,merchant,year,month,summary,filter) {
     return {
@@ -35,49 +37,33 @@ function receiveOrderByUser(orders) {
         orders,
     }
 }
-function _addTracking(id,trackNo) {
-    return {
-        type: ORDER_L_ADD_TRACKING,
-        id,
-        trackNo
-    }
-}
-function _setStatus(id,status) {
-    return {
-        type : ORDER_L_SET_STATUS,
-        id,
-        status
-    }
-}
-function _startPay(id) {
-    return {
-        type : ORDER_L_START_PAY,
-        id
-    }
-}
+
+
 export function addTracking(id,trackNo) {
     return (dispatch) => {
         return Request
             .post(`/api/order/${id}/track`)
-            .send({
-                trackNo
-            })
+            .send({ trackNo })
             .end((err,res) => {
-                if(!err){
-                    dispatch(_addTracking(id,trackNo))
-                }
+                dispatch({
+                    type: ORDER_ADD_TRACKING,
+                    id,
+                    trackNo
+                })
             })
     }
 }
-
-
 export function setStatus(id,status) {
     return dispatch => {
         return Request
             .post(`/api/order/${id}/status`)
             .send({status})
             .end((err,res) => {
-                dispatch(_setStatus(id,status))
+                dispatch({
+                    type : ORDER_SET_STATUS,
+                    id,
+                    status
+                })
             })
     }
 }
@@ -90,7 +76,10 @@ export function startPay(id) {
                     alert('通知补款失败')
                 }else{
                     alert('通知补款成功')
-                    dispatch(_startPay(id))
+                    dispatch({
+                        type : ORDER_START_PAY,
+                        id
+                    })
                 }
             })
     }
@@ -119,21 +108,12 @@ export function getOrderByUser(id) {
 export function getOrder (page = 0,status = '',merchant = '',year,month,filter) {
     return (dispatch,getState) => {
         let params = { page }
-        if(status) {
-            params.status = status
-        }
-        if(merchant) {
-            params.merchant = merchant
-        }
-        if(year) {
-            params.year = year
-        }
-        if(month) {
-            params.month = month
-        }
-        if(filter) {
-            params.filter = filter
-        }
+        status ? params.status = status : null
+        merchant ? params.merchant = merchant : null
+        year ? params.year = year : null
+        month ? params.month = month : null
+        filter ? params.filter = filter : null
+
         return Request
             .get(`/api/orders`)
             .query(params)

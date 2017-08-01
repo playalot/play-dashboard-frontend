@@ -1,11 +1,7 @@
 import Immutable from 'immutable'
 import { 
     EXPLORE_RECEIVE_DATA,
-	EXPLORE_ADD_BANNER,
 	EXPLORE_DELETE_BANNER, 
-	EXPLORE_ADD_TOPIC,
-    EXPLORE_ADD_TOY,
-    EXPLORE_ADD_DRAFT,
 } from '../actions/exploreAction'
 
 export default (state = Immutable.fromJS({ 
@@ -18,22 +14,6 @@ export default (state = Immutable.fromJS({
                         .set('toys',Immutable.fromJS(action.toys))
                         .set('drafts',Immutable.fromJS(action.drafts))
                         .set('loaded',true)
-        case EXPLORE_ADD_BANNER:
-        	return state.updateIn(['banners'],(banners) => {
-        		return banners.unshift(Immutable.fromJS(action.res))
-        	})
-        case EXPLORE_ADD_TOPIC:
-        	return state.updateIn(['themes'],(themes) => {
-        		return themes.unshift(Immutable.fromJS(action.res))
-        	})
-        case EXPLORE_ADD_TOY:
-            return state.updateIn(['toys'],(toys) => {
-                return toys.unshift(Immutable.fromJS(action.res))
-            })
-        case EXPLORE_ADD_DRAFT:
-            return state.updateIn(['drafts'],(drafts) => {
-                return drafts.unshift(Immutable.fromJS(action.res))
-            })
         case EXPLORE_DELETE_BANNER:
             let target = `${action.target}s`
             return state.updateIn([target],(target) => {

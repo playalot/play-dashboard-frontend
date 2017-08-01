@@ -1,21 +1,20 @@
 import Request from 'superagent'
 
-export const PAGE_L_RECEIVE_PAGE = 'PAGE_L_RECEIVE_PAGE'
+export const PAGE_TOGGLE_PUB = 'PAGE_TOGGLE_PUB'
+export const PAGE_TOGGLE_REC = 'PAGE_TOGGLE_REC'
+export const PAGE_TOGGLE_SHARE = 'PAGE_TOGGLE_SHARE'
+export const PAGE_SET_COVER_TYPE = 'PAGE_SET_COVER_TYPE'
+export const PAGE_ADD_TOY = 'PAGE_ADD_TOY'
+export const PAGE_REMOVE_TOY = 'PAGE_REMOVE_TOY'
 export const PAGE_CLEAR_PAGE = 'PAGE_CLEAR_PAGE'
-export const PAGE_L_TOGGLE_PUB = 'PAGE_L_TOGGLE_PUB'
-export const PAGE_L_TOGGLE_REC = 'PAGE_L_TOGGLE_REC'
-export const PAGE_L_DELETE_ARTICLE = 'PAGE_L_DELETE_ARTICLE'
-export const PAGE_L_SET_COVER_TYPE = 'PAGE_L_SET_COVER_TYPE'
-export const PAGE_L_ADD_TOY = 'PAGE_L_ADD_TOY'
-export const PAGE_L_REMOVE_TOY = 'PAGE_L_REMOVE_TOY'
-export const PAGE_L_TOGGLE_SHARE = 'PAGE_L_TOGGLE_SHARE'
-export const PAGE_EDIT_SET_RAW = 'PAGE_EDIT_SET_RAW'
-export const PAGE_EDIT_CLEAR_RAW = 'PAGE_EDIT_CLEAR_RAW'
+export const PAGE_DELETE_ARTICLE = 'PAGE_DELETE_ARTICLE'
+
+export const PAGE_RECEIVE_PAGE = 'PAGE_RECEIVE_PAGE'
 
 
 function receivePage(res,totalPages = 10,page,filter = '',query = '') {
     return {
-        type: PAGE_L_RECEIVE_PAGE,
+        type: PAGE_RECEIVE_PAGE,
         res,
         totalPages,
         page,
@@ -23,110 +22,56 @@ function receivePage(res,totalPages = 10,page,filter = '',query = '') {
         query
     }
 }
-function _togglePub(id) {
-    return {
-        type: PAGE_L_TOGGLE_PUB,
-        id
-    }
-}
-function _toggleRec(id) {
-    return {
-        type: PAGE_L_TOGGLE_REC,
-        id
-    }
-}
-function _deleteArticle(id) {
-    return {
-        type: PAGE_L_DELETE_ARTICLE,
-        id
-    }
-}
-function _setCoverType(val,id) {
-    return {
-        type: PAGE_L_SET_COVER_TYPE,
-        val,
-        id
-    }
-}
-function _addToy(id, toy) {
-    return {
-        type: PAGE_L_ADD_TOY,
-        id,
-        toy
-    }
-}
-function _removeToy(id) {
-    return {
-        type: PAGE_L_REMOVE_TOY,
-        id
-    }
-}
-function _toggleShare(id) {
-    return {
-        type: PAGE_L_TOGGLE_SHARE,
-        id
-    }
-}
-const status = {
-    query: '',
-    ts: null,
-    overload: false,
-}
 
-export function togglePub(id) {
+export function togglePub(id,isPub) {
     return (dispatch,getState) => {
-        let value = null
-        let index = getState().page.get('pages').findIndex((item) => {
-            value = item.get('id') === id ? item.get('isPub') : null
-            return item.get('id') === id
-        })
         return Request
             .post(`/api/page/${id}/pub`)
-            .send({
-                isPub: !value
-            })
+            .send({ isPub })
             .end((err,res) => {
-                dispatch(_togglePub(id))
+                dispatch({type:PAGE_TOGGLE_PUB,id})
             })
     }
 }
-export function toggleRec(id) {
+export function toggleRec(id,recommend) {
     return (dispatch,getState) => {
-        let value = null
-        let index = getState().page.get('pages').findIndex((item) => {
-            value = item.get('id') === id ? item.get('isRec') : null
-            return item.get('id') === id
-        })
         return Request
             .post(`/api/page/${id}/recommend`)
-            .send({
-                recommend: !value
-            })
+            .send({ recommend })
             .end((err,res) => {
-                dispatch(_toggleRec(id))
+                dispatch({type:PAGE_TOGGLE_REC,id})
             })
     }
 }
+export function toggleShare(id,forShare) {
+    return (dispatch,getState) => {
+        return Request
+            .post(`/api/page/${id}/share`)
+            .send({ forShare })
+            .end((err,res) => {
+                dispatch({type:PAGE_TOGGLE_SHARE,id})
+            })
+    }
+}
+
 export function deleteArticle(id) {
     return (dispatch) => {
         Request
             .del(`/api/page/${id}`)
             .end((err,res) => {
-                dispatch(_deleteArticle(id))
+                dispatch({type:PAGE_DELETE_ARTICLE,id})
             })
     }
 }
 
-export function setCoverType(val,id) {
+export function setCoverType(id,val) {
     return (dispatch) => {
-        let flag = val ? 'l' : 's'
+        let coverType = val ? 'l' : 's'
         Request
             .post(`/api/page/${id}/cover`)
-            .send({
-                coverType: flag
-            })
+            .send({ coverType })
             .end((err,res) => {
-                dispatch(_setCoverType(val,id))    
+                dispatch({type:PAGE_SET_COVER_TYPE,id,val})
             })
     }
 }
@@ -136,7 +81,7 @@ export function addToy(id, sid) {
         return Request
             .post(`/api/page/${id}/toy/${sid}`)
             .end((err, res) => {
-                dispatch(_addToy(id, res.body))
+                dispatch({type:PAGE_ADD_TOY,id,toy:res.body})
             })
     }
 }
@@ -145,30 +90,10 @@ export function removeToy(id) {
         return Request
             .del(`/api/page/${id}/toy`)
             .end((err,res) => {
-                dispatch(_removeToy(id))
+                dispatch({type:PAGE_REMOVE_TOY,id})
             })
     }
 }
-
-export function toggleShare(id) {
-    return (dispatch,getState) => {
-        let value = null
-        let index = getState().page.get('pages').findIndex((item) => {
-            value = item.get('id') === id ? item.get('forShare') : null
-            return item.get('id') === id
-        })
-        return Request
-            .post(`/api/page/${id}/share`)
-            .send({
-                forShare: !value
-            })
-            .end((err,res) => {
-                dispatch(_toggleShare(id))
-            })
-    }
-}
-
-
 
 export function getPage (page = 0) {
     return (dispatch,getState) => {
@@ -215,21 +140,6 @@ export function getPageBy (filter = '',query = '') {
             .end((err, res) => {
                 dispatch(receivePage(res.body.pages,res.body.totalPages,page,filter,query))
             })
-    }
-}
-
-export function setPageRaw(raw,gallery,created = Date.now()) {
-    return {
-        type:PAGE_EDIT_SET_RAW,
-        raw,
-        gallery,
-        created
-    }
-}
-
-export function clearPageRaw() {
-    return {
-        type: PAGE_EDIT_CLEAR_RAW
     }
 }
 

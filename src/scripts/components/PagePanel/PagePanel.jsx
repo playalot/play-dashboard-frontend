@@ -117,20 +117,20 @@ export default class PagePanel extends Component {
 	                  		on="L"
 	                  		off="S"
 	                  		active={page.coverType === 'l'} 
-	                  		onChange={value => this.props.setCoverType(value,page.id)}
+	                  		onChange={value => this.props.setCoverType(page.id,value)}
 	                  	/>
 	                  </td>
 	                  <td style={{width:150}}> 
 	                  	<div className="page-flex-column">
 	                    	<div>
 	                    		<Link to={`/page/edit?id=${page.id}` }><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link>
-	                    		<span style={{color:'#333'}} onClick={() => this.togglePub(page.id)} className={isPubClass}><i className="fa fa-eye-slash"></i></span>
+	                    		<span style={{color:'#333'}} onClick={() => this.props.togglePub(page.id,!page.isPub)} className={isPubClass}><i className="fa fa-eye-slash"></i></span>
 	                    		<span style={{color:'#333'}} onClick={() => this.deleteArticle(page.id)} className="btn btn-sm"><i className="fa fa-trash"></i></span>
 	                    	</div>
 	                    	<div>
 	                    		<span style={{color:'#333'}} onClick={() => this.addToy(page.id)} className="btn btn-sm"><i className="fa fa-plus"></i></span>
-	                    		<span style={{color:'#333'}} onClick={() => this.toggleRec(page.id)} className={isRecClass}><i className="fa fa-thumbs-o-up"></i></span>
-	                    		<span style={{color:'#333'}} onClick={() => this.toggleShare(page.id)} className={isShareClass}><i className="fa fa-share-square-o"></i></span>
+	                    		<span style={{color:'#333'}} onClick={() => this.props.toggleRec(page.id,!page.isRec)} className={isRecClass}><i className="fa fa-thumbs-o-up"></i></span>
+	                    		<span style={{color:'#333'}} onClick={() => this.props.toggleShare(page.id,!page.forShare)} className={isShareClass}><i className="fa fa-share-square-o"></i></span>
 	                    	</div>
 	                  	</div>
 	                  </td>

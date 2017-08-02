@@ -6,6 +6,7 @@ export const FEEDBACK_DELETE_FEEDBACK = 'FEEDBACK_DELETE_FEEDBACK'
 export const REPORT_RECEIVE_DATA = 'REPORT_RECEIVE_DATA'
 export const REPORT_DELETE_REPORT = 'REPORT_DELETE_REPORT'
 export const REPORT_TOGGLE_BLK = 'REPORT_TOGGLE_BLK'
+export const REPORT_TOGGLE_R18 = 'REPORT_TOGGLE_R18'
 
 
 export function deleteFeedback(id) {
@@ -71,19 +72,29 @@ export function deleteReport(id) {
 
 export function toggleBlk(id) {
     return (dispatch, getState) => {
-        let value = null
-        let index = getState().report.get('reports').findIndex((item) => {
-            value = item.get('targetId') === id ? item.getIn(['target','isBlk']) : null
-            return item.get('targetId') === id
-        })
         return Request
             .post(`/api/post/${id}/block`)
             .send({
-                block: !value
+                block: true
             })
             .end((err, res) => {
                 dispatch({
                     type: REPORT_TOGGLE_BLK,
+                    id
+                })
+            })
+    }
+}
+export function toggleR18(id) {
+    return (dispatch, getState) => {
+        return Request
+            .post(`/api/post/${id}/r18`)
+            .send({
+                r18: true
+            })
+            .end((err, res) => {
+                dispatch({
+                    type: REPORT_TOGGLE_R18,
                     id
                 })
             })

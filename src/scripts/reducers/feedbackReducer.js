@@ -1,7 +1,7 @@
 import Immutable from 'immutable'
 import { 
     FEEDBACK_RECEIVE_DATA, FEEDBACK_DELETE_FEEDBACK, 
-    REPORT_RECEIVE_DATA, REPORT_DELETE_REPORT, REPORT_TOGGLE_BLK
+    REPORT_RECEIVE_DATA, REPORT_DELETE_REPORT, REPORT_TOGGLE_BLK,REPORT_TOGGLE_R18
 } from '../actions/feedbackAction'
 
 export default (state = Immutable.fromJS({ 
@@ -38,6 +38,16 @@ export default (state = Immutable.fromJS({
                         return item.get('targetId') === action.id
                     }), (item) => {
                         return item.setIn(['target','isBlk'], !item.getIn(['target','isBlk']));
+                    }
+                )
+            })
+        case REPORT_TOGGLE_R18:
+            return state.updateIn(['reports'],(reports) => {
+                return reports.update(
+                    reports.findIndex((item) => {
+                        return item.get('targetId') === action.id
+                    }), (item) => {
+                        return item.setIn(['target','isR18'], !item.getIn(['target','isR18']));
                     }
                 )
             })

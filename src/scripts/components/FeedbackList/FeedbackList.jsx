@@ -71,7 +71,6 @@ export default class FeedbackList extends Component{
 										<tbody>
 											{
 												this.props.reports.map((report) => {
-													let invisibleClass = report.target && report.target.isBlk === true ? 'btn yellow-casablanca btn-sm' : 'btn btn-sm'
 													return(
 														<tr key={`report_${report.id}`}>
 															<td>
@@ -100,15 +99,15 @@ export default class FeedbackList extends Component{
 															</td>
 															<td>
 																<ButtonToolbar>
-																	<span className="btn btn-sm" onClick={() => this.deleteReport(report.id)}><i className="fa fa-check"></i></span>
+																	<span className="btn btn-sm" onClick={() => this.props.deleteReport(report.id)}><i className="fa fa-check"></i></span>
 																	{
 																		report.targetType === 'post' ?
-																		<span className={invisibleClass} onClick={() => this.toggleBlk(report.targetId)}><i className="fa fa-eye-slash"></i></span>
+																		<span className="btn btn-sm" onClick={() => this.props.toggleBlk(report.targetId)}><i className="fa fa-eye-slash"></i></span>
 																		: <span></span>
 																	}
 																	{
 																		report.targetType === 'post' ?
-																		<span className={invisibleClass} onClick={() => this.toggleBlk(report.targetId)}><i className="fa fa-venus-mars"></i></span>
+																		<span className="btn btn-sm" onClick={() => this.props.toggleR18(report.targetId)}><i className="fa fa-venus-mars"></i></span>
 																		: <span></span>
 																	}
 																</ButtonToolbar>

@@ -108,9 +108,9 @@ export default class PostPanel extends Component{
 							{post.cls.map(c => <span key={`post_${post.id}_c_${c}`} className="label label-warning label-margin" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>)}
 						</div>
 						<div className="d-flex p-2 justify-content-around">
-							<span>评论 : {post.counts.comments}</span>
-							<span>喜欢 : {post.counts.likes}</span>
-							<span>观看 : {post.counts.views}</span>
+							<span>评论 : {post.counts && post.counts.comments || 0}</span>
+							<span>喜欢 : {post.counts && post.counts.likes || 0}</span>
+							<span>观看 : {post.counts && post.counts.views || 0}</span>
 						</div>
 						<div className="clearfix">
 							<ButtonToolbar className="pull-right">

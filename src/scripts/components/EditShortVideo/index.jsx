@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Dropzone from 'react-dropzone';
 import Request from 'superagent';
+import TagsInput from 'react-tagsinput'
 import { Modal,Button,FormGroup,FormControl,Col,Row,Form } from 'react-bootstrap'
 import CDN from '../../widgets/cdn'
 function makeid() {
@@ -24,7 +25,7 @@ export default class extends Component {
       progress: 0,
       uploadKey: '',
       caption: '',
-      category:'news',
+      tags:[],
       alert: false,
       offset:1,
       modalPoster:false,
@@ -132,7 +133,7 @@ export default class extends Component {
       userId: this.state.userId,
       uploadKey: this.state.uploadKey,
       thumbnail:this.state.thumbnail,
-      category:this.state.category
+      tags:this.state.tags
     };
     if (this.state.caption.trim() !== '') {
       data.caption = this.state.caption
@@ -205,37 +206,7 @@ export default class extends Component {
 						<FormGroup>
 							<Col className="control-label" sm={2}>标签</Col>
 							<Col sm={9}>
-								<div className="btn-group">
-                  <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    {(() => {
-                        switch(this.state.category){
-                            case 'review':
-                                return '评测'
-                            case 'news':
-                                return '新闻'
-                            case 'info':
-                                return '情报'
-                            case 'interview':
-                                return '访谈'
-                            case 'essay':
-                                return '随笔'
-                            case 'knowledge':
-                                return '干货'
-                            default :
-                                return ''
-                        }
-                    })()}
-                    &nbsp;&nbsp;<span className="caret"></span>
-                  </button>
-                    <ul className="dropdown-menu">
-                        <li><a onClick={() => this.setState({category:'review'})}>评测</a></li>
-                        <li><a onClick={() => this.setState({category:'news'})}>新闻</a></li>
-                        <li><a onClick={() => this.setState({category:'info'})}>情报</a></li>
-                        <li><a onClick={() => this.setState({category:'interview'})}>访谈</a></li>
-                        <li><a onClick={() => this.setState({category:'essay'})}>随笔</a></li>
-                        <li><a onClick={() => this.setState({category:'knowledge'})}>干货</a></li>
-                    </ul>
-                </div>
+								<TagsInput value={this.state.tags} onChange={(tags) => this.setState({tags})} />
 							</Col>
 						</FormGroup>
 						<FormGroup>

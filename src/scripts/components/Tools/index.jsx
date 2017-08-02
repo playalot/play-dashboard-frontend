@@ -7,81 +7,141 @@ export default class extends Component {
 	  	super(props);
 	
 	  	this.state = {
-			id:'',
-			pages:'',
-			loading:false,
-			
+			toysdailyId:'',
+			toysdailyPage:'',
+
 			toypeopleId:'',
-	  	};
-	  this.toysdaily = this._toysdaily.bind(this)
-	  this.toypeople = this._toypeople.bind(this)
+
+			newsgammeId:'',
+
+			goodsmileId:'',
+
+			json:'',
+	  	}
+		this.toysdaily = this._toysdaily.bind(this)
+		this.toypeople = this._toypeople.bind(this)
+		this.newsgamme = this._newsgamme.bind(this)
+		this.goodsmile = this._goodsmile.bind(this)
+		this.addPage = this._addPage.bind(this)
 	}
+
 	_toysdaily() {
-		const { id,pages,loading } = this.state
-		if(loading){
-			return
-		}
-		this.setState({loading:true})
+		const { toysdailyId,toysdailyPage } = this.state
 		Request.get('/api/crawl/toysdaily')
-		.query({ id,pages })
+		.query({ id:toysdailyId,pages:toysdailyPage })
 		.end((err,res) => {
 			if(!err){
 				this.setState({
-					id:'',pages:'',loading:false
+					toysdailyId:'',toysdailyPage:''
 				})
 			}
 		})
 	}
 	_toypeople() {
-		const { toypeopleId,loading } = this.state
-		if(loading){
-			return
-		}
-		this.setState({loading:true})
+		const { toypeopleId } = this.state
 		Request.get('/api/crawl/toypeople')
-		.query({ id:toypeople })
+		.query({ id:toypeopleId })
 		.end((err,res) => {
 			if(!err){
-				this.setState({
-					toypeople:'',loading:false
-				})
+				this.setState({ toypeopleId:'' })
+			}
+		})
+	}
+	_newsgamme() {
+		const { newsgammeId } = this.state
+		Request.get('/api/crawl/newsgamme')
+		.query({ id:newsgammeId })
+		.end((err,res) => {
+			if(!err){ this.setState({ newsgammeId:'' }) }
+		})
+	}
+	_goodsmile() {
+		const { goodsmileId } = this.state
+		Request.get('/api/crawl/goodsmile')
+		.query({ id:goodsmileId })
+		.end((err,res) => {
+			if(!err){ this.setState({ goodsmileId:'' }) }
+		})
+	}
+	_addPage() {
+		let raw
+		try {
+			raw = JSON.parse(this.state.json)
+		}catch(e) {
+			console.log(e)
+			return alert('json解析出错了')
+		}
+		const { title,pageType,nodes } = raw
+		if(title.trim() == ''){
+			return alert('title为空')
+		}
+		if(pageType.trim() == ''){
+			return alert('pageType为空')
+		}
+		if(!nodes.length){
+			return alert('节点长度为0')
+		}
+		Request.post(`/api/crawl/json`)
+		.send(raw)
+		.end((err,res) => {
+			if(!err){
+				alert('添加文章成功')
+				this.setState({ json:'' })
 			}
 		})
 	}
 	render() {
 		return(
-			<div style={{padding:20}}>
+			<div className="p-3">
 				<div>
-				  	<div>
-				    	<h3 className="box-title">玩具日报</h3>
-				  	</div>
-				  	<div>
-				  		<Row>
-				  			<Col sm={4}>
-			                  <FormControl value={this.state.id} placeholder="ID" type="text" onChange={e => this.setState({id:e.target.value})}/>
-			                </Col>
-			                <Col sm={4}>
-			                  <FormControl value={this.state.pages} placeholder="页数" type="text" onChange={e => this.setState({pages:e.target.value})}/>
-			                </Col>
-			                <Col sm={4}>
-			                	<button className="btn red btn-outline" disabled={this.state.loading} onClick={this.toysdaily}>爬取</button>
-			                </Col>
-				  		</Row>
-				  	</div>
-				  	<div>
-				    	<h3 className="box-title">玩具人</h3>
-				  	</div>
-				  	<div>
-				  		<Row>
-				  			<Col sm={8}>
-			                  <FormControl value={this.state.id} placeholder="ID" type="text" onChange={e => this.setState({id:e.target.value})}/>
-			                </Col>
-			                
-			                <Col sm={4}>
-			                	<button className="btn red btn-outline" disabled={this.state.loading} onClick={this.toypeople}>爬取</button>
-			                </Col>
-				  		</Row>
-				  	</div>
+				    <h3>玩具日报</h3>
+				  	<Row>
+						<Col sm={4}>
+							<FormControl value={this.state.toysdailyId} placeholder="ID" type="text" onChange={e => this.setState({toysdailyId:e.target.value})}/>
+						</Col>
+						<Col sm={4}>
+							<FormControl value={this.state.toysdailyPage} placeholder="页数" type="text" onChange={e => this.setState({toysdailyPage:e.target.value})}/>
+						</Col>
+						<Col sm={4}>
+							<button className="btn red btn-outline" onClick={this.toysdaily}>爬取</button>
+						</Col>
+					</Row>
+				    <h3>玩具人</h3>
+					<Row>
+						<Col sm={8}>
+							<FormControl value={this.state.toypeopleId} placeholder="ID" type="text" onChange={e => this.setState({toypeopleId:e.target.value})}/>
+						</Col>
+						<Col sm={4}>
+							<button className="btn red btn-outline" onClick={this.toypeople}>爬取</button>
+						</Col>
+					</Row>
+				    <h3>宅宅新闻</h3>
+					<Row>
+						<Col sm={8}>
+							<FormControl value={this.state.newsgammeId} placeholder="ID" type="text" onChange={e => this.setState({newsgammeId:e.target.value})}/>
+						</Col>
+						<Col sm={4}>
+							<button className="btn red btn-outline" disabled={this.state.loading} onClick={this.newsgamme}>爬取</button>
+						</Col>
+					</Row>
+				    <h3>GoodSmile</h3>
+					<Row>
+						<Col sm={8}>
+							<FormControl value={this.state.goodsmileId} placeholder="ID" type="text" onChange={e => this.setState({goodsmileId:e.target.value})}/>
+						</Col>
+						<Col sm={4}>
+							<button className="btn red btn-outline" disabled={this.state.loading} onClick={this.goodsmile}>爬取</button>
+						</Col>
+					</Row>
+					<h3>添加JSON文章</h3>
+					<Row>
+						<Col sm={8}>
+							<textarea onChange={(e) => this.setState({json:e.target.value})} value={this.state.json} style={{width:'100%',resize:'vertical'}}></textarea>
+						</Col>
+						<Col sm={4}>
+							<button className="btn red btn-outline"onClick={this.addPage}>添加</button>
+						</Col>
+					</Row>
 				</div>
 			</div>
 

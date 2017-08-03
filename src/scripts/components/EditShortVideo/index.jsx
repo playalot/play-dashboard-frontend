@@ -111,35 +111,39 @@ export default class extends Component {
               .end((err, res) =>{
                   const posters = this.state.posters
                   posters.push(uploadKey)
-                  this.setState({posters,thumbnail:uploadKey})
+                  this.setState({posters,thumbnail:uploadKey,offset:null})
               })
           };
           img.src = file.preview
       })
   }
   onSubmit() {
-    if (this.state.uploadKey === '' ) {
+    const { uploadKey,canSubmit,progress,userId,thumbnail,tags,caption,title,offset } = this.state
+    if (uploadKey === '' ) {
       return alert('请先上传视频')
     }
-    if(!this.state.canSubmit){
-      if(this.state.progress > 99){
+    if(!canSubmit){
+      if(progress > 99){
         return alert('请等待后台转码')
       }else{
         return alert('正在上传..')
       }
-      
     }
     let data = {
-      userId: this.state.userId,
-      uploadKey: this.state.uploadKey,
-      thumbnail:this.state.thumbnail,
-      tags:this.state.tags
-    };
-    if (this.state.caption.trim() !== '') {
-      data.caption = this.state.caption
+      userId,
+      uploadKey,
+      tags
     }
-    if (this.state.title.trim() !== '') {
-      data.title = this.state.title
+    if(offset){
+      data.offset = offset
+    }else{
+      data.thumbnail = thumbnail
+    }
+    if (caption.trim() !== '') {
+      data.caption = caption
+    }
+    if (title.trim() !== '') {
+      data.title = title
     }
     Request
       .post('/api/uploadvideo')
@@ -152,6 +156,7 @@ export default class extends Component {
           uploadKey: '',
           caption: '',
           title:'',
+          offset:1,
           showPoster:false,
         },() => {
           alert('提交成功')
@@ -255,7 +260,7 @@ export default class extends Component {
 								}
 								return(
 									<Col key={`poster_${i}`} sm={2} style={{padding:10}}>
-									<img onClick={() => this.setState({modalPoster:false,thumbnail:`http://img.playalot.cn/${this.state.uploadKey}?vframe/jpg/offset/${item}`})} style={{width:'100%'}} src={`http://img.playalot.cn/${this.state.uploadKey}?vframe/jpg/offset/${item}`}/>
+									<img onClick={() => this.setState({modalPoster:false,thumbnail:`http://img.playalot.cn/${this.state.uploadKey}?vframe/jpg/offset/${item}`,offset:item})} style={{width:'100%'}} src={`http://img.playalot.cn/${this.state.uploadKey}?vframe/jpg/offset/${item}`}/>
 									</Col>
 								)
 								})
@@ -264,7 +269,7 @@ export default class extends Component {
 								this.state.posters.map((poster,i) => {
 								return (
 									<Col key={`poster_u_${i}`} sm={2} style={{padding:10}}>
-									<img onClick={() => this.setState({modalPoster:false,thumbnail:CDN.show(poster)})} style={{width:'100%',height:80,objectFit:'cover'}} src={CDN.show(poster)}/>
+									<img onClick={() => this.setState({modalPoster:false,thumbnail:CDN.show(poster),offset:null})} style={{width:'100%',height:80,objectFit:'cover'}} src={CDN.show(poster)}/>
 									</Col>
 								)
 								})

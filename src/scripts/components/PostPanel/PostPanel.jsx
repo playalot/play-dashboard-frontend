@@ -4,6 +4,7 @@ import { Col, ButtonToolbar } from 'react-bootstrap'
 import Moment from 'moment'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import Masonry from 'react-masonry-component'
+import PlayPreImage from '../Common/PlayPreImage'
 
 const _ = require('lodash')
 
@@ -61,7 +62,7 @@ export default class PostPanel extends Component{
 						 {
 							post.video ?
 							<div style={{position:'relative'}}>
-								<ImgLoad src={post.preview} />
+								<PlayPreImage src={post.preview} />
 								<div className="d-flex justify-content-center align-items-center" style={{position:'absolute',top:0,left:0,width:'100%',height:'100%'}}>
 									<span onClick={() => this.setState({videoUrl:post.video.url})} style={{fontSize:80,color:'rgba(255,255,255,.8)',cursor:'pointer'}} className="fa fa-play-circle-o">
 									</span>
@@ -69,7 +70,7 @@ export default class PostPanel extends Component{
 							</div>
 							:<div>
 								<div>
-									<ImgLoad src={post.photos[0].url640} onClick={() => this.props.openImage(this.formatUrl(post.photos),0) } />
+									<PlayPreImage src={post.photos[0].url640} onClick={() => this.props.openImage(this.formatUrl(post.photos),0) } />
 								</div>
 								{
 									post.photos.length === 1 ? null :
@@ -131,7 +132,7 @@ export default class PostPanel extends Component{
 				</div>
 				{
 					this.state.videoUrl ?
-					<div className="play-modal" onClick={() => this.setState({videoUrl:''})}>
+					<div className="play-modal"  onClick={() => this.setState({videoUrl:''})}>
 						<div className="play-dialog" onClick={e => e.stopPropagation()}>
 							<div>
 								<video style={{width:'100%',maxHeight:500}} src={this.state.videoUrl} controls></video>
@@ -141,49 +142,6 @@ export default class PostPanel extends Component{
 					: null
 				}
 	        </Col>
-		)
-	}
-}
-
-class ImgLoad extends Component{
-	constructor(props) {
-	  	super(props)
-	  	this.state = {
-	  		loaded:false
-	  	}
-	}
-	componentWillMount() {
-		const {src} = this.props
-		let w,h
-		try{
-			w = /_w_\d{1,}/.exec(src)[0].replace('_w_','')
-			h = /_h_\d{1,}/.exec(src)[0].replace('_h_','')
-			
-		}catch(e){
-			console.error(e)
-			w = 0
-			h = 0
-		}
-		this.setState({
-			scale:`${h/w*100}%`
-		})
-		const img = new Image()
-		img.src = src
-		img.onload = () => {
-			this.setState({
-				loaded:true
-			})
-		}
-	}
-	render() {
-		return (
-			<div style={{width:'100%',height:0,paddingBottom:`${this.state.scale}`,background:'rgb(238,237,235)',position:'relative'}}>
-				{
-					this.state.loaded ?
-					<img src={this.props.src} onClick={this.props.onClick} alt="photo" style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',objectFit:'contain'}} />
-					:null
-				}
-			</div>
 		)
 	}
 }

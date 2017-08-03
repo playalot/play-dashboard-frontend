@@ -19,6 +19,7 @@ import FeedbackList from '../FeedbackList'
 
 import Tools from '../Tools'
 
+import Post from '../Post'
 import UserDetail from '../UserDetail'
 import EditTag from '../EditTag'
 import EditToy from '../EditToy'
@@ -161,6 +162,7 @@ export default class App extends Component{
 								<Route path="/orders" component={OrderList}/>
 								<Route path="/feedbacks" component={FeedbackList}/>
 
+								<Route path="/post/:id" component={Post}/>
 								<Route path="/tools" component={Tools}/>
 
 								<Route path="/user/:id" component={UserDetail}/>

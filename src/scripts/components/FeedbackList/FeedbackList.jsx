@@ -81,12 +81,12 @@ export default class FeedbackList extends Component{
 															<td style={{textAlign:'center'}}>
 																{
 																	report.targetType === 'post' ?
-																	<a target="_blank" href={`http://www.playalot.cn/post/${report.targetId}`}>图片</a>
+																	<Link to={`/post/${report.targetId}`}>图片</Link>
 																	:null
 																}
 																{
 																	report.targetType === 'user' ?
-																	<a target="_blank" href={`http://www.playalot.cn/user/${report.targetId}`}>用户</a>
+																	<Link to={`/user/${report.targetId}`}>用户</Link>
 																	:null
 																}
 															</td>

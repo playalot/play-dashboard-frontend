@@ -72,9 +72,7 @@ export default class Post extends Component {
             .end((err, res) => {
                 this.setState((prevState) => {
                     return {
-                        post:prevState.post.updateIn(['tags'],tags => {
-                            return tags.push(Immutable.fromJS(res.body))
-                        })
+                        post:prevState.post.update('tags',tags => tags.push(Immutable.fromJS(res.body)))
                     }
                 })
             })
@@ -201,8 +199,13 @@ export default class Post extends Component {
     }
     _deletePost() {
         if(confirm('删除这个post?')){
-            this.props.history.goBack()
+            Request
+            .del(`/api/post/${this.props.match.params.id}`)
+            .end((err, res) => {
+                this.props.history.goBack()
+            })
         }
+        
     }
     render() {
         const post = this.state.post.toJS()

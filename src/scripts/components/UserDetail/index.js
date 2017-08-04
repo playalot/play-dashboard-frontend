@@ -6,6 +6,8 @@ import { fetchTagClass } from '../../actions/tagClassAction'
 import { approveUser } from '../../actions/userAction'
 import { getUserPage,clearPage } from '../../actions/pageAction'
 import { getUserPost,setClassification,removeClassification,clearPost } from '../../actions/postAction'
+
+import { setTouid } from '../../actions/adminAction'
 const mapActionCreators = {
 	getUserPost,
 	setClassification,
@@ -21,7 +23,9 @@ const mapActionCreators = {
 
 	approveUser,
 	clearPost,
-	clearPage
+	clearPage,
+
+	setTouid
 }
 
 const mapStateToProps = (state) => {

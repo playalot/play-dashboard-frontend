@@ -42,6 +42,10 @@ class PlayAliBaichuan extends Component {
 	        });
 		}
 	}
+	componentWillUnmount() {
+		WKIT.destroy()
+		$('#alibaichuan').empty()
+	}
 	render() {
 		let show = this.props.baichuan.touid === 'none' ? false : true
 

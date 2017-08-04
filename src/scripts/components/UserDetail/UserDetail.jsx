@@ -7,6 +7,9 @@ import PagePanel from '../PagePanel'
 import PlayAccount from '../Common/PlayAccount'
 import Request from 'superagent'
 import ReactPaginate from 'react-paginate'
+
+import PlayAliBaichuan from '../Common/PlayAliBaichuan'
+
 export default class extends Component{
 	constructor(props) {
 		super(props)
@@ -158,6 +161,14 @@ export default class extends Component{
 							</Row>
 							<Row>
 								<Col xsOffset={1} sm={3} className="sm-2-label">
+									<strong>Chat</strong>
+								</Col>
+								<Col sm={8} style={{padding:'7px 20px'}}>
+									<button className="btn btn-outline blue btn-xs" onClick={() => this.props.setTouid(user.id,user.avatar)}>私信</button>
+								</Col>
+							</Row>
+							<Row>
+								<Col xsOffset={1} sm={3} className="sm-2-label">
 									<strong>Active</strong>
 								</Col>
 								<Col sm={8} style={{padding:'7px 20px'}}>
@@ -233,6 +244,7 @@ export default class extends Component{
 					</div>
 					: null
 				}
+				<PlayAliBaichuan/>
 			</div>
 		)
 	}

@@ -15,8 +15,11 @@ export const uploadFiles = async (files,prefix,uploadUrl = 'http://upload.qiniu.
             .attach('file', file, file.name)
             .set('Accept', 'application/json')
             .then(() => uploadKey)
+            .catch(e => e)
     })
-    return await Promise.all(promises)
+    const keys = await Promise.all(promises)
+
+    return keys.filter(key => typeof key == 'string')
 }
 
 export const uploadImageWithWH = async (file,prefix,uploadUrl = 'http://upload.qiniu.com/') => {

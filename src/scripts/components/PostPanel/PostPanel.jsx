@@ -12,7 +12,8 @@ export default class PostPanel extends Component{
 	constructor(props) {
 		super(props)
 		this.state = {
-			videoUrl:''
+			videoUrl:'',
+			sharePost:false,
 		}
 	  	this.toggleRecommend = () => this.props.toggleRecommend(this.props.post.id)
 	  	this.toggleBlock = () => this.props.toggleBlock(this.props.post.id)
@@ -21,7 +22,9 @@ export default class PostPanel extends Component{
 	  	this.removeToy = () => confirm('删除这个玩具标签?') && this.props.removeToy(this.props.post.id)
 	  	this.deletePost = () => confirm('删除这个post?') && this.props.deletePost(this.props.post.id)
 	  	this.addTag = this._addTag.bind(this)
-	  	this.addToy = this._addToy.bind(this)
+		this.addToy = this._addToy.bind(this)
+				
+		this.sharePost = () => this.setState({sharePost:true}) 
 	}
 	_addToy() {
 		let id = prompt('输入玩具ID')
@@ -119,6 +122,7 @@ export default class PostPanel extends Component{
 								<CopyToClipboard text={post.id} onCopy={() => null}>
 									<span className="btn btn-sm"><i className="fa fa-copy"></i></span>
 								</CopyToClipboard>
+								<span onClick={ () => this.setState({sharePost:true}) } className="btn btn-sm"><i className="fa fa-share-square-o"></i></span>
 								<span onClick={ this.addToy } className="btn btn-sm"><i className="fa fa-plus"></i></span>
 								<span onClick={ this.addTag } className="btn btn-sm"><i className="fa fa-tag"></i></span>
 								<span onClick={ () => this.props.openClass( post ) } className="btn btn-sm"><i className="fa fa-th-large"></i></span>
@@ -136,6 +140,22 @@ export default class PostPanel extends Component{
 						<div className="play-dialog" onClick={e => e.stopPropagation()}>
 							<div>
 								<video style={{width:'100%',maxHeight:500}} src={this.state.videoUrl} controls></video>
+							</div>
+						</div>
+					</div>
+					: null
+				}
+				{
+					this.state.sharePost ?
+					<div className="play-modal"  onClick={() => this.setState({sharePost:false})}>
+						<div className="play-dialog" onClick={e => e.stopPropagation()}>
+							<p>{`#play玩具控app用户美图推荐!# ${post.user.nickname}： ${post.caption ||''} http://www.playalot.cn/post/${post.id}`}</p>
+							<div>
+								{
+									post.photos.map((photo,i) => {
+										return <img style={{width:80,height:80,margin:'0 5px 5px 0'}} src={photo.url.split('?')[0]} alt=""/>
+									})
+								}
 							</div>
 						</div>
 					</div>

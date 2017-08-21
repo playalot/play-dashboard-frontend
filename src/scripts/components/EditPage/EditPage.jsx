@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import Request from 'superagent'
 import Dropzone from 'react-dropzone'
 import TagsInput from 'react-tagsinput'
+import { Prompt } from 'react-router-dom'
 
 import {
   Editor,
@@ -426,6 +427,11 @@ export default class EditPage extends Component {
                 <div onClick={this.scrollToTop} className="scroll-to-top">
                     <i className="fa fa-arrow-up"></i>
                 </div>
+                {
+                    parse(this.props.location.search).id ?
+                    <Prompt message="确定离开此页面吗?"/>
+                    :null
+                }
             </div>
         )
     }

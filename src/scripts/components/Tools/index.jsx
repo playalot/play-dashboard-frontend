@@ -22,6 +22,7 @@ export default class extends Component {
 		this.toypeople = this._toypeople.bind(this)
 		this.newsgamme = this._newsgamme.bind(this)
 		this.goodsmile = this._goodsmile.bind(this)
+		this.moefigure = this._moefigure.bind(this)
 		this.addPage = this._addPage.bind(this)
 	}
 
@@ -61,6 +62,14 @@ export default class extends Component {
 		.query({ id:goodsmileId })
 		.end((err,res) => {
 			if(!err){ this.setState({ goodsmileId:'' }) }
+		})
+	}
+	_moefigure() {
+		const { moefigureId } = this.state
+		Request.get('/api/crawl/moefigure')
+		.query({ id:moefigureId })
+		.end((err,res) => {
+			if(!err){ this.setState({ moefigureId:'' }) }
 		})
 	}
 	_addPage() {
@@ -131,6 +140,15 @@ export default class extends Component {
 						</Col>
 						<Col sm={4}>
 							<button className="btn red btn-outline" disabled={this.state.loading} onClick={this.goodsmile}>爬取</button>
+						</Col>
+					</Row>
+				    <h3>Moefigure</h3>
+					<Row>
+						<Col sm={8}>
+							<FormControl value={this.state.moefigureId} placeholder="ID" type="text" onChange={e => this.setState({moefigureId:e.target.value})}/>
+						</Col>
+						<Col sm={4}>
+							<button className="btn red btn-outline" disabled={this.state.loading} onClick={this.moefigure}>爬取</button>
 						</Col>
 					</Row>
 					<h3>添加JSON文章</h3>

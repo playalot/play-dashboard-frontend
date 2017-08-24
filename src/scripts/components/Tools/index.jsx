@@ -1,6 +1,7 @@
 import React,{ Component } from 'react'
 import { Input,FormControl,Radio,Button,Row,Col } from 'react-bootstrap'
 import Request from 'superagent'
+import { Link } from 'react-router-dom'
 
 export default class extends Component {
 	constructor(props) {
@@ -160,6 +161,15 @@ export default class extends Component {
 							<button className="btn red btn-outline"onClick={this.addPage}>添加</button>
 						</Col>
 					</Row>
+					<Row>
+						<Col sm={8}>
+							<span style={{fontSize:24}}>每周精选</span>
+						</Col>
+						<Col sm={4}>
+							<Link to="/weekpage" className="btn red btn-outline">编辑</Link>
+						</Col>
+					</Row>
+
 				</div>
 			</div>
 

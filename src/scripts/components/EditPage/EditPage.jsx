@@ -48,7 +48,9 @@ export default class EditPage extends Component {
             videoUrl:null,
             uploadKey:'',
 
-            uploadingVideo:false
+            uploadingVideo:false,
+            dialogJson:false,
+            jsonText:''
         }
         //封面
         this.onDropCover = (files) => uploadImageWithWH(files[0],'article/cover/').then(cover => this.setState({cover},this.saveStorage))
@@ -75,6 +77,10 @@ export default class EditPage extends Component {
             uploadKey:null,
             videoUrl:null,
         })
+        this.addJson = () => {
+            let rawData = convertFromRaw(JSON.parse(this.state.jsonText))
+            this.setState({ editorState:EditorState.push(this.state.editorState, rawData),dialogJson:false })
+        }
     }
     componentDidMount() {
         const data = window.localStorage.getItem('editor-draft')
@@ -98,7 +104,7 @@ export default class EditPage extends Component {
 			.end((err,res) => {
 				const { title, cover, tags, category, gallery, raw, authorId } = res.body
                 let rawData = convertFromRaw(raw)
-                console.log(rawData.toJS().entityMap)
+                // console.log(rawData.toJS().entityMap)
 				this.setState({
 					title, cover, tags, category, gallery, authorId:authorId.$oid,
                     editorState:EditorState.push(this.state.editorState, rawData)
@@ -319,6 +325,8 @@ export default class EditPage extends Component {
                     </Dropzone>
                     <span data-toggle="tooltip" data-placement="top" title="视频" className="fa fa-video-camera" onClick={this.showVideoDialog}>
                     </span>
+                    <span data-toggle="tooltip" data-placement="top" title="导入json" className="fa fa-share-square-o" onClick={() => this.setState({dialogJson:true})}>
+                    </span>
                 </DraftToolbar>
                 <div className="edit-section">
                     <div className="edit-root">
@@ -390,8 +398,8 @@ export default class EditPage extends Component {
                 }
                 {
                     this.state.dialogVideo ?
-                    <div className="play-modal">
-                        <div className="play-dialog">
+                    <div className="play-modal" onClick={() => this.setState({dialogVideo:false})}>
+                        <div className="play-dialog" onClick={e => e.stopPropagation()}>
                             <span onClick={() => this.setState({dialogVideo:false})} className="dialog-close">×</span>
                             <ul className="nav nav-tabs">
                               <li className={this.state.videoMode ? 'active':''}><a onClick={() => this.setState({videoMode:true})}>粘贴视频通用代码</a></li>
@@ -418,6 +426,23 @@ export default class EditPage extends Component {
                             }
                             <div className="dialog-footer">
                                 <button className="btn btn-outline green" disabled={this.state.uploadingVideo} onClick={this.addVideo}>插入</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    : null
+                }
+                {
+                    this.state.dialogJson ?
+                    <div className="play-modal" onClick={() => this.setState({dialogJson:false})}>
+                        <div className="play-dialog" onClick={e => e.stopPropagation()}>
+                            <span onClick={() => this.setState({dialogJson:false})} className="dialog-close">×</span>
+                            <p className="dialog-title">导入json</p>
+                            <br/>
+                            <textarea onChange={e => this.setState({jsonText:e.target.value})} style={{width: '100%', resize: 'vertical'}} rows="5"></textarea>
+                            
+                            <div className="dialog-footer">
+                                <button className="btn btn-outline green" onClick={this.addJson}>插入</button>
                             </div>
                         </div>
 

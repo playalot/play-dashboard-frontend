@@ -2,6 +2,7 @@ import React,{ Component } from 'react'
 import { Route,Link,Switch,NavLink } from 'react-router-dom'
 
 import PlayMainHeader from '../Common/PlayMainHeader'
+import PlayWeekPage from '../Common/PlayWeekPage'
 
 import Home from '../Home'
 import ExplorePage from '../ExplorePage'
@@ -164,6 +165,7 @@ export default class App extends Component{
 
 								<Route path="/post/:id" component={Post}/>
 								<Route path="/tools" component={Tools}/>
+								<Route path="/weekpage" component={PlayWeekPage}/>
 
 								<Route path="/user/:id" component={UserDetail}/>
 								<Route path="/tag/:id" component={EditTag}/>

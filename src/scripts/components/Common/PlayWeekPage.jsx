@@ -30,6 +30,9 @@ export default class extends Component {
             }else{
                 this.setState({
                     curIndex:i,
+                    id:'',
+                    index:'',
+                    comment:''
                 }) 
             }
         }

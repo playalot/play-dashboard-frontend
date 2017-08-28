@@ -53,7 +53,7 @@ export default class extends Component {
                     "type": "image",
                     "mutability": "IMMUTABLE",
                     "data": {
-                        "src": image.src,
+                        "src": image.src.split('?')[0] + '!articlestyle' ,
                         "type": "image"
                     }
                 }

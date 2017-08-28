@@ -18,6 +18,21 @@ export default class extends Component {
         }
         this.addImage = this._addImage.bind(this)
         this.addJson = this._addJson.bind(this)
+        this.onClick = (i) => {
+            const image = this.state.images[i]
+            if(image) {
+                this.setState({
+                    curIndex:i,
+                    id:image.id,
+                    index:image.index,
+                    comment:image.comment
+                })
+            }else{
+                this.setState({
+                    curIndex:i,
+                }) 
+            }
+        }
 
     }
     _addImage() {
@@ -29,6 +44,8 @@ export default class extends Component {
         .end((err,res) => {
             if(!err) {
                 const image = {
+                    id,
+                    index,
                     src:res.body.photos[index || 0]['url'],
                     user:res.body.user,
                     comment
@@ -177,7 +194,7 @@ export default class extends Component {
                             {
                                 images.map((image,i) => {
                                     return (
-                                        <Col onClick={() => this.setState({curIndex:i})} style={{padding:0,height:100,border:`4px solid ${i == curIndex ? '#0ff':'transparent'}`}} key={`play_week_page-${i}`} sm={3}>
+                                        <Col onClick={() => this.onClick(i)} style={{padding:0,height:100,border:`4px solid ${i == curIndex ? '#0ff':'transparent'}`}} key={`play_week_page-${i}`} sm={3}>
                                            {
                                                image ? <img style={{width:'100%',height:'100%'}} className="play-img-cover" src={image['src']} alt=""/> : <span>{i}</span>
                                            }

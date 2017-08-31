@@ -20,7 +20,7 @@ class PlayAliBaichuan extends Component {
 	        appkey: 23289048,
 	        credential: 'NTY5MTYzMWExNjAw',
 	        touid: '576d0cbd1c00003700c1c32b',
-	    	avatar:'http://img.playalot.cn/user/avatar/c3c6f_1482486056_w_1000_h_1000_5691631a160000370003ad5c.jpg?imageView2/2/w/120/q/90',
+	    	avatar:'http://img.playalot.cn/user/avatar/f518_1503303713_w_1080_h_1080_5691631a160000370003ad5c.jpg?imageView2/2/w/120/q/90',
 	    	// logo: 'http://img.alicdn.com/tps/i3/TB12LD9IFXXXXb3XpXXSyFWJXXX-82-82.png',
 	    	// pluginUrl: 'http://www.taobao.com/market/seller/openim/plugindemo.php',
 	    	// sendMsgToCustomService: true,

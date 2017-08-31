@@ -8,7 +8,6 @@ import PlayAccount from '../Common/PlayAccount'
 import Request from 'superagent'
 import ReactPaginate from 'react-paginate'
 
-import PlayAliBaichuan from '../Common/PlayAliBaichuan'
 
 export default class extends Component{
 	constructor(props) {
@@ -244,7 +243,6 @@ export default class extends Component{
 					</div>
 					: null
 				}
-				<PlayAliBaichuan/>
 			</div>
 		)
 	}

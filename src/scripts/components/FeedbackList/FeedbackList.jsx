@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Moment from 'moment'
 import ReactPaginate from 'react-paginate'
-import PlayAliBaichuan from '../Common/PlayAliBaichuan'
 import { parsePage } from '../../widgets/parse'
 
 import { Row, Form, FormGroup, FormControl, Button, InputGroup, ButtonToolbar, Modal } from 'react-bootstrap'
@@ -195,7 +194,6 @@ export default class FeedbackList extends Component{
 					backdropClosesModal={true}
 					showCloseButton={false}
 				/>
-		        <PlayAliBaichuan/>
           	</div>
 		)
 	}

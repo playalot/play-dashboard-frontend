@@ -37,12 +37,14 @@ import OrderUserList from '../OrderUserList'
 
 import EditPage from '../EditPage'
 
+import PlayAliBaichuan from '../Common/PlayAliBaichuan'
 
 export default class App extends Component{
 	render() {
 		return (
 			<div className="page-wrapper">
 				<PlayMainHeader/>
+				<PlayAliBaichuan/>
 				<div className="clearfix"> </div>
 				<div className="page-container">
 					<div className="page-sidebar-wrapper">

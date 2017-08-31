@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom'
 import Moment from 'moment'
 import ReactPaginate from 'react-paginate'
 import Request from 'superagent'
-import PlayAliBaichuan from '../Common/PlayAliBaichuan'
 import PlayAccount from '../Common/PlayAccount'
 import { parsePage } from '../../widgets/parse'
 
@@ -156,7 +155,6 @@ export default class UserList extends Component{
 					</div>
 					: null
 				}
-        <PlayAliBaichuan/>
     	</div>
 		)
 	}

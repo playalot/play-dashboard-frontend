@@ -76,6 +76,10 @@ export default class extends Component {
     let timer = setInterval( () => {
       if (vdom.readyState === 4){
         let uploadKey = `user/video/raw/${makeid()}_${Math.round(Date.now()/1000)}_w_${vdom.videoWidth}_h_${vdom.videoHeight}_d_${Math.floor(vdom.duration)}_${this.state.userId}.mp4`
+        if(vdom.videoWidth == 0 || vdom.videoHeight == 0){
+          clearInterval(timer)
+          return alert('视频出错,请重新上传..')
+        }
         Request.get('/api/uptoken').query({key:uploadKey})
         .end((err,res) => {
           let uptoken = res.body.uptoken

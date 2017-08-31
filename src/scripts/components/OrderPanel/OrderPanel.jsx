@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom'
 import { Row, Button, FormControl,Form, FormGroup } from 'react-bootstrap'
 import Moment from 'moment'
 
-import PlayAliBaichuan from '../Common/PlayAliBaichuan'
-
 export default class extends Component{
 	constructor(props) {
 	  super(props);
@@ -118,7 +116,6 @@ export default class extends Component{
             })}
           </tbody>
         </table>
-        <PlayAliBaichuan></PlayAliBaichuan>
       </div>
 		)
 	}

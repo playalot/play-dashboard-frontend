@@ -25,6 +25,17 @@ export default class PostPanel extends Component{
 		this.addToy = this._addToy.bind(this)
 				
 		this.sharePost = () => this.setState({sharePost:true}) 
+		this.sendMsg = (id) => {
+			WKIT.sendMsg({
+				touid:id,
+				msg:`小伙伴你好~(*´▽｀)ノ因您搬运官方图片存在不规范操作，所以来通知一下~
+				
+				如果搬运官方图片时一定要打上搬运标签，而且要是有文字信息的 例如发售日 售价 开订日期 也一定都要写在描述上面 绝不能只搬运图片呦
+				
+				其他玩家的作品要是想转载的话，就一定要获得授权，不然是不允许转到玩具控平台的，玩具姬看到后会马上删掉哦٩(×̯×)۶ 
+				`
+			})
+		}
 	}
 	_addToy() {
 		let id = prompt('输入玩具ID')
@@ -73,7 +84,7 @@ export default class PostPanel extends Component{
 							</div>
 							:<div>
 								<div>
-									<PlayPreImage src={post.photos[0].url640} onClick={() => this.props.openImage(this.formatUrl(post.photos),0) } />
+									<PlayPreImage src={post.preview} onClick={() => this.props.openImage(this.formatUrl(post.photos),0) } />
 								</div>
 								{
 									post.photos.length === 1 ? null :
@@ -129,6 +140,15 @@ export default class PostPanel extends Component{
 								<span onClick={ () => this.props.removeAllClassification(post.id,post.cls) } className="btn btn-sm"><i className="fa fa-chain-broken"></i></span>
 								<span onClick={() => this.props.toggleR18(post.id,!post.isR18) } className={`${btnClass} ${post.isR18 ? 'yellow-casablanca':''}`}><i className="fa fa-venus-mars"></i></span>
 								<span onClick={() => this.props.toggleBlock(post.id,!post.isBlk)} className={`${btnClass} ${post.isBlk ? 'yellow-casablanca':''}`}><i className="fa fa-eye-slash"></i></span>
+								<div className="btn-group">
+									<span className="btn btn-sm" data-toggle="dropdown">
+										<i className="fa fa-paper-plane"></i>
+									</span>
+									<ul className="dropdown-menu">
+										<li><a onClick={() => this.sendMsg(post.user.id)}>搬运 通知</a></li>
+									</ul>
+								</div>
+								
 								<span onClick={ this.deletePost } className="post-caption-btn btn btn-sm"><i className="fa fa-trash"></i></span>
 							</ButtonToolbar>
 						</div>
@@ -153,7 +173,7 @@ export default class PostPanel extends Component{
 							<div>
 								{
 									post.photos.map((photo,i) => {
-										return <img style={{width:80,height:80,margin:'0 5px 5px 0'}} src={photo.url.split('?')[0]} alt=""/>
+										return <img key={`photo_picker-${i}`} style={{width:80,height:80,margin:'0 5px 5px 0'}} src={photo.url.split('?')[0]} alt=""/>
 									})
 								}
 							</div>

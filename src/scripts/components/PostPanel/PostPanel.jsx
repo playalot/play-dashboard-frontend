@@ -25,9 +25,12 @@ export default class PostPanel extends Component{
 		this.addToy = this._addToy.bind(this)
 				
 		this.sharePost = () => this.setState({sharePost:true}) 
-		this.sendMsg = (id) => {
+		this.sendMsg = (touid) => {
+			WKIT.switchTouid({
+	            touid,
+	        });
 			WKIT.sendMsg({
-				touid:id,
+				touid,
 				msg:`小伙伴你好~(*´▽｀)ノ因您搬运官方图片存在不规范操作，所以来通知一下~
 				
 				如果搬运官方图片时一定要打上搬运标签，而且要是有文字信息的 例如发售日 售价 开订日期 也一定都要写在描述上面 绝不能只搬运图片呦
@@ -145,7 +148,7 @@ export default class PostPanel extends Component{
 										<i className="fa fa-paper-plane"></i>
 									</span>
 									<ul className="dropdown-menu">
-										<li><a onClick={() => this.sendMsg(post.user.id)}>搬运 通知</a></li>
+										<li><a onClick={() => this.sendMsg(post.user.id)}>盗图 通知</a></li>
 									</ul>
 								</div>
 								

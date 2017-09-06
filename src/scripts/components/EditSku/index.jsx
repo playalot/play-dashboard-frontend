@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import { Form, FormGroup, Col, FormControl, Row, Button, ControlLabel } from 'react-bootstrap'
+import Dropzone from 'react-dropzone'
 import DatePicker from 'react-datepicker'
 import Moment from 'moment'
 import Request from 'superagent'
 import parse from '../../widgets/parse'
 import CDN from '../../widgets/cdn'
 import { MERCHANTS } from '../../widgets/constant'
+import { uploadImageWithWH } from '../../widgets/upload'
 export default class EditSku extends Component {
   constructor(props) {
     super(props)
@@ -26,10 +28,12 @@ export default class EditSku extends Component {
       merchant:'PLAY玩具控',
       version:'',
       tbUrl:'',
-      note: ''
+      note: '',
+      image:''
     }
     this.save = this._save.bind(this)
     this.changeOrderClose = (date) => this.setState({orderClose:date})
+    this.onDropImage = (files) => uploadImageWithWH(files[0],'stock/image/').then(image => this.setState({image}))
   }
   componentWillMount() {
     const id = this.props.match.params.id
@@ -57,16 +61,18 @@ export default class EditSku extends Component {
           orderClose: stock.preOrder ? Moment(stock.preOrder.orderClose) : Moment(),
           version: stock.version || '',
           tbUrl: stock.tbUrl || '',
+          image: stock.image || '',
           note: stock.note || '',
           isAddSku:false
         })
       })
     }
   }
+ 
   _save() {
     const {
       id,sid,isAddSku,
-      price,quantity,freight,prepay,orderClose,type,costPrice,originPrice,version,tbUrl,note,merchant
+      price,quantity,freight,prepay,orderClose,type,costPrice,originPrice,version,tbUrl,note,merchant,image
     } = this.state
     let data = {
       price:parseFloat(price),
@@ -77,12 +83,13 @@ export default class EditSku extends Component {
         prepay:parseFloat(prepay),
         orderClose:`${orderClose.format('YYYY-MM-DD')} 23:59:59`
       },
-      version,tbUrl,note,merchant
+      version,tbUrl,note,merchant,image
     }
     type ==='preOrder' ? null:delete data['preOrder']
     version.trim() ? null : delete data['version']
     tbUrl.trim() ? null : delete data['tbUrl']
     note.trim() ? null : delete data['note']
+    image.trim() ? null : delete data['image']
     if(isAddSku){
       Request
       .post(`/api/toy/${id}/stock`)
@@ -154,6 +161,20 @@ export default class EditSku extends Component {
               </Col>
               <Col sm={4}>
                 <FormControl value={this.state.quantity} type="number" onChange={(e) => this.setState({quantity:e.target.value})}/>
+              </Col>
+            </FormGroup>
+            <FormGroup>
+              <Col sm={3} className="control-label">
+                图片
+              </Col>
+              <Col sm={4}>
+                <Dropzone accept="image/jpeg, image/png" onDrop={this.onDropImage} className="play-dropzone-style">
+                  {
+                    this.state.image ?
+                    <img className="play-img-cover w-100 h-100" src={CDN.show(this.state.image) } alt=""/>
+                    :<div>将图片拖入此区域</div>
+                  }
+								</Dropzone>
               </Col>
             </FormGroup>
             <hr/>

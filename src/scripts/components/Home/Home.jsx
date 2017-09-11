@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import Moment from 'moment'
 import ReactPaginate from 'react-paginate'
 import { parsePage } from '../../widgets/parse'
+import PlayToyPanel from '../Common/PlayToyPanel'
 
 const FlexibleXYPlot = makeWidthFlexible(XYPlot)
 export default class Home extends Component {
@@ -261,11 +262,11 @@ export default class Home extends Component {
                                       <span className="mt-comment-author">{activity.user.nickname}</span>
                                       <span className="mt-comment-date">{Moment.unix(activity.created /1000).format("D MMM, H:mm A")}</span>
                                   </div>
-                                      <div className="mt-comment-text">{activity.content || 'sadfasdfasdfs'}</div>
+                                      <div className="mt-comment-text">{activity.content || ''}</div>
                                       <div className="mt-comment-details">
-                                        {activity.topic ?
-                                          <a target="_blank" style={{marginBottom:5,display:'inline-block'}} href={`http://www.playalot.cn/${activity.topic.type}/${activity.topic.id}`}>
-                                            {activity.topic.text}
+                                        {activity.target.type == "toy" ?
+                                          <a target="_blank" href={`http://www.playalot.cn/${activity.target.type}/${activity.target.id}`}>
+                                            <PlayToyPanel tid={activity.target.id} style={{border:1}}></PlayToyPanel>
                                           </a>
                                           :null
                                         }

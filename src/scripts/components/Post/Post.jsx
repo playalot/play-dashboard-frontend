@@ -23,11 +23,11 @@ export default class Post extends Component {
             classModal:false,
 
             videoUrl:''
-            
+
         }
         this.openImage = (images,currentImage) => this.setState({ lightboxIsOpen: true,images:this.formatImage(images),currentImage})
         this.closeLightbox = () => this.setState({lightboxIsOpen:false,images:[]})
-        
+
 
         this.addTag = this._addTag.bind(this)
         this.removeTag = this._removeTag.bind(this)
@@ -205,7 +205,7 @@ export default class Post extends Component {
                 this.props.history.goBack()
             })
         }
-        
+
     }
     render() {
         const post = this.state.post.toJS()
@@ -225,7 +225,7 @@ export default class Post extends Component {
                 </div>
                 <div className="portlet-body">
                         {
-                        post.video ?
+                        typeof post.video !== 'undefined' ?
                         <div style={{position:'relative'}}>
                             <PlayPreImage src={post.preview} />
                             <div className="d-flex justify-content-center align-items-center" style={{position:'absolute',top:0,left:0,width:'100%',height:'100%'}}>
@@ -252,7 +252,7 @@ export default class Post extends Component {
                                     }
                                 </div>
                             }
-                            
+
                         </div>
                     }
                     {
@@ -291,7 +291,7 @@ export default class Post extends Component {
                     </div>
                     <div className="clearfix">
                          <ButtonToolbar className="pull-right">
-                             <span onClick={() => this.toggleRec(!post.isRec)} className={`btn btn-sm ${post.isRec ? 'yellow-casablanca':''}`}><i className="fa fa-thumbs-o-up"></i></span> 
+                             <span onClick={() => this.toggleRec(!post.isRec)} className={`btn btn-sm ${post.isRec ? 'yellow-casablanca':''}`}><i className="fa fa-thumbs-o-up"></i></span>
                             <CopyToClipboard text={post.id} onCopy={() => null}>
                                 <span className="btn btn-sm"><i className="fa fa-copy"></i></span>
                             </CopyToClipboard>
@@ -299,10 +299,10 @@ export default class Post extends Component {
                             <span onClick={ this.addTag } className="btn btn-sm"><i className="fa fa-tag"></i></span>
                             <span onClick={ () => this.setState({classModal:true}) } className="btn btn-sm"><i className="fa fa-th-large"></i></span>
                             <span onClick={ () => this.removeAllClassification(post.cls) } className="btn btn-sm"><i className="fa fa-chain-broken"></i></span>
-                            <span onClick={ () => this.toggleR18(!post.isR18)} className={`btn btn-sm ${post.isR18 ? 'yellow-casablanca':''}`}><i className="fa fa-venus-mars"></i></span> 
-                            <span onClick={ () => this.toggleBlk(!post.isBlk)} className={`btn btn-sm ${post.isBlk ? 'yellow-casablanca':''}`}><i className="fa fa-eye-slash"></i></span> 
+                            <span onClick={ () => this.toggleR18(!post.isR18)} className={`btn btn-sm ${post.isR18 ? 'yellow-casablanca':''}`}><i className="fa fa-venus-mars"></i></span>
+                            <span onClick={ () => this.toggleBlk(!post.isBlk)} className={`btn btn-sm ${post.isBlk ? 'yellow-casablanca':''}`}><i className="fa fa-eye-slash"></i></span>
                             <span onClick={ this.deletePost } className="post-caption-btn btn btn-sm"><i className="fa fa-trash"></i></span>
-                        </ButtonToolbar> 
+                        </ButtonToolbar>
                     </div>
                 </div>
                 <Lightbox
@@ -327,11 +327,11 @@ export default class Post extends Component {
                                             className="label label-warning label-margin" >
                                             {
                                                 this.props.loaded && this.props.classifications[c]['name']
-                                            }  
+                                            }
                                         </span>
                                     )
                                 })
-                            }  
+                            }
                         </div>
                         <strong>全部类别</strong>
                         <div>

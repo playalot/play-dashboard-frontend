@@ -1,7 +1,8 @@
 import Immutable from 'immutable'
 import {
 	TOL_RECEIVE_TOY, TOL_TOGGLE_R18, TOL_TOGGLE_RECOMMEND, TOL_DELETE_TOY, TOL_ADD_TOY,
-    TOY_RECEIVE_TOY_BY_QUERY,TOY_CLEAR_SUGGESTION,TOY_ADD_TOY_CLASS,TOY_REMOVE_TOY_CLASS
+    TOY_RECEIVE_TOY_BY_QUERY,TOY_CLEAR_SUGGESTION,TOY_ADD_TOY_CLASS,TOY_REMOVE_TOY_CLASS,
+    TOY_ADD_TAG,TOY_REMOVE_TAG
 } from '../actions/toyAction'
 
 export default (state = Immutable.fromJS({ toys: [],totalPages:100,filter:'',query:'',sort:'created',month:'',year:'',toyResults:[] }),action)=>{
@@ -70,9 +71,33 @@ export default (state = Immutable.fromJS({ toys: [],totalPages:100,filter:'',que
                     toys.findIndex((item) => {
                         return item.get('id') === action.tid
                     }), (item) => {
-                        return item.updateIn(['cls'], (cls) => {
-                            return cls.delete(cls.findKey((cl) => {
-                                return cl === action.c
+                        return item.updateIn(['tags'], (tags) => {
+                            return tags.push(action.text)
+                        })
+                    }
+                )
+            })
+        case TOY_ADD_TAG:
+            return state.updateIn(['toys'], (toys) => {
+                return toys.update(
+                    toys.findIndex((item) => {
+                        return item.get('id') === action.id
+                    }), (item) => {
+                        return item.updateIn(['tags'], (tags) => {
+                            return tags.push(Immutable.fromJS(action.text))
+                        })
+                    }
+                )
+            })
+        case TOY_REMOVE_TAG:
+            return state.updateIn(['toys'], (toys) => {
+                return toys.update(
+                    toys.findIndex((item) => {
+                        return item.get('id') === action.id
+                    }), (item) => {
+                        return item.updateIn(['tags'], (tags) => {
+                            return tags.delete(tags.findKey((tag) => {
+                                return tag.get('id') === action.tid
                             }))
                         })
                     }

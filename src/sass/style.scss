@@ -2,9 +2,10 @@
 // $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 // @import "~bootstrap-sass/assets/stylesheets/bootstrap";
 @import "~bootstrap/dist/css/bootstrap.css";
-@import "bs4-utils/variables";
-@import "bs4-utils/mixins";
-@import "bs4-utils/utilities";
+// @import "bs4-utils/variables";
+// @import "bs4-utils/mixins";
+// @import "bs4-utils/utilities";
+
 //admin-lte
 // @import "~admin-lte/dist/css/AdminLTE.css";
 // @import "custom/skin";
@@ -20,9 +21,11 @@
 @import "simple-line-icons/simple-line-icons.css";
 
 //metronic
-@import "metronic/components.css";
-@import "metronic/layout.css";
-@import "metronic/blue.css";
+// @import "metronic/components.css";
+// @import "metronic/layout.css";
+// @import "metronic/blue.css";
+@import "metronic/style.bundle.css";
+@import "metronic/vendors.bundle.css";
 
 
 //editor style
@@ -50,3 +53,136 @@
 //     height:100%;
 //     position: relative;
 // }
+
+
+.dashboard-stat {
+    display: block;
+    margin-bottom: 25px;
+    overflow: hidden;
+    border-radius: 4px; 
+    &:before,&:after{
+        content: " ";
+        display: table;
+    }
+    &:after{
+        clear: both;
+    }
+    .visual{
+        width: 80px;
+        height: 80px;
+        display: block;
+        float: left;
+        padding-top: 10px;
+        padding-left: 15px;
+        margin-bottom: 15px;
+        font-size: 35px;
+        line-height: 35px;
+        i{
+            margin-left: -35px;
+            font-size: 110px;
+            line-height: 110px;
+            color: #FFFFFF;
+            opacity: 0.1;
+        }
+    }
+    .details {
+        position: absolute;
+        right: 15px;
+        padding-right: 15px;
+        .number{
+            padding-top: 25px;
+            text-align: right;
+            font-size: 34px;
+            line-height: 36px;
+            letter-spacing: -1px;
+            margin-bottom: 0px;
+            font-weight: 300;
+            color: #FFFFFF;
+            opacity: 1;
+        } 
+        .desc {
+            text-align: right;
+            font-size: 16px;
+            letter-spacing: 0px;
+            font-weight: 300; 
+            color: #FFFFFF;
+            opacity: 1;
+        }
+    }
+    &.blue{
+        background-color: #3598dc;
+    }
+    &.green{
+        background-color: #32c5d2;
+    }
+    &.red{
+        background-color: #e7505a;;
+    }
+    &.yellow{
+        background-color: #c49f47;
+    }
+    &.purple{
+        background-color: #8E44AD;
+    }
+    &.blue-dark{
+        background-color: #5e738b;
+    }
+}
+
+.pagination{
+    justify-content: center;
+    li{
+        a{
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            
+            position: relative;
+            display: block;
+            padding: 0.5rem 0.75rem;
+            margin-left: -1px;
+            line-height: 1.25;
+            color: #007bff;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            &:focus,&:hover{
+                color: #0056b3;
+                text-decoration: none;
+                background-color: #e9ecef;
+                border-color: #ddd;
+            }
+        }
+        &:first-child{
+            a{
+                border-top-left-radius: 0.3rem;
+                border-bottom-left-radius: 0.3rem; 
+            }
+        }
+        &:last-child{
+            a{
+                border-top-right-radius: 0.3rem;
+                border-bottom-right-radius: 0.3rem;
+            }
+        }
+        &.active{
+            a{
+                z-index: 2;
+                color: #fff;
+                background-color: #007bff;
+                border-color: #007bff;
+            }
+        }
+        &.disabled {
+            a{
+                color: #868e96;
+                pointer-events: none;
+                background-color: #fff;
+                border-color: #ddd;
+            }
+        }
+    }
+}
+
+  
+  

@@ -75,21 +75,19 @@ export default class Post extends Component{
 				<Row>
 					<PostPanels/>
 				</Row>
-				<Row style={{textAlign:'center'}}>
 					<ReactPaginate 
 						previousLabel={<span>&laquo;</span>}
 						nextLabel={<span>&raquo;</span>}
-						breakLabel={<span>...</span>}
+						breakLabel={<a>...</a>}
 						breakClassName={"break-me"}
 						pageCount={this.props.totalPages}
 						marginPagesDisplayed={2}
 						pageRangeDisplayed={5}
 						onPageChange={obj => this.goPage(obj.selected)}
-						containerClassName={"pagination"}
+						containerClassName={"pagination justify-content-center"}
 						subContainerClassName={"pages pagination"}
 						forcePage={parsePage(this.props.location.search)}
 						activeClassName={"active"} />
-				</Row>
 			</div>
 		)
 	}

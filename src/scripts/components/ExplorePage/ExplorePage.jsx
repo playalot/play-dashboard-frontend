@@ -29,6 +29,28 @@ export default class ExplorePage extends Component{
 		return(
 			<div>
 				<Row>
+					<div>
+						<ul className="nav nav-tabs  m-tabs-line" role="tablist">
+							<li className="nav-item m-tabs__item">
+								<a className="nav-link m-tabs__link active" data-toggle="tab" href="#m_tabs_6_1" role="tab">
+									Messages
+								</a>
+							</li>
+							<li className="nav-item m-tabs__item">
+								<a className="nav-link m-tabs__link" data-toggle="tab" href="#m_tabs_6_3" role="tab">
+									Logs
+								</a>
+							</li>
+						</ul>
+						<div className="tab-content">
+							<div className="tab-pane active" id="m_tabs_6_1" role="tabpanel">
+								Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+							</div>
+							<div className="tab-pane" id="m_tabs_6_3" role="tabpanel">
+								Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged
+							</div>
+						</div>
+					</div>
 					<Col xs={12}>
 						<div className="portlet light ">
 							<div className="portlet-title tabbable-line">

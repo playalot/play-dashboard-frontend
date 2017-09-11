@@ -13,9 +13,11 @@ const config = {
     entry: {
         app: path.resolve(__dirname, 'src/scripts/main.js'),
         vendor: [
-			'jquery',
+            'jquery',
+            path.resolve(__dirname, 'src/scripts/metronic/popper.js'),
 			'bootstrap-sass/assets/javascripts/bootstrap.js',
-			path.resolve(__dirname, 'src/scripts/metronic/app.js')
+            // path.resolve(__dirname, 'src/scripts/metronic/app.js'),
+            path.resolve(__dirname, 'src/scripts/metronic/scripts.bundle.js')
 		]
     },
     output: {
@@ -68,7 +70,7 @@ const config = {
         new webpack.ProvidePlugin({
             $: "jquery",
             jQuery: "jquery",
-            "window.jQuery": "jquery"
+            "window.jQuery": "jquery",
         }),
         new CopyWebpackPlugin([{
             from: path.resolve(__dirname, "src/index.html"),

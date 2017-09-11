@@ -9,6 +9,8 @@ export const TOY_RECEIVE_TOY_BY_QUERY = 'TOY_RECEIVE_TOY_BY_QUERY'
 export const TOY_CLEAR_SUGGESTION = 'TOY_CLEAR_SUGGESTION'
 export const TOY_ADD_TOY_CLASS = 'TOY_ADD_TOY_CLASS'
 export const TOY_REMOVE_TOY_CLASS = 'TOY_REMOVE_TOY_CLASS'
+export const TOY_ADD_TAG = 'TOY_ADD_TAG'
+export const TOY_REMOVE_TAG = 'TOY_REMOVE_TAG'
 
 function receiveToy(res,totalPages,page,filter,query,sort,year,month) {
     return {
@@ -217,6 +219,26 @@ export const removeToyClass = (tid, c) => {
             .del(`/api/toy/${tid}/class/${c}`)
             .end((err, res) => {
                 dispatch(_removeToyClass(tid, c))
+            })
+    }
+}
+
+export const addToyTag = (id,text) => {
+    return (dispatch) => {
+        return Request
+            .post(`/api/toy/${id}/tag/${text}`)
+            .end((err, res) => {
+                dispatch({type:TOY_ADD_TAG,id,text:res.body})
+            })
+    }
+}
+
+export const removeToyTag = (id,tid) => {
+    return (dispatch, getState) => {
+        return Request
+            .del(`/api/toy/${id}/tag/${tid}`)
+            .end((err, res) => {
+                dispatch({type: TOY_REMOVE_TAG,id,tid})
             })
     }
 }

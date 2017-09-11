@@ -90,7 +90,7 @@ export default class UserList extends Component{
                   <tr key={`user-list_${user.id }`}>
                     <td>
                   	<div className="btn-group">
-										  <img style={{width:'45px'}} src={user.avatar}  data-toggle="dropdown" className="img-circle"/>
+										  <img className="avatar45" src={user.avatar}  data-toggle="dropdown"/>
 										  <ul className="dropdown-menu">
 										    <li><a onClick={() => this.props.history.push(`/user/${user.id}`)}>查看<small>({user.nickname})</small></a></li>
 										    <li><a onClick={() => this.props.setTouid(user.id,user.avatar)}>私信</a></li>
@@ -116,7 +116,6 @@ export default class UserList extends Component{
             </tbody>
           </table>
         </div>
-        <Row style={{textAlign:'center'}}>
         	<ReactPaginate
         		previousLabel={<span>&laquo;</span>}
 						nextLabel={<span>&raquo;</span>}
@@ -130,7 +129,6 @@ export default class UserList extends Component{
 						subContainerClassName={"pages pagination"}
 						forcePage={parsePage(this.props.location.search)}
 						activeClassName={"active"} />
-	      </Row>
 	      {
 					dialogApprove ?
 					<div className="play-modal" onClick={() => this.setState({dialogApprove:false})}>

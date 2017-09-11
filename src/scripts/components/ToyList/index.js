@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import ToyList from './ToyList'
-import { getToy,getToyBy, recommend, toggleR18, toggleRecommend, deleteToy, addToy,addToyClass,removeToyClass } from '../../actions/toyAction'
+import { getToy,getToyBy, recommend, toggleR18, toggleRecommend, deleteToy, addToy,addToyClass,removeToyClass,addToyTag,removeToyTag } from '../../actions/toyAction'
 import { fetchToyClass } from '../../actions/tagClassAction'
 const mapActionCreators = {
 	getToy,
@@ -10,6 +10,8 @@ const mapActionCreators = {
 	toggleRecommend,
 	deleteToy,
 	addToy,
+	addToyTag,
+	removeToyTag,
 
 	fetchToyClass,
 	addToyClass,

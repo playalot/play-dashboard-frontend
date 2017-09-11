@@ -10,9 +10,12 @@ module.exports = {
 		],
 		vendor: [
 			'jquery',
-			'bootstrap-sass/assets/javascripts/bootstrap.js',
+			// 'popper',
+			path.resolve(__dirname, 'src/scripts/metronic/popper.js'),
+			'bootstrap/dist/js/bootstrap.js',
 			// 'admin-lte/dist/js/app.js'
-			path.resolve(__dirname, 'src/scripts/metronic/app.js')
+			// path.resolve(__dirname, 'src/scripts/metronic/app.js')
+			path.resolve(__dirname, 'src/scripts/metronic/scripts.bundle.js')
 		]
 	},
 	resolve: {
@@ -65,7 +68,7 @@ module.exports = {
 		new webpack.ProvidePlugin({
 			$: "jquery",
 			jQuery: "jquery",
-			"window.jQuery": "jquery"
+			"window.jQuery": "jquery",
 		}),
 	],
 	devServer: {

@@ -62,20 +62,23 @@ export default class PostPanel extends Component{
 		const { post } = this.props
 		const btnClass = 'btn btn-sm'
 		return(
-			<Col xs={12} sm={4} lg={3}>
-				<div className="portlet bordered light" style={{padding:'12px 5px 15px 5px'}}>
-					<div className="portlet-title" style={{marginBottom:0}}>
-						<div className="d-flex">
-							<Link to={`/user/${post.user.id}`}>
-								<img style={{maxWidth:40}} className="img-circle" src={ post.user.avatar } alt="User Image" />
-							</Link>
-							<div className="d-flex flex-column pl-2">
-								<span><Link to={`/user/${post.user.id}`}>{ post.user.nickname }</Link></span>
-	                			<small className="text-muted">{ Moment.unix(post.created / 1000).fromNow() }</small>
+			<Col xs={12} sm={4} lg={3} className="p-2">
+				<div className="m-portlet m-portlet--mobile mb-2">
+					<div className="m-portlet__head p-3">
+						<div className="m-portlet__head-caption">
+							<div className="d-flex">
+								<Link to={`/user/${post.user.id}`}>
+									<img style={{maxWidth:40}} className="rounded-circle" src={ post.user.avatar } alt="User Image" />
+								</Link>
+								<div className="d-flex flex-column pl-2">
+									<span><Link to={`/user/${post.user.id}`}>{ post.user.nickname }</Link></span>
+									<small className="text-muted">{ Moment.unix(post.created / 1000).fromNow() }</small>
+								</div>
 							</div>
+
 						</div>
 					</div>
-					<div className="portlet-body">
+					<div className="m-portlet__body p-3">
 						 {
 							post.video ?
 							<div style={{position:'relative'}}>
@@ -111,10 +114,10 @@ export default class PostPanel extends Component{
 							post.caption ? <p className="text-muted mb-2">{post.caption}</p> : null
 						}
 						<div className="">
-							{post.tags.map(t => <span key={`post_${post.id}_t_${t.id}`} className='label label-info label-margin'><Link to={'/tag/'+t.id}>{t.text}</Link>{" "}<i className="fa fa-close" onClick={ () => this.removeTag(t.id)}></i></span>)}
+							{post.tags.map(t => <span key={`post_${post.id}_t_${t.id}`} className='m-badge m-badge--info m-badge--wide label-margin'><Link to={'/tag/'+t.id}>{t.text}</Link>{" "}<i className="fa fa-close" onClick={ () => this.removeTag(t.id)}></i></span>)}
 							{
 								post.toys.length ?
-								<span className='label label-success label-margin'>
+								<span className='m-badge m-badge--success m-badge--wide'>
 									<Link to={'/toy/'+post.toys[0].id}>{post.toys[0].name.substring(0, 25)+'...'}
 									</Link>
 									<i className="fa fa-close" onClick={ () => this.removeToy()}></i>
@@ -123,7 +126,7 @@ export default class PostPanel extends Component{
 							}
 						</div>
 						<div className="">
-							{post.cls.map(c => <span key={`post_${post.id}_c_${c}`} className="label label-warning label-margin" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>)}
+							{post.cls.map(c => <span key={`post_${post.id}_c_${c}`} className="m-badge m-badge--warning m-badge--wide text-white" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>)}
 						</div>
 						<div className="d-flex p-2 justify-content-around">
 							<span>评论 : {post.counts && post.counts.comments || 0}</span>
@@ -132,7 +135,7 @@ export default class PostPanel extends Component{
 						</div>
 						<div className="clearfix">
 							<ButtonToolbar className="pull-right">
-								<span onClick={() => this.props.toggleRecommend(post.id,!post.isRec)} className={`${btnClass} ${post.isRec ? 'yellow-casablanca':''}`}><i className="fa fa-thumbs-o-up"></i></span>
+								<span onClick={() => this.props.toggleRecommend(post.id,!post.isRec)} className={`${btnClass} ${post.isRec ? 'btn-warning':''}`}><i className="fa fa-thumbs-o-up"></i></span>
 								<CopyToClipboard text={post.id} onCopy={() => null}>
 									<span className="btn btn-sm"><i className="fa fa-copy"></i></span>
 								</CopyToClipboard>
@@ -141,8 +144,8 @@ export default class PostPanel extends Component{
 								<span onClick={ this.addTag } className="btn btn-sm"><i className="fa fa-tag"></i></span>
 								<span onClick={ () => this.props.openClass( post ) } className="btn btn-sm"><i className="fa fa-th-large"></i></span>
 								<span onClick={ () => this.props.removeAllClassification(post.id,post.cls) } className="btn btn-sm"><i className="fa fa-chain-broken"></i></span>
-								<span onClick={() => this.props.toggleR18(post.id,!post.isR18) } className={`${btnClass} ${post.isR18 ? 'yellow-casablanca':''}`}><i className="fa fa-venus-mars"></i></span>
-								<span onClick={() => this.props.toggleBlock(post.id,!post.isBlk)} className={`${btnClass} ${post.isBlk ? 'yellow-casablanca':''}`}><i className="fa fa-eye-slash"></i></span>
+								<span onClick={() => this.props.toggleR18(post.id,!post.isR18) } className={`${btnClass} ${post.isR18 ? 'btn-warning':''}`}><i className="fa fa-venus-mars"></i></span>
+								<span onClick={() => this.props.toggleBlock(post.id,!post.isBlk)} className={`${btnClass} ${post.isBlk ? 'btn-warning':''}`}><i className="fa fa-eye-slash"></i></span>
 								<div className="btn-group">
 									<span className="btn btn-sm" data-toggle="dropdown">
 										<i className="fa fa-paper-plane"></i>

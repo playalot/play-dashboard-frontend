@@ -38,7 +38,9 @@ export default class Toy extends Component{
 
 	  	this.closeClass = () => this.setState({ selectedToy: null })
 	  	this.addToyClass = (tid,c) => this._addToyClass(tid,c)
-	  	this.removeToyClass = (tid,c) => this._removeToyClass(tid,c)
+		this.removeToyClass = (tid,c) => this._removeToyClass(tid,c)
+		  
+		this.addTag = this._addTag.bind(this)
 	}
 	componentWillMount() {
 		if(!this.props.toyLoaded){
@@ -71,6 +73,12 @@ export default class Toy extends Component{
 		index !== -1 ? this.state.selectedToy.cls.splice(index,1) : null
 		this.props.removeToyClass(tid,c)
 	}
+	_addTag(id) {
+        let text = prompt('输入标签')
+		if (text) {
+			this.props.addToyTag(id,text)
+		}
+    }
 	render() {
 		let modal = (<div></div>)
 	    if (this.state.selectedToy !== null) {
@@ -197,14 +205,17 @@ export default class Toy extends Component{
 											</div>
 											<div className="toy-item-info">
 												<span className="toy-item-name">{toy.name}</span>
-												<span className="toy-item-desc">{'厂商 ' + toy.company}</span>
-												<span className="toy-item-desc">{'发售 ' + toy.release}</span>
+												<span className="toy-item-desc">{'厂商 ' + toy.info.company}</span>
+												<span className="toy-item-desc">{'发售 ' + toy.info.releaseString}</span>
 												<span className="toy-item-desc">{'价格 ' + toy.money? toy.money : '不知道呀'}</span>
 												<span className="toy-item-desc">{'本周热度 ' + toy.counts.hits}</span>
 											</div>
 										</div>
 									</div>
 									<div className="portlet-body">
+										<div>
+											{toy.tags.map(t => <span key={`toy_${toy.id}_tag_${t.id}`} className='label label-info label-margin'><Link to={'/tag/'+t.id}>{t.text}</Link>{" "}<i className="fa fa-close" onClick={ () => this.props.removeToyTag(toy.id,t.id)}></i></span>)}
+										</div>
 										<div>
 											{toy.cls.map(c => <span key={'t_'+toy.id+'_c_'+c} className="label label-warning label-margin" >{this.props.toyClass[c].name}</span>)}
 										</div>
@@ -215,6 +226,7 @@ export default class Toy extends Component{
 												</CopyToClipboard>
 												<Link to={'/toy/' + toy.id } ><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link>
 												<span onClick={() => 	this.setState({selectedToy:toy})} className="btn btn-sm"><i className="fa fa-th-large"></i></span>
+												<span onClick={() => this.addTag(toy.id) } className="btn btn-sm"><i className="fa fa-tag"></i></span>
 												<span onClick={() =>	this.recommend(toy.id) } className="btn btn-sm"><i className="fa fa-bookmark-o"></i></span>
 												<span onClick={() =>	this.toggleR18(toy.id) } className={r18Class}><i className="fa fa-venus-mars"></i></span>
 												<span onClick={() =>	this.toggleRecommend(toy.id) } className={recommendClass}><i className="fa fa-thumbs-o-up"></i></span>

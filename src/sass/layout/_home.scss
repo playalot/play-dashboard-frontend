@@ -31,3 +31,15 @@
 	width: auto;
 	height: 200px;
 }
+
+.activity-image{
+	display:flex;
+	flex-wrap:wrap;
+	padding:5px 0;
+	img{
+		margin:0 10px 10px 0;
+		object-fit: cover;
+		width:65px;
+		height:65px;
+	}
+}

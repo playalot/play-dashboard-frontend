@@ -210,6 +210,7 @@ export default class Post extends Component {
     render() {
         const post = this.state.post.toJS()
         if(!post.user) return null
+            console.log(post.video)
         return (
             <div className="portlet bordered light" style={{maxWidth:768,margin:'0 auto'}}>
                 <div className="portlet-title">

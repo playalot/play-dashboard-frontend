@@ -157,8 +157,8 @@ export default class Home extends Component {
               </Row>
               <div className="row">
                 <div className="col-lg-6 col-xs-12 col-sm-12">
-                  <div className="portlet light bordered">
-                    <div className="portlet-title">
+                  <div className="m-portlet m-portlet--mobile">
+                    <div className="m-portlet__head p-3">
                       <div className="caption">
                         <i className="icon-bubbles font-dark hide"></i>
                         <span className="caption-subject font-dark bold uppercase">评论</span>
@@ -179,18 +179,15 @@ export default class Home extends Component {
                           activeClassName={"active"} />
                       </div>
                     </div>
-                    <div className="portlet-body">
+                    <div className="m-portlet__body p-3">
                       <div className="mt-comments">
                         {
                           this.props.activitiesC.map((activity,i) => {
                             return (
-                              <div className="mt-comment" key={`act_c_${activity.id}`} >
+                              <div className="d-flex " key={`act_c_${activity.id}`} >
+                                <img className="avatar45" src={activity.user.avatar} alt="avatar"/>
 
-                                <div className="mt-comment-img">
-                                    <img style={{width:45}} src={activity.user.avatar} alt="avatar"/>
-                                </div>
-
-                                <div className="mt-comment-body">
+                                <div className="p-2">
                                   <div className="mt-comment-info">
                                       <span className="mt-comment-author">{activity.user.nickname}</span>
                                       <span className="mt-comment-date">{Moment.unix(activity.created /1000).format("D MMM, H:mm A")}</span>
@@ -223,8 +220,8 @@ export default class Home extends Component {
                   </div>
                 </div>
                 <div className="col-lg-6 col-xs-12 col-sm-12">
-                  <div className="portlet light bordered">
-                    <div className="portlet-title">
+                  <div className="m-portlet m-portlet--mobile">
+                    <div className="m-portlet__head p-3">
                       <div className="caption">
                         <i className="icon-bubbles font-dark hide"></i>
                         <span className="caption-subject font-dark bold uppercase">动态</span>
@@ -245,18 +242,16 @@ export default class Home extends Component {
                           activeClassName={"active"} />
                       </div>
                     </div>
-                    <div className="portlet-body">
+                    <div className="m-portlet__body p-3">
                       <div className="mt-comments">
                         {
                           this.props.activitiesO.map((activity,i) => {
                             return (
-                              <div className="mt-comment" key={`act_o_${activity.id}`}>
+                              <div className="d-flex " key={`act_o_${activity.id}`}>
 
-                                <div className="mt-comment-img">
-                                    <img style={{width:45}} src={activity.user.avatar} alt="avatar"/>
-                                </div>
+                                    <img className="avatar45" src={activity.user.avatar} alt="avatar"/>
 
-                                <div className="mt-comment-body">
+                                <div className="p-2">
                                   <div className="mt-comment-info">
                                       <span className="mt-comment-author">{activity.user.nickname}</span>
                                       <span className="mt-comment-date">{Moment.unix(activity.created /1000).format("D MMM, H:mm A")}</span>

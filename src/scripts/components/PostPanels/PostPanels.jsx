@@ -29,10 +29,10 @@ export default class extends Component {
 		if(!this.props.classLoaded){
 			this.props.fetchTagClass()
 		}
-		$(window).on('resize',this.resize)
+		// $(window).on('resize',this.resize)
 	}
 	componentWillUnmount() {
-		$(window).off('resize',this.resize)
+		// $(window).off('resize',this.resize)
 	}
 	_setPostClassification(pid,cid) {
 		this.state.selectedPost.cls.push(cid)
@@ -82,7 +82,7 @@ export default class extends Component {
 			)
 		}
 		return(
-			<div>
+			<div className="w-100">
 				<Masonry ref={(c) => this.masonry = this.masonry || c.masonry} options={{transitionDuration: 0}}>
 					{
 						this.props.posts ?

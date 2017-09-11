@@ -7,7 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "admin-lte": "^2.3.8",
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^4.0.0-beta",
     "bootstrap-sass": "^3.3.7",
     "draft-convert": "^1.4.8",
     "draft-js": "^0.10.1",
@@ -19,6 +19,7 @@
     "lodash": "^4.17.4",
     "lodash-deep": "^2.0.0",
     "moment": "^2.18.1",
+    "popper.js": "^1.12.5",
     "prop-types": "^15.5.10",
     "qs": "^6.5.0",
     "react": "^15.6.1",

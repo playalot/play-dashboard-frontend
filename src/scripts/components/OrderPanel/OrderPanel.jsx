@@ -52,8 +52,8 @@ export default class extends Component{
 	render() {
 		const { orders } = this.props
 		return(
-			<div className="table-responsive skus-table">
-        <table className="table table-bordered table-hover">
+			<div className="table-responsive bg-white">
+        <table className="table table-bordered">
         	<thead><tr><th>用户</th><th>商家</th><th></th><th>订单</th><th>总金额</th><th>下单时间</th><th>更新时间</th><th>订单状态</th><th></th><th></th></tr></thead>
           <tbody>
             {orders.map((order,index) => {
@@ -61,7 +61,7 @@ export default class extends Component{
                 <tr key={order.id}>
                   <td>
                   	<div className="btn-group">
-										  <img style={{width:'30px'}} src={order.user.avatar}  data-toggle="dropdown" className="img-circle"/>
+										  <img src={order.user.avatar}  data-toggle="dropdown" className="avatar45"/>
 										  <ul className="dropdown-menu">
 										    <li><Link to={`/user/${order.user.id}`}>查看<small>({order.user.nickname})</small></Link></li>
 										    <li><Link to={`/order/user/${order.user.id}`}>显示个人订单</Link></li>

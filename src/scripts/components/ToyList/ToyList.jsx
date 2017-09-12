@@ -124,7 +124,7 @@ export default class Toy extends Component{
 					<Form inline className="form-input-filter" onSubmit={(e) => e.preventDefault()}>
 						<FormGroup>
 							<Col smOffset={2} style={{marginRight: '25px'}}>
-								<button type="button" className="btn green btn-outline" onClick={this.addtoy}>创建新玩具</button>
+								<button type="button" className="btn btn-outline-info" onClick={this.addtoy}>创建新玩具</button>
 							</Col>
 						</FormGroup>
 						<FormGroup>
@@ -185,7 +185,7 @@ export default class Toy extends Component{
 						</FormGroup>
 					</Form>
 				</div>
-				<Row>
+				<Row className="pt-3">
 					{this.props.toys.map((toy) => {
 						let recommendClass = 'btn btn-sm';
 						if (toy.isRec === true) {
@@ -197,8 +197,8 @@ export default class Toy extends Component{
 						}
 						return (
 							<Col className="col" xs={6} sm={3} lg={3} key={'toy_'+toy.id}>
-								<div className="portlet bordered light" style={{padding:'12px 5px 15px 5px'}}>
-									<div className="portlet-title pb-2" style={{marginBottom:0}}>
+								<div className="m-portlet m-portlet--mobile">
+									<div className="m-portlet__head p-1">
 										<div className="toy-item">
 											<div className="toy-item-img">
 												<img src={toy.cover} alt={toy.name} />
@@ -212,7 +212,7 @@ export default class Toy extends Component{
 											</div>
 										</div>
 									</div>
-									<div className="portlet-body">
+									<div className="portlet-body p-1">
 										<div>
 											{toy.tags.map(t => <span key={`toy_${toy.id}_tag_${t.id}`} className='label label-info label-margin'><Link to={'/tag/'+t.id}>{t.text}</Link>{" "}<i className="fa fa-close" onClick={ () => this.props.removeToyTag(toy.id,t.id)}></i></span>)}
 										</div>
@@ -245,21 +245,19 @@ export default class Toy extends Component{
 						)
 					})}
 				</Row>
-				<Row style={{textAlign:'center'}}>
-					<ReactPaginate
-						previousLabel={<span>&laquo;</span>}
-						nextLabel={<span>&raquo;</span>}
-						breakLabel={<span>...</span>}
-						breakClassName={"break-me"}
-						pageCount={this.props.totalPages}
-						marginPagesDisplayed={2}
-						pageRangeDisplayed={5}
-						onPageChange={obj => this.goPage(obj.selected)}
-						containerClassName={"pagination"}
-						subContainerClassName={"pages pagination"}
-						forcePage={parsePage(this.props.location.search)}
-						activeClassName={"active"} />
-				</Row>
+				<ReactPaginate
+					previousLabel={<span>&laquo;</span>}
+					nextLabel={<span>&raquo;</span>}
+					breakLabel={<a>...</a>}
+					breakClassName={"break-me"}
+					pageCount={this.props.totalPages}
+					marginPagesDisplayed={2}
+					pageRangeDisplayed={5}
+					onPageChange={obj => this.goPage(obj.selected)}
+					containerClassName={"pagination"}
+					subContainerClassName={"pages pagination"}
+					forcePage={parsePage(this.props.location.search)}
+					activeClassName={"active"} />
 				{modal}
 			</div>
 		)

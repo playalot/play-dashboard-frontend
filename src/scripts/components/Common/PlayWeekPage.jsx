@@ -186,58 +186,56 @@ export default class extends Component {
         const { curIndex,images } = this.state
         return(
             <div>
-                <Row>
-                    <Col sm={4}>
+                <div className="row">
+                    <div className="col-sm-4">
                         {
                             images[curIndex] ? <img style={{width:'100%'}} className="play-img-cover" src={images[curIndex]['src']} alt=""/> : null
                         }
-                    </Col>
-                    <Col sm={8}>
-                        <Row>
+                    </div>
+                    <div className="col-sm-8">
+                        <div className="row">
                             {
                                 images.map((image,i) => {
                                     return (
-                                        <Col onClick={() => this.onClick(i)} style={{padding:0,height:100,border:`4px solid ${i == curIndex ? '#0ff':'transparent'}`}} key={`play_week_page-${i}`} sm={3}>
+                                        <div className="col-sm-3" onClick={() => this.onClick(i)} style={{padding:0,height:100,border:`4px solid ${i == curIndex ? '#0ff':'transparent'}`}} key={`play_week_page-${i}`} >
                                            {
                                                image ? <img style={{width:'100%',height:'100%'}} className="play-img-cover" src={image['src']} alt=""/> : <span>{i}</span>
                                            }
-                                        </Col>
+                                        </div>
                                     )
                                 })
                             }
-                        </Row>
-                    </Col>
-                </Row>
+                        </div>
+                    </div>
+                </div>
                 <br/>
-                <Row>
-                    <Col sm={8}>
-                        <Row>
-                            <Col sm={6}>
-                                <FormControl value={this.state.id} placeholder="ID" type="text" onChange={e => this.setState({id:e.target.value})}/>
-                            </Col>
-                            <Col sm={6}>
-                            <FormControl value={this.state.index} placeholder="INDEX" type="text" onChange={e => this.setState({index:e.target.value})}/>
-                            </Col>
-                        </Row>
-                        <Row style={{marginTop:10}}>
-                            <Col sm={12}>
-                                <FormControl value={this.state.comment} placeholder="小编点评" type="text" onChange={e => this.setState({comment:e.target.value})}/>
-                            </Col>
-                        </Row>
-                        
-
-                    </Col>
-                    <Col sm={4}>
+                <div className="row">
+                    <div className="col-sm-8">
+                        <div className="row">
+                            <div className="col-sm-6">
+                                <input className="form-control" value={this.state.id} placeholder="ID" type="text" onChange={e => this.setState({id:e.target.value})}/>
+                            </div>
+                            <div className="col-sm-6">
+                                <input className="form-control" value={this.state.index} placeholder="INDEX" type="text" onChange={e => this.setState({index:e.target.value})}/>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-sm-12">
+                                <input className="form-control" value={this.state.comment} placeholder="小编点评" type="text" onChange={e => this.setState({comment:e.target.value})}/>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-sm-4">
                         <button className="btn red btn-outline" style={{marginRight:20}} onClick={this.addImage}>添加</button>
                         <button className="btn blue btn-outline" onClick={this.addJson}>生成JSON</button>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
                 <br/>
-                <Row>
-                    <Col xs={12}>
+                <div className="row">
+                    <div className="col-xs-12">
                         <textarea style={{width:'100%',resize:'vertical'}} value={this.state.json} onChange={e => this.setState({json:e.target.value})}  rows="10"></textarea>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             </div>
         )
     }

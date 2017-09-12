@@ -61,7 +61,7 @@ export default class OrderList extends Component{
 	render() {
 		const { year,month,status } = this.state
 		return(
-			<div className="content" style={{backgroundColor:'#fff'}}>
+			<div>
 			  <div className="page-header">
 			  	<Form inline onSubmit={(e) => e.preventDefault()}>
 				  	<div className="btn-group">
@@ -121,8 +121,10 @@ export default class OrderList extends Component{
 		            </FormGroup>
 			  	</Form>
 			  </div>
-			  <div className="alert alert-dismissible">
-					<button type="button" className="close" data-dismiss="alert" aria-hidden="true">×</button>
+			  <div className="alert alert-primary alert-dismissible fade show">
+					<button type="button" className="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
 					<h5>
 						{year ? `${year}年`:''}
 						{month ? `${month}月`:''}&nbsp;
@@ -150,11 +152,10 @@ export default class OrderList extends Component{
 					</h5>
 				</div>
 	          <OrderPanel/>
-	          <Row style={{textAlign:'center'}}>
 	          	<ReactPaginate
 	          		previousLabel={<span>&laquo;</span>}
 					nextLabel={<span>&raquo;</span>}
-					breakLabel={<span>...</span>}
+					breakLabel={<a>...</a>}
 					breakClassName={"break-me"}
 					pageCount={this.props.totalPages}
 					marginPagesDisplayed={2}
@@ -164,7 +165,6 @@ export default class OrderList extends Component{
 					subContainerClassName={"pages pagination"}
 					forcePage={parsePage(this.props.location.search)}
 					activeClassName={"active"} />
-	          </Row>
 	        </div>
 
 		)

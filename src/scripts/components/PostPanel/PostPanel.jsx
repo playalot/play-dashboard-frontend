@@ -60,7 +60,7 @@ export default class PostPanel extends Component{
 	}
 	render() {
 		const { post } = this.props
-		const btnClass = 'btn btn-sm'
+		const btnClass = 'btn btn-sm m--margin-rt-3'
 		return(
 			<Col xs={12} sm={4} lg={3} className="p-2">
 				<div className="m-portlet m-portlet--mobile mb-2">
@@ -130,7 +130,7 @@ export default class PostPanel extends Component{
 							}
 							{
 								post.toys.length ?
-								<span className='m-badge m-badge--rounded m-badge--success m-badge--wide m--margin-rt-3'>
+								<span className='m-badge m-badge--rounded m-badge--warning m-badge--wide m--margin-rt-3'>
 									<Link to={'/toy/'+post.toys[0].id}>{post.toys[0].name.substring(0, 25)+'...'}
 									</Link>
 									<i className="fa fa-close" onClick={ () => this.removeToy()}></i>
@@ -150,17 +150,17 @@ export default class PostPanel extends Component{
 							<ButtonToolbar className="pull-right">
 								<span onClick={() => this.props.toggleRecommend(post.id,!post.isRec)} className={`${btnClass} ${post.isRec ? 'btn-warning':''}`}><i className="fa fa-thumbs-o-up"></i></span>
 								<CopyToClipboard text={post.id} onCopy={() => null}>
-									<span className="btn btn-sm"><i className="fa fa-copy"></i></span>
+									<span className={btnClass}><i className="fa fa-copy"></i></span>
 								</CopyToClipboard>
-								<span onClick={ () => this.setState({sharePost:true}) } className="btn btn-sm"><i className="fa fa-share-square-o"></i></span>
-								<span onClick={ this.addToy } className="btn btn-sm"><i className="fa fa-plus"></i></span>
-								<span onClick={ this.addTag } className="btn btn-sm"><i className="fa fa-tag"></i></span>
-								<span onClick={ () => this.props.openClass( post ) } className="btn btn-sm"><i className="fa fa-th-large"></i></span>
-								<span onClick={ () => this.props.removeAllClassification(post.id,post.cls) } className="btn btn-sm"><i className="fa fa-chain-broken"></i></span>
+								<span onClick={ () => this.setState({sharePost:true}) } className={btnClass}><i className="fa fa-share-square-o"></i></span>
+								<span onClick={ this.addToy } className={btnClass}><i className="fa fa-plus"></i></span>
+								<span onClick={ this.addTag } className={btnClass}><i className="fa fa-tag"></i></span>
+								<span onClick={ () => this.props.openClass( post ) } className={btnClass}><i className="fa fa-th-large"></i></span>
+								<span onClick={ () => this.props.removeAllClassification(post.id,post.cls) } className={btnClass}><i className="fa fa-chain-broken"></i></span>
 								<span onClick={() => this.props.toggleR18(post.id,!post.isR18) } className={`${btnClass} ${post.isR18 ? 'btn-warning':''}`}><i className="fa fa-venus-mars"></i></span>
 								<span onClick={() => this.props.toggleBlock(post.id,!post.isBlk)} className={`${btnClass} ${post.isBlk ? 'btn-warning':''}`}><i className="fa fa-eye-slash"></i></span>
 								<div className="btn-group">
-									<span className="btn btn-sm" data-toggle="dropdown">
+									<span className={btnClass} data-toggle="dropdown">
 										<i className="fa fa-paper-plane"></i>
 									</span>
 									<ul className="dropdown-menu">

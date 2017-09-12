@@ -117,11 +117,6 @@ export default class EditPage extends Component {
             this.setState({authorId:nextProps.user.id})
         }
     }
-    scrollToTop(e) {
-        e.preventDefault()
-        $('html, body').animate({scrollTop: 0}, 1000)
-        return false
-    }
     
     _saveStorage() {
         const {
@@ -352,9 +347,9 @@ export default class EditPage extends Component {
                     </div>
 
                     <div className="col-sm-4">
-                        <button className="btn btn-outline green pull-right" onClick={this.publish.bind(this)}>发布文章</button>
-                        <div style={{marginRight:15}} className="btn-group dropup pull-right">
-                          <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <button className="btn btn-outline-primary pull-right" onClick={this.publish.bind(this)}>发布文章</button>
+                        <div style={{marginRight:15}} className="dropdown">
+                          <button type="button" className="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
                             {(() => {
                                 switch(category){
                                     case 'review':
@@ -373,15 +368,14 @@ export default class EditPage extends Component {
                                         return ''
                                 }
                             })()}
-                            &nbsp;&nbsp;<span className="caret"></span>
                           </button>
                             <ul className="dropdown-menu">
-                                <li><a onClick={() => this.setState({category:'review'},() => this.saveStorage())}>评测</a></li>
-                                <li><a onClick={() => this.setState({category:'news'},() => this.saveStorage())}>新闻</a></li>
-                                <li><a onClick={() => this.setState({category:'info'},() => this.saveStorage())}>情报</a></li>
-                                <li><a onClick={() => this.setState({category:'interview'},() => this.saveStorage())}>访谈</a></li>
-                                <li><a onClick={() => this.setState({category:'essay'},() => this.saveStorage())}>随笔</a></li>
-                                <li><a onClick={() => this.setState({category:'knowledge'},() => this.saveStorage())}>干货</a></li>
+                                <li className="dropdown-item"><a onClick={() => this.setState({category:'review'},() => this.saveStorage())}>评测</a></li>
+                                <li className="dropdown-item"><a onClick={() => this.setState({category:'news'},() => this.saveStorage())}>新闻</a></li>
+                                <li className="dropdown-item"><a onClick={() => this.setState({category:'info'},() => this.saveStorage())}>情报</a></li>
+                                <li className="dropdown-item"><a onClick={() => this.setState({category:'interview'},() => this.saveStorage())}>访谈</a></li>
+                                <li className="dropdown-item"><a onClick={() => this.setState({category:'essay'},() => this.saveStorage())}>随笔</a></li>
+                                <li className="dropdown-item"><a onClick={() => this.setState({category:'knowledge'},() => this.saveStorage())}>干货</a></li>
                             </ul>
                         </div>
                     </div>
@@ -425,7 +419,7 @@ export default class EditPage extends Component {
                                 </div>
                             }
                             <div className="dialog-footer">
-                                <button className="btn btn-outline green" disabled={this.state.uploadingVideo} onClick={this.addVideo}>插入</button>
+                                <button className="btn btn-outline-primary" disabled={this.state.uploadingVideo} onClick={this.addVideo}>插入</button>
                             </div>
                         </div>
 
@@ -442,15 +436,15 @@ export default class EditPage extends Component {
                             <textarea onChange={e => this.setState({jsonText:e.target.value})} style={{width: '100%', resize: 'vertical'}} rows="5"></textarea>
                             
                             <div className="dialog-footer">
-                                <button className="btn btn-outline green" onClick={this.addJson}>插入</button>
+                                <button className="btn btn-outline-primary" onClick={this.addJson}>插入</button>
                             </div>
                         </div>
 
                     </div>
                     : null
                 }
-                <div onClick={this.scrollToTop} className="scroll-to-top">
-                    <i className="fa fa-arrow-up"></i>
+                <div className="m-scroll-top m-scroll-top--skin-top" data-toggle="m-scroll-top" data-scroll-offset="500" data-scroll-speed="300">
+                    <i className="la la-arrow-up"></i>
                 </div>
                 {
                     parse(this.props.location.search).id ?

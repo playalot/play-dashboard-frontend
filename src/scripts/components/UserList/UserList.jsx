@@ -119,7 +119,7 @@ export default class UserList extends Component{
         	<ReactPaginate
         		previousLabel={<span>&laquo;</span>}
 						nextLabel={<span>&raquo;</span>}
-						breakLabel={<span>...</span>}
+						breakLabel={<a>...</a>}
 						breakClassName={"break-me"}
 						pageCount={this.props.totalPages}
 						marginPagesDisplayed={2}

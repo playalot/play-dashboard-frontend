@@ -4828,7 +4828,7 @@ jQuery.fn.extend({
     $(document).on('click', function(e) {
         $('.m-menu__nav .m-menu__item.m-menu__item--submenu.m-menu__item--hover[data-menu-submenu-toggle="click"]').each(function() {
             var  element = $(this).parent('.m-menu__nav').parent();
-            menu = element.mMenu(); 
+            var menu = element.mMenu(); 
             
             if (menu.getSubmenuMode() !== 'dropdown') { 
                 return;

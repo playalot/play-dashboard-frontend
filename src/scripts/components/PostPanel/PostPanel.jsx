@@ -23,8 +23,8 @@ export default class PostPanel extends Component{
 	  	this.deletePost = () => confirm('删除这个post?') && this.props.deletePost(this.props.post.id)
 	  	this.addTag = this._addTag.bind(this)
 		this.addToy = this._addToy.bind(this)
-				
-		this.sharePost = () => this.setState({sharePost:true}) 
+
+		this.sharePost = () => this.setState({sharePost:true})
 		this.sendMsg = (touid) => {
 			WKIT.switchTouid({
 	            touid,
@@ -32,10 +32,10 @@ export default class PostPanel extends Component{
 			WKIT.sendMsg({
 				touid,
 				msg:`小伙伴你好~(*´▽｀)ノ因您搬运官方图片存在不规范操作，所以来通知一下~
-				
+
 				如果搬运官方图片时一定要打上搬运标签，而且要是有文字信息的 例如发售日 售价 开订日期 也一定都要写在描述上面 绝不能只搬运图片呦
-				
-				其他玩家的作品要是想转载的话，就一定要获得授权，不然是不允许转到玩具控平台的，玩具姬看到后会马上删掉哦٩(×̯×)۶ 
+
+				其他玩家的作品要是想转载的话，就一定要获得授权，不然是不允许转到玩具控平台的，玩具姬看到后会马上删掉哦٩(×̯×)۶
 				`
 			})
 		}
@@ -64,21 +64,31 @@ export default class PostPanel extends Component{
 		return(
 			<Col xs={12} sm={4} lg={3} className="p-2">
 				<div className="m-portlet m-portlet--mobile mb-2">
-					<div className="m-portlet__head p-3">
-						<div className="m-portlet__head-caption">
-							<div className="d-flex">
-								<Link to={`/user/${post.user.id}`}>
-									<img style={{maxWidth:40}} className="rounded-circle" src={ post.user.avatar } alt="User Image" />
-								</Link>
-								<div className="d-flex flex-column pl-2">
-									<span><Link to={`/user/${post.user.id}`}>{ post.user.nickname }</Link></span>
-									<small className="text-muted">{ Moment.unix(post.created / 1000).fromNow() }</small>
+					<div className="m-portlet__body p-3">
+						<div className="m-widget3">
+							<div className="m-widget3__item">
+								<div className="m-widget3__header">
+									<div className="m-widget3__user-img">
+										<Link to={`/user/${post.user.id}`}>
+											<img className="m-widget3__img" src={ post.user.avatar } alt=""/>
+										</Link>
+									</div>
+									<div className="m-widget3__info">
+										<Link className="m-widget3__username" to={`/user/${post.user.id}`}>
+											{ post.user.nickname }
+										</Link>
+										<br/>
+										<span className="m-widget3__time">{ Moment.unix(post.created / 1000).fromNow() }</span>
+									</div>
+									<span className="m-widget3__status">
+										<i className="flaticon-more-v3" style={{fontSize:"1rem"}}></i>
+									</span>
+								</div>
+								<div className="m-widget3__body">
+									{ post.caption ? <p className="m-widget3__text">{post.caption}</p> : null }
 								</div>
 							</div>
-
 						</div>
-					</div>
-					<div className="m-portlet__body p-3">
 						 {
 							post.video ?
 							<div style={{position:'relative'}}>
@@ -107,17 +117,20 @@ export default class PostPanel extends Component{
 										}
 									</div>
 								}
-								
 							</div>
 						}
-						{
-							post.caption ? <p className="text-muted mb-2">{post.caption}</p> : null
-						}
+
 						<div className="">
-							{post.tags.map(t => <span key={`post_${post.id}_t_${t.id}`} className='m-badge m-badge--info m-badge--wide label-margin'><Link to={'/tag/'+t.id}>{t.text}</Link>{" "}<i className="fa fa-close" onClick={ () => this.removeTag(t.id)}></i></span>)}
+							{
+								post.tags.map(t =>
+									<span key={`post_${post.id}_t_${t.id}`} className='m-badge m-badge--rounded m-badge--info m-badge--wide m--margin-rt-3'>
+										<Link to={'/tag/'+t.id}>{t.text}</Link>{" "}<i className="fa fa-close" onClick={ () => this.removeTag(t.id)}></i>
+									</span>
+								)
+							}
 							{
 								post.toys.length ?
-								<span className='m-badge m-badge--success m-badge--wide'>
+								<span className='m-badge m-badge--rounded m-badge--success m-badge--wide m--margin-rt-3'>
 									<Link to={'/toy/'+post.toys[0].id}>{post.toys[0].name.substring(0, 25)+'...'}
 									</Link>
 									<i className="fa fa-close" onClick={ () => this.removeToy()}></i>
@@ -126,7 +139,7 @@ export default class PostPanel extends Component{
 							}
 						</div>
 						<div className="">
-							{post.cls.map(c => <span key={`post_${post.id}_c_${c}`} className="m-badge m-badge--warning m-badge--wide text-white" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>)}
+							{post.cls.map(c => <span key={`post_${post.id}_c_${c}`} className="m-badge m-badge--rounded m-badge--warning m-badge--wide m--margin-rt-3" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>)}
 						</div>
 						<div className="d-flex p-2 justify-content-around">
 							<span>评论 : {post.counts && post.counts.comments || 0}</span>
@@ -154,7 +167,7 @@ export default class PostPanel extends Component{
 										<li><a onClick={() => this.sendMsg(post.user.id)}>盗图 通知</a></li>
 									</ul>
 								</div>
-								
+
 								<span onClick={ this.deletePost } className="post-caption-btn btn btn-sm"><i className="fa fa-trash"></i></span>
 							</ButtonToolbar>
 						</div>

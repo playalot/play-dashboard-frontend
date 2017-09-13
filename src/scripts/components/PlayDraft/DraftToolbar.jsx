@@ -21,10 +21,14 @@ export default class extends Component {
 	  	this.addLink = this._addLink.bind(this)
 	}
 	componentDidMount() {
-		$('#page-affix').affix({
-		  offset: {
-		    top: $('#page-affix').offset().top - 50
-		  }
+		const affix = document.querySelector('#page-affix')
+		const affixOffsetTop = affix.offsetTop
+		window.addEventListener('scroll',() => {
+			if(document.body.scrollTop >= affixOffsetTop - 60){
+				$('#page-affix').css({position:'fixed',top:70})
+			}else {
+				$('#page-affix').css({position:'relative',top:0})
+			}
 		})
 	}
 	_toggleInlineStyle(inlineStyle) {

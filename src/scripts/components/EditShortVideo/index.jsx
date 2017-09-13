@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import Dropzone from 'react-dropzone';
 import Request from 'superagent';
 import TagsInput from 'react-tagsinput'
-import { Modal,Button,FormGroup,FormControl,Col,Row,Form } from 'react-bootstrap'
 import CDN from '../../widgets/cdn'
 function makeid() {
     let text = '';
@@ -182,73 +181,87 @@ export default class extends Component {
 					</div>
 				</div>
 				<div className="portlet-body py-5">
-					<Form horizontal onSubmit={(e) => e.preventDefault()}>
-						<FormGroup>
-							<Col className="control-label" sm={2}>上传视频</Col>
-							<Col xs={6} sm={3}>
+					<form onSubmit={(e) => e.preventDefault()}>
+						<div className="form-group row">
+              <div className="col-sm-2 control-label">
+                上传视频
+              </div>
+              <div className="col-sm-3 col-6">
 								<Dropzone onDrop={this.onDrop} multiple={false} className="play-dropzone-style">
 									<div>将视频文件拖入该区域</div>
 								</Dropzone>
-							</Col>
-							<Col xs={6} sm={3}>
+              </div>
+              <div className="col-sm-3 col-6">
 								<video ref="vtag" style={{height:100,width:'auto'}} src={this.state.videoUrl} controls></video>
-							</Col>
-						</FormGroup>
-						<FormGroup>
-							<Col className="control-label" sm={2}>用户ID</Col>
-							<Col sm={9}>
-								<FormControl type="text" value={this.state.userId} onChange={(e) => this.setState({userId:e.target.value})} />
-							</Col>
-						</FormGroup>
-						<FormGroup>
-							<Col className="control-label" sm={2}>标题</Col>
-							<Col sm={9}>
-								<FormControl type="text" value={this.state.title} onChange={(e) => this.setState({title:e.target.value})}/>
-							</Col>
-						</FormGroup>
-						<FormGroup>
-							<Col className="control-label" sm={2}>描述</Col>
-							<Col sm={9}>
+              </div>
+						</div>
+						<div className="form-group row">
+              <div className="col-sm-2 control-label">
+                用户ID
+              </div>
+              <div className="col-sm-9">
+								<input className="form-control" type="text" value={this.state.userId} onChange={(e) => this.setState({userId:e.target.value})} />
+              </div>
+						</div>
+            <div className="form-group row">
+              <div className="col-sm-2 control-label">
+                标题
+              </div>
+              <div className="col-sm-9">
+								<input className="form-control" type="text" value={this.state.title} onChange={(e) => this.setState({title:e.target.value})}/>
+              </div>
+            </div>
+            <div className="form-group row">
+              <div className="col-sm-2 control-label">
+                描述
+              </div>
+              <div className="col-sm-9">
 								<textarea style={{width:'100%'}} onChange={(e) => this.setState({caption:e.target.value})} value={this.state.caption} />
-							</Col>
-						</FormGroup>
-						<FormGroup>
-							<Col className="control-label" sm={2}>标签</Col>
-							<Col sm={9}>
+              </div>
+            </div>
+            <div className="form-group row">
+              <div className="col-sm-2 control-label">
+                标签
+              </div>
+              <div className="col-sm-9">
 								<TagsInput value={this.state.tags} onChange={(tags) => this.setState({tags})} />
-							</Col>
-						</FormGroup>
-						<FormGroup>
-							<Col className="control-label" sm={2}>进度</Col>
-							<Col sm={9}>
-								<div className="progress progress-striped active mt-3">
-									<div className="progress-bar progress-bar-info" role="progressbar" style={{width:`${this.state.progress}%`}}>
-										{this.state.progress}
-									</div>
-								</div>
-							</Col>
-						</FormGroup>
+              </div>
+            </div>
+            <div className="form-group row">
+              <div className="col-sm-2 control-label">
+                进度
+              </div>
+              <div className="col-sm-9">
+                <div className="progress">
+                  <div className="progress-bar" role="progressbar" style={{width:`${this.state.progress}%`}} aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                    {this.state.progress}
+                  </div>
+                </div>
+              </div>
+            </div>
 						{
 							this.state.showPoster ?
-							<FormGroup>
-								<Col className="control-label" sm={2}>封面</Col>
-								<Col xs={2}>
-									<img style={{width:'100%'}} src={CDN.show(this.state.thumbnail)}/>
-								</Col>
-								<Col xs={8}>
+              <div className="form-group row">
+                <div className="col-sm-2 control-label">
+                  封面
+                </div>
+                <div className="col-2">
+									<img className="w-100" src={CDN.show(this.state.thumbnail)}/>
+                </div>
+                <div className="col-8">
 									<button onClick={() => this.setState({modalPoster:true})} className="btn btn-outline purple">更换封面</button> <br/><br/>
 									<Dropzone style={{display:'inline-block',border:'none'}} accept="image/*" onDrop={this.uploadCover}>
 										<button className="btn btn-outline red">上传封面</button>
 									</Dropzone>
-								</Col>
-							</FormGroup>
+                </div>
+              </div>
 							:null
 						}
-					</Form>
+					</form>
 					<div className="portlet-body py-5" style={{borderTop:'1px solid #eef1f5'}}>
-						<Col sm={2} smOffset={2}>
+            <div className="col-sm-2 ml-auto">
 							<button className="btn green btn-outline" onClick={this.onSubmit}>提交</button>
-						</Col>
+            </div>
 					</div>
 				</div>
 				{
@@ -263,18 +276,18 @@ export default class extends Component {
 									return null
 								}
 								return(
-									<Col key={`poster_${i}`} sm={2} style={{padding:10}}>
-									<img onClick={() => this.setState({modalPoster:false,thumbnail:`http://img.playalot.cn/${this.state.uploadKey}?vframe/jpg/offset/${item}`,offset:item})} style={{width:'100%'}} src={`http://img.playalot.cn/${this.state.uploadKey}?vframe/jpg/offset/${item}`}/>
-									</Col>
+                  <div key={`poster_${i}`} className="col-sm-2">
+									  <img onClick={() => this.setState({modalPoster:false,thumbnail:`http://img.playalot.cn/${this.state.uploadKey}?vframe/jpg/offset/${item}`,offset:item})} style={{width:'100%'}} src={`http://img.playalot.cn/${this.state.uploadKey}?vframe/jpg/offset/${item}`}/>
+                  </div>
 								)
 								})
 							}
 							{
 								this.state.posters.map((poster,i) => {
 								return (
-									<Col key={`poster_u_${i}`} sm={2} style={{padding:10}}>
-									<img onClick={() => this.setState({modalPoster:false,thumbnail:CDN.show(poster),offset:null})} style={{width:'100%',height:80,objectFit:'cover'}} src={CDN.show(poster)}/>
-									</Col>
+                  <div key={`poster_u_${i}`} className="col-sm-2">
+									  <img onClick={() => this.setState({modalPoster:false,thumbnail:CDN.show(poster),offset:null})} style={{width:'100%',height:80,objectFit:'cover'}} src={CDN.show(poster)}/>
+                  </div>
 								)
 								})
 							}

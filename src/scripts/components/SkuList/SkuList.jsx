@@ -127,9 +127,9 @@ export default class SkuList extends Component{
 	    }
 		const { orderBy,asc } = this.state
 		return(
-			<div>
+			<div className="bg-white">
 				<div style={{minHeight:500}} className="table-responsive skus-table">
-					<table className="table table-bordered table-hover">
+					<table className="table table-bordered">
 						<thead>
 							<tr>
 								<th colSpan={2}>
@@ -149,8 +149,6 @@ export default class SkuList extends Component{
 									<div className="btn-group">
 										<button type="button" className="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
 											{this.state.merchant ? this.state.merchant : '所有商家'}
-											&nbsp;
-											<span className="fa fa-angle-down"></span>
 										</button>
 										<ul className="dropdown-menu">
 											<li><a onClick={() => this.onChangeMerchant('')}>所有商家</a></li>
@@ -162,8 +160,6 @@ export default class SkuList extends Component{
 									<div className="btn-group">
 										<button type="button" className="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
 											{this.state.type ? (this.state.type === 'inStock' ? '现货':'预售') : '全部类型'}
-											&nbsp;
-											<span className="fa fa-angle-down"></span>
 										</button>
 										<ul className="dropdown-menu">
 											<li><a onClick={() => this.onChangeType('')}>全部类型</a></li>
@@ -192,11 +188,10 @@ export default class SkuList extends Component{
 						</tbody>
 					</table>
 				</div>
-				<Row className="text-center">
 					<ReactPaginate
 						previousLabel={<span>&laquo;</span>}
 						nextLabel={<span>&raquo;</span>}
-						breakLabel={<span>...</span>}
+						breakLabel={<a>...</a>}
 						breakClassName={"break-me"}
 						pageCount={this.props.totalPages}
 						marginPagesDisplayed={2}
@@ -207,7 +202,6 @@ export default class SkuList extends Component{
 						forcePage={parsePage(this.props.location.search)}
 						activeClassName={"active"}
 					/>
-				</Row>
 				{modal}
 			</div>
 
@@ -306,7 +300,7 @@ class SkuTr extends Component {
 					<Link className="btn dark btn-outline btn-sm" to={`/sku/${sku.id}?sid=${stock.stockId}`}>修改</Link>
 					<div className="btn-group">
 						<button type="button" className="btn dark btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
-							更多 <span className="fa fa-angle-down"></span>
+							更多
 						</button>
 						<ul className="dropdown-menu pull-right">
 							<li><a onClick={() => this.props.setSelectedSku(sku)}>分类</a></li>

@@ -136,65 +136,65 @@ export default class extends Component {
 					</div>
 				</div>
 				<div className="portlet-body form py-5">
-					<Form horizontal  onSubmit={(e) => e.preventDefault()}>
-						<FormGroup>
-							<Col className="control-label" sm={2}>上传封面</Col>
-							<Col xs={6} sm={3}>
+					<form onSubmit={(e) => e.preventDefault()}>
+						<div className="form-group row">
+							<label className="col-sm-2 col-form-label">上传封面</label>
+							<div className="col-6 col-sm-3">
 								<Dropzone accept="image/jpeg, image/png" onDrop={this.onDropImage} className="play-dropzone-style">
 									<div>将图片拖入此区域</div>
 								</Dropzone>
-							</Col>
-							<Col xs={6} sm={3}>
+							</div>
+							<div className="col-6 col-sm-3">
 								{
 									this.state.image !== '' ?
 									<img style={{height:100,width:'auto'}} src={CDN.show(this.state.image)} />
 									:null
 								}
-							</Col>
-						</FormGroup>
-						<FormGroup>
-							<Col sm={2} className="control-label">标题(必填)</Col>
-							<Col sm={8}>
-								<FormControl value={this.state.title} type="text" onChange={(e) => this.setState({title:e.target.value})}/>
-							</Col>
-						</FormGroup>
-						<FormGroup>
-							<Col sm={2} className="control-label">描述(选填)</Col>
-							<Col sm={8}>
-								<FormControl value={this.state.description} type="text" onChange={(e) => this.setState({description:e.target.value})}/>
-							</Col>
-						</FormGroup>
-						<FormGroup>
-							<Col sm={2} className="control-label">位置</Col>
-							<Col sm={8}>
+							</div>
+						</div>
+						<div className="form-group row">
+							<label className="col-sm-2 col-form-label">标题(必填)</label>
+							<div className="col-sm-8">
+								<input className="form-control" value={this.state.title} type="text" onChange={(e) => this.setState({title:e.target.value})}/>
+							</div>
+						</div>
+						<div className="form-group row">
+							<label className="col-sm-2 col-form-label">位置</label>
+							<div className="col-sm-8">
 								{
 									typeOptions.map((type,i) => {
 										return(
-											<Radio key={`type_${i}`} inline name="type" value={type.value} onChange={(e) => this.setState({type:e.target.value})}  checked={type.value == this.state.type}>{type.label}</Radio>
+											<label className="form-check-label">
+												<input key={`type_${i}`} class="form-check-input" type="radio" checked={type.value == this.state.type} value={type.value} onChange={(e) => this.setState({type:e.target.value})}/>
+												{type.label}
+											</label>
 										)
 									})
 								}
-							</Col>
-						</FormGroup>
-						<FormGroup>
-							<Col sm={2} className="control-label">目标类型</Col>
-							<Col sm={8}>
+							</div>
+						</div>
+						<div className="form-group row">
+							<label className="col-sm-2 col-form-label">目标类型</label>
+							<div className="col-sm-8">
 								{
 									radioOptions.map((targetType,i) => {
 										return(
-											<Radio key={`target_type_${i}`} inline name="targetType" value={targetType.value} onChange={(e) => this.setState({targetType:e.target.value})} checked={targetType.value == this.state.targetType}>{targetType.label}</Radio>
+											<label className="form-check-label">
+												<input key={`target_type_${i}`} class="form-check-input" type="radio" value={targetType.value} onChange={(e) => this.setState({targetType:e.target.value})} checked={targetType.value == this.state.targetType}/>
+												{targetType.label}
+											</label>
 										)
 									})
 								}
-							</Col>
-						</FormGroup>
+							</div>
+						</div>
+	
 						{
 							this.state.targetType === 'catalog' ?
-							<FormGroup>
-								<Col sm={2} className="control-label">
-									商品
-								</Col>
-								<Col sm={8}>
+							<div className="form-group">
+								<label className="col-sm-2 col-form-label">商品</label>
+					
+								<div className="col-sm-8">
 									<div className="d-flex flex-column">
 										{
 											this.state.toyIds.map((id,index) => {
@@ -230,34 +230,37 @@ export default class extends Component {
 											placeholder="请输入玩具关键字/玩具ID"
 										/>
 									</div>
-								</Col>
-							</FormGroup>
+								</div>
+							</div>
 							:null
 						}
 						<br />
-						<FormGroup>
-							<Col sm={2} className="control-label">目标ID</Col>
-							<Col sm={8}>
-								<FormControl value={this.state.targetId} type="text" onChange={(e) => this.setState({targetId:e.target.value})}/>
-							</Col>
-						</FormGroup>
-						<FormGroup>
-							<Col sm={2} className="control-label">附加(如url)</Col>
-							<Col sm={8}>
-							<FormControl value={this.state.extra} type="text" onChange={(e) => this.setState({extra:e.target.value})}/>
-							</Col>
-						</FormGroup>
-						<FormGroup>
-							<Col sm={2} className="control-label">图片</Col>
-							<Col sm={8}>
-								<FormControl.Static>{this.state.image}</FormControl.Static>
-							</Col>
-						</FormGroup>
-					</Form>
-					<div className="portlet-body py-5" style={{borderTop:'1px solid #eef1f5'}}>
-						<Col sm={2} smOffset={2}>
+						<div className="form-group row">
+							<label className="col-sm-2 col-form-label">目标ID</label>
+							<div className="col-sm-8">
+								<input className="form-control" value={this.state.targetId} type="text" onChange={(e) => this.setState({targetId:e.target.value})}/>
+							</div>
+						</div>
+						<div className="form-group row">
+							<label className="col-sm-2 col-form-label">附加(如url)</label>
+							<div className="col-sm-8">
+								<input className="form-control" value={this.state.extra} type="text" onChange={(e) => this.setState({extra:e.target.value})}/>
+							</div>
+						</div>
+						<div className="form-group row">
+							<label className="col-sm-2 col-form-label">图片</label>
+							<div className="col-sm-8">
+								<p>{this.state.image}</p>
+							</div>
+						</div>
+						
+			
+					</form>
+					<div className="portlet-body py-5 row" style={{borderTop:'1px solid #eef1f5'}}>
+						<div className="col-sm-2 ml-auto">
 							<button className="btn btn-outline green" type="button" onClick={this.submit}>Submit</button>
-						</Col>
+
+						</div>
 					</div>
 				</div>
 			</div>

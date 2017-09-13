@@ -29,29 +29,167 @@ export default class ExplorePage extends Component{
 		return(
 			<div>
 				<Row>
-					<div>
-						<ul className="nav nav-tabs  m-tabs-line" role="tablist">
-							<li className="nav-item m-tabs__item">
-								<a className="nav-link m-tabs__link active" data-toggle="tab" href="#m_tabs_6_1" role="tab">
-									Messages
-								</a>
-							</li>
-							<li className="nav-item m-tabs__item">
-								<a className="nav-link m-tabs__link" data-toggle="tab" href="#m_tabs_6_3" role="tab">
-									Logs
-								</a>
-							</li>
-						</ul>
-						<div className="tab-content">
-							<div className="tab-pane active" id="m_tabs_6_1" role="tabpanel">
-								Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+					<div className="m-portlet w-100">
+						<div className="m-portlet__body">
+							<div className="d-flex justify-content-between align-items-center">
+								<button onClick={this.addDraft} className="btn btn-outline-info">创建草稿</button>
+								<ul className="nav nav-tabs m-tabs-line m-tabs-line--2x m-tabs-line--success" role="tablist">
+									
+									<li className="nav-item m-tabs__item">
+										<a className="nav-link m-tabs__link active" data-toggle="tab" href="#explore_1" role="tab">
+											发现页banner
+										</a>
+									</li>
+									<li className="nav-item m-tabs__item">
+										<a className="nav-link m-tabs__link" data-toggle="tab" href="#explore_2" role="tab">
+											发现页主题
+										</a>
+									</li>
+									<li className="nav-item m-tabs__item">
+										<a className="nav-link m-tabs__link" data-toggle="tab" href="#explore_3" role="tab">
+											玩具页Banner
+										</a>
+									</li>
+									<li className="nav-item m-tabs__item">
+										<a className="nav-link m-tabs__link" data-toggle="tab" href="#explore_4" role="tab">
+											草稿
+										</a>
+									</li>
+								</ul>
 							</div>
-							<div className="tab-pane" id="m_tabs_6_3" role="tabpanel">
-								Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged
+							<div className="tab-content">
+								<div className="tab-pane active" id="explore_1" role="tabpanel">
+									{
+										this.props.banners ?
+										<table className="table table-striped">
+											<tbody>
+												{
+													this.props.banners.map((banner,index) =>{
+														return(
+															<tr key={'b_'+banner.id+index}>
+																<td>
+																	<img src={banner.image} style={{width:150}} />
+																</td>
+																<td>
+																	<span>{banner.title}</span>
+																</td>
+																<td style={{textAlign:'right'}}>
+																	<Link className="btn btn-circle btn-icon-only btn-default" to={`/recommend/${banner.id}`}>
+																		<i className="fa fa-edit"></i>
+																	</Link>
+																	<a className="btn btn-circle btn-icon-only btn-default" onClick={() => this.deleteBanner(banner.id)}>
+																		<i className="fa fa-trash"></i>
+																	</a>
+																</td>
+															</tr>
+														)
+													})
+												}
+											</tbody>
+										</table>
+										:null
+									}
+								</div>
+								<div className="tab-pane" id="explore_2" role="tabpanel">
+									{
+										this.props.themes ?
+										<table className="table table-striped">
+											<tbody>
+												{
+													this.props.themes.map((topic,index) =>{
+														return(
+															<tr key={'b_'+topic.id+index}>
+																<td>
+																	<img src={topic.image} style={{width:150}} />
+																</td>
+																<td>
+																	<span>{topic.title}</span>
+																</td>
+																<td style={{textAlign:'right'}}>
+																	<Link className="btn btn-circle btn-icon-only btn-default" to={`/recommend/${topic.id}`}>
+																		<i className="fa fa-edit"></i>
+																	</Link>
+																	<a className="btn btn-circle btn-icon-only btn-default" onClick={() => this.deleteTopic(topic.id)}>
+																		<i className="fa fa-trash"></i>
+																	</a>
+																</td>
+															</tr>
+														)
+													})
+												}
+											</tbody>
+										</table>
+										:null
+									}
+								</div>
+								<div className="tab-pane" id="explore_3" role="tabpanel">
+									{
+										this.props.toys?
+										<table className="table table-striped">
+											<tbody>
+												{
+													this.props.toys.map((toy,index) =>{
+														return(
+															<tr key={'b_'+toy.id+index}>
+																<td>
+																	<img src={toy.image} style={{width:150}} />
+																</td>
+																<td>
+																	<span>{toy.title}</span>
+																</td>
+																<td style={{textAlign:'right'}}>
+																	<Link className="btn btn-circle btn-icon-only btn-default" to={`/recommend/${toy.id}`}>
+																		<i className="fa fa-edit"></i>
+																	</Link>
+																	<a className="btn btn-circle btn-icon-only btn-default" onClick={() => this.deleteToy(toy.id)}>
+																		<i className="fa fa-trash"></i>
+																	</a>
+																</td>
+															</tr>
+														)
+													})
+												}
+											</tbody>
+										</table>
+										:null
+									}
+								</div>
+								<div className="tab-pane" id="explore_4" role="tabpanel">
+									{
+										this.props.drafts ?
+										<table className="table table-striped">
+											<tbody>
+												{
+													this.props.drafts.map((draft,index) =>{
+														return(
+															<tr key={'b_'+draft.id+index}>
+																<td>
+																	<img src={draft.image} style={{width:150}} />
+																</td>
+																<td>
+																	<span>{draft.title}</span>
+																</td>
+																<td style={{textAlign:'right'}}>
+																	<Link className="btn btn-circle btn-icon-only btn-default" to={`/recommend/${draft.id}`}>
+																		<i className="fa fa-edit"></i>
+																	</Link>
+																	<a className="btn btn-circle btn-icon-only btn-default" onClick={() => this.deleteDraft(draft.id)}>
+																		<i className="fa fa-trash"></i>
+																	</a>
+																</td>
+															</tr>
+														)
+													})
+												}
+											</tbody>
+										</table>
+										:null
+									}
+								</div>
 							</div>
 						</div>
 					</div>
-					<Col xs={12}>
+					{/* <Col xs={12}>
 						<div className="portlet light ">
 							<div className="portlet-title tabbable-line">
 								<div className="caption caption-md">
@@ -205,7 +343,7 @@ export default class ExplorePage extends Component{
 								</div>
 							</div>
 						</div>
-					</Col>
+					</Col> */}
 				</Row>
 			</div>
 		)

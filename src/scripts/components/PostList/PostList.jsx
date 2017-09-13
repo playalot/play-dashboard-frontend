@@ -75,7 +75,7 @@ export default class Post extends Component{
 				<Row>
 					<PostPanels/>
 				</Row>
-					<ReactPaginate 
+					<ReactPaginate
 						previousLabel={<span>&laquo;</span>}
 						nextLabel={<span>&raquo;</span>}
 						breakLabel={<a>...</a>}
@@ -92,4 +92,3 @@ export default class Post extends Component{
 		)
 	}
 }
-

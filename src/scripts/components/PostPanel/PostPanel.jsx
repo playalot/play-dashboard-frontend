@@ -60,7 +60,7 @@ export default class PostPanel extends Component{
 	}
 	render() {
 		const { post } = this.props
-		const btnClass = 'btn btn-sm m-btn--pill'
+		const btnClass = 'btn btn-sm m--margin-rt-3'
 		return(
 			<Col xs={12} sm={4} lg={3} className="p-2">
 				<div className="m-portlet m-portlet--mobile mb-2">

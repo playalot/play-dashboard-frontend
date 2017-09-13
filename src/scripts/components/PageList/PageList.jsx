@@ -63,21 +63,19 @@ export default class PageList extends Component{
 	            </Form>
 	          </div>
 	          <PagePanel/>
-	          <Row style={{textAlign:'center'}}>
 	          	<ReactPaginate
 	          		previousLabel={<span>&laquo;</span>}
-					nextLabel={<span>&raquo;</span>}
-					breakLabel={<span>...</span>}
-					breakClassName={"break-me"}
-					pageCount={this.props.totalPages}
-					marginPagesDisplayed={2}
-					pageRangeDisplayed={5}
-					onPageChange={obj => this.goPage(obj.selected)}
-					containerClassName={"pagination"}
-					subContainerClassName={"pages pagination"}
-					forcePage={parsePage(this.props.location.search)}
-					activeClassName={"active"} />
-	          </Row>
+								nextLabel={<span>&raquo;</span>}
+								breakLabel={<a>...</a>}
+								breakClassName={"break-me"}
+								pageCount={this.props.totalPages}
+								marginPagesDisplayed={2}
+								pageRangeDisplayed={5}
+								onPageChange={obj => this.goPage(obj.selected)}
+								containerClassName={"pagination"}
+								subContainerClassName={"pages pagination"}
+								forcePage={parsePage(this.props.location.search)}
+								activeClassName={"active"} />
 	        </div>
 		)
 	}

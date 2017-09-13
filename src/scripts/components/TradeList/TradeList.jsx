@@ -56,11 +56,11 @@ export default class TradeList extends Component {
 							let isBlkClass = trade.isBlk === true ? 'btn yellow-casablanca btn-sm' : 'btn btn-sm'
 							return(
 								<Col xs={12} sm={3} lg={3} key={`trade_${i}`}>
-									<div className="portlet bordered light" style={{padding:'12px 5px 15px 5px'}}>
-										<div className="portlet-title" style={{marginBottom:0}}>
+									<div className="m-portlet m-portlet--mobile">
+										<div className="m-portlet__head p-3">
 											<div className="d-flex">
 												<Link to={`/user/${trade.user.id}`}>
-													<img style={{maxWidth:40}} className="img-circle" src={ trade.user.avatar } alt="User Image" />
+													<img className="avatar45" src={ trade.user.avatar } alt="User Image" />
 												</Link>
 												<div className="d-flex flex-column pl-2">
 													<span><Link to={`/user/${trade.user.id}`}>{ trade.user.nickname }</Link></span>
@@ -68,7 +68,7 @@ export default class TradeList extends Component {
 												</div>
 											</div>
 										</div>
-										<div className="portlet-body">
+										<div className="m-portlet__body p-3">
 											<div>
 												<div>
 													<ImgLoad src={trade.photos[0].url640} onClick={() => this.openImage(trade.photos,0) } />
@@ -139,11 +139,10 @@ export default class TradeList extends Component {
 						:null
 					}
 				</Row>
-				<Row style={{textAlign:'center'}}>
 					<ReactPaginate 
 						previousLabel={<span>&laquo;</span>}
 						nextLabel={<span>&raquo;</span>}
-						breakLabel={<span>...</span>}
+						breakLabel={<a>...</a>}
 						breakClassName={"break-me"}
 						pageCount={this.props.totalPages}
 						marginPagesDisplayed={2}
@@ -153,7 +152,6 @@ export default class TradeList extends Component {
 						subContainerClassName={"pages pagination"}
 						forcePage={parsePage(this.props.location.search)}
 						activeClassName={"active"} />
-				</Row>
 				<Lightbox
 					images={this.state.images}
 					isOpen={this.state.lightboxIsOpen}

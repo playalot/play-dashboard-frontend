@@ -14,11 +14,13 @@ const config = {
         app: path.resolve(__dirname, 'src/scripts/main.js'),
         vendor: [
             'jquery',
+            // 'popper',
             path.resolve(__dirname, 'src/scripts/metronic/popper.js'),
-			'bootstrap-sass/assets/javascripts/bootstrap.js',
-            // path.resolve(__dirname, 'src/scripts/metronic/app.js'),
+            'bootstrap/dist/js/bootstrap.js',
+            // 'admin-lte/dist/js/app.js'
+            // path.resolve(__dirname, 'src/scripts/metronic/app.js')
             path.resolve(__dirname, 'src/scripts/metronic/scripts.bundle.js')
-		]
+		      ]
     },
     output: {
         path: path.resolve(__dirname, 'dist'),

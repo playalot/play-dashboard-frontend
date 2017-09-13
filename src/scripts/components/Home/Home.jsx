@@ -51,7 +51,7 @@ export default class Home extends Component {
                 <Col xs={6} sm={12} lg={6}>
                   <Row>
                     <Col xs={4} sm={6} lg={4}>
-                      <a className="dashboard-stat dashboard-stat-v2 blue" href="#">
+                      <a className="dashboard-stat blue" href="#">
                         <div className="visual">
                           <i className="fa fa-users"></i>
                         </div>
@@ -64,7 +64,7 @@ export default class Home extends Component {
                       </a>
                     </Col>
                     <Col xs={4} sm={6} lg={4}>
-                      <a className="dashboard-stat dashboard-stat-v2 green" href="#">
+                      <a className="dashboard-stat green" href="#">
                         <div className="visual">
                           <i className="fa fa-rocket"></i>
                         </div>
@@ -77,7 +77,7 @@ export default class Home extends Component {
                       </a>
                     </Col>
                     <Col xs={4} sm={6} lg={4}>
-                      <a className="dashboard-stat dashboard-stat-v2 yellow" href="#">
+                      <a className="dashboard-stat yellow" href="#">
                         <div className="visual">
                           <i className="fa fa-tags"></i>
                         </div>
@@ -90,7 +90,7 @@ export default class Home extends Component {
                       </a>
                     </Col>
                     <Col xs={4} sm={6} lg={4}>
-                      <a className="dashboard-stat dashboard-stat-v2 red" href="#">
+                      <a className="dashboard-stat red" href="#">
                         <div className="visual">
                           <i className="fa fa-comments"></i>
                         </div>
@@ -103,7 +103,7 @@ export default class Home extends Component {
                       </a>
                     </Col>
                     <Col xs={4} sm={6} lg={4}>
-                      <a className="dashboard-stat dashboard-stat-v2 purple" href="#">
+                      <a className="dashboard-stat purple" href="#">
                         <div className="visual">
                           <i className="fa fa-photo"></i>
                         </div>
@@ -116,7 +116,7 @@ export default class Home extends Component {
                       </a>
                     </Col>
                     <Col xs={4} sm={6} lg={4}>
-                      <a className="dashboard-stat dashboard-stat-v2 blue-dark" href="#">
+                      <a className="dashboard-stat blue-dark" href="#">
                         <div className="visual">
                           <i className="fa fa-photo"></i>
                         </div>
@@ -157,108 +157,103 @@ export default class Home extends Component {
                 </Col>
               </Row>
               <div className="row">
-                <div className="col-lg-6 col-xs-12 col-sm-12">
+                <div className="col-lg-6">
                   <div className="m-portlet m-portlet--mobile">
                     <div className="m-portlet__head p-3">
-                      <div className="caption">
-                        <i className="icon-bubbles font-dark hide"></i>
-                        <span className="caption-subject font-dark bold uppercase">评论</span>
+                      <div>
+                        <i className="icon-bubbles mr-2"></i>
+                        <span>评论</span>
                       </div>
-                      <div className="actions">
-                        <ReactPaginate
-                          previousLabel={<span>&laquo;</span>}
-                          nextLabel={<span>&raquo;</span>}
-                          breakLabel={<span>...</span>}
-                          breakClassName={"break-me"}
-                          pageCount={this.props.totalPagesC}
-                          marginPagesDisplayed={2}
-                          pageRangeDisplayed={5}
-                          onPageChange={obj => this.props.getActivitiesC(obj.selected)}
-                          containerClassName={"pagination"}
-                          subContainerClassName={"pages pagination"}
-                          forcePage={this.props.pageC}
-                          activeClassName={"active"} />
-                      </div>
+                      <ReactPaginate
+                        previousLabel={<span>&laquo;</span>}
+                        nextLabel={<span>&raquo;</span>}
+                        breakLabel={<a>...</a>}
+                        breakClassName={"break-me"}
+                        pageCount={this.props.totalPagesC}
+                        marginPagesDisplayed={2}
+                        pageRangeDisplayed={5}
+                        onPageChange={obj => this.props.getActivitiesC(obj.selected)}
+                        containerClassName={"pagination mt-2"}
+                        subContainerClassName={"pages pagination"}
+                        forcePage={this.props.pageC}
+                        activeClassName={"active"} />
                     </div>
                     <div className="m-portlet__body p-3">
-                      <div className="mt-comments">
-                        {
-                          this.props.activitiesC.map((activity,i) => {
-                            return (
-                              <div className="d-flex " key={`act_c_${activity.id}`} >
+                      {
+                        this.props.activitiesC.map((activity,i) => {
+                          return (
+                            <div className="d-flex " key={`act_c_${activity.id}`} >
+                              <Link to={`/user/${activity.user.id}`}>
                                 <img className="avatar45" src={activity.user.avatar} alt="avatar"/>
-
-                                <div className="p-2">
-                                  <div className="mt-comment-info">
-                                      <span className="mt-comment-author">{activity.user.nickname}</span>
-                                      <span className="mt-comment-date">{Moment.unix(activity.created /1000).format("D MMM, H:mm A")}</span>
-                                  </div>
-                                      <div className="mt-comment-text">{activity.content || 'sadfasdfasdfs'}</div>
-                                      <div className="mt-comment-details">
-                                        {activity.topic ?
-                                          <a target="_blank" style={{marginBottom:5,display:'inline-block'}} href={`http://www.playalot.cn/${activity.topic.type}/${activity.topic.id}`}>
-                                            {activity.topic.text}
-                                          </a>
-                                          :null
-                                        }
-                                        <a target="_blank" href={`http://www.playalot.cn/${activity.target.type}/${activity.target.id}`} className="activity-image">
-                                          {
-                                            activity.images.map((img,i) => {
-                                              return (
-                                                <img key={`activity_${activity.id}_${i}`} src={img} alt=""/>
-                                              )
-                                            })
-                                          }
+                              </Link>
+                              <div className="p-2" style={{flex:1}}>
+                                <div>
+                                    <span>{activity.user.nickname}</span>
+                                    <span>{Moment.unix(activity.created /1000).format("D MMM, H:mm A")}</span>
+                                </div>
+                                    <div>{activity.content || ''}</div>
+                                    <div>
+                                      {activity.topic ?
+                                        <a target="_blank" style={{marginBottom:5,display:'inline-block'}} href={`http://www.playalot.cn/${activity.topic.type}/${activity.topic.id}`}>
+                                          {activity.topic.text}
                                         </a>
-                                      </div>
-                                  </div>
-                              </div>
-                            )
-                          })
-                        }
-                      </div>
+                                        :null
+                                      }
+                                      <a target="_blank" href={`http://www.playalot.cn/${activity.target.type}/${activity.target.id}`} className="activity-image">
+                                        {
+                                          activity.images.map((img,i) => {
+                                            return (
+                                              <img key={`activity_${activity.id}_${i}`} src={img} alt=""/>
+                                            )
+                                          })
+                                        }
+                                      </a>
+                                    </div>
+                                </div>
+                            </div>
+                          )
+                        })
+                      }
                     </div>
                   </div>
                 </div>
-                <div className="col-lg-6 col-xs-12 col-sm-12">
+                <div className="col-lg-6">
                   <div className="m-portlet m-portlet--mobile">
                     <div className="m-portlet__head p-3">
-                      <div className="caption">
-                        <i className="icon-bubbles font-dark hide"></i>
-                        <span className="caption-subject font-dark bold uppercase">动态</span>
+                      <div>
+                        <i className="icon-bubbles mr-2"></i>
+                        <span>动态</span>
                       </div>
-                      <div className="actions">
-                        <ReactPaginate
-                          previousLabel={<span>&laquo;</span>}
-                          nextLabel={<span>&raquo;</span>}
-                          breakLabel={<span>...</span>}
-                          breakClassName={"break-me"}
-                          pageCount={this.props.totalPagesO}
-                          marginPagesDisplayed={2}
-                          pageRangeDisplayed={5}
-                          onPageChange={obj => this.props.getActivitiesO(obj.selected)}
-                          containerClassName={"pagination"}
-                          subContainerClassName={"pages pagination"}
-                          forcePage={this.props.pageO}
-                          activeClassName={"active"} />
-                      </div>
+                      <ReactPaginate
+                        previousLabel={<span>&laquo;</span>}
+                        nextLabel={<span>&raquo;</span>}
+                        breakLabel={<a>...</a>}
+                        breakClassName={"break-me"}
+                        pageCount={this.props.totalPagesO}
+                        marginPagesDisplayed={2}
+                        pageRangeDisplayed={5}
+                        onPageChange={obj => this.props.getActivitiesO(obj.selected)}
+                        containerClassName={"pagination mt-2"}
+                        subContainerClassName={"pages pagination"}
+                        forcePage={this.props.pageO}
+                        activeClassName={"active"} />
                     </div>
                     <div className="m-portlet__body p-3">
-                      <div className="mt-comments">
+                      <div>
                         {
                           this.props.activitiesO.map((activity,i) => {
                             return (
                               <div className="d-flex " key={`act_o_${activity.id}`}>
-
+                                <Link to={`/user/${activity.user.id}`}>
                                     <img className="avatar45" src={activity.user.avatar} alt="avatar"/>
-
-                                <div className="p-2">
-                                  <div className="mt-comment-info">
-                                      <span className="mt-comment-author">{activity.user.nickname}</span>
-                                      <span className="mt-comment-date">{Moment.unix(activity.created /1000).format("D MMM, H:mm A")}</span>
+                                </Link>
+                                <div className="p-2" style={{flex:1}}>
+                                  <div>
+                                      <span>{activity.user.nickname}</span>
+                                      <span>{Moment.unix(activity.created /1000).format("D MMM, H:mm A")}</span>
                                   </div>
-                                      <div className="mt-comment-text">{activity.content || ''}</div>
-                                      <div className="mt-comment-details">
+                                      <div>{activity.content || ''}</div>
+                                      <div>
                                         {activity.target.type == "toy" ?
                                           <a target="_blank" href={`http://www.playalot.cn/${activity.target.type}/${activity.target.id}`}>
                                             <PlayToyPanel tid={activity.target.id} style={{border:1}}></PlayToyPanel>

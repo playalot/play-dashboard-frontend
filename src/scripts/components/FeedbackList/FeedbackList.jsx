@@ -46,22 +46,23 @@ export default class FeedbackList extends Component{
 	}
 	render() {
 		return(
-			<div className="content">
-				<div className="portlet light ">
-					<div className="portlet-title tabbable-line">
-						<div className="caption caption-md">
-							<span className="caption-subject font-blue-madison bold uppercase"></span>
-						</div>
-						<ul className="nav nav-tabs">
-							<li className="active">
-								<a href="#report" data-toggle="tab">举报</a>
+			<div>
+				<div className="m-portlet m-portlet--mobile">
+					<div className="m-portlet__body pb-0">
+						<ul className="nav nav-tabs m-tabs-line m-tabs-line--2x m-tabs-line--success" role="tablist">
+							<li className="nav-item m-tabs__item">
+								<a className="nav-link m-tabs__link active" data-toggle="tab" href="#report" role="tab">
+									举报
+								</a>
 							</li>
-							<li>
-								<a href="#feedback" data-toggle="tab">反馈</a>
+							<li className="nav-item m-tabs__item">
+								<a className="nav-link m-tabs__link" data-toggle="tab" href="#feedback" role="tab">
+									反馈
+								</a>
 							</li>
 						</ul>
 					</div>
-					<div className="portlet-body">
+					<div className="m-portlet__body">
 						<div className="tab-content">
 							<div className="tab-pane active" id="report">
 								<div className="table-responsive">
@@ -73,7 +74,7 @@ export default class FeedbackList extends Component{
 													return(
 														<tr key={`report_${report.id}`}>
 															<td>
-																<Link to={`/user/${report.user.id}`}><img style={{width:'45px'}} src={report.user.avatar} className="img-circle"/></Link>
+																<Link to={`/user/${report.user.id}`}><img src={report.user.avatar} className="avatar45"/></Link>
 															</td>
 															<td>{report.content}</td>
 															<td>{Moment.unix(report.created / 1000).fromNow()}</td>
@@ -122,7 +123,7 @@ export default class FeedbackList extends Component{
 									<ReactPaginate
 										previousLabel={<span>&laquo;</span>}
 										nextLabel={<span>&raquo;</span>}
-										breakLabel={<span>...</span>}
+										breakLabel={<a>...</a>}
 										breakClassName={"break-me"}
 										pageCount={this.props.rPages}
 										marginPagesDisplayed={2}
@@ -145,7 +146,7 @@ export default class FeedbackList extends Component{
 														<tr key={`feedback_${feedback.id}`}>
 															<td>
 																<div className="btn-group">
-																<img style={{width:'30px'}} src={feedback.user.avatar}  data-toggle="dropdown" className="img-circle"/>
+																<img src={feedback.user.avatar}  data-toggle="dropdown" className="avatar45"/>
 																<ul className="dropdown-menu">
 																	<li><a onClick={() => this.props.history.push(`/user/${feedback.user.id}`)}>查看<small>({feedback.user.nickname})</small></a></li>
 																	<li><a onClick={() => this.props.setTouid(feedback.user.id,feedback.user.avatar)}>私信</a></li>
@@ -169,7 +170,7 @@ export default class FeedbackList extends Component{
 								<ReactPaginate
 									previousLabel={<span>&laquo;</span>}
 									nextLabel={<span>&raquo;</span>}
-									breakLabel={<span>...</span>}
+									breakLabel={<a>...</a>}
 									breakClassName={"break-me"}
 									pageCount={this.props.fPages}
 									marginPagesDisplayed={2}

@@ -6,9 +6,7 @@
   "author": "Guan Guan",
   "license": "MIT",
   "dependencies": {
-    "admin-lte": "^2.3.8",
     "bootstrap": "^4.0.0-beta",
-    "bootstrap-sass": "^3.3.7",
     "draft-convert": "^1.4.9",
     "draft-js": "^0.10.1",
     "draft-js-export-html": "^0.6.0",

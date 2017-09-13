@@ -75,9 +75,9 @@ export default class PagePanel extends Component {
           <tbody>
           	{
           		pages.map((page) => {
-          			let isPubClass = `btn btn-sm ${page.isPub ? '' : 'yellow-casablanca'}`
-          			let isRecClass = `btn btn-sm ${page.isRec ? 'yellow-casablanca' : ''}`
-          			let isShareClass = `btn btn-sm ${page.forShare ? 'yellow-casablanca' : ''}`
+          			let isPubClass = `btn btn-sm ${page.isPub ? '' : 'btn-warning'}`
+          			let isRecClass = `btn btn-sm ${page.isRec ? 'btn-warning' : ''}`
+          			let isShareClass = `btn btn-sm ${page.forShare ? 'btn-warning' : ''}`
           			return (
           				<tr key={page.id}>
           					<td>
@@ -86,7 +86,7 @@ export default class PagePanel extends Component {
 	                  <td>
 	                  	{page.title}<a target="_blank" href={`http://www.playalot.cn/page/${page.id}`}>[预览]</a>
 	                  </td>
-	                  <td><Link to={`/user/${page.user.id}`}><img style={{width:'45px'}} src={page.user.avatar} className="img-circle"/></Link></td>
+	                  <td><Link to={`/user/${page.user.id}`}><img src={page.user.avatar} className="avatar45"/></Link></td>
                   	<td>{page.category}</td>
                   	<td style={{whiteSpace:'inherit'}}>
 	                  	{

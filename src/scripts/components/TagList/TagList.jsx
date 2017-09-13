@@ -130,19 +130,19 @@ export default class TagList extends Component{
 						this.props.tags.map( (tag) => {
 							return (
 								<Col xs={6} sm={3} lg={3} key={'u_'+tag.id}>
-									<div className="portlet bordered light" style={{padding:'12px 5px 15px 5px'}}>
-										<div className="portlet-title" style={{marginBottom:0}}>
+									<div className="m-portlet m-portlet--mobile">
+										<div className="m-portlet__head p-3" style={{marginBottom:0}}>
 											<p className="my-1">{tag.text}</p>
 											<div className="d-flex justify-content-between">
 												<small className="text-muted">{tag.counts.posts} 照片</small>
 												<small className="text-muted">{tag.counts.follows} 关注</small>
 											</div>
 										</div>
-										<div className="portlet-body">
-											<img src={tag.image?CDN.show(tag.image):''} className="img-responsive"/>
+										<div className="m-portlet__body p3">
+											<img src={tag.image?CDN.show(tag.image):''} className="img-responsive w-100"/>
 											<div>
 												{tag.cls.map((c) => {
-													return (<span key={'t_c_'+tag.id+'_'+c} className="label label-warning label-margin" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>);
+													return (<span key={'t_c_'+tag.id+'_'+c} className="m-badge m-badge--rounded m-badge--warn m-badge--wide m--margin-rt-3" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>);
 												})}
 											</div>
 											<div className="clearfix">
@@ -160,11 +160,10 @@ export default class TagList extends Component{
 						})
 					}
 				</Row>
-				<Row style={{textAlign:'center'}}>
 					<ReactPaginate
 						previousLabel={<span>&laquo;</span>}
 						nextLabel={<span>&raquo;</span>}
-						breakLabel={<span>...</span>}
+						breakLabel={<a>...</a>}
 						breakClassName={"break-me"}
 						pageCount={this.props.totalPages}
 						marginPagesDisplayed={2}
@@ -174,7 +173,6 @@ export default class TagList extends Component{
 						subContainerClassName={"pages pagination"}
 						forcePage={parsePage(this.props.location.search)}
 						activeClassName={"active"} />
-		      </Row>
 		    {modal}
 	    </div>
 		)

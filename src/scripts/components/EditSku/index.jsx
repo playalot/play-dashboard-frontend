@@ -29,7 +29,8 @@ export default class EditSku extends Component {
       version:'',
       tbUrl:'',
       note: '',
-      image:''
+      image:'',
+      images:[]
     }
     this.save = this._save.bind(this)
     this.changeOrderClose = (date) => this.setState({orderClose:date})
@@ -40,8 +41,8 @@ export default class EditSku extends Component {
     const sid = parse(this.props.location.search).sid
     Request.get(`/api/toy/${id}`)
     .end((err,res) => {
-      const { name,cover } = res.body
-      this.setState({ id,name,cover })
+      const { name,cover,images } = res.body
+      this.setState({ id,name,cover,images })
     })
     if(sid){
       Request
@@ -167,7 +168,7 @@ export default class EditSku extends Component {
               <Col sm={3} className="control-label">
                 图片
               </Col>
-              <Col sm={4}>
+              <Col sm={3}>
                 <Dropzone accept="image/jpeg, image/png" onDrop={this.onDropImage} className="play-dropzone-style">
                   {
                     this.state.image ?
@@ -175,7 +176,24 @@ export default class EditSku extends Component {
                     :<div>将图片拖入此区域</div>
                   }
 								</Dropzone>
+                
               </Col>
+              
+            </FormGroup>
+            <FormGroup>
+              <Col sm={3} className="control-label">
+                图片库
+              </Col>
+              <Col sm={9}>
+                {
+                  this.state.images.map((image,i) => {
+                    return(
+                      <img onClick={() => this.setState({image})} className="mr-1 mb-1" src={CDN.show(image)} key={image} style={{maxHeight:100}} alt=""/>
+                    )
+                  })
+                }
+              </Col>
+              
             </FormGroup>
             <hr/>
             <FormGroup>

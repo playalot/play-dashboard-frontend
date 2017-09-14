@@ -64,11 +64,6 @@ export default class OrderList extends Component{
 			<div className="m-content">
 				<div className="m-portlet m-portlet--mobile m-portlet--tabs">
 					<div className="m-portlet__head">
-						<div className="m-portlet__head-caption">
-							<div className="m-portlet__head-title">
-								<h3 className="m-portlet__head-text">订单列表</h3>
-							</div>
-						</div>
 						<div className="m-portlet__head-tools">
 							<ul className="nav nav-tabs m-tabs-line m-tabs-line--left m-tabs-line--primary m-tabs-line--2x" role="tablist">
 								<li className="nav-item m-tabs__item">
@@ -97,7 +92,15 @@ export default class OrderList extends Component{
 									</a>
 								</li>
 							</ul>
-							<ul className="m-portlet__nav">
+							<ul className="m-portlet__nav" style={{textAlign:"left"}}>
+								<div className="form-group m-portlet__nav-item ">
+									<span className="input-group">
+										<input type="text" placeholder="请输入搜索关键字" value={this.state.filter} className="form-control" onChange={this.onChangeFilter}/>
+										<span className="input-group-btn"><button type="button" className="btn btn-default" onClick={this.search}>搜索</button></span>
+									</span>
+								</div>
+							</ul>
+							<ul className="m-portlet__nav" style={{textAlign:"left"}}>
 								<div className="form-group m-portlet__nav-item ">
 									<select className="form-control" value={month} onChange={this.onChangeMonth}>
 										<option value="">全部月份</option>
@@ -116,14 +119,34 @@ export default class OrderList extends Component{
 									</select>
 								</div>
 							</ul>
+							<ul className="m-portlet__nav">
+								<div className="form-group m-portlet__nav-item ">
+									<select className="form-control" value={year} onChange={this.onChangeYear}>
+										<option value="">全部年份</option>
+										<option value="2017">2017年</option>
+										<option value="2016">2016年</option>
+										<option value="2015">2015年</option>
+										<option value="2014">2014年</option>
+										<option value="2013">2013年</option>
+										<option value="2012">2012年</option>
+									</select>
+								</div>
+							</ul>
+							<ul className="m-portlet__nav">
+								<div className="form-group m-portlet__nav-item ">
+									<select className="form-control" value={this.state.merchant} onChange={(e) => this.setState({merchant:e.target.value},this.search)}>
+										<option value="">所有商家</option>
+										{
+											MERCHANTS.map((m,i) => <option key={`order-list-${m}`} value={m}>{m}</option>)
+										}
+									</select>
+								</div>
+							</ul>
 						</div>
 					</div>
 					<div className="m-portlet__body">
-						<div className="alert alert-primary alert-dismissible fade show">
-							<button type="button" className="close" data-dismiss="alert" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-							<h5>
+						<div className="alert m-alert--default">
+							<strong>
 								{year ? `${year}年`:''}
 								{month ? `${month}月`:''}&nbsp;
 								一共<strong>{this.props.summary.count}</strong>笔&nbsp;
@@ -147,23 +170,23 @@ export default class OrderList extends Component{
 								})()}
 								&nbsp;订单，
 								总计<strong>{this.props.summary.totalPrice}</strong>元
-							</h5>
+							</strong>
 						</div>
-					</div>
-					<OrderPanel/>
-					<ReactPaginate
-						previousLabel={<span>&laquo;</span>}
-						nextLabel={<span>&raquo;</span>}
-						breakLabel={<a>...</a>}
-						breakClassName={"break-me"}
-						pageCount={this.props.totalPages}
-						marginPagesDisplayed={2}
-						pageRangeDisplayed={5}
-						onPageChange={obj => this.goPage(obj.selected)}
-						containerClassName={"pagination"}
-						subContainerClassName={"pages pagination"}
-						forcePage={parsePage(this.props.location.search)}
-						activeClassName={"active"} />
+							<OrderPanel/>
+							<ReactPaginate
+								previousLabel={<span>&laquo;</span>}
+								nextLabel={<span>&raquo;</span>}
+								breakLabel={<a>...</a>}
+								breakClassName={"break-me"}
+								pageCount={this.props.totalPages}
+								marginPagesDisplayed={2}
+								pageRangeDisplayed={5}
+								onPageChange={obj => this.goPage(obj.selected)}
+								containerClassName={"pagination"}
+								subContainerClassName={"pages pagination"}
+								forcePage={parsePage(this.props.location.search)}
+								activeClassName={"active"} />
+						</div>
 					</div>
 				</div>
 			)

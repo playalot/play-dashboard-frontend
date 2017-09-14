@@ -45,6 +45,7 @@ export default class App extends Component{
 		return (
 			<div className="m-grid m-grid--hor m-grid--root m-page">
 				<PlayMainHeader/>
+				<PlayAliBaichuan/>
 				<div className="m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body">
 					<PlayMainSide/>
 					<div className="m-grid__item m-grid__item--fluid m-wrapper">

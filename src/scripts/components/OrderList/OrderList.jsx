@@ -67,27 +67,27 @@ export default class OrderList extends Component{
 						<div className="m-portlet__head-tools">
 							<ul className="nav nav-tabs m-tabs-line m-tabs-line--left m-tabs-line--primary m-tabs-line--2x" role="tablist">
 								<li className="nav-item m-tabs__item">
-									<a className="nav-link m-tabs__link active" data-toggle="tab" role="tab" onClick={()=> this.setState({status:''}, this.search)}>
+									<a className={`nav-link m-tabs__link ${status === '' ? 'active':''}`} data-toggle="tab" role="tab" onClick={()=> this.setState({status:''}, this.search)}>
 										全部
 									</a>
 								</li>
 								<li className="nav-item m-tabs__item">
-									<a className="nav-link m-tabs__link" data-toggle="tab" role="tab" onClick={()=> this.setState({status:'prepaid'},this.search)}>
+									<a className={`nav-link m-tabs__link ${status === 'prepaid' ? 'active':''}`} data-toggle="tab" role="tab" onClick={()=> this.setState({status:'prepaid'},this.search)}>
 										已预订
 									</a>
 								</li>
 								<li className="nav-item m-tabs__item">
-									<a className="nav-link m-tabs__link" data-toggle="tab" role="tab" onClick={()=> this.setState({status:'due'},this.search)}>
+									<a className={`nav-link m-tabs__link ${status === 'due' ? 'active':''}`} data-toggle="tab" role="tab" onClick={()=> this.setState({status:'due'},this.search)}>
 										待补款
 									</a>
 								</li>
 								<li className="nav-item m-tabs__item">
-									<a className="nav-link m-tabs__link" data-toggle="tab" role="tab" onClick={()=> this.setState({status:'paid'},this.search)}>
+									<a className={`nav-link m-tabs__link ${status === 'paid' ? 'active':''}`} data-toggle="tab" role="tab" onClick={()=> this.setState({status:'paid'},this.search)}>
 										已支付
 									</a>
 								</li>
 								<li className="nav-item m-tabs__item">
-									<a className="nav-link m-tabs__link" data-toggle="tab" role="tab" onClick={()=> this.setState({status:'done'},this.search)}>
+									<a className={`nav-link m-tabs__link ${status === 'done' ? 'active':''}`} data-toggle="tab" role="tab" onClick={()=> this.setState({status:'done'},this.search)}>
 										已完成
 									</a>
 								</li>

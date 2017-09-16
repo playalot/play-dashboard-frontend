@@ -40,11 +40,11 @@ export default class extends Component{
 						</div>
 					)
 				}
-				return <span className="label label-danger">等待买家补款</span>
+				return <span className="m-badge m-badge--danger m-badge--wide">等待买家补款</span>
 			case 'closed':
-				return <span className="label label-default">已关闭</span>
+				return <span className="m-badge  m-badge--secondary m-badge--wide">已关闭</span>
 			case 'done':
-				return <span className="label label-info">已完成</span>
+				return <span className="m-badge  m-badge--accent m-badge--wide">已完成</span>
 			default :
 				return ''
 		}
@@ -55,7 +55,7 @@ export default class extends Component{
 			<div className="m-section">
 				<div className="m-section__content">
 		        <table className="table table-bordered m-table">
-		        	<thead><tr><th>用户</th><th>商家</th><th>图片</th><th>订单</th><th>总金额</th><th>下单时间</th><th>更新时间</th><th>订单状态</th><th></th><th></th></tr></thead>
+		        	<thead><tr><th>用户</th><th>商家</th><th>图片</th><th>订单</th><th>总金额</th><th>下单时间</th><th>更新时间</th><th style={{width:"105px"}}>订单状态</th><th></th><th></th></tr></thead>
 		          <tbody>
 		            {orders.map((order,index) => {
 		              return (

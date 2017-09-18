@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Form, FormGroup, Col, FormControl, Row, Button, ControlLabel } from 'react-bootstrap'
 import Dropzone from 'react-dropzone'
 import DatePicker from 'react-datepicker'
 import Moment from 'moment'
@@ -119,10 +118,10 @@ export default class EditSku extends Component {
   }
   render() {
     return(
-      <div className="portlet bordered light">
-        <div className="portlet-title">
-          <div className="caption">
-						<span className="caption-subject font-blue-sharp bold uppercase">
+      <div>
+        <div>
+          <div>
+						<span className="text-primary">
 							{
 								this.state.isAddSku ? '添加商品库存':'修改商品库存'
 							}
@@ -136,39 +135,32 @@ export default class EditSku extends Component {
 					</div>
         </div>
         <div className="portlet-body py-5">
-          <Form horizontal onSubmit={(e) => e.preventDefault()}>
-            <FormGroup>
-              <Col sm={3} className="sm-2-label">
-                卖家
-              </Col>
-              <Col sm={4}>
-                <FormControl componentClass="select" value={this.state.merchant} onChange={(e) => this.setState({merchant:e.target.value})}>
+          <form onSubmit={(e) => e.preventDefault()}>
+            <div className="form-group row">
+              <label className="col-sm-3 col-form-label text-right">卖家</label>
+              <div className="col-sm-4">
+                <select className="form-control" value={this.state.merchant} onChange={(e) => this.setState({merchant:e.target.value})}>
                   { MERCHANTS.map(m => <option key={`edit-sku-${m}`} value={m}>{m}</option>) }
-                </FormControl>
-              </Col>
-            </FormGroup>
-            <FormGroup>
-              <Col sm={3} className="control-label">
-                版本
-              </Col>
-              <Col sm={4}>
-                <FormControl value={this.state.version} type="text" onChange={(e) => this.setState({version:e.target.value})}/>
-                <span className="help-block">默认为普通版</span>
-              </Col>
-            </FormGroup>
-            <FormGroup>
-              <Col sm={3} className="control-label">
-                库存数量
-              </Col>
-              <Col sm={4}>
-                <FormControl value={this.state.quantity} type="number" onChange={(e) => this.setState({quantity:e.target.value})}/>
-              </Col>
-            </FormGroup>
-            <FormGroup>
-              <Col sm={3} className="control-label">
-                图片
-              </Col>
-              <Col sm={3}>
+                </select>
+
+              </div>
+            </div>
+            <div className="row mb-2">
+              <label className="col-3 col-form-label text-right">版本</label>
+              <div className="col-sm-4">
+                <input className="form-control" value={this.state.version} type="text" onChange={(e) => this.setState({version:e.target.value})}/>
+                <small className="form-text text-muted">默认为普通版</small>
+              </div>
+            </div>
+            <div className="row mb-2">
+              <label className="col-3 col-form-label text-right">库存数量</label>
+              <div className="col-sm-4">
+                <input className="form-control" value={this.state.quantity} type="number" onChange={(e) => this.setState({quantity:e.target.value})}/>
+              </div>
+            </div>
+            <div className="row mb-2">
+              <label className="col-3 col-form-label text-right">图片</label>
+              <div className="col-sm-4">
                 <Dropzone accept="image/jpeg, image/png" onDrop={this.onDropImage} className="play-dropzone-style">
                   {
                     this.state.image ?
@@ -176,15 +168,11 @@ export default class EditSku extends Component {
                     :<div>将图片拖入此区域</div>
                   }
 								</Dropzone>
-                
-              </Col>
-              
-            </FormGroup>
-            <FormGroup>
-              <Col sm={3} className="control-label">
-                图片库
-              </Col>
-              <Col sm={9}>
+              </div>
+            </div>
+            <div className="row">
+              <label className="col-3 col-form-label text-right">图片库</label>
+              <div className="col-sm-9">
                 {
                   this.state.images.map((image,i) => {
                     return(
@@ -192,98 +180,82 @@ export default class EditSku extends Component {
                     )
                   })
                 }
-              </Col>
-              
-            </FormGroup>
+              </div>
+            </div>
             <hr/>
-            <FormGroup>
-              <Col sm={3} className="control-label">
-                购买类型
-              </Col>
-              <Col sm={4} className="mt-2">
+            <div className="row">
+              <label className="col-3 col-form-label text-right">购买类型</label>
+              <div className="col-sm-4 my-auto">
                 <label>
                   <input type="radio" name="type" value="inStock" onChange={(e) => this.setState({type:e.target.value})} checked={this.state.type==='inStock'}/>现货
                 </label>&nbsp;&nbsp;
                 <label>
                   <input type="radio" name="type" value="preOrder" onChange={(e) => this.setState({type:e.target.value})} checked={this.state.type==='preOrder'}/>预定
                 </label>
-              </Col>
-            </FormGroup>
+              </div>
+            </div>
             {
               this.state.type === 'preOrder' ?
-              <FormGroup>
-                <Col sm={3} className="control-label">
-                  定金
-                </Col>
-                <Col sm={4}>
-                  <FormControl value={this.state.prepay} type="number" onChange={(e) => this.setState({prepay:e.target.value})}/>
-                </Col>
-              </FormGroup>
+              <div className="row mb-2">
+                <label className="col-3 col-form-label text-right">定金</label>
+                <div className="col-sm-4">
+                  <input className="form-control" value={this.state.prepay} type="number" onChange={(e) => this.setState({prepay:e.target.value})}/>
+                </div>
+              </div>
               :null
             }
             {
               this.state.type === 'preOrder' ?
-              <FormGroup>
-                <Col sm={3} className="control-label">
-                  截止时间
-                </Col>
-                <Col sm={4} className="mt-2">
+              <div className="row mb-2">
+                <label className="col-3 col-form-label text-right">截止时间</label>
+                <div className="col-sm-4">
                   <DatePicker
                     selected={this.state.orderClose}
                     onChange={this.changeOrderClose}
                     dateFormat="YYYY/MM/DD"
                   />
-                </Col>
-              </FormGroup>
+                </div>
+              </div>
               :null
             }
-            <FormGroup>
-              <Col sm={3} className="control-label">
-                售价
-              </Col>
-              <Col sm={4}>
-                <FormControl value={this.state.price} type="number" onChange={(e) => this.setState({price:e.target.value})}/>
-              </Col>
-            </FormGroup>
-            <FormGroup>
-              <Col sm={3} className="control-label">
-                进货成本价
-              </Col>
-              <Col sm={4}>
-                <FormControl value={this.state.costPrice} type="number" onChange={(e) => this.setState({costPrice:e.target.value})}/>
-              </Col>
-            </FormGroup>
-            <FormGroup>
-              <Col sm={3} className="control-label">
-                运费
-              </Col>
-              <Col sm={4}>
-                <FormControl value={this.state.freight} type="number" onChange={(e) => this.setState({freight:e.target.value})}/>
-              </Col>
-            </FormGroup>
+            <div className="row mb-2">
+              <label className="col-3 col-form-label text-right">售价</label>
+              <div className="col-sm-4">
+                <input className="form-control" value={this.state.price} type="number" onChange={(e) => this.setState({price:e.target.value})}/>
+              </div>
+            </div>
+            <div className="row mb-2">
+              <label className="col-3 col-form-label text-right">进货成本价</label>
+              <div className="col-sm-4">
+                <input className="form-control" value={this.state.costPrice} type="number" onChange={(e) => this.setState({costPrice:e.target.value})}/>
+              </div>
+            </div>
+            <div className="row mb-2">
+              <label className="col-3 col-form-label text-right">运费</label>
+              <div className="col-sm-4">
+                <input className="form-control" value={this.state.freight} type="number" onChange={(e) => this.setState({freight:e.target.value})}/>
+              </div>
+            </div>
             <hr/>
-            <FormGroup>
-              <Col sm={3} className="control-label">
-                淘宝链接
-              </Col>
-              <Col sm={4}>
-                <FormControl value={this.state.tbUrl} type="text" onChange={(e) => this.setState({tbUrl:e.target.value})}/>
-                <span className="help-block">添加该产品淘宝链接</span>
-              </Col>
-            </FormGroup>
-            <FormGroup controlId="formControlsTextarea">
-              <Col sm={3} className="control-label">
-                备注
-              </Col>
-              <Col sm={4}>
-                <FormControl componentClass="textarea" value={this.state.note} onChange={(e) => this.setState({note:e.target.value})}/>
-              </Col>
-            </FormGroup>
-          </Form>
-          <div className="portlet-body py-5" style={{borderTop:'1px solid #eef1f5'}}>
-            <Col sm={3} smOffset={2}>
-              <button className="btn btn-outline green" type="button" onClick={this.save}>提交</button>
-            </Col>
+            <div className="row mb-2">
+              <label className="col-3 col-form-label text-right">淘宝链接</label>
+              <div className="col-sm-4">
+                <input className="form-control" value={this.state.tbUrl} type="text" onChange={(e) => this.setState({tbUrl:e.target.value})}/>
+                <small className="form-text text-muted">添加该产品淘宝链接</small>
+              </div>
+            </div>
+            <div className="row mb-2">
+              <label className="col-3 col-form-label text-right">备注</label>
+              <div className="col-sm-4">
+                <textarea className="form-control" value={this.state.note} onChange={(e) => this.setState({note:e.target.value})}></textarea>
+              </div>
+            </div>
+          </form>
+          <div className="row py-5">
+            <div className="col-sm-3"></div>
+            <div className="col-sm-3">
+              <button className="btn btn-outline-primary" type="button" onClick={this.save}>提交</button>
+            </div>
           </div>
         </div>
       </div>

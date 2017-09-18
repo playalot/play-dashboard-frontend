@@ -18,7 +18,7 @@ const mapActionCreators = {
 }
 
 const mapStateToProps = (state) => {
-	const { toys,totalPages,page,filter,query,sort,month,year } = state.toyReducer.toJS()
+	const { toys,totalPages,page,filter,query,sort,month,year,children } = state.toyReducer.toJS()
 	const { toyClass, toyLoaded } = state.tagClassReducer.toJS()
 	return {
 		toys,
@@ -31,6 +31,7 @@ const mapStateToProps = (state) => {
 		month,
 		toyClass,
 		toyLoaded,
+		children,
 	}
 }
 

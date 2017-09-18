@@ -23,7 +23,7 @@ export default class EditTag extends Component{
             cls:[],
 
             openTag:false,
-            children:''
+            children:[]
         }
         this.onDropImage = this._onDropImage.bind(this)
         this.onDropCover = this._onDropCover.bind(this)
@@ -38,6 +38,7 @@ export default class EditTag extends Component{
         this.changeNewKey = (e) => this.setState({newKey:e.target.value})
         this.changeNewValue = (e) => this.setState({newValue:e.target.value})
         this.handleTagsChange = (alias) => { this.setState({ alias }) }
+        this.handleChildrenChange = (children) => { this.setState({ children }) }
         this.submit = this._submit.bind(this)
         this.stop = (e) => {
             if(e.keyCode === 13){
@@ -65,7 +66,7 @@ export default class EditTag extends Component{
                     otherInfo:res.body.otherInfo || [],
                     alias: res.body.alias.length ? res.body.alias : [],
                     cls:res.body.cls.length ? res.body.cls : [],
-                    children:res.body.children || ''
+                    children:res.body.children || []
                 })
             })
     }
@@ -240,9 +241,10 @@ export default class EditTag extends Component{
                     </div>
                     <div className="row mb-2">
                         <label className="col-sm-2 col-form-label text-right">子类</label>
-                        <div className="col-sm-4">
-                            <input className="form-control" type="text" value={this.state.children} onChange={e => this.setState({children:e.target.value})}  />
+                        <div className="col-sm-9 my-auto">
+                            <TagsInput inputProps={{ placeholder: '添加子类'}} value={this.state.children} onChange={(children) => this.handleChildrenChange(children)} />
                         </div>
+                       
                     </div>
                     <div className="row mb-2">
                         <label className="col-sm-2 col-form-label text-right">详细描述</label>

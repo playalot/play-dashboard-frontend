@@ -5,7 +5,7 @@ import {
     TOY_ADD_TAG,TOY_REMOVE_TAG
 } from '../actions/toyAction'
 
-export default (state = Immutable.fromJS({ toys: [],totalPages:100,filter:'',query:'',sort:'created',month:'',year:'',toyResults:[] }),action)=>{
+export default (state = Immutable.fromJS({ toys: [],totalPages:100,filter:'',query:'',sort:'created',month:'',year:'',toyResults:[],children:[] }),action)=>{
     switch (action.type) {
         case TOL_RECEIVE_TOY:
             return state
@@ -17,6 +17,7 @@ export default (state = Immutable.fromJS({ toys: [],totalPages:100,filter:'',que
                 .set('sort',action.sort)
                 .set('year',action.year)
                 .set('month',action.month)
+                .updateIn(['children'],(children) => children.clear().concat(Immutable.fromJS(action.children)))
         case TOL_TOGGLE_R18:
         	return state.updateIn(['toys'], (toys) => {
         		return toys.update(

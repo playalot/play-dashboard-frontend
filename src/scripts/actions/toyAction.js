@@ -12,7 +12,7 @@ export const TOY_REMOVE_TOY_CLASS = 'TOY_REMOVE_TOY_CLASS'
 export const TOY_ADD_TAG = 'TOY_ADD_TAG'
 export const TOY_REMOVE_TAG = 'TOY_REMOVE_TAG'
 
-function receiveToy(res,totalPages,page,filter,query,sort,year,month) {
+function receiveToy(res,totalPages,page,filter,query,sort,year,month,children = []) {
     return {
         type: TOL_RECEIVE_TOY,
         res,
@@ -22,7 +22,8 @@ function receiveToy(res,totalPages,page,filter,query,sort,year,month) {
         query,
         sort,
         year,
-        month
+        month,
+        children
     }
 }
 function _toggleR18(id) {
@@ -160,7 +161,7 @@ export function getToy (page = 0) {
             .get(`/api/toys`)
             .query(params)
             .end((err, res) => {
-                dispatch(receiveToy(res.body.toys,res.body.totalPages,page,filter,query,sort,year,month))
+                dispatch(receiveToy(res.body.toys,res.body.totalPages,page,filter,query,sort,year,month,res.body.children))
             })
     }
 }
@@ -188,7 +189,7 @@ export function getToyBy (filter = '',query = '',sort = 'created',year,month) {
             .get(`/api/toys`)
             .query(params)
             .end((err, res) => {
-                dispatch(receiveToy(res.body.toys,res.body.totalPages,page,filter,query,sort,year,month))
+                dispatch(receiveToy(res.body.toys,res.body.totalPages,page,filter,query,sort,year,month,res.body.children))
             })
     }
 }

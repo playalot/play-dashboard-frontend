@@ -12,7 +12,6 @@ const mapActionCreators = {
 	addToy,
 	addToyTag,
 	removeToyTag,
-
 	fetchToyClass,
 	addToyClass,
 	removeToyClass,
@@ -30,7 +29,6 @@ const mapStateToProps = (state) => {
 		sort,
 		year,
 		month,
-
 		toyClass,
 		toyLoaded,
 	}

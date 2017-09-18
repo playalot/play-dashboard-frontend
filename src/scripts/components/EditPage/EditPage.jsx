@@ -347,37 +347,37 @@ export default class EditPage extends Component {
                     </div>
 
                     <div className="col-sm-4">
-                        <button className="btn btn-outline-primary pull-right" onClick={this.publish.bind(this)}>发布文章</button>
-                        <div style={{marginRight:15}} className="dropdown">
-                          <button type="button" className="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
-                            {(() => {
-                                switch(category){
-                                    case 'review':
-                                        return '评测'
-                                    case 'news':
-                                        return '新闻'
-                                    case 'info':
-                                        return '情报'
-                                    case 'interview':
-                                        return '访谈'
-                                    case 'essay':
-                                        return '随笔'
-                                    case 'knowledge':
-                                        return '干货'
-                                    default :
-                                        return ''
-                                }
-                            })()}
-                          </button>
+                        <div className="btn-group">
+                            <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                {(() => {
+                                    switch(category){
+                                        case 'review':
+                                            return '评测'
+                                        case 'news':
+                                            return '新闻'
+                                        case 'info':
+                                            return '情报'
+                                        case 'interview':
+                                            return '访谈'
+                                        case 'essay':
+                                            return '随笔'
+                                        case 'knowledge':
+                                            return '干货'
+                                        default :
+                                            return ''
+                                    }
+                                })()}
+                            </button>
                             <ul className="dropdown-menu">
-                                <li className="dropdown-item"><a onClick={() => this.setState({category:'review'},() => this.saveStorage())}>评测</a></li>
-                                <li className="dropdown-item"><a onClick={() => this.setState({category:'news'},() => this.saveStorage())}>新闻</a></li>
-                                <li className="dropdown-item"><a onClick={() => this.setState({category:'info'},() => this.saveStorage())}>情报</a></li>
-                                <li className="dropdown-item"><a onClick={() => this.setState({category:'interview'},() => this.saveStorage())}>访谈</a></li>
-                                <li className="dropdown-item"><a onClick={() => this.setState({category:'essay'},() => this.saveStorage())}>随笔</a></li>
-                                <li className="dropdown-item"><a onClick={() => this.setState({category:'knowledge'},() => this.saveStorage())}>干货</a></li>
+                                <li><a onClick={() => this.setState({category:'review'},() => this.saveStorage())}>评测</a></li>
+                                <li><a onClick={() => this.setState({category:'news'},() => this.saveStorage())}>新闻</a></li>
+                                <li><a onClick={() => this.setState({category:'info'},() => this.saveStorage())}>情报</a></li>
+                                <li><a onClick={() => this.setState({category:'interview'},() => this.saveStorage())}>访谈</a></li>
+                                <li><a onClick={() => this.setState({category:'essay'},() => this.saveStorage())}>随笔</a></li>
+                                <li><a onClick={() => this.setState({category:'knowledge'},() => this.saveStorage())}>干货</a></li>
                             </ul>
                         </div>
+                        <button className="btn btn-outline-primary pull-right" onClick={this.publish.bind(this)}>发布文章</button>
                     </div>
                 </div>
                 {

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Dropzone from 'react-dropzone'
 import CDN from '../../widgets/cdn'
-import { Modal, Button,Form, FormGroup, Col, FormControl, Row,Radio } from 'react-bootstrap'
 import Request from 'superagent'
 import Select from 'react-select'
 import PlayToyPanel from '../Common/PlayToyPanel'
@@ -32,25 +31,25 @@ export default class extends Component {
 			)
 		}
 	}
-  componentDidMount() {
-    Request
-    .get(`/api/recommend/${this.props.match.params.id}`)
-    .end((err,res) => {
-      if(!err) {
-        const { id,image,targetId,targetType,extra,title,type,toyIds } = res.body
-        this.setState({
-          id:id||'',
-          image:image||'',
-          targetId:targetId||'',
-          targetType:targetType||'page',
-          extra:extra||'',
-          title:title||' ',
-          type:type||'banner',
+	componentDidMount() {
+		Request
+		.get(`/api/recommend/${this.props.match.params.id}`)
+		.end((err,res) => {
+			if(!err) {
+				const { id,image,targetId,targetType,extra,title,type,toyIds } = res.body
+				this.setState({
+					id:id||'',
+					image:image||'',
+					targetId:targetId||'',
+					targetType:targetType||'page',
+					extra:extra||'',
+					title:title||' ',
+					type:type||'banner',
 					toyIds:toyIds||[]
-        })
-      }
-    })
-  }
+				})
+			}
+		})
+	}
   _onDropImage(images) {
     let formData = new FormData()
     formData.append('file', images[0])
@@ -132,7 +131,7 @@ export default class extends Component {
 			<div className="portlet bordered light">
 				<div className="portlet-title">
 					<div className="caption">
-						<span className="caption-subject font-blue-sharp bold uppercase">推荐编辑器</span>
+						<span className="text-primary">推荐编辑器</span>
 					</div>
 				</div>
 				<div className="portlet-body form py-5">
@@ -160,12 +159,12 @@ export default class extends Component {
 						</div>
 						<div className="form-group row">
 							<label className="col-sm-2 col-form-label">位置</label>
-							<div className="col-sm-8">
+							<div className="col-sm-8 my-auto">
 								{
 									typeOptions.map((type,i) => {
 										return(
-											<label className="form-check-label">
-												<input key={`type_${i}`} class="form-check-input" type="radio" checked={type.value == this.state.type} value={type.value} onChange={(e) => this.setState({type:e.target.value})}/>
+											<label key={`type_${i}`} className="form-check-label mx-1">
+												<input  className="form-check-input" type="radio" checked={type.value == this.state.type} value={type.value} onChange={(e) => this.setState({type:e.target.value})}/>
 												{type.label}
 											</label>
 										)
@@ -175,12 +174,12 @@ export default class extends Component {
 						</div>
 						<div className="form-group row">
 							<label className="col-sm-2 col-form-label">目标类型</label>
-							<div className="col-sm-8">
+							<div className="col-sm-8 my-auto">
 								{
 									radioOptions.map((targetType,i) => {
 										return(
-											<label className="form-check-label">
-												<input key={`target_type_${i}`} class="form-check-input" type="radio" value={targetType.value} onChange={(e) => this.setState({targetType:e.target.value})} checked={targetType.value == this.state.targetType}/>
+											<label key={`target_type_${i}`} className="form-check-label mx-1">
+												<input  className="form-check-input" type="radio" value={targetType.value} onChange={(e) => this.setState({targetType:e.target.value})} checked={targetType.value == this.state.targetType}/>
 												{targetType.label}
 											</label>
 										)
@@ -191,7 +190,7 @@ export default class extends Component {
 	
 						{
 							this.state.targetType === 'catalog' ?
-							<div className="form-group">
+							<div className="form-group row">
 								<label className="col-sm-2 col-form-label">商品</label>
 					
 								<div className="col-sm-8">
@@ -205,7 +204,7 @@ export default class extends Component {
 																let toyIds = this.state.toyIds
 																toyIds[index] = null
 																this.setState({toyIds})
-															}} className="btn btn-sm red btn-outline">删除</button>
+															}} className="btn btn-sm btn-outline-danger">删除</button>
 														</PlayToyPanel>
 													)
 												}
@@ -249,17 +248,17 @@ export default class extends Component {
 						</div>
 						<div className="form-group row">
 							<label className="col-sm-2 col-form-label">图片</label>
-							<div className="col-sm-8">
-								<p>{this.state.image}</p>
+							<div className="col-sm-8 my-auto">
+								<span>{this.state.image}</span>
 							</div>
 						</div>
 						
 			
 					</form>
-					<div className="portlet-body py-5 row" style={{borderTop:'1px solid #eef1f5'}}>
-						<div className="col-sm-2 ml-auto">
-							<button className="btn btn-outline green" type="button" onClick={this.submit}>Submit</button>
-
+					<div className="row">
+						<div className="col-sm-2"></div>
+						<div className="col-sm-2">
+							<button className="btn btn-outline-primary" type="button" onClick={this.submit}>Submit</button>
 						</div>
 					</div>
 				</div>

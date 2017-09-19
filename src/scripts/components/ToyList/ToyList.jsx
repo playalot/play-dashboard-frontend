@@ -233,7 +233,7 @@ export default class Toy extends Component{
 													<p className="card-text mb-0">{'厂商 ' + toy.info.company}</p>
 													<p className="card-text mb-0">{'发售 ' + toy.info.releaseString}</p>
 													<p className="card-text mb-0">{'价格 ' + toy.info.moneyString}</p>
-													<p className="card-text mb-0">{'本周热度 ' + toy.counts.hits}</p>
+													<p className="card-text mb-0">{'点击 ' + toy.counts.hits}/{'已买 ' + toy.counts.owns}/{'想要 ' + toy.counts.wish}</p>
 													<div>
 														{toy.tags.map(t => <span key={`toy_${toy.id}_tag_${t.id}`} className='badge badge-light m--margin-rt-3'><Link to={'/tag/'+t.id}>{t.text}</Link>{" "}<i className="la la-close" onClick={ () => this.props.removeToyTag(toy.id,t.id)}></i></span>)}
 													</div>

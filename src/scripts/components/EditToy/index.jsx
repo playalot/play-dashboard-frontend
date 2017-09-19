@@ -148,7 +148,7 @@ export default class EditToy extends Component {
 			gashapon.image = gashaponImage
 		}
 		if(gashaponPrice){
-			gashapon.price = gashaponPrice
+			gashapon.price = parseInt(gashaponPrice)
 			data.gashapon = gashapon
 		}
 		Object.keys(data).forEach(key => data[key]=== '' ? delete data[key] : '')

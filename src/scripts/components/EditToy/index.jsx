@@ -45,6 +45,7 @@ export default class EditToy extends Component {
 			character: '',
 			artist: '',
 			series: '',
+			seriesNo: '',
 			origin: '',
 			isR18: false,
 			otherInfo: [],
@@ -79,9 +80,9 @@ export default class EditToy extends Component {
 
 	  	this.submit = this._submit.bind(this)
 		this.removeImg = this._removeImg.bind(this)
-		
+
 		this.onDropGashaponImage = (files) => uploadImageWithWH(files[0],'toy/gashapon/').then(gashaponImage => this.setState({gashaponImage}))
-		
+
 	}
 	componentWillMount() {
 		Request
@@ -99,6 +100,7 @@ export default class EditToy extends Component {
 					character:res.body.info.character || '',
 					artist:res.body.info.artist || '',
 					series:res.body.info.series || '',
+					seriesNo:res.body.info.seriesNo || '',
 					origin:res.body.info.origin || '',
 					detail: res.body.info.detail || '',
 					isR18:res.body.isR18,
@@ -132,9 +134,9 @@ export default class EditToy extends Component {
     }
 	_submit() {
 	  	let { cover, name, nameRaw, release, money, currency, scale, detail, company,
-			character, artist, series, origin, isR18, otherInfo, images,gashaponImage,gashaponPrice } = this.state
+			character, artist, series, seriesNo, origin, isR18, otherInfo, images,gashaponImage,gashaponPrice } = this.state
 		const data = { cover, name, nameRaw, release, money:parseInt(money), currency,
-			scale, detail, company, character, artist, series, isR18, otherInfo, images }
+			scale, detail, company, character, artist, series, seriesNo, isR18, otherInfo, images }
 		const gashapon = {}
 		if(name.trim() === ''){
 			return alert('名字不能为空')
@@ -171,7 +173,6 @@ export default class EditToy extends Component {
 					</div>
 					<div className="d-flex justify-content-end align-items-center">
 						<ul className="nav nav-tabs m-tabs-line m-tabs-line--2x m-tabs-line--info" role="tablist">
-							
 							<li className="nav-item m-tabs__item">
 								<a className="nav-link m-tabs__link active" data-toggle="tab" href="#edit_toy_1" role="tab">
 								玩具信息
@@ -284,6 +285,12 @@ export default class EditToy extends Component {
 										</div>
 									</div>
 									<div className="row">
+										<label className="col-2 col-form-label text-right">系列编号</label>
+										<div className="col-sm-10">
+											<input type="text" className="edit-toy-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({seriesNo:e.target.value})} value={this.state.seriesNo}/>
+										</div>
+									</div>
+									<div className="row">
 										<label className="col-2 col-form-label text-right">角色</label>
 										<div className="col-sm-10">
 											<input type="text" className="edit-toy-input" onFocus={(e) => e.target.select()} onChange={(e) => this.setState({character:e.target.value})} value={this.state.character}/>
@@ -319,17 +326,17 @@ export default class EditToy extends Component {
 								<div className="col-sm-10">
 									<SortableList onRemove={this.removeImg} axis="xy" items={this.state.images} onSortEnd={this.onSortEnd} />
 								</div>
-								
+
 							</div>
 						</div>
 						<div className="tab-pane" id="edit_toy_2">
 							<div className="row">
 								<label className="col-2 col-form-label text-right">详细描述</label>
 								<div className="col-sm-10">
-									<textarea 
-										className="edit-toy-text-area" 
+									<textarea
+										className="edit-toy-text-area"
 										rows="3"
-										onChange={(e) => this.setState({detail:e.target.value})} 
+										onChange={(e) => this.setState({detail:e.target.value})}
 										value={this.state.detail}>
 									</textarea>
 								</div>
@@ -376,7 +383,7 @@ export default class EditToy extends Component {
 									</Dropzone>
 								</div>
 								<div className="col-sm-10">
-									<img style={{height:100}} src={CDN.show(this.state.gashaponImage) } alt="" /> 
+									<img style={{height:100}} src={CDN.show(this.state.gashaponImage) } alt="" />
 								</div>
 							</div>
 							<div className="row">

@@ -203,9 +203,9 @@ export default class Toy extends Component{
 								</ul>
 							</div>
 						</div>
-						
+
 						<div className="m-portlet__body ">
-							<div className="row d-flex justify-content-end p-3">
+							<div className="row d-flex justify-content-end pt-0">
 								{
 									this.props.children.map((child) => {
 										return(
@@ -227,7 +227,7 @@ export default class Toy extends Component{
 									return (
 										<Col className="col p-2" xs={4} sm={3} lg={2} key={'toy_'+toy.id}>
 											<div className="card">
-												<div className="card-header">{toy.name}</div>
+												<div className="card-header">{toy.name}<span className="badge badge-info">{toy.info.seriesNo}</span></div>
 												<img className="card-img-top" src={toy.cover} alt={toy.name} />
 												<div className="card-body">
 													<p className="card-text mb-0">{'厂商 ' + toy.info.company}</p>

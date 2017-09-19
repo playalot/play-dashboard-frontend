@@ -138,10 +138,10 @@ export function addToy() {
     }
 }
 
-export function getToy (page = 0) {
+export function getToy (page = 0,query = '') {
     return (dispatch,getState) => {
         let params = { page }
-        const { filter, query,sort,year,month } = getState().toyReducer.toJS()
+        const { filter,sort,year,month } = getState().toyReducer.toJS()
         if(filter) {
             params.filter = filter
         }

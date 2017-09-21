@@ -1,8 +1,6 @@
 import React,{ Component } from 'react'
 const _ = require('lodash')
-import {
-	Col, Row, Modal, Form, FormGroup, InputGroup, FormControl, Button, ButtonToolbar
-} from 'react-bootstrap'
+import Modal from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import CDN from '../../widgets/cdn'
 import ReactPaginate from 'react-paginate'
@@ -52,7 +50,7 @@ export default class TagList extends Component{
 	_recommendTag(tid) {
 		if (confirm('推荐这个标签?')) {
 			this.props.recommendTag(tid)
-    	}
+		}
 	}
 	_goPage(page) {
 		this.props.history.push(`/tags?page=${page}`)
@@ -71,110 +69,124 @@ export default class TagList extends Component{
 			modal = (
 				<div>
 					<Modal className='modal-container' animation={false} show={true} onHide={this.closeTag}>
-							<Modal.Body>
-								<strong>已选类别</strong>
-								<div>
-										{
-											this.state.selectedTag.cls.map(function(c){
-												return (
-													<span key={'t_c_m_'+c}
-													onClick={ () => this.removeTagClassification( this.state.selectedTag.id, c) }
-													className="label label-warning label-margin" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>);
-											}, this)
-										}
+						<Modal.Body>
+							<strong>已选类别</strong>
+							<div>
+								{
+									this.state.selectedTag.cls.map(function(c){
+										return (
+											<span key={'t_c_m_'+c}
+												onClick={ () => this.removeTagClassification( this.state.selectedTag.id, c) }
+												className="label label-warning label-margin" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>
+											)
+										}, this)
+									}
 								</div>
 								<strong>全部类别</strong>
 								<div>
-									{
-										cls.map((c,key) => {
-											return (
-												<span key={'c_m_'+key}
+									{cls.map((c,key) => {
+										return (
+											<span key={'c_m_'+key}
 												className='label label-info label-margin'
 												bsStyle='success'
 												onClick={() => this.setTagClassification(this.state.selectedTag.id, c.id) }>{c.name}</span>
 											)
-										})
-									}
-								</div>
-							</Modal.Body>
-					</Modal>
-				</div>
-			)
-		}
-		return(
-			<div className="content">
-				<div className="page-header">
-					<Form inline onSubmit={(e) => e.preventDefault()}>
-						<FormGroup>
-							<FormControl componentClass="select" placeholder="select" value={this.state.type} onChange={this.onChangeType}>
-								<option value="">全部</option>
-								<option value="company">品牌</option>
-								<option value="series">系列</option>
-								<option value="topic">话题</option>
-								<option value="person">人物</option>
-							</FormControl>
-						</FormGroup>
-						{' '}
-						<FormGroup style={{marginLeft:10}}>
-							<InputGroup>
-								<FormControl type="text" placeholder='输入标签关键字' onKeyDown={e => e.keyCode === 13 && this.search()} value={this.state.query} onChange={(e) => this.setState({query:e.target.value})} />
-								<InputGroup.Button>
-									<Button onClick={this.search}>搜索</Button>
-								</InputGroup.Button>
-							</InputGroup>
-						</FormGroup>
-					</Form>  
-				</div>
-				<Row>
-					{
-						this.props.tags.map( (tag) => {
-							return (
-								<Col xs={6} sm={3} lg={3} key={'u_'+tag.id}>
-									<div className="m-portlet m-portlet--mobile">
-										<div className="m-portlet__head p-3" style={{marginBottom:0}}>
-											<p className="my-1">{tag.text}</p>
-											<div className="d-flex justify-content-between">
-												<small className="text-muted">{tag.counts.posts} 照片</small>
-												<small className="text-muted">{tag.counts.follows} 关注</small>
-											</div>
-										</div>
-										<div className="m-portlet__body p3">
-											<img src={tag.image?CDN.show(tag.image):''} className="img-responsive w-100"/>
-											<div>
-												{tag.cls.map((c) => {
-													return (<span key={'t_c_'+tag.id+'_'+c} className="m-badge m-badge--rounded m-badge--warn m-badge--wide m--margin-rt-3" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>);
-												})}
-											</div>
-											<div className="clearfix">
-												<ButtonToolbar className="pull-right">
-													<Link to={'/tag/'+tag.id}><span style={{color:'#333'}} className="btn btn-sm"><i className="fa fa-edit"></i></span></Link>
-													<span className="btn btn-sm" onClick={ () => this.recommendTag(tag.id)}><i className="fa fa-bookmark-o"></i></span>
-													<span className="btn btn-sm" onClick={ () => this.openTag(tag)}><i className="fa fa-th-large"></i></span>
-													<span className="btn btn-sm" onClick={ () => this.deleteTag(tag.id) }><i className="fa fa-trash"></i></span>
-												</ButtonToolbar>
-											</div>
-										</div>
+										})}
 									</div>
-								</Col>
-							)
-						})
-					}
-				</Row>
-					<ReactPaginate
-						previousLabel={<span>&laquo;</span>}
-						nextLabel={<span>&raquo;</span>}
-						breakLabel={<a>...</a>}
-						breakClassName={"break-me"}
-						pageCount={this.props.totalPages}
-						marginPagesDisplayed={2}
-						pageRangeDisplayed={5}
-						onPageChange={obj => this.goPage(obj.selected)}
-						containerClassName={"pagination"}
-						subContainerClassName={"pages pagination"}
-						forcePage={parsePage(this.props.location.search)}
-						activeClassName={"active"} />
-		    {modal}
-	    </div>
-		)
-	}
-}
+								</Modal.Body>
+							</Modal>
+						</div>
+					)
+				}
+				return(
+					<div className="m-content">
+						<div className="m-portlet m-portlet--mobile m-portlet--tabs">
+							<div className="m-portlet__head">
+								<div className="m-portlet__head-tools clearfix">
+									<ul className="nav nav-tabs m-tabs-line m-tabs-line--left m-tabs-line--primary m-tabs-line--2x" role="tablist">
+										<li className="nav-item m-tabs__item">
+											<a className={`nav-link m-tabs__link ${this.state.type === '' ? 'active':''}`} data-toggle="tab" role="tab" onClick={()=> this.setState({type:''}, this.search)}>
+												全部
+											</a>
+										</li>
+										<li className="nav-item m-tabs__item">
+											<a className={`nav-link m-tabs__link ${this.state.type === 'company' ? 'active':''}`} data-toggle="tab" role="tab" onClick={()=> this.setState({type:'company'},this.search)}>
+												品牌
+											</a>
+										</li>
+										<li className="nav-item m-tabs__item">
+											<a className={`nav-link m-tabs__link ${this.state.type === 'series' ? 'active':''}`} data-toggle="tab" role="tab" onClick={()=> this.setState({type:'series'},this.search)}>
+												系列
+											</a>
+										</li>
+										<li className="nav-item m-tabs__item">
+											<a className={`nav-link m-tabs__link ${this.state.type === 'circle' ? 'active':''}`} data-toggle="tab" role="tab" onClick={()=> this.setState({type:'circle'},this.search)}>
+												圈子
+											</a>
+										</li>
+										<li className="nav-item m-tabs__item">
+											<a className={`nav-link m-tabs__link ${this.state.type === 'topic' ? 'active':''}`} data-toggle="tab" role="tab" onClick={()=> this.setState({type:'topic'},this.search)}>
+												话题
+											</a>
+										</li>
+									</ul>
+									<ul className="m-portlet__nav">
+										<div className="form-group m-portlet__nav-item ">
+											<span className="input-group">
+												<input type="text" placeholder="请输入搜索关键字" onKeyDown={e => e.keyCode === 13 && this.search()} value={this.state.query} className="form-control" onChange={(e) => this.setState({query:e.target.value})}/>
+												<span className="input-group-btn"><button type="button" className="btn btn-default" onClick={this.search}>搜索</button></span>
+											</span>
+										</div>
+									</ul>
+								</div>
+							</div>
+							<div className="m-portlet__body pt-2">
+								<div className="row">
+									{this.props.tags.map( (tag) => {
+										return (
+											<div className="col col-xs-4 col-sm-3 col-lg-2 p-2" key={'u_'+tag.id}>
+												<div className="card">
+													<div className="card-header p-2">{tag.text}</div>
+													<img className="card-img-top" src={tag.image?CDN.show(tag.image):''} alt={tag.text} />
+													<div className="card-body p-2">
+														<p className="card-text mb-0">{'照片 ' + tag.counts.posts}/{'关注 ' + tag.counts.follows}</p>
+														<div>
+															{tag.cls.map((c) => {
+																return (<span key={'t_c_'+tag.id+'_'+c} className="m-badge m-badge--rounded m-badge--warn m-badge--wide m--margin-rt-3" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>);
+															})}
+														</div>
+													</div>
+													<div className="card-footer p-2">
+														<div className="btn-toolbar" role="toolbar">
+															<div className="btn-group" role="group">
+																<Link to={'/tag/'+tag.id}><span style={{color:'#333'}} className="btn btn-sm"><i className="la la-edit"></i></span></Link>
+																<span className="btn btn-sm" onClick={ () => this.openTag(tag)}><i className="la la-th-large"></i></span>
+																<span className="btn btn-sm" onClick={ () => this.deleteTag(tag.id) }><i className="la la-trash"></i></span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										)
+									})}
+								</div>
+								<ReactPaginate
+									previousLabel={<span>&laquo;</span>}
+									nextLabel={<span>&raquo;</span>}
+									breakLabel={<a>...</a>}
+									breakClassName={"break-me"}
+									pageCount={this.props.totalPages}
+									marginPagesDisplayed={2}
+									pageRangeDisplayed={5}
+									onPageChange={obj => this.goPage(obj.selected)}
+									containerClassName={"pagination"}
+									subContainerClassName={"pages pagination"}
+									forcePage={parsePage(this.props.location.search)}
+									activeClassName={"active"} />
+									{modal}
+								</div>
+							</div>
+						</div>
+					)
+				}
+			}

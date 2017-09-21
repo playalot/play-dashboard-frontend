@@ -172,20 +172,20 @@ export default class OrderList extends Component{
 								总计<strong>{this.props.summary.totalPrice}</strong>元
 							</strong>
 						</div>
-							<OrderPanel/>
-							<ReactPaginate
-								previousLabel={<span>&laquo;</span>}
-								nextLabel={<span>&raquo;</span>}
-								breakLabel={<a>...</a>}
-								breakClassName={"break-me"}
-								pageCount={this.props.totalPages}
-								marginPagesDisplayed={2}
-								pageRangeDisplayed={5}
-								onPageChange={obj => this.goPage(obj.selected)}
-								containerClassName={"pagination"}
-								subContainerClassName={"pages pagination"}
-								forcePage={parsePage(this.props.location.search)}
-								activeClassName={"active"} />
+						<OrderPanel/>
+						<ReactPaginate
+							previousLabel={<span>&laquo;</span>}
+							nextLabel={<span>&raquo;</span>}
+							breakLabel={<a>...</a>}
+							breakClassName={"break-me"}
+							pageCount={this.props.totalPages}
+							marginPagesDisplayed={2}
+							pageRangeDisplayed={5}
+							onPageChange={obj => this.goPage(obj.selected)}
+							containerClassName={"pagination"}
+							subContainerClassName={"pages pagination"}
+							forcePage={parsePage(this.props.location.search)}
+							activeClassName={"active"} />
 						</div>
 					</div>
 				</div>

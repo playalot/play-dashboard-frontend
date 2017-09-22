@@ -226,7 +226,7 @@ export default class Post extends Component {
                 </div>
                 <div className="portlet-body">
                         {
-                        typeof post.video !== 'undefined' ?
+                        !!post.video ?
                         <div style={{position:'relative'}}>
                             <PlayPreImage src={post.preview} />
                             <div className="d-flex justify-content-center align-items-center" style={{position:'absolute',top:0,left:0,width:'100%',height:'100%'}}>

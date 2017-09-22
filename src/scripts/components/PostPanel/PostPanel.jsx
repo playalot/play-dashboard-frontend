@@ -169,7 +169,7 @@ export default class PostPanel extends Component{
 							<div className="m-widget3__item m--margin-bottom-0">
 								<div className="m-widget3__body">
 									<ButtonToolbar>
-										<CopyToClipboard text={post.id} onCopy={() => null}>
+										<CopyToClipboard text={post.id} onCopy={() => Toastr.success(`ID已复制到剪贴板`)}>
 											<span className="btn btn-sm" style={{fontSize:'1.3rem'}}><i className="la la-copy"></i></span>
 										</CopyToClipboard>
 										<span onClick={() => this.props.toggleRecommend(post.id,!post.isRec)} className={`${btnClass} ${post.isRec ? 'btn-info':''}`} style={{fontSize:'1.3rem'}}><i className="la la-thumbs-o-up"></i></span>

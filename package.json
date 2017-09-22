@@ -42,7 +42,8 @@
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.1.0",
-    "superagent": "^3.6.0"
+    "superagent": "^3.6.0",
+    "toastr": "^2.1.2"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.3",

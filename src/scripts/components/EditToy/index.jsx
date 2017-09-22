@@ -136,7 +136,7 @@ export default class EditToy extends Component {
 	  	let { cover, name, nameRaw, release, money, currency, scale, detail, company,
 			character, artist, series, seriesNo, origin, isR18, otherInfo, images,gashaponImage,gashaponPrice } = this.state
 		const data = { cover, name, nameRaw, release, money:parseInt(money), currency,
-			scale, detail, company, character, artist, series, seriesNo, isR18, otherInfo, images }
+			scale, detail, company, character, artist, series, seriesNo, origin, isR18, otherInfo, images }
 		const gashapon = {}
 		if(name.trim() === ''){
 			return alert('名字不能为空')

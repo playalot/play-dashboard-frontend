@@ -166,9 +166,8 @@ export function getToy (page = 0,query = '') {
     }
 }
 
-export function getToyBy (filter = '',query = '',sort = 'created',year,month) {
+export function getToyBy (page = 0, filter = '',query = '',sort = 'created',year,month) {
     return (dispatch,getState) => {
-        let page = 0
         let params = { page }
         if(filter) {
             params.filter = filter

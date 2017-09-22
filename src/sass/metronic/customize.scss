@@ -146,3 +146,8 @@
   }
 }
 
+.modal-backdrop{
+    &.in{
+        opacity: .5;
+    }
+}

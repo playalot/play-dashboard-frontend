@@ -90,7 +90,7 @@ export default class TagList extends Component{
 										return (
 											<span key={'t_c_m_'+c}
 												onClick={ () => this.removeTagClassification( this.state.selectedTag.id, c) }
-												className="label label-warning label-margin" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>
+												className="m-badge m-badge--rounded m-badge--warning m-badge--wide m--margin-rt-3 text-white" >{_.isEmpty(this.props.classifications) ? c : this.props.classifications[c].name}</span>
 											)
 										}, this)
 									}
@@ -100,8 +100,7 @@ export default class TagList extends Component{
 									{cls.map((c,key) => {
 										return (
 											<span key={'c_m_'+key}
-												className='label label-info label-margin'
-												bsStyle='success'
+												className='m-badge m-badge--rounded m-badge--warning m-badge--wide m--margin-rt-3 text-white'
 												onClick={() => this.setTagClassification(this.state.selectedTag.id, c.id) }>{c.name}</span>
 											)
 										})}

@@ -10,14 +10,15 @@ export const TL_DELETE_TAG = 'TL_DELETE_TAG'
 export const TL_RECEIVE_SUGGESTION = 'TL_RECEIVE_SUGGESTION'
 export const TL_CLEAR_SUGGESTION = 'TL_CLEAR_SUGGESTION'
 
-function receiveTag(res,totalPages,page,filter,query) {
+function receiveTag(res,totalPages,page,filter,query,children) {
     return {
         type: TL_RECEIVE_TAG,
         res,
         totalPages,
         page,
         filter,
-        query
+        query,
+        children
     }
 }
 function _setClassification(tid, cid) {
@@ -113,10 +114,10 @@ export const clearSuggestion = () => {
     }
 }
 
-export function getTag(page = 0) {
+export function getTag(page = 0,query = '') {
     return (dispatch,getState) => {
         let params = { page }
-        const { type, query } = getState().tagReducer.toJS()
+        const { type } = getState().tagReducer.toJS()
         if(type) {
             params.type = type
         }
@@ -127,14 +128,13 @@ export function getTag(page = 0) {
             .get(`/api/tags`)
             .query(params)
             .end((err, res) => {
-                dispatch(receiveTag(res.body.tags,res.body.totalPages,page,type,query))
+                dispatch(receiveTag(res.body.tags,res.body.totalPages,page,type,query,res.body.children))
             })
     }
 }
 
-export function getTagBy (type = '',query ='') {
+export function getTagBy (page = 0 ,type = '',query ='') {
     return (dispatch,getState) => {
-        let page = 0
         let params = { page }
         if(type) {
             params.type = type
@@ -146,7 +146,7 @@ export function getTagBy (type = '',query ='') {
             .get(`/api/tags`)
             .query(params)
             .end((err, res) => {
-                dispatch(receiveTag(res.body.tags,res.body.totalPages,page,type,query))
+                dispatch(receiveTag(res.body.tags,res.body.totalPages,page,type,query,res.body.children))
             })
     }
 }

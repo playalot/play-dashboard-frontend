@@ -9,7 +9,7 @@ import {
     TL_CLEAR_SUGGESTION,
 } from '../actions/tagAction'
 
-export default (state = Immutable.fromJS({ tags:[],totalPages:100,type:'',query:'',suggestions:[],tagLoaded:false }),action)=>{
+export default (state = Immutable.fromJS({ tags:[],totalPages:100,type:'',query:'',suggestions:[],tagLoaded:false,children:[] }),action)=>{
     switch (action.type) {
         case TL_RECEIVE_TAG:
             return state
@@ -18,6 +18,7 @@ export default (state = Immutable.fromJS({ tags:[],totalPages:100,type:'',query:
                 .set('page',action.page)
                 .set('type',action.filter)
                 .set('query',action.query)
+                .set('children',action.children)
         case TL_SET_CLASSIFICATION:
             return state.updateIn(['tags'], (tags) => {
                 return tags.update(

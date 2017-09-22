@@ -17,7 +17,7 @@ const mapActionCreators = {
 
 const mapStateToProps = (state) => {
 	const { classifications, loaded } = state.tagClassReducer.toJS()
-	const { tags,suggestions, tagLoaded, totalPages,page, type, query } = state.tagReducer.toJS()
+	const { tags,suggestions, tagLoaded, totalPages,page, type, query,children } = state.tagReducer.toJS()
 	return {
 		tags,
 		suggestions,
@@ -26,6 +26,7 @@ const mapStateToProps = (state) => {
 		type,
 		query,
 		tagLoaded,
+		children,
 
 		classifications,
 		classLoaded:loaded,

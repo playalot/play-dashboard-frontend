@@ -11,7 +11,7 @@ import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc'
 const SortableItem = SortableElement(({img,onRemove,index,i}) =>
 	<div style={{margin:'0 5px 5px 0'}}>
 		<button type="button" className="close" aria-label="Close" onClick={() => onRemove(i)}>
-			<span aria-hidden="true">&times;</span>
+			&times;
 		</button>
 		<img style={{height:100}} className="img-responsive" src={CDN.show(img)}/>
 	</div>

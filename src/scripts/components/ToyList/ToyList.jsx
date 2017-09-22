@@ -1,6 +1,6 @@
 import React,{ Component } from 'react'
 const _ = require('lodash')
-import Modal from 'react-bootstrap'
+import {Modal} from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import Request from 'superagent'
 import DatePicker from 'react-datepicker'

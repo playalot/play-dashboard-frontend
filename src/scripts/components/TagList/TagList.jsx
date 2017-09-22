@@ -1,10 +1,10 @@
 import React,{ Component } from 'react'
 const _ = require('lodash')
-import Modal from 'react-bootstrap'
+import {Modal} from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import CDN from '../../widgets/cdn'
 import ReactPaginate from 'react-paginate'
-import { parsePage } from '../../widgets/parse'
+import parse,{ parsePage } from '../../widgets/parse'
 export default class TagList extends Component{
 	constructor(props) {
 		super(props)
@@ -31,11 +31,18 @@ export default class TagList extends Component{
 		}
 		const { page,query,type } = this.props
 		if(typeof page === 'number') {
-			this.props.history.push(`/tags?page=${page}`)
+			let path = `/tags?page=${page}`
+			path += query ? `&query=${query}` : ``
+			this.props.history.push(path)
 			this.setState({type,query})
 		}else{
 			const ppage = parsePage(this.props.location.search)
-			this.goPage(ppage)
+			const pquery = parse(this.props.location.search).query || ''
+			this.setState({
+				query:pquery
+			},() => {
+				this.goPage(ppage)
+			})
 		}
 	}
 	_setTagClassification(tid,cid) {
@@ -53,12 +60,18 @@ export default class TagList extends Component{
 		}
 	}
 	_goPage(page) {
-		this.props.history.push(`/tags?page=${page}`)
-		this.props.getTag(page)
+		let { query } = this.state
+		let path = `/tags?page=${page}`
+		path += query ? `&query=${query}` : ``
+		this.props.history.push(path)
+		this.props.getTag(page,query)
 	}
 	_search() {
-		this.props.history.push(`/tags?page=0`)
-		this.props.getTagBy(this.state.type,this.state.query.trim())
+		const { type,query } = this.state
+		let path = `/tags?page=${this.props.page}`
+		path += query ? `&query=${query}` : ``
+		this.props.history.push(path)
+		this.props.getTagBy(this.props.page,type,query.trim())
 	}
 	render() {
 		let modal = (<div></div>)
@@ -141,6 +154,15 @@ export default class TagList extends Component{
 								</div>
 							</div>
 							<div className="m-portlet__body pt-2">
+								<div className="row d-flex justify-content-end p-2">
+									{
+										this.props.children.map((child) => {
+											return(
+												<span onClick={() => this.setState({query:child},this.search)} key={child} className="m-badge m-badge--rounded m-badge--info m-badge--wide m--margin-rt-3">{child}</span>
+											)
+										})
+									}
+								</div>
 								<div className="row">
 									{this.props.tags.map( (tag) => {
 										return (

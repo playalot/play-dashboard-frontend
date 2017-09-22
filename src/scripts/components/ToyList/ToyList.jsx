@@ -68,11 +68,11 @@ export default class Toy extends Component{
 		this.props.getToy(page,query)
 	}
 	_search() {
-		const { filter,query,sort,year,month,page } = this.state
-		let path = `/toys?page=${page}`
+		const { filter,query,sort,year,month } = this.state
+		let path = `/toys?page=${this.props.page}`
 		path += query ? `&query=${query}` : ``
 		this.props.history.push(path)
-		this.props.getToyBy(page,filter,query.trim(),sort,year,month)
+		this.props.getToyBy(this.props.page,filter,query.trim(),sort,year,month)
 	}
 	_addToyClass(tid,c) {
 		this.state.selectedToy.cls.push(c)

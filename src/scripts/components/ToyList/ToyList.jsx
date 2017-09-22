@@ -222,7 +222,7 @@ export default class Toy extends Component{
 										return (
 											<div className="col col-xs-4 col-sm-3 col-lg-2 p-2" key={'toy_'+toy.id}>
 												<div className="card">
-													<div className="card-header p-2">{toy.name}{' '}<span className="badge badge-info">{toy.info.seriesNo}</span></div>
+													<div className="card-header p-2">{toy.name}{' '}<span className="badge badge-info">{toy.info.seriesNo}</span>{' '}<span className="badge badge-warning">{toy.score.avgPts == 0 ? '' : toy.score.avgPts}</span></div>
 													<img className="card-img-top" src={toy.cover} alt={toy.name} />
 													<div className="card-body p-2">
 														<p className="card-text mb-0">{'厂商 ' + toy.info.company}</p>
@@ -239,7 +239,7 @@ export default class Toy extends Component{
 													<div className="card-footer p-2">
 														<div className="btn-toolbar" role="toolbar">
 															<div className="btn-group" role="group">
-																<CopyToClipboard text={toy.id} onCopy={() => null}>
+																<CopyToClipboard text={toy.id} onCopy={() => Toastr.success(`ID已复制到剪贴板`)}>
 																	<span className="btn btn-sm"><i className="la la-copy"></i></span>
 																</CopyToClipboard>
 																<Link to={'/toy/' + toy.id } ><span style={{color:'#333'}} className="btn btn-sm"><i className="la la-edit"></i></span></Link>

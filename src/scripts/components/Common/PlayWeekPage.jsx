@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Row, Col,FormControl } from 'react-bootstrap'
 import Request from 'superagent'
 
 export default class extends Component {
@@ -39,7 +38,7 @@ export default class extends Component {
 
     }
     _addImage() {
-        const { id,index,images,curIndex,comment } = this.state
+        let { id,index,images,curIndex,comment } = this.state
         if(!id.trim()){
             return
         }
@@ -53,8 +52,23 @@ export default class extends Component {
                     user:res.body.user,
                     comment
                 }
+
+                const flag = images.some((item) => {
+                    if(item){
+                        return item.user.id === res.body.user.id
+                    }else{
+                        return false
+                    }
+                })
+                if(flag) {
+                    return alert('入围用户重复')
+                }
+
                 images[curIndex] = image
-                this.setState({ images,id:'',index:'',comment:'' })
+                if(curIndex<9){
+                    curIndex++
+                }
+                this.setState({ images,id:'',index:'',comment:'',curIndex })
             }
         })
     }
@@ -197,9 +211,9 @@ export default class extends Component {
                             {
                                 images.map((image,i) => {
                                     return (
-                                        <div className="col-sm-3" onClick={() => this.onClick(i)} style={{padding:0,height:100,border:`4px solid ${i == curIndex ? '#0ff':'transparent'}`}} key={`play_week_page-${i}`} >
+                                        <div className="col-sm-3 d-flex justify-content-center align-items-center" onClick={() => this.onClick(i)} style={{padding:0,height:100,border:`4px solid ${i == curIndex ? '#0ff':'transparent'}`}} key={`play_week_page-${i}`} >
                                            {
-                                               image ? <img style={{width:'100%',height:'100%'}} className="play-img-cover" src={image['src']} alt=""/> : <span>{i}</span>
+                                               image ? <img style={{width:'100%',height:'100%'}} className="play-img-cover" src={image['src']} alt=""/> : <span>第{i+1}名</span>
                                            }
                                         </div>
                                     )
@@ -208,10 +222,10 @@ export default class extends Component {
                         </div>
                     </div>
                 </div>
-                <br/>
+                <hr/>
                 <div className="row">
                     <div className="col-sm-8">
-                        <div className="row">
+                        <div className="row mb-2">
                             <div className="col-sm-6">
                                 <input className="form-control" value={this.state.id} placeholder="ID" type="text" onChange={e => this.setState({id:e.target.value})}/>
                             </div>
@@ -226,14 +240,16 @@ export default class extends Component {
                         </div>
                     </div>
                     <div className="col-sm-4">
-                        <button className="btn red btn-outline" style={{marginRight:20}} onClick={this.addImage}>添加</button>
-                        <button className="btn blue btn-outline" onClick={this.addJson}>生成JSON</button>
+                        <button className="btn btn-outline-primary" style={{marginRight:20}} onClick={this.addImage}>添加</button>
                     </div>
                 </div>
-                <br/>
+                <hr/>
                 <div className="row">
-                    <div className="col-xs-12">
+                    <div className="col-sm-8">
                         <textarea style={{width:'100%',resize:'vertical'}} value={this.state.json} onChange={e => this.setState({json:e.target.value})}  rows="10"></textarea>
+                    </div>
+                    <div className="col-sm-4">
+                        <button className="btn btn-outline-primary" onClick={this.addJson}>生成JSON</button>
                     </div>
                 </div>
             </div>

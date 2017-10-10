@@ -1,5 +1,4 @@
 import React,{ Component } from 'react'
-import { Input,FormControl,Radio,Button,Row,Col } from 'react-bootstrap'
 import Request from 'superagent'
 import { Link } from 'react-router-dom'
 
@@ -9,13 +8,16 @@ export default class extends Component {
 	
 	  	this.state = {
 			toysdailyId:'',
-			toysdailyPage:'',
+			toysdailyPage:1,
 
 			toypeopleId:'',
 
 			newsgammeId:'',
 
 			goodsmileId:'',
+
+			moefigureId:'',
+			moefigurePage:1,
 
 			json:'',
 	  	}
@@ -34,7 +36,7 @@ export default class extends Component {
 		.end((err,res) => {
 			if(!err){
 				this.setState({
-					toysdailyId:'',toysdailyPage:''
+					toysdailyId:'',toysdailyPage:1
 				})
 			}
 		})
@@ -70,7 +72,7 @@ export default class extends Component {
 		Request.get('/api/crawl/moefigure')
 		.query({ id:moefigureId })
 		.end((err,res) => {
-			if(!err){ this.setState({ moefigureId:'' }) }
+			if(!err){ this.setState({ moefigureId:'',moefigurePage:1 }) }
 		})
 	}
 	_addPage() {
@@ -104,71 +106,76 @@ export default class extends Component {
 		return(
 			<div className="p-3">
 				<div>
-				    <h3>玩具日报</h3>
-				  	<Row>
-						<Col sm={4}>
-							<FormControl value={this.state.toysdailyId} placeholder="ID" type="text" onChange={e => this.setState({toysdailyId:e.target.value})}/>
-						</Col>
-						<Col sm={4}>
-							<FormControl value={this.state.toysdailyPage} placeholder="页数" type="text" onChange={e => this.setState({toysdailyPage:e.target.value})}/>
-						</Col>
-						<Col sm={4}>
-							<button className="btn red btn-outline" onClick={this.toysdaily}>爬取</button>
-						</Col>
-					</Row>
-				    <h3>玩具人</h3>
-					<Row>
-						<Col sm={8}>
-							<FormControl value={this.state.toypeopleId} placeholder="ID" type="text" onChange={e => this.setState({toypeopleId:e.target.value})}/>
-						</Col>
-						<Col sm={4}>
-							<button className="btn red btn-outline" onClick={this.toypeople}>爬取</button>
-						</Col>
-					</Row>
-				    <h3>宅宅新闻</h3>
-					<Row>
-						<Col sm={8}>
-							<FormControl value={this.state.newsgammeId} placeholder="ID" type="text" onChange={e => this.setState({newsgammeId:e.target.value})}/>
-						</Col>
-						<Col sm={4}>
-							<button className="btn red btn-outline" disabled={this.state.loading} onClick={this.newsgamme}>爬取</button>
-						</Col>
-					</Row>
-				    <h3>GoodSmile</h3>
-					<Row>
-						<Col sm={8}>
-							<FormControl value={this.state.goodsmileId} placeholder="ID" type="text" onChange={e => this.setState({goodsmileId:e.target.value})}/>
-						</Col>
-						<Col sm={4}>
-							<button className="btn red btn-outline" disabled={this.state.loading} onClick={this.goodsmile}>爬取</button>
-						</Col>
-					</Row>
-				    <h3>Moefigure</h3>
-					<Row>
-						<Col sm={8}>
-							<FormControl value={this.state.moefigureId} placeholder="ID" type="text" onChange={e => this.setState({moefigureId:e.target.value})}/>
-						</Col>
-						<Col sm={4}>
-							<button className="btn red btn-outline" disabled={this.state.loading} onClick={this.moefigure}>爬取</button>
-						</Col>
-					</Row>
-					<h3>添加JSON文章</h3>
-					<Row>
-						<Col sm={8}>
+				    <h4>玩具日报</h4>
+					<div className="row mb-3">
+						<div className="col-4">
+							<input className="form-control" value={this.state.toysdailyId} placeholder="ID" type="text" onChange={e => this.setState({toysdailyId:e.target.value})}/>
+						</div>
+						<div className="col-4">
+							<input className="form-control" value={this.state.toysdailyPage} placeholder="页数" type="text" onChange={e => this.setState({toysdailyPage:e.target.value})}/>
+						</div>
+						<div className="col-4">
+							<button className="btn btn-outline-primary" onClick={this.toysdaily}>爬取</button>
+						</div>
+					</div>
+
+				    <h4>玩具人</h4>
+					<div className="row mb-3">
+						<div className="col-8">
+							<input className="form-control" value={this.state.toypeopleId} placeholder="ID" type="text" onChange={e => this.setState({toypeopleId:e.target.value})}/>
+						</div>
+						<div className="col-4">
+							<button className="btn btn-outline-primary" onClick={this.toypeople}>爬取</button>
+						</div>
+					</div>
+				  
+				    <h4>宅宅新闻</h4>
+					<div className="row mb-3">
+						<div className="col-8">
+							<input className="form-control" value={this.state.newsgammeId} placeholder="ID" type="text" onChange={e => this.setState({newsgammeId:e.target.value})}/>
+						</div>
+						<div className="col-4">
+							<button className="btn btn-outline-primary" disabled={this.state.loading} onClick={this.newsgamme}>爬取</button>
+						</div>
+					</div>
+				    <h4>GoodSmile</h4>
+					<div className="row mb-3">
+						<div className="col-8">
+							<input className="form-control" value={this.state.goodsmileId} placeholder="ID" type="text" onChange={e => this.setState({goodsmileId:e.target.value})}/>
+						</div>
+						<div className="col-4">
+							<button className="btn btn-outline-primary" disabled={this.state.loading} onClick={this.goodsmile}>爬取</button>
+						</div>
+					</div>
+				    <h4>Moefigure</h4>
+					<div className="row mb-3">
+						<div className="col-4">
+							<input className="form-control" value={this.state.moefigureId} placeholder="ID" type="text" onChange={e => this.setState({moefigureId:e.target.value})}/>
+						</div>
+						<div className="col-4">
+							<input className="form-control" value={this.state.moefigurePage} placeholder="页数" type="text" onChange={e => this.setState({moefigurePage:e.target.value})}/>
+						</div>
+						<div className="col-4">
+							<button className="btn btn-outline-primary" disabled={this.state.loading} onClick={this.moefigure}>爬取</button>
+						</div>
+					</div>
+					<h4>添加JSON文章</h4>
+					<div className="row mb-3">
+						<div className="col-8">
 							<textarea onChange={(e) => this.setState({json:e.target.value})} value={this.state.json} style={{width:'100%',resize:'vertical'}}></textarea>
-						</Col>
-						<Col sm={4}>
-							<button className="btn red btn-outline"onClick={this.addPage}>添加</button>
-						</Col>
-					</Row>
-					<Row>
-						<Col sm={8}>
+						</div>
+						<div className="col-4">
+							<button className="btn btn-outline-primary"onClick={this.addPage}>添加</button>
+						</div>
+					</div>
+					<div className="row mb-3">
+						<div className="col-8">
 							<span style={{fontSize:24}}>每周精选</span>
-						</Col>
-						<Col sm={4}>
-							<Link to="/weekpage" className="btn red btn-outline">编辑</Link>
-						</Col>
-					</Row>
+						</div>
+						<div className="col-4">
+							<Link to="/weekpage" className="btn btn-outline-primary">编辑</Link>
+						</div>
+					</div>
 
 				</div>
 			</div>

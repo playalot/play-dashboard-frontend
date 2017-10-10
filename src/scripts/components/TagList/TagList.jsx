@@ -141,6 +141,11 @@ export default class TagList extends Component{
 												话题
 											</a>
 										</li>
+										<li className="nav-item m-tabs__item">
+											<a className={`nav-link m-tabs__link ${this.state.type === 'merchant' ? 'active':''}`} data-toggle="tab" role="tab" onClick={()=> this.setState({type:'merchant'},this.search)}>
+												商家
+											</a>
+										</li>
 									</ul>
 									<ul className="m-portlet__nav">
 										<div className="form-group m-portlet__nav-item ">

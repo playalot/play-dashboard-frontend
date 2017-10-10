@@ -225,7 +225,7 @@ export default class EditTag extends Component{
                                 <option value="person">真人</option>
                                 <option value="origin">原著</option>
                                 <option value="topic">话题</option>
-                                <option value="event">活动</option>
+                                <option value="merchant">商家</option>
                                 <option value="media">媒体</option>
                             </select>
                         </div>

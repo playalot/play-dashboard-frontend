@@ -1,7 +1,7 @@
 import React,{ Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link,withRouter } from 'react-router-dom'
 import Request from 'superagent'
-export default class extends Component {
+class PlayMainHeader extends Component {
     constructor(props) {
         super(props)
 		this.signOut = () => {
@@ -9,11 +9,19 @@ export default class extends Component {
                 window.location.href = '/signOut'
             }
         }
+        this.addToy = this._addToy.bind(this)
 	}
 	componentWillMount() {
 		!this.props.loaded && this.props.fetchInfo()
     }
- 
+    _addToy() {
+        if(confirm('创建一个新的玩具？')) {
+            Request.post(`/api/toy`)
+            .end((err,res) => {
+                this.props.history.push(`/toy/${res.body.id}`)
+            })
+        }
+    }
     render() {
         const { nickName, avatar, email } = this.props.user
         return(
@@ -76,17 +84,12 @@ export default class extends Component {
                                                 </li>
                                                 <hr/>
                                                 <li className="m-menu__item "  data-redirect="true" aria-haspopup="true">
-                                                    <a  href="header/actions.html" className="m-menu__link ">
-                                                        <i className="m-menu__link-icon flaticon-diagram"></i>
+                                                    <a className="m-menu__link " onClick={this.addToy}>
+                                                        <i className="m-menu__link-icon icon-rocket"></i>
                                                         <span className="m-menu__link-title">
                                                             <span className="m-menu__link-wrap">
                                                                 <span className="m-menu__link-text">
-                                                                    Generate Reports
-                                                                </span>
-                                                                <span className="m-menu__link-badge">
-                                                                    <span className="m-badge m-badge--success">
-                                                                        2
-                                                                    </span>
+                                                                    创建玩具
                                                                 </span>
                                                             </span>
                                                         </span>
@@ -318,3 +321,6 @@ export default class extends Component {
         )
     }
 }
+
+
+export default withRouter(PlayMainHeader)

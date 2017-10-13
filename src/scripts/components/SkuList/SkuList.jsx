@@ -147,7 +147,7 @@ export default class SkuList extends Component{
 								<th onClick={() => this.sortBy('sold')} style={{minWidth:60}}> 销量 <span className={`fa ${orderBy == 'sold' ? ( asc ? 'font-purple fa-sort-up' : 'font-purple fa-sort-down' ):'fa-sort font-grey'}`}></span></th>
 								<th>
 									<div className="btn-group">
-										<button type="button" className="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+										<button type="button" className="btn btn-sm btn-outline-dark dropdown-toggle" data-toggle="dropdown">
 											{this.state.merchant ? this.state.merchant : '所有商家'}
 										</button>
 										<ul className="dropdown-menu">
@@ -158,7 +158,7 @@ export default class SkuList extends Component{
 								</th>
 								<th>
 									<div className="btn-group">
-										<button type="button" className="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+										<button type="button" className="btn btn-sm btn-outline-dark dropdown-toggle" data-toggle="dropdown">
 											{this.state.type ? (this.state.type === 'inStock' ? '现货':'预售') : '全部类型'}
 										</button>
 										<ul className="dropdown-menu">
@@ -273,12 +273,12 @@ class SkuTr extends Component {
 						<span className="label label-warning label-margin">
 							预售
 						</span> :
-						<span className="label label-info label-margin">现货</span>
+						<span className="badge badge-primary label-margin">现货</span>
 					}
 					<br/>
 					{
 						stock.type === 'preOrder' && stock.preOrder.orderClose < Date.now() ?
-						<span className="label label-danger  label-margin">已结单</span>
+						<span className="badge badge-warning text-white label-margin">已结单</span>
 						:null
 					}
 				</td>
@@ -297,9 +297,9 @@ class SkuTr extends Component {
 					}
 				</td>
 				<td>
-					<Link className="btn dark btn-outline btn-sm" to={`/sku/${sku.id}?sid=${stock.stockId}`}>修改</Link>
+					<Link className="btn btn-outline-info btn-sm mr-1" to={`/sku/${sku.id}?sid=${stock.stockId}`}>修改</Link>
 					<div className="btn-group">
-						<button type="button" className="btn dark btn-sm btn-outline dropdown-toggle" data-toggle="dropdown">
+						<button type="button" className="btn btn-sm btn-outline-dark dropdown-toggle" data-toggle="dropdown">
 							更多
 						</button>
 						<ul className="dropdown-menu pull-right">

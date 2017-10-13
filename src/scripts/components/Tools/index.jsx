@@ -68,9 +68,9 @@ export default class extends Component {
 		})
 	}
 	_moefigure() {
-		const { moefigureId } = this.state
+		const { moefigureId,moefigurePage } = this.state
 		Request.get('/api/crawl/moefigure')
-		.query({ id:moefigureId })
+		.query({ id:moefigureId,pages:moefigurePage })
 		.end((err,res) => {
 			if(!err){ this.setState({ moefigureId:'',moefigurePage:1 }) }
 		})

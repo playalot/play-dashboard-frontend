@@ -38,11 +38,10 @@
 //react-vis
 @import "~react-vis/dist/styles/plot";
 
-// #app{
-//     width:100%;
-//     height:100%;
-//     position: relative;
-// }
+#app{
+    display:flex;
+    flex:1;
+}
 body {
   font-family: PingFang SC,Open Sans,sans-serif;
   font-weight: normal;

@@ -98,7 +98,7 @@ export default class EditTag extends Component{
     }
     _onDropImage(files) {
         let file = files[0];
-        let uploadKey = `tag/image/${this.state.id}.${Math.random().toString().substring(2,12)}`
+        let uploadKey = `tag/image/${this.state.id}_${Math.random().toString().substring(2,12)}`
         Request
             .get(`/api/uptoken?key=${uploadKey}`)
             .end((err,res) => {
@@ -118,7 +118,7 @@ export default class EditTag extends Component{
     }
     _onDropCover(files) {
         let file = files[0];
-        let uploadKey = `tag/cover/${this.state.id}.${Math.random().toString().substring(2,12)}`
+        let uploadKey = `tag/cover/${this.state.id}_${Math.random().toString().substring(2,12)}`
         Request
             .get(`/api/uptoken?key=${uploadKey}`)
             .end((err,res) => {

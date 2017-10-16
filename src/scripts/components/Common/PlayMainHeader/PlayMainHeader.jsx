@@ -10,6 +10,7 @@ class PlayMainHeader extends Component {
             }
         }
         this.addToy = this._addToy.bind(this)
+        this.addDraft = this._addDraft.bind(this)
 	}
 	componentWillMount() {
 		!this.props.loaded && this.props.fetchInfo()
@@ -21,6 +22,17 @@ class PlayMainHeader extends Component {
                 this.props.history.push(`/toy/${res.body.id}`)
             })
         }
+    }
+    _addDraft() {
+        if(confirm('创建一个新草稿？')){
+			 Request
+            .post(`/api/recommend?place=draft`)
+            .end((err,res) => {
+				if(!err){
+					this.props.history.push(`/recommend/${res.body.id}`)
+				}
+            })
+		}
     }
     render() {
         const { nickName, avatar, email } = this.props.user
@@ -58,7 +70,7 @@ class PlayMainHeader extends Component {
                                         <a  href="#" className="m-menu__link m-menu__toggle">
                                             <i className="m-menu__link-icon flaticon-add"></i>
                                             <span className="m-menu__link-text">
-                                                Actions
+                                                操作
                                             </span>
                                             <i className="m-menu__hor-arrow la la-angle-down"></i>
                                             <i className="m-menu__ver-arrow la la-angle-right"></i>
@@ -90,6 +102,18 @@ class PlayMainHeader extends Component {
                                                             <span className="m-menu__link-wrap">
                                                                 <span className="m-menu__link-text">
                                                                     创建玩具
+                                                                </span>
+                                                            </span>
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li className="m-menu__item "  data-redirect="true" aria-haspopup="true">
+                                                    <a className="m-menu__link " onClick={this.addDraft}>
+                                                        <i className="m-menu__link-icon icon-directions"></i>
+                                                        <span className="m-menu__link-title">
+                                                            <span className="m-menu__link-wrap">
+                                                                <span className="m-menu__link-text">
+                                                                    创建banner
                                                                 </span>
                                                             </span>
                                                         </span>

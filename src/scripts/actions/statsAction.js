@@ -5,17 +5,18 @@ export const HOME_RECEIVE_ACTIVITIES_C = 'HOME_RECEIVE_ACTIVITIES_C'
 export const HOME_RECEIVE_ACTIVITIES_O = 'HOME_RECEIVE_ACTIVITIES_O'
 
 function receiveStats(res) {
-    res.last.map((item,i) => {
-        item.x = item.d
-        item.y = item.n
-    })
-    res.aggregate.map((item,i) => {
-        item.x = item.d
-        item.y = item.n
+    const { last,aggregate } = res
+    const data = last.map((item,i) => {
+        return{
+            name:item.d + '日',
+            last:item.n,
+            aggregate:aggregate[i]['n']
+        }
     })
     return {
         type: HOME_RECEIVE_STATS,
-        res
+        res,
+        data
     }
 }
 

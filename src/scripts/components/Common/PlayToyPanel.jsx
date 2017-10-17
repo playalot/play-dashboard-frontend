@@ -25,7 +25,7 @@ export default class PlayToyPanel extends Component {
                 <div key={`catalog_${toy.id}`} className="d-flex p-2 justify-content-between align-items-center">
                     <div className="d-flex">
                         <img style={{width:50,height:50}} className="play-img-cover" src={CDN.show(toy.cover)} alt=""/>
-                        <h5 className="pl-2">{toy.name}</h5>
+                        <h5 className="pl-2" style={{flex:1}}>{toy.name}</h5>
                     </div>
                     {this.props.children}
                 </div>

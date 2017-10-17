@@ -91,13 +91,13 @@ export default class PagePanel extends Component {
                   	<td style={{whiteSpace:'inherit'}}>
 	                  	{
 	                  		page.tags.map((tag,index) => {
-	                  			return (<span className="label label-info label-margin" key={`page_tag_${index}`}>{tag}</span>)
+	                  			return (<span className="m-badge m-badge--rounded m-badge--info m-badge--wide m--margin-rt-3" key={`page_tag_${index}`}>{tag}</span>)
 	                  		})
 	                  	}
 	                  	{
 												page.toys.map((toy, index) => {
 	                  		 	return (
-														<span key={`toy_${index}`} className="label label-success label-margin">
+														<span key={`toy_${index}`} className="m-badge m-badge--rounded m-badge--success m-badge--wide m--margin-rt-3">
 	                  			 		{ toy.name } <i className="fa fa-close" onClick={ () => this.removeToy(page.id)}></i>
 	                  			 	</span>
 	                  			 )
@@ -108,7 +108,7 @@ export default class PagePanel extends Component {
 	                  	<div className="page-flex-column">
 	                    	<span style={{marginBottom:10}}>{page.counts.views} views</span>
 	                    	<span onClick={() => this.setState({timePageId:page.id})}>
-	                    		{Moment.unix(page.created / 1000).fromNow()}
+	                    		{Moment(page.created).fromNow()}
 	                    	</span>
 	                  	</div>
 	                  </td>

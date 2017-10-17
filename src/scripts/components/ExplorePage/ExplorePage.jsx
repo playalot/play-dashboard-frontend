@@ -1,5 +1,4 @@
 import React,{ Component } from 'react'
-import { Row, Col, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import Request from 'superagent'
 export default class ExplorePage extends Component{
@@ -28,7 +27,7 @@ export default class ExplorePage extends Component{
 	render() {
 		return(
 			<div>
-				<Row>
+				<div className="row">
 					<div className="m-portlet w-100">
 						<div className="m-portlet__body">
 							<div className="d-flex justify-content-between align-items-center">
@@ -189,162 +188,7 @@ export default class ExplorePage extends Component{
 							</div>
 						</div>
 					</div>
-					{/* <Col xs={12}>
-						<div className="portlet light ">
-							<div className="portlet-title tabbable-line">
-								<div className="caption caption-md">
-									<button onClick={this.addDraft} className="btn green btn-outline">创建草稿</button>
-								</div>
-								<ul className="nav nav-tabs">
-									<li className="active">
-										<a href="#explore_1" data-toggle="tab">发现页banner</a>
-									</li>
-									<li>
-										<a href="#explore_2" data-toggle="tab">发现页主题</a>
-									</li>
-									<li>
-										<a href="#explore_3" data-toggle="tab">玩具页Banner</a>
-									</li>
-									<li>
-										<a href="#explore_4" data-toggle="tab">草稿</a>
-									</li>
-								</ul>
-							</div>
-							<div className="portlet-body">
-								<div className="tab-content">
-									<div className="tab-pane active" id="explore_1">
-										{
-											this.props.banners ?
-											<table className="table table-striped">
-												<tbody>
-													{
-														this.props.banners.map((banner,index) =>{
-															return(
-																<tr key={'b_'+banner.id+index}>
-																	<td>
-																		<img src={banner.image} style={{width:150}} />
-																	</td>
-																	<td>
-																		<span>{banner.title}</span>
-																	</td>
-																	<td style={{textAlign:'right'}}>
-																		<Link className="btn btn-circle btn-icon-only btn-default" to={`/recommend/${banner.id}`}>
-																			<i className="fa fa-edit"></i>
-																		</Link>
-																		<a className="btn btn-circle btn-icon-only btn-default" onClick={() => this.deleteBanner(banner.id)}>
-																			<i className="fa fa-trash"></i>
-																		</a>
-																	</td>
-																</tr>
-															)
-														})
-													}
-												</tbody>
-											</table>
-											:null
-										}
-									</div>
-									<div className="tab-pane" id="explore_2">
-										{
-											this.props.themes ?
-											<table className="table table-striped">
-												<tbody>
-													{
-														this.props.themes.map((topic,index) =>{
-															return(
-																<tr key={'b_'+topic.id+index}>
-																	<td>
-																		<img src={topic.image} style={{width:150}} />
-																	</td>
-																	<td>
-																		<span>{topic.title}</span>
-																	</td>
-																	<td style={{textAlign:'right'}}>
-																		<Link className="btn btn-circle btn-icon-only btn-default" to={`/recommend/${topic.id}`}>
-																			<i className="fa fa-edit"></i>
-																		</Link>
-																		<a className="btn btn-circle btn-icon-only btn-default" onClick={() => this.deleteTopic(topic.id)}>
-																			<i className="fa fa-trash"></i>
-																		</a>
-																	</td>
-																</tr>
-															)
-														})
-													}
-												</tbody>
-											</table>
-											:null
-										}
-									</div>
-									<div className="tab-pane" id="explore_3">
-										{
-											this.props.toys?
-											<table className="table table-striped">
-												<tbody>
-													{
-														this.props.toys.map((toy,index) =>{
-															return(
-																<tr key={'b_'+toy.id+index}>
-																	<td>
-																		<img src={toy.image} style={{width:150}} />
-																	</td>
-																	<td>
-																		<span>{toy.title}</span>
-																	</td>
-																	<td style={{textAlign:'right'}}>
-																		<Link className="btn btn-circle btn-icon-only btn-default" to={`/recommend/${toy.id}`}>
-																			<i className="fa fa-edit"></i>
-																		</Link>
-																		<a className="btn btn-circle btn-icon-only btn-default" onClick={() => this.deleteToy(toy.id)}>
-																			<i className="fa fa-trash"></i>
-																		</a>
-																	</td>
-																</tr>
-															)
-														})
-													}
-												</tbody>
-											</table>
-											:null
-										}
-									</div>
-									<div className="tab-pane" id="explore_4">
-										{
-											this.props.drafts ?
-											<table className="table table-striped">
-												<tbody>
-													{
-														this.props.drafts.map((draft,index) =>{
-															return(
-																<tr key={'b_'+draft.id+index}>
-																	<td>
-																		<img src={draft.image} style={{width:150}} />
-																	</td>
-																	<td>
-																		<span>{draft.title}</span>
-																	</td>
-																	<td style={{textAlign:'right'}}>
-																		<Link className="btn btn-circle btn-icon-only btn-default" to={`/recommend/${draft.id}`}>
-																			<i className="fa fa-edit"></i>
-																		</Link>
-																		<a className="btn btn-circle btn-icon-only btn-default" onClick={() => this.deleteDraft(draft.id)}>
-																			<i className="fa fa-trash"></i>
-																		</a>
-																	</td>
-																</tr>
-															)
-														})
-													}
-												</tbody>
-											</table>
-											:null
-										}
-									</div>
-								</div>
-							</div>
-						</div>
-					</Col> */}
-				</Row>
+				</div>
 			</div>
 		)
 	}

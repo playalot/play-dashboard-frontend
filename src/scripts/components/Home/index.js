@@ -10,13 +10,13 @@ const mapActionCreators = {
 
 const mapStateToProps = (state) => {
     const { 
-        stats, loaded,
+        stats, loaded,data,
         activitiesC,pageC,totalPagesC,
         activitiesO,pageO,totalPagesO
 
     }  = state.stats.toJS()
     return {
-        stats, loaded,
+        stats, loaded,data,
         activitiesC,pageC,totalPagesC,
         activitiesO,pageO,totalPagesO
     }

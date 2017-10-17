@@ -2,7 +2,7 @@ import React,{ Component } from 'react'
 import Request from 'superagent'
 import Dropzone from 'react-dropzone'
 import CDN from '../../widgets/cdn'
-import { uploadImageWithWH,uploadFiles } from '../../widgets/upload'
+import { uploadImageWithWH,uploadFiles,uploadImagesWithWH } from '../../widgets/upload'
 import PlaySwitch from '../Common/playSwitch'
 import Select from 'react-select'
 // import PlayHtmlEditor from '../Common/PlayHtmlEditor'
@@ -75,7 +75,7 @@ export default class EditToy extends Component {
 	  	this.addOtherInfo = this._addOtherInfo.bind(this)
 	  	this.changeNewKey = (e) => this.setState({newKey:e.target.value})
 	  	this.changeNewValue = (e) => this.setState({newValue:e.target.value})
-	  	this.onDropOfficialImage = (files) => uploadFiles(files,`toy/img/${this.props.match.params.id}_`).then(keys => this.setState(prevState => ({images:prevState.images.concat(...keys)})))
+	  	this.onDropOfficialImage = (files) => uploadImagesWithWH(files,`toy/img/${this.props.match.params.id}_`).then(keys => this.setState(prevState => ({images:prevState.images.concat(...keys)})))
 	  	this.onDropCover = (files) => uploadImageWithWH(files[0],'toy/cover/').then(cover => this.setState({cover}))
 
 	  	this.submit = this._submit.bind(this)

@@ -9,10 +9,10 @@ export default (state = Immutable.fromJS({
 }),action)=>{
     switch (action.type) {
         case HOME_RECEIVE_STATS:
-            return state.mergeDeep({
-                stats: action.res,
-                loaded:true
-            })
+            return state
+                .set('stats',action.res)
+                .set('data',action.data)
+                .set('loaded',true)
         case HOME_RECEIVE_ACTIVITIES_C:
         	return state
                 .updateIn(['activitiesC'], (activities) => activities.clear().concat(Immutable.fromJS(action.res)))

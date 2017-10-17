@@ -31,14 +31,14 @@
           padding: 0.5rem 0.75rem;
           margin-left: -1px;
           line-height: 1.25;
-          color: #007bff;
+          color: #337ab7;
           background-color: #fff;
           border: 1px solid #ddd;
+          text-decoration: none;
           cursor: pointer;
           &:focus,&:hover{
-              color: #0056b3;
-              text-decoration: none;
-              background-color: #e9ecef;
+              color: #23527c;
+              background-color: #eee;
               border-color: #ddd;
           }
       }
@@ -56,18 +56,18 @@
       }
       &.active{
           a{
-              z-index: 2;
-              color: #fff;
-              background-color: #007bff;
-              border-color: #007bff;
+            color: #fff;
+            cursor: default;
+            background-color: #337ab7;
+            border-color: #337ab7;
           }
       }
       &.disabled {
           a{
-              color: #868e96;
-              pointer-events: none;
-              background-color: #fff;
-              border-color: #ddd;
+            color: #777;
+            cursor: not-allowed;
+            background-color: #fff;
+            border-color: #ddd;
           }
       }
   }

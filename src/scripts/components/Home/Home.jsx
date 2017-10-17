@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
-import { Row,Col } from 'react-bootstrap'
-import {makeWidthFlexible,XYPlot, XAxis, YAxis,VerticalGridLines, HorizontalGridLines, VerticalBarSeries,Crosshair} from 'react-vis'
 import { Link } from 'react-router-dom'
-import Moment from 'moment'
 import ReactPaginate from 'react-paginate'
 import { parsePage } from '../../widgets/parse'
+import { dateFormat } from '../../widgets'
 import PlayToyPanel from '../Common/PlayToyPanel'
 
-const FlexibleXYPlot = makeWidthFlexible(XYPlot)
+import { ResponsiveContainer,BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
+
 export default class Home extends Component {
     constructor(props) {
       super(props);
@@ -44,13 +43,13 @@ export default class Home extends Component {
       })
     }
     render() {
-        const { stats } = this.props
+        const { stats,data } = this.props
         return (
             <div>
-              <Row>
-                <Col xs={6} sm={12} lg={6}>
-                  <Row>
-                    <Col xs={4} sm={6} lg={4}>
+              <div className="row">
+                <div className="col-md-6">
+                  <div className="row">
+                    <div className="col-12 col-sm-6 col-lg-4">
                       <a className="dashboard-stat blue" href="#">
                         <div className="visual">
                           <i className="fa fa-users"></i>
@@ -62,8 +61,10 @@ export default class Home extends Component {
                             <div className="desc">用户数</div>
                         </div>
                       </a>
-                    </Col>
-                    <Col xs={4} sm={6} lg={4}>
+
+                    </div>
+         
+                    <div className="col-12 col-sm-6 col-lg-4">
                       <a className="dashboard-stat green" href="#">
                         <div className="visual">
                           <i className="fa fa-rocket"></i>
@@ -75,8 +76,8 @@ export default class Home extends Component {
                             <div className="desc">玩具数</div>
                         </div>
                       </a>
-                    </Col>
-                    <Col xs={4} sm={6} lg={4}>
+                    </div>
+                    <div className="col-12 col-sm-6 col-lg-4">
                       <a className="dashboard-stat yellow" href="#">
                         <div className="visual">
                           <i className="fa fa-tags"></i>
@@ -88,8 +89,8 @@ export default class Home extends Component {
                             <div className="desc">标签数</div>
                         </div>
                       </a>
-                    </Col>
-                    <Col xs={4} sm={6} lg={4}>
+                    </div>
+                    <div className="col-12 col-sm-6 col-lg-4">
                       <a className="dashboard-stat red" href="#">
                         <div className="visual">
                           <i className="fa fa-comments"></i>
@@ -101,8 +102,8 @@ export default class Home extends Component {
                             <div className="desc">照片总数</div>
                         </div>
                       </a>
-                    </Col>
-                    <Col xs={4} sm={6} lg={4}>
+                    </div>
+                    <div className="col-12 col-sm-6 col-lg-4">
                       <a className="dashboard-stat purple" href="#">
                         <div className="visual">
                           <i className="fa fa-photo"></i>
@@ -114,8 +115,8 @@ export default class Home extends Component {
                             <div className="desc">昨日发图</div>
                         </div>
                       </a>
-                    </Col>
-                    <Col xs={4} sm={6} lg={4}>
+                    </div>
+                    <div className="col-12 col-sm-6 col-lg-4">
                       <a className="dashboard-stat blue-dark" href="#">
                         <div className="visual">
                           <i className="fa fa-photo"></i>
@@ -127,35 +128,29 @@ export default class Home extends Component {
                             <div className="desc">今日发图</div>
                         </div>
                       </a>
-                    </Col>
-                  </Row>
-                </Col>
-                <Col xs={6} sm={12} lg={6}>
-                  <div className="portlet light bordered">
-                    <div className="portlet-body">
-                      <FlexibleXYPlot
-                        onMouseLeave={() => this.setState({crosshairValues:[]})}
-                        height={350}>
-                        <VerticalGridLines />
-                        <HorizontalGridLines />
-                        <VerticalBarSeries
-                          onNearestX={this.nearestXHandler}
-                          data={stats.last || []}
-                        />
-                        <VerticalBarSeries
-                          data={stats.aggregate || [] }
-                        />
-                        <Crosshair
-                          itemsFormat={this._formatCrosshairItems}
-                          titleFormat={this._formatCrosshairTitle}
-                          values={this.state.crosshairValues}/>
-                        <XAxis />
-                        <YAxis />
-                      </FlexibleXYPlot>
                     </div>
                   </div>
-                </Col>
-              </Row>
+                </div>
+                <div className="col-md-6">
+                  <div className="portlet light bordered">
+                    <div className="portlet-body">
+                      <ResponsiveContainer width="100%" height={300}>
+                        <BarChart data={data}>
+                          <XAxis dataKey="name"/>
+                          <YAxis/>
+                          <CartesianGrid strokeDasharray="3 3"/>
+                          <Tooltip/>
+                          <Legend />
+                          <Bar name="连续登录" dataKey="last" fill="#8884d8" />
+                          <Bar name="累计登录" dataKey="aggregate" fill="#82ca9d" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                  <div>
+                  </div>
+                </div>
+              </div>
               <div className="row">
                 <div className="col-lg-6">
                   <div className="m-portlet m-portlet--mobile">
@@ -188,8 +183,8 @@ export default class Home extends Component {
                               </Link>
                               <div className="p-2" style={{flex:1}}>
                                 <div>
-                                    <span>{activity.user.nickname}</span>
-                                    <span>{Moment.unix(activity.created /1000).format("D MMM, H:mm A")}</span>
+                                    <span>{activity.user.nickname}</span>&nbsp;
+                                    <span>{dateFormat(activity.created)}</span>
                                 </div>
                                     <div>{activity.content || ''}</div>
                                     <div>
@@ -249,14 +244,14 @@ export default class Home extends Component {
                                 </Link>
                                 <div className="p-2" style={{flex:1}}>
                                   <div>
-                                      <span>{activity.user.nickname}</span>
-                                      <span>{Moment.unix(activity.created /1000).format("D MMM, H:mm A")}</span>
+                                      <span>{activity.user.nickname}</span>&nbsp;
+                                      <span>{dateFormat(activity.created)}</span>
                                   </div>
                                       <div>{activity.content || ''}</div>
                                       <div>
                                         {activity.target.type == "toy" ?
                                           <a target="_blank" href={`http://www.playalot.cn/${activity.target.type}/${activity.target.id}`}>
-                                            <PlayToyPanel tid={activity.target.id} style={{border:1}}></PlayToyPanel>
+                                            <PlayToyPanel tid={activity.target.id}></PlayToyPanel>
                                           </a>
                                           :null
                                         }

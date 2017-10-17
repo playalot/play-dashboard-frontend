@@ -22,6 +22,31 @@ export const uploadFiles = async (files,prefix,uploadUrl = 'http://upload.qiniu.
     return keys.filter(key => typeof key == 'string')
 }
 
+export const uploadImagesWithWH = async (files,prefix,uploadUrl = 'http://upload.qiniu.com/') => {
+    const uptoken = await Request.get('/api/uptoken').then(res => res.body.uptoken)
+
+    const promises = files.map(async (file) => {
+        const img = new Image()
+        img.src = file.preview
+        await new Promise(resolve => img.onload = resolve)
+        const uploadKey = `${prefix}${Math.round(Date.now() / 1000)}_w_${img.width}_h_${img.height}_${makeId()}.${file.name.split('.').pop()}`
+        return Request
+            .post(uploadUrl)
+            .field('key', uploadKey)
+            .field('token', uptoken)
+            .field('x:filename', file.name)
+            .field('x:size', file.size)
+            .attach('file', file, file.name)
+            .set('Accept', 'application/json')
+            .then(() => uploadKey)
+            .catch(e => e)
+    })
+    const keys = await Promise.all(promises)
+
+    return keys.filter(key => typeof key == 'string')   
+}
+
+
 export const uploadImageWithWH = async (file,prefix,uploadUrl = 'http://upload.qiniu.com/') => {
     const img = new Image()
     img.src = file.preview

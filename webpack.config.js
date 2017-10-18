@@ -10,11 +10,8 @@ module.exports = {
 		],
 		vendor: [
 			'jquery',
-			// 'popper',
-			path.resolve(__dirname, 'src/scripts/metronic/popper.js'),
+			path.resolve(__dirname, 'src/scripts/widgets/plugin.js'),
 			'bootstrap/dist/js/bootstrap.js',
-			// 'admin-lte/dist/js/app.js'
-			// path.resolve(__dirname, 'src/scripts/metronic/app.js')
 			path.resolve(__dirname, 'src/scripts/metronic/scripts.bundle.js')
 		]
 	},
@@ -69,6 +66,7 @@ module.exports = {
 			$: "jquery",
 			jQuery: "jquery",
 			"window.jQuery": "jquery",
+			Popper: ['popper.js', 'default'],
 		}),
 	],
 	devServer: {

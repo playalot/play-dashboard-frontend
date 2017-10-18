@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import FeedbackList from './FeedbackList'
 
-import { getFeedback, deleteFeedback,getReport, deleteReport, toggleBlk,toggleR18 } from '../../actions/feedbackAction'
+import { getFeedback, deleteFeedback,getReport, deleteReport, toggleBlk,toggleR18,reportPushReply,feedbackPushReply } from '../../actions/feedbackAction'
 import { setTouid } from '../../actions/adminAction'
 const mapActionCreators = {
 	getFeedback,
@@ -11,6 +11,8 @@ const mapActionCreators = {
 	deleteReport,
 	toggleBlk,
 	toggleR18,
+	reportPushReply,
+	feedbackPushReply,
 	
 	setTouid,
 }

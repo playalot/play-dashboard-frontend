@@ -8,6 +8,8 @@ export const REPORT_DELETE_REPORT = 'REPORT_DELETE_REPORT'
 export const REPORT_TOGGLE_BLK = 'REPORT_TOGGLE_BLK'
 export const REPORT_TOGGLE_R18 = 'REPORT_TOGGLE_R18'
 
+export const REPORT_REPLY_LOG = 'REPORT_REPLY_LOG'
+export const FEEDBACK_REPLY_LOG = 'FEEDBACK_REPLY_LOG'
 
 export function deleteFeedback(id) {
     return (dispatch) => {
@@ -78,6 +80,7 @@ export function toggleBlk(id) {
                 block: true
             })
             .end((err, res) => {
+                Toastr.success(`此帖子已屏蔽`)
                 dispatch({
                     type: REPORT_TOGGLE_BLK,
                     id
@@ -93,10 +96,26 @@ export function toggleR18(id) {
                 r18: true
             })
             .end((err, res) => {
+                Toastr.success(`此帖子已设为十八禁`)
                 dispatch({
                     type: REPORT_TOGGLE_R18,
                     id
                 })
             })
+    }
+}
+
+export function reportPushReply(id,log) {
+    return {
+        type:REPORT_REPLY_LOG,
+        id,
+        log
+    }
+}
+export function feedbackPushReply(id,log) {
+    return {
+        type:FEEDBACK_REPLY_LOG,
+        id,
+        log
     }
 }

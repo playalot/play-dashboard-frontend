@@ -13,14 +13,11 @@ const config = {
     entry: {
         app: path.resolve(__dirname, 'src/scripts/main.js'),
         vendor: [
-            'jquery',
-            // 'popper',
-            path.resolve(__dirname, 'src/scripts/metronic/popper.js'),
-            'bootstrap/dist/js/bootstrap.js',
-            // 'admin-lte/dist/js/app.js'
-            // path.resolve(__dirname, 'src/scripts/metronic/app.js')
-            path.resolve(__dirname, 'src/scripts/metronic/scripts.bundle.js')
-		      ]
+			'jquery',
+			path.resolve(__dirname, 'src/scripts/widgets/plugin.js'),
+			'bootstrap/dist/js/bootstrap.js',
+			path.resolve(__dirname, 'src/scripts/metronic/scripts.bundle.js')
+		]
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -73,6 +70,7 @@ const config = {
             $: "jquery",
             jQuery: "jquery",
             "window.jQuery": "jquery",
+            Popper: ['popper.js', 'default'],
         }),
         new CopyWebpackPlugin([{
             from: path.resolve(__dirname, "src/index.html"),

@@ -1,7 +1,7 @@
 import Immutable from 'immutable'
 import { 
-    FEEDBACK_RECEIVE_DATA, FEEDBACK_DELETE_FEEDBACK, 
-    REPORT_RECEIVE_DATA, REPORT_DELETE_REPORT, REPORT_TOGGLE_BLK,REPORT_TOGGLE_R18
+    FEEDBACK_RECEIVE_DATA, FEEDBACK_DELETE_FEEDBACK, FEEDBACK_REPLY_LOG,
+    REPORT_RECEIVE_DATA, REPORT_DELETE_REPORT, REPORT_TOGGLE_BLK,REPORT_TOGGLE_R18,REPORT_REPLY_LOG
 } from '../actions/feedbackAction'
 
 export default (state = Immutable.fromJS({ 
@@ -48,6 +48,30 @@ export default (state = Immutable.fromJS({
                         return item.get('targetId') === action.id
                     }), (item) => {
                         return item.setIn(['target','isR18'], !item.getIn(['target','isR18']));
+                    }
+                )
+            })
+        case REPORT_REPLY_LOG:
+            return state.updateIn(['reports'], (reports) => {
+                return reports.update(
+                    reports.findIndex((item) => {
+                        return item.get('id') === action.id
+                    }), (item) => {
+                        return item.updateIn(['logs'], (logs) => {
+                            return logs.push(Immutable.fromJS(action.log))
+                        })
+                    }
+                )
+            })
+        case FEEDBACK_REPLY_LOG:
+            return state.updateIn(['feedbacks'], (feedbacks) => {
+                return feedbacks.update(
+                    feedbacks.findIndex((item) => {
+                        return item.get('id') === action.id
+                    }), (item) => {
+                        return item.updateIn(['logs'], (logs) => {
+                            return logs.push(Immutable.fromJS(action.log))
+                        })
                     }
                 )
             })

@@ -110,7 +110,11 @@ export default class EditPage extends Component {
                     editorState:EditorState.push(this.state.editorState, rawData)
 				})
 			})
-		}
+        }
+        $('[data-toggle="m-scroll-top"]').mScrollTop({
+            offset: 300,
+            speed: 600
+        });
     }
     componentWillReceiveProps(nextProps) {
         if(!this.state.pageId){
@@ -443,7 +447,7 @@ export default class EditPage extends Component {
                     </div>
                     : null
                 }
-                <div className="m-scroll-top m-scroll-top--skin-top" data-toggle="m-scroll-top" data-scroll-offset="500" data-scroll-speed="300">
+                <div className="m-scroll-top m-scroll-top--skin-top" data-toggle="m-scroll-top">
                     <i className="la la-arrow-up"></i>
                 </div>
                 {

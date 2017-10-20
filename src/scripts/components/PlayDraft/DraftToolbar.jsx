@@ -24,7 +24,8 @@ export default class extends Component {
 		const affix = document.querySelector('#page-affix')
 		const affixOffsetTop = affix.offsetTop
 		window.addEventListener('scroll',() => {
-			if(document.body.scrollTop >= affixOffsetTop - 60){
+			const scrollTop = document.body.scrollTop || document.documentElement.scrollTop
+			if(scrollTop >= affixOffsetTop - 60){
 				$('#page-affix').css({position:'fixed',top:70})
 			}else {
 				$('#page-affix').css({position:'relative',top:0})

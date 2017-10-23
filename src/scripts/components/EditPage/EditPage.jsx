@@ -400,8 +400,8 @@ export default class EditPage extends Component {
                         <div className="play-dialog" onClick={e => e.stopPropagation()}>
                             <span onClick={() => this.setState({dialogVideo:false})} className="dialog-close">×</span>
                             <ul className="nav nav-tabs">
-                              <li className={this.state.videoMode ? 'active':''}><a onClick={() => this.setState({videoMode:true})}>粘贴视频通用代码</a></li>
-                              <li className={this.state.videoMode ? '':'active'}><a onClick={() => this.setState({videoMode:false})}>上傳視頻</a></li>
+                              <li className={`btn btn-outline mr-2 ${this.state.videoMode ? 'text-primary':'text-dark'}`}><a onClick={() => this.setState({videoMode:true})}>粘贴视频通用代码</a></li>
+                              <li className={`btn btn-outline mr-2 ${this.state.videoMode ? 'text-dark':'text-primary'}`}><a onClick={() => this.setState({videoMode:false})}>上傳視頻</a></li>
                             </ul>
                             <br/>
                             {

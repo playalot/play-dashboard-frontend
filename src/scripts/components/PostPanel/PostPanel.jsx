@@ -5,6 +5,8 @@ import Moment from 'moment'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import Masonry from 'react-masonry-component'
 import PlayPreImage from '../Common/PlayPreImage'
+import Request from 'superagent'
+
 
 const _ = require('lodash')
 
@@ -14,6 +16,8 @@ export default class PostPanel extends Component{
 		this.state = {
 			videoUrl:'',
 			sharePost:false,
+			commentPostId:null,
+			commentContent:''
 		}
 	  	this.toggleRecommend = () => this.props.toggleRecommend(this.props.post.id)
 	  	this.toggleBlock = () => this.props.toggleBlock(this.props.post.id)
@@ -39,6 +43,20 @@ export default class PostPanel extends Component{
 				`
 			})
 		}
+		this.commentPost = (commentPostId) => {
+			this.setState({commentPostId},() => {
+				$('#commentModal').modal('show')
+			})
+		}
+		this.comment = this._comment.bind(this)
+	}
+	componentDidMount() {
+		$('#commentModal').on('hidden.bs.modal', (e) => {
+			this.setState({
+				commentPostId:null,
+				commentContent:''
+			})
+		})
 	}
 	_addToy() {
 		let id = prompt('输入玩具ID')
@@ -57,6 +75,20 @@ export default class PostPanel extends Component{
 			image.src = image.url
 		})
 		return images
+	}
+	_comment() {
+		Request.post(`/api/post/${this.state.commentPostId}/comment`)
+		.send({
+			content:this.state.commentContent
+		})
+		.end((err,res) => {
+			if(err) {
+				Toastr.error(`评论失败。`)
+			}else{
+				Toastr.success(`评论成功～`)
+				$('#commentModal').modal('hide')
+			}
+		})
 	}
 	render() {
 		const { post } = this.props
@@ -78,7 +110,7 @@ export default class PostPanel extends Component{
 											{ post.user.nickname }
 										</Link>
 										<br/>
-										<span className="m-widget3__time">{ Moment.unix(post.created / 1000).fromNow() }</span>
+										<span className="m-widget3__time">{ Moment(post.created).fromNow() }</span>
 									</div>
 									<span className="m-widget3__status"  style={{paddingTop:0}}>
 										<div className="btn-group">
@@ -87,6 +119,7 @@ export default class PostPanel extends Component{
 											</span>
 											<ul className="dropdown-menu">
 												<li><a onClick={() => this.sendMsg(post.user.id)}>盗图 通知</a></li>
+												<li><a onClick={() => this.commentPost(post.id)}>评论</a></li>
 											</ul>
 										</div>
 									</span>
@@ -209,6 +242,24 @@ export default class PostPanel extends Component{
 					</div>
 					: null
 				}
+				<div className="modal fade" id="commentModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div className="modal-dialog" role="document">
+						<div className="modal-content">
+							<div className="modal-header">
+								<h5 className="modal-title" id="exampleModalLabel">评论内容</h5>
+									<button type="button" className="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div className="modal-body">
+								<textarea value={this.state.commentContent} onChange={(e) => this.setState({commentContent:e.target.value})} className="w-100" name="" id="" cols="30" rows="5"></textarea>
+							</div>
+							<div className="modal-footer">
+								<button onClick={this.comment} type="button" className="btn btn-outline-primary">发送</button>
+							</div>
+						</div>
+					</div>
+				</div>
 	      </Col>
 		)
 	}

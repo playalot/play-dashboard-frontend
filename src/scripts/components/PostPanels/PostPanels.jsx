@@ -4,6 +4,8 @@ import Lightbox from 'react-images'
 import { Modal } from 'react-bootstrap'
 import PostPanel from '../PostPanel'
 
+import Request from 'superagent'
+
 const _ = require('lodash')
 export default class extends Component {
 	constructor(props) {
@@ -13,6 +15,8 @@ export default class extends Component {
 			lightboxIsOpen:false,
 			images:[],
 			currentImage:0,
+			currentPostId:null,
+			commentContent:''
 		}
 
 		this.openImage = (images,currentImage) => this.setState({ lightboxIsOpen: true,images,currentImage})
@@ -24,12 +28,29 @@ export default class extends Component {
 		this.setPostClassification = (pid,cid) => this._setPostClassification(pid,cid)
 		this.removePostClassification = (pid,c) => this._removePostClassification(pid,c)
 		this.resize = () => { this.masonry.layout() }
+
+		this.commentPost = (currentPostId) => { 
+			this.setState({
+				currentPostId
+			},() => {
+				$('#commentModal').modal('show')
+			})
+		}
+		this.comment = this._comment.bind(this)
 	}
 	componentWillMount() {
 		if(!this.props.classLoaded){
 			this.props.fetchTagClass()
 		}
 		// $(window).on('resize',this.resize)
+	}
+	componentDidMount() {
+		$('#commentModal').on('hidden.bs.modal', (e) => {
+			this.setState({
+				currentPostId:null,
+				commentContent:''
+			})
+		})
 	}
 	componentWillUnmount() {
 		// $(window).off('resize',this.resize)
@@ -42,6 +63,20 @@ export default class extends Component {
 		let index = this.state.selectedPost.cls.indexOf(c)
 		index !== -1 ? this.state.selectedPost.cls.splice(index,1) : null
 		this.props.removeClassification(pid,c)
+	}
+	_comment() {
+		Request.post(`/api/post/${this.state.currentPostId}/comment`)
+		.send({
+			content:this.state.commentContent
+		})
+		.end((err,res) => {
+			if(err) {
+				Toastr.error(`评论失败。`)
+			}else{
+				Toastr.success(`评论成功～`)
+				$('#commentModal').modal('hide')
+			}
+		})
 	}
 	render() {
 		let modal = null
@@ -88,7 +123,7 @@ export default class extends Component {
 						this.props.posts ?
 						this.props.posts.map(post => {
 							return (
-								<PostPanel key={`post_${post.id}`} post={post} openImage={this.openImage} openClass={this.openClass}/>
+								<PostPanel key={`post_${post.id}`} post={post} commentPost={this.commentPost} openImage={this.openImage} openClass={this.openClass}/>
 							)
 						})
 						:null
@@ -105,6 +140,24 @@ export default class extends Component {
 					backdropClosesModal={true}
 					showCloseButton={false}
 				/>
+				<div className="modal fade" id="commentModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div className="modal-dialog" role="document">
+						<div className="modal-content">
+							<div className="modal-header">
+								<h5 className="modal-title" id="exampleModalLabel">评论内容</h5>
+									<button type="button" className="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div className="modal-body">
+								<textarea value={this.state.commentContent} onChange={(e) => this.setState({commentContent:e.target.value})} className="w-100" name="" id="" cols="30" rows="5"></textarea>
+							</div>
+							<div className="modal-footer">
+								<button onClick={this.comment} type="button" className="btn btn-outline-primary">发送</button>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		)
 	}

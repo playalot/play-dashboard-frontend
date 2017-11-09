@@ -6,6 +6,8 @@ import PostPanel from '../PostPanel'
 
 import Request from 'superagent'
 
+import { dateFormat } from '../../widgets'
+
 const _ = require('lodash')
 export default class extends Component {
 	constructor(props) {
@@ -16,7 +18,8 @@ export default class extends Component {
 			images:[],
 			currentImage:0,
 			currentPostId:null,
-			commentContent:''
+			commentContent:'',
+			commentsPost:null
 		}
 
 		this.openImage = (images,currentImage) => this.setState({ lightboxIsOpen: true,images,currentImage})
@@ -37,6 +40,7 @@ export default class extends Component {
 			})
 		}
 		this.comment = this._comment.bind(this)
+		this.showComments = this._showComments.bind(this)
 	}
 	componentWillMount() {
 		if(!this.props.classLoaded){
@@ -51,9 +55,11 @@ export default class extends Component {
 				commentContent:''
 			})
 		})
-	}
-	componentWillUnmount() {
-		// $(window).off('resize',this.resize)
+		$('#commentsModal').on('hidden.bs.modal', (e) => {
+			this.setState({
+				commentsPost:null,
+			})
+		})
 	}
 	_setPostClassification(pid,cid) {
 		this.state.selectedPost.cls.push(cid)
@@ -76,6 +82,11 @@ export default class extends Component {
 				Toastr.success(`评论成功～`)
 				$('#commentModal').modal('hide')
 			}
+		})
+	}
+	_showComments(commentsPost) {
+		this.setState({ commentsPost },() => {
+			$('#commentsModal').modal('show')
 		})
 	}
 	render() {
@@ -123,7 +134,7 @@ export default class extends Component {
 						this.props.posts ?
 						this.props.posts.map(post => {
 							return (
-								<PostPanel key={`post_${post.id}`} post={post} commentPost={this.commentPost} openImage={this.openImage} openClass={this.openClass}/>
+								<PostPanel key={`post_${post.id}`} post={post} showComments={this.showComments} commentPost={this.commentPost} openImage={this.openImage} openClass={this.openClass}/>
 							)
 						})
 						:null
@@ -157,6 +168,38 @@ export default class extends Component {
 							</div>
 						</div>
 					</div>
+				</div>
+				<div className="modal fade" id="commentsModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					{
+						this.state.commentsPost ?
+						<div className="modal-dialog" role="document">
+							<div className="modal-content">
+								<div className="modal-header">
+									<h5 className="modal-title" id="exampleModalLabel">玩家评论</h5>
+										<button type="button" className="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div className="modal-body">
+									{
+										this.state.commentsPost.comments.map((comment,i) => {
+											return(
+												<div key={comment.id} className="d-flex" style={{borderBottom:'1px solid #eee'}}>
+													<img src={comment.user.avatar} className="avatar45" alt="avatar"/>
+													<div className="d-flex flex-column px-3" style={{flex:1}}>
+														<span className="text-primary">{comment.user.nickname}</span>
+														<span className="text-muted">{dateFormat(comment.created)}</span>
+														<span className="mt-2">{comment.text}</span>
+													</div>
+												</div>
+											)
+										})
+									}
+								</div>
+							</div>
+						</div>
+						:null
+					}
 				</div>
 			</div>
 		)

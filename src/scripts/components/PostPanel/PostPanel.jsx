@@ -166,6 +166,7 @@ export default class PostPanel extends Component{
 										<span onClick={ () => this.props.openClass( post ) } className="btn btn-sm"><i className="la la-list" style={{fontSize:'1.3rem'}}></i></span>
 										<span onClick={ () => this.props.removeAllClassification(post.id,post.cls) } className="btn btn-sm"><i className="la la-thumbs-o-down" style={{fontSize:'1.3rem'}}></i></span>
 										<span onClick={ () => this.setState({sharePost:true}) } className="btn btn-sm"><i className="la la-weibo" style={{fontSize:'1.3rem'}}></i></span>
+										<span onClick={ () => this.props.showComments(post) } className="btn btn-sm"><i className="la la-comment" style={{fontSize:'1.3rem'}}></i></span>
 									</ButtonToolbar>
 								</div>
 							</div>

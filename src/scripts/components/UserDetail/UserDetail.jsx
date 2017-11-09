@@ -21,7 +21,7 @@ export default class extends Component{
 			user:{},
 			currentPage:'posts',
 			postPage:0,
-			replyContent:'',
+			replyContent:'不要只发动漫图片嘛，很意义不明耶...好歹配个2W字的故事嘛 ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄',
 		}
 		this.setActive = this._setActive.bind(this)
 		this.approve = this._approve.bind(this)
@@ -48,7 +48,7 @@ export default class extends Component{
 	componentDidMount() {
 		$('#replyModal').on('hidden.bs.modal', (e) => {
 			this.setState({
-				replyContent:''
+				replyContent:'不要只发动漫图片嘛，很意义不明耶...好歹配个2W字的故事嘛 ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄'
 			})
 		})
 	}

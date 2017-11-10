@@ -94,7 +94,7 @@ export default class PostPanel extends Component{
 										</div>
 									</span>
 								</div>
-								<div className="m-widget3__body m--margin-bottom-5">
+								<div className="m-widget3__body m--margin-bottom-5" style={{wordBreak: 'break-all'}}>
 									{ post.caption ? post.caption : null }
 								</div>
 								<div className="m-widget3__body m--margin-bottom-5">

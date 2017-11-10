@@ -19,15 +19,15 @@ export default class StickerList extends Component{
 	}
 	render() {
 		return(
-			<div className="content">
-				<Row>
-					<button className="btn btn-outline green" onClick={this.addStickerSet}>Add Collection</button>
-				</Row>
+			<div>
+				<div className="row mb-3">
+					<button className="btn btn-outline-info" onClick={this.addStickerSet}>Add Collection</button>
+				</div>
 				{
 					this.props.sets.map((set) => {
 						return (
-							<Row key={'set_'+set.id} style={{borderBottom:'1px solid #eee'}}>
-								<Col sm={12}>
+							<div className="row my-2" key={'set_'+set.id} style={{borderBottom:'1px solid #ccc'}}>
+								<div className="col-sm-12">
 									<div>
 										<div className="d-flex justify-content-between">
 											<h3><img style={{maxHeight:'45px'}} src={set.image}/>{' '}{set.name}</h3>
@@ -37,28 +37,28 @@ export default class StickerList extends Component{
 												<Link to={`/sticker/${set.id}/edit`} className="btn btn-sm"  style={{color:'#333'}} ><i className="fa fa-edit"></i></Link>
 											</div>
 										</div>
-										<div>
+										<div className="row">
 											{set.stickers.map((sticker) => {
 												return (
-													<Col className="col" xs={6} sm={1} lg={1} key={'sticker_'+sticker.id}>
+													<div className="col-6 col-sm-1" key={'sticker_'+sticker.id}>
 														<div className="box box-solid">
 															<div className="box-body" style={{backgroundColor:'#aaaaaa'}}>
-																	<img className="img-responsive" src={sticker.image} />
+																	<img className="w-100" src={sticker.image} />
 															</div>
 															<div className="box-footer">
-																<ButtonToolbar className="pull-right">
+																<div className="pull-right btn-toolbar">
 																	<span onClick={() => this.riseSticker(set.id, sticker.id) } className="btn btn-sm"><i className="fa fa-angle-double-up"></i></span>
 																	<span onClick={() => this.deleteSticker(set.id, sticker.id) } className="btn btn-sm"><i className="fa fa-trash"></i></span>
-																</ButtonToolbar>
+																</div>
 															</div>
 														</div>
-													</Col>
+													</div>
 												);
 											})}
 										</div>
 									</div>
-								</Col>
-							</Row>
+								</div>
+							</div>
 						)
 					})
 				}

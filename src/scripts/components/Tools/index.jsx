@@ -31,6 +31,11 @@ export default class extends Component {
 
 	_toysdaily() {
 		const { toysdailyId,toysdailyPage } = this.state
+		if(toysdailyId){
+			Toastr.success(`玩具日报正在爬取`)
+		}else{
+			return Toastr.error(`请输入ID`)
+		}
 		Request.get('/api/crawl/toysdaily')
 		.query({ id:toysdailyId,pages:toysdailyPage })
 		.end((err,res) => {
@@ -43,6 +48,11 @@ export default class extends Component {
 	}
 	_toypeople() {
 		const { toypeopleId } = this.state
+		if(toypeopleId){
+			Toastr.success(`玩具人正在爬取`)
+		}else{
+			return Toastr.error(`请输入ID`)
+		}
 		Request.get('/api/crawl/toypeople')
 		.query({ id:toypeopleId })
 		.end((err,res) => {
@@ -53,6 +63,11 @@ export default class extends Component {
 	}
 	_newsgamme() {
 		const { newsgammeId } = this.state
+		if(newsgammeId){
+			Toastr.success(`宅宅新闻正在爬取`)
+		}else{
+			return Toastr.error(`请输入ID`)
+		}
 		Request.get('/api/crawl/newsgamme')
 		.query({ id:newsgammeId })
 		.end((err,res) => {
@@ -61,6 +76,11 @@ export default class extends Component {
 	}
 	_goodsmile() {
 		const { goodsmileId } = this.state
+		if(goodsmileId){
+			Toastr.success(`GoodsSmile正在爬取`)
+		}else{
+			return Toastr.error(`请输入ID`)
+		}
 		Request.get('/api/crawl/goodsmile')
 		.query({ id:goodsmileId })
 		.end((err,res) => {
@@ -69,6 +89,11 @@ export default class extends Component {
 	}
 	_moefigure() {
 		const { moefigureId,moefigurePage } = this.state
+		if(moefigureId){
+			Toastr.success(`Moefigure正在爬取`)
+		}else{
+			return Toastr.error(`请输入ID`)
+		}
 		Request.get('/api/crawl/moefigure')
 		.query({ id:moefigureId,pages:moefigurePage })
 		.end((err,res) => {
@@ -138,6 +163,7 @@ export default class extends Component {
 							<button className="btn btn-outline-primary" disabled={this.state.loading} onClick={this.newsgamme}>爬取</button>
 						</div>
 					</div>
+
 				    <h4>GoodSmile</h4>
 					<div className="row mb-3">
 						<div className="col-8">
@@ -147,6 +173,7 @@ export default class extends Component {
 							<button className="btn btn-outline-primary" disabled={this.state.loading} onClick={this.goodsmile}>爬取</button>
 						</div>
 					</div>
+
 				    <h4>Moefigure</h4>
 					<div className="row mb-3">
 						<div className="col-4">
@@ -159,6 +186,7 @@ export default class extends Component {
 							<button className="btn btn-outline-primary" disabled={this.state.loading} onClick={this.moefigure}>爬取</button>
 						</div>
 					</div>
+					
 					<h4>添加JSON文章</h4>
 					<div className="row mb-3">
 						<div className="col-8">

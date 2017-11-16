@@ -2,14 +2,15 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Row, Button, FormControl,Form, FormGroup } from 'react-bootstrap'
 import Moment from 'moment'
-
+import Request from 'superagent'
 export default class extends Component{
 	constructor(props) {
 	  super(props);
 
 	  this.state = {};
 	  this.addTracking = this._addTracking.bind(this)
-	  this.setStatus = this._setStatus.bind(this)
+		this.setStatus = this._setStatus.bind(this)
+		this.closeExpireOrder = this._closeExpireOrder.bind(this)
 	}
 	_addTracking(id) {
 		let trackNo = prompt('输入物流号')
@@ -21,7 +22,16 @@ export default class extends Component{
 		if (confirm(`确定${state === 'closed' ? '关闭':'完成'}这个订单吗?`)) {
 			this.props.setStatus(id,state)
 		}
-
+	}
+	_closeExpireOrder(id) {
+		Request.post(`/api/order/${id}/closeExpire`)
+		.end((err,res) => {
+			if(err) {
+				Toastr.error(`关闭订单失败。`)
+			}else{
+				Toastr.success(`关闭订单成功～`)
+			}
+		})
 	}
 	formatStatus(str,startPay) {
 		switch(str) {
@@ -91,6 +101,7 @@ export default class extends Component{
 												  		<li><Link to={`/order/edit/${order.id}`}>订单详情</Link></li>
 												  		<li><Link to={`/order/toy/${order.items[0].toyId}`}>显示全部订单</Link></li>
 													  	{order.status === 'open' ? <li><a onClick={() => this.setStatus(order.id,'closed')}>关闭订单</a></li> : null}
+												  		<li><a onClick={() => this.closeExpireOrder(order.id)}>关闭过期订单</a></li>
 													  	{order.status === 'paid' ? <li><a onClick={() => this.setStatus(order.id,'done')}>订单完成</a></li> : null}
 													  	{order.status === 'prepaid' ? <li><a onClick={() => this.props.startPay(order.id)}>通知补款</a></li> : null}
 													</ul>
